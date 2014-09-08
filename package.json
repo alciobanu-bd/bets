@@ -1,0 +1,13 @@
+{
+    "name": "bets",
+    "version": "0.0.0",
+    "description": "Bets app based on MEAN stack",
+    "dependencies": {},
+    "devDependencies": {
+        "bower": "*",
+        "grunt-bower-install": "*"
+    },
+    "engines": {
+        "node": ">=0.10.19"
+    }
+}

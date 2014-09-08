@@ -1,0 +1,17 @@
+{
+    "name": "bets",
+    "version": "0.0.0",
+    "dependencies": {
+        "bootstrap": "*",
+        "jquery": "*",
+        "angular": "*",
+        "angular-route": "*",
+        "angular-resource": "*",
+        "angular-cookies": "*",
+        "angular-sanitize": "*"
+    },
+    "devDependencies": {
+        "angular-mocks": "*",
+        "angular-scenario": "*"
+    }
+}
