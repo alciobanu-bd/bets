@@ -2,7 +2,14 @@
     "name": "bets",
     "version": "0.0.0",
     "description": "Bets app based on MEAN stack",
-    "dependencies": {},
+    "dependencies": {
+        "express": "~4.0.0",
+        "mongoose": "*",
+        "body-parser": "*",
+        "express-jwt": "*",
+        "node-restful": "*",
+        "method-override": "*"
+    },
     "devDependencies": {
         "bower": "*",
         "grunt-bower-install": "*"
