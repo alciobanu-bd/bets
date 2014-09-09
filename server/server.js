@@ -5,7 +5,6 @@ var restful = require('node-restful');
 var mongoose = restful.mongoose;
 var methodOverride = require('method-override');
 var path = require('path');
-var mime = require('mime');
 GLOBAL.app = express();
 
 // configure app to use bodyParser()
@@ -26,6 +25,7 @@ var port = 8080;
 
 var user = require('./model/User.js');
 var user = require('./route/UserRoute.js');
+var user = require('./route/InitRoute.js');
 
 // resolve statics
 // use client folder root path / and server index.html

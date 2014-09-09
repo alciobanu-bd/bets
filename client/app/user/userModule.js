@@ -1,2 +1,2 @@
 
-var userModule = angular.module('user', []);
+var userModule = angular.module('user', ['resource']);

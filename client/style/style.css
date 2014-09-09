@@ -12,10 +12,15 @@
 }
 
 .centered {
+    margin: 0 auto;
+    float: none;
     text-align: center;
 }
 
-.vertical-table {
-    display: table-cell;
-    vertical-align: middle;
+.cornered-input {
+    border-radius: 7px !important;
+}
+
+.top-buffer-0-5-em {
+    margin-top: 0.5em;
 }

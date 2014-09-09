@@ -4,6 +4,7 @@ var betsModule = angular.module(
     [
         // dependencies
         'templates',
-        'user'
+        'user',
+        'resources'
     ]
 );
