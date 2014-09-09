@@ -8,7 +8,8 @@
         "body-parser": "*",
         "express-jwt": "*",
         "node-restful": "*",
-        "method-override": "*"
+        "method-override": "*",
+        "path": "*"
     },
     "devDependencies": {
         "bower": "*",

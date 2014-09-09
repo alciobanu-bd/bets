@@ -4,6 +4,8 @@ var bodyParser = require('body-parser');
 var restful = require('node-restful');
 var mongoose = restful.mongoose;
 var methodOverride = require('method-override');
+var path = require('path');
+var mime = require('mime');
 GLOBAL.app = express();
 
 // configure app to use bodyParser()
@@ -24,6 +26,14 @@ var port = 8080;
 
 var user = require('./model/User.js');
 var user = require('./route/UserRoute.js');
+
+// resolve statics
+// use client folder root path / and server index.html
+// DO NOT MOVE UPSIDE - it should stay AFTER app.use new routes
+app.use('/', express.static(path.resolve('client/')));
+app.use(function(req, res) {
+    res.sendfile(path.resolve('client/index.html'));
+});
 
 // START THE SERVER
 app.listen(port);

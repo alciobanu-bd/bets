@@ -10,3 +10,12 @@
 .white-gray {
     color: #EBEBEB !important;
 }
+
+.centered {
+    text-align: center;
+}
+
+.vertical-table {
+    display: table-cell;
+    vertical-align: middle;
+}
