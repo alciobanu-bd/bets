@@ -2,6 +2,7 @@
 // NOTE that app is defined globally
 
 var User = require('./../model/User.js');
+var Roles = require('./..model/Roles.js');
 
 User
     .methods(['get', 'post', 'put', 'delete'])
@@ -10,6 +11,7 @@ User
         req.body.registerDate = new Date();
         req.body.points = 0;
         req.body.place = -1;
+        req.body.role = Roles.user.name;
         next();
     })
     .route('rm-rf.delete', {

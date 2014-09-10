@@ -25,6 +25,9 @@ db
 
 var port = 8080;
 
+var jwtauth = require('./middlewares/jwtauth.js'); // token middleware
+app.all('*', jwtauth);
+
 var user = require('./model/User.js');
 var user = require('./route/UserRoute.js');
 var user = require('./route/LoginRoute.js');

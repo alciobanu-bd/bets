@@ -25,7 +25,7 @@ router.post('/login', function(req, res) {
     User
     .find
     ({username: req.body.username},
-    {salt: 0},
+    {salt: 0}, // exclude salt
     function (err, users) {
         if (err || users.length == 0) {
             res.status(401).json({message: "Username doesn't exist."});
