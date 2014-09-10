@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var UserSchema = mongoose.Schema({
     username: {type: 'string', required: true},
     password: {type: 'string', required: true},
+    salt: {type: 'string', required: false},
     birthDate: {type: 'date', required: true},
     email: {type: 'string', required: true},
     registerDate: {type: 'date', required: false},

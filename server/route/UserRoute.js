@@ -12,7 +12,7 @@ User
         req.body.place = -1;
         next();
     })
-    .route('rm-rf', {
+    .route('rm-rf.delete', {
         handler: function(req, res, next) {
             User.remove({}, function(err) {
                 if (err) {
@@ -25,11 +25,10 @@ User
                     res.json({
                         message: "Success."
                     });
-                    console.log('user collection removed');
+                    console.log('User collection removed');
                 }
             });
-        },
-        methods: ['delete']
+        }
     });
 
 User.register(app, '/api/user');
