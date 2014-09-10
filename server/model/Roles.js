@@ -1,6 +1,5 @@
 
-module.exports =
-{
+var roles = {
     user: {
         name: 'ROLE_USER',
         value: -1000
@@ -14,3 +13,17 @@ module.exports =
         value: 0
     }
 };
+
+var roleValue = function (roleName) {
+    var fRole = _.find(roles, function (role) {
+        return role == roleName;
+    });
+    if (fRole) {
+        return fRole.value;
+    }
+    return -999999999;
+}
+
+roles.roleValue = roleValue;
+
+module.exports = roles;

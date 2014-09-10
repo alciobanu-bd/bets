@@ -15,12 +15,3 @@ var UserSchema = mongoose.Schema({
 });
 
 module.exports = restful.model('user', UserSchema);
-
-/*
-    Possible roles for user (from less privileged to most privileged):
-
-    ROLE_USER
-    ROLE_ADMIN
-    ROLE_ROOT
-
- */

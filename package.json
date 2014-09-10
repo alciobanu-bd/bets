@@ -10,7 +10,8 @@
         "node-restful": "*",
         "method-override": "*",
         "path": "*",
-        "moment": "*"
+        "moment": "*",
+        "underscore": "*"
     },
     "devDependencies": {
         "bower": "*",
