@@ -3,9 +3,11 @@ var User = require('./../model/User.js');
 var Roles = require('./../model/Roles.js');
 var jwt = require('jwt-simple');
 
-module.exports = function (role, username) {
+module.exports = function (role) {
 
     return function(req, res, next) {
+
+        console.log("req para", req.params);
 
         var token = req.headers['x-access-token'];
 
@@ -27,8 +29,7 @@ module.exports = function (role, username) {
                             });
                         }
                         else {
-                            if ((role && Roles.roleValue(user.role) < Roles.roleValue(role)) ||
-                                (username && user.username != username)) {
+                            if (role && Roles.roleValue(user.role) < Roles.roleValue(role)) {
                                 res.status(401).json({
                                     message: "You are not permitted to execute this method."
                                 });

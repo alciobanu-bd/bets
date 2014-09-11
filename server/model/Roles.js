@@ -1,4 +1,6 @@
 
+var _ = require("underscore");
+
 var roles = {
     user: {
         name: 'ROLE_USER',
