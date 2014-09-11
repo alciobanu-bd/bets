@@ -8,3 +8,5 @@ var betsModule = angular.module(
         'resources'
     ]
 );
+
+var REST_HOSTNAME = '';

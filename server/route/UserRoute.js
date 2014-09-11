@@ -13,6 +13,14 @@ User
     .methods(['get', 'post', 'put', 'delete'])
     .before('post', function (req, res, next) {
 
+        if (req.body.password != req.body.confirmPassword) {
+            var errorFields = {password: false, confirmPassword: false};
+            res.status(500).json({
+                message: "Account couldn't be created. Passwords are not matching",
+                errorFields: errorFields
+            });
+        }
+
         User.find({$or: [{username: req.body.username}, {email: req.body.email}]}, function (err, foundUsers) {
 
             if (err) {
@@ -33,7 +41,7 @@ User
                     }
 
                     res.status(409).json({
-                        message: "Account couldn't be created.",
+                        message: "Account couldn't be created. Some fields are already taken.",
                         errorFields: errorFields
                     });
                 }
@@ -67,9 +75,9 @@ User
         });
     })
     // only admins are permitted to see all existing users, gets on a specific user are permitted for all users
-    .before('get'/*, jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')])*/)
-    .before('put'/*, jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')])*/)
-    .before('delete'/*, jwtauth([tokenChecks.hasRole('ROLE_ADMIN')])*/)
+    .before('get', jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')]))
+    .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')]))
+    .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
     .route('rm-rf.delete', /*jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]),*/ {
         handler: function(req, res, next) {
             User.remove({}, function(err) {

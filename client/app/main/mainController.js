@@ -6,22 +6,30 @@ function ($scope, Templates, UserInfo, $location) {
     $scope.Templates = Templates;
     $scope.userInfo = UserInfo;
 
-    $scope.currentBodyView = '';
-
+    $scope.goHome = function () {
+        if ($scope.userInfo.isLogged) {
+            $scope.currentBodyView = Templates.welcome.logged;
+        }
+        else {
+            $scope.currentBodyView = Templates.welcome.notLogged;
+        }
+        $location.path($scope.currentBodyView.route);
+    }
+    $scope.goHome();
 
     $scope.goToLogin = function () {
         $scope.currentBodyView = Templates.user.login;
-        $location.path('login');
+        $location.path($scope.currentBodyView.route);
     }
 
     $scope.goToRegister = function () {
         $scope.currentBodyView = Templates.user.register;
-        $location.path('register');
+        $location.path($scope.currentBodyView.route);
     }
 
     $scope.goToHome = function () {
-        $scope.currentBodyView = '';
-        $location.path('login');
+//        $scope.currentBodyView = '';
+        $location.path($scope.currentBodyView.route);
     }
 
 }

@@ -8,7 +8,8 @@
         "angular-route": "*",
         "angular-resource": "*",
         "angular-cookies": "*",
-        "angular-sanitize": "*"
+        "angular-sanitize": "*",
+        "underscore": "*"
     },
     "devDependencies": {
         "angular-mocks": "*",

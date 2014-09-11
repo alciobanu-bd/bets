@@ -24,3 +24,8 @@
 .top-buffer-0-5-em {
     margin-top: 0.5em;
 }
+.red-border {
+    border-style: solid;
+    border-color: #ff0000;
+    border-width: 0.2em;
+}

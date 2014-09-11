@@ -4,26 +4,31 @@
         <h2>Create a new account</h2>
         <div class="input-group centered" style="min-width: 40%;">
             <div class="form-group">
-                <input type="text" ng-model="inputs.username" class="form-control cornered-input" placeholder="Username">
+                <input type="text" ng-model="inputs.username.model" class="form-control cornered-input" ng-class="inputs.username.error" placeholder="Username">
             </div>
             <div class="form-group">
-                <input type="password" ng-model="inputs.password" class="form-control cornered-input" placeholder="Password">
+                <input type="password" ng-model="inputs.password.model" class="form-control cornered-input" ng-class="inputs.password.error" placeholder="Password">
             </div>
             <div class="form-group">
-                <input type="password" ng-model="inputs.confirmPassword" class="form-control cornered-input" placeholder="Confirm password">
+                <input type="password" ng-model="inputs.confirmPassword.model" class="form-control cornered-input" ng-class="inputs.confirmPassword.error" placeholder="Confirm password">
             </div>
             <div class="form-group">
-                <input type="text" ng-model="inputs.email" class="form-control cornered-input" placeholder="E-mail">
+                <input type="text" ng-model="inputs.email.model" class="form-control cornered-input" ng-class="inputs.email.error" placeholder="E-mail">
             </div>
             <div class="form-group">
-                <input type="text" ng-model="inputs.birthDate" class="form-control cornered-input" placeholder="Birth date">
+                <input type="text" ng-model="inputs.birthDate.model" class="form-control cornered-input" ng-class="inputs.birthDate.error" placeholder="Birth date">
             </div>
         </div>
-        <div style="margin-top: 1em">
+        <div style="margin-top: 1em" ng-click="register()">
             <a class="btn btn-info">
                 Register
             </a>
         </div>
+
+        <div ng-show="!status.success && !status.error" ng-class="status.success ? 'alert-success' : 'alert-danger'">
+            {{status.message}}
+        </div>
+
     </div>
 
 </div>

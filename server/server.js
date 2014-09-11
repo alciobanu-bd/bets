@@ -13,6 +13,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.query());
 app.use(methodOverride());
+app.use(function (req, res, next) {
+    req.url = decodeURIComponent(req.url).substring(1);
+    next();
+});
 
 app.set('jwtTokenSecret', 'YOUR_SECRET_STRING'); // use token service
 

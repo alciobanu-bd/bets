@@ -8,12 +8,34 @@ Bow before client for it is root.
 var templates =
 {
     header: {
-        logged: 'app/user/views/headerLogged.html',
-        notLogged: 'app/user/views/headerNotLogged.html'
+        logged: {
+            html: 'app/user/views/headerLogged.html',
+            route: ''
+        },
+        notLogged: {
+            html: 'app/user/views/headerNotLogged.html',
+            route: ''
+        }
     },
     user: {
-        login: 'app/user/views/login.html',
-        register: 'app/user/views/register.html'
+        login: {
+            html: 'app/user/views/login.html',
+            route: 'login'
+        },
+        register: {
+            html: 'app/user/views/register.html',
+            route: 'register'
+        }
+    },
+    welcome: {
+        logged: {
+            html: 'app/main/views/welcomeLogged.html',
+            route: ''
+        },
+        notLogged: {
+            html: 'app/main/views/welcomeNotLogged.html',
+            route: ''
+        }
     }
 }
 

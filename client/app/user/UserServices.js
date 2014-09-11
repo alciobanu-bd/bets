@@ -13,3 +13,13 @@ function () {
 
 }
 ])
+
+.factory('RegisterErrors', [
+function () {
+
+    return {
+
+    };
+
+}
+])
