@@ -18,7 +18,7 @@ var roles = {
 
 var roleValue = function (roleName) {
     var fRole = _.find(roles, function (role) {
-        return role == roleName;
+        return role.name == roleName;
     });
     if (fRole) {
         return fRole.value;
