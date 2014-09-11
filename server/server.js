@@ -14,7 +14,9 @@ app.use(bodyParser.json());
 app.use(express.query());
 app.use(methodOverride());
 app.use(function (req, res, next) {
-    req.url = decodeURIComponent(req.url).substring(1);
+    // url decoding middleware
+    req.url = decodeURIComponent(req.url);
+    req.url = req.url.replace(/[/]+/g, '/');
     next();
 });
 

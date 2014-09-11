@@ -14,9 +14,9 @@ User
     .before('post', function (req, res, next) {
 
         if (req.body.password != req.body.confirmPassword) {
-            var errorFields = {password: false, confirmPassword: false};
+            var errorFields = {password: true, confirmPassword: true};
             res.status(500).json({
-                message: "Account couldn't be created. Passwords are not matching",
+                message: "Account couldn't be created. Passwords are not matching.",
                 errorFields: errorFields
             });
         }

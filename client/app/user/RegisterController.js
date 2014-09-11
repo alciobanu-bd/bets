@@ -12,7 +12,7 @@ function ($scope, InitUrls, CallUrlService) {
             model: '',
             error: false
         },
-        validatePassword: {
+        confirmPassword: {
             model: '',
             error: false
         },
@@ -28,12 +28,14 @@ function ($scope, InitUrls, CallUrlService) {
 
     $scope.status = {
         success: false,
-        error: false
+        error: false,
+        message: ''
     };
 
     var resetStatus = function () {
         $scope.status.success = false;
         $scope.status.error = false;
+        $scope.status.message = '';
     }
 
     var resetInputsError = function () {
@@ -62,6 +64,7 @@ function ($scope, InitUrls, CallUrlService) {
             },
             function (response) {
 
+                response = response.data;
                 $scope.status.error = true;
 
                 if (response.name == "ValidationError") {
@@ -69,14 +72,18 @@ function ($scope, InitUrls, CallUrlService) {
                     $scope.status.message = 'Account wasn\'t created. Highlighted fields are required.';
 
                     for (var i in response.errors) {
-                        $scope.inputs[response.errors[i]].error = true;
+                        $scope.inputs[i].error = true;
+                    }
+
+                    if ($scope.inputs.password.error) {
+                        $scope.inputs.confirmPassword.error = true;
                     }
 
                 }
                 else {
                     $scope.status.message = response.message;
                     for (var i in response.errorFields) {
-                        $scope.inputs[response.errorFields[i]].error = true;
+                        $scope.inputs[i].error = true;
                     }
                 }
 
