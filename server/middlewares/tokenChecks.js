@@ -40,9 +40,6 @@ var hasRoleWithId = function (role) { // for /get/:id
 var hasRoleWithoutId = function (role) { // for /get (withoud :id)
     return function (req, res, next, user) {
 
-        console.log("Roles.roleValue(user.role)", Roles.roleValue(user.role));
-        console.log("Roles.roleValue(role)", Roles.roleValue(role));
-
         if (req.params.id == undefined) {
             if (role && Roles.roleValue(user.role) < Roles.roleValue(role)) {
                 res.status(401).json({

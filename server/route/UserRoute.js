@@ -3,26 +3,76 @@
 
 var User = require('./../model/User.js');
 var Roles = require('./../model/Roles.js');
+var Salt = require('./../model/Salt.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
+
+var _ = require('underscore');
 
 User
     .methods(['get', 'post', 'put', 'delete'])
     .before('post', function (req, res, next) {
-        // be sure these fields are saved
-        req.body.registerDate = new Date();
-        req.body.points = 0;
-        req.body.place = -1;
-        req.body.role = Roles.user.name;
-        next();
+
+        User.find({$or: [{username: req.body.username}, {email: req.body.email}]}, function (err, foundUsers) {
+
+            if (err) {
+                res.status(500).json({
+                    message: "Account couldn't be created due to server errors."
+                });
+            }
+            else {
+
+                if (foundUsers.length > 0) {
+
+                    var errorFields = {username: false, email:false};
+
+                    for (var i in foundUsers) {
+                        var fUser = foundUsers[i];
+                        errorFields.username = fUser.username == req.body.username;
+                        errorFields.email = fUser.email == req.body.email;
+                    }
+
+                    res.status(409).json({
+                        message: "Account couldn't be created.",
+                        errorFields: errorFields
+                    });
+                }
+
+                else {
+                    // be sure these fields are saved
+
+                    User.find({}, {place: 1, points: 1}, function (err, userPlaces) {
+                        if (err) {
+                            res.status(500).json({
+                                message: "Account couldn't be created due to server errors."
+                            });
+                        }
+                        else {
+
+                            //calculate place (number of users which have more points than zero + 1)
+                            req.body.place = _.filter(userPlaces, function (user) {
+                                return user.points > 0;
+                            }).length + 1;
+
+                            req.body.salt = Salt.generateSalt();
+                            req.body.registerDate = new Date();
+                            req.body.points = 0;
+                            req.body.role = Roles.user.name;
+                            next();
+                        }
+                    });
+                }
+
+            }
+        });
     })
     // only admins are permitted to see all existing users, gets on a specific user are permitted for all users
-    .before('get', jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')]))
-    .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')]))
-    .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
-    .route('rm-rf.delete', {
+    .before('get'/*, jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')])*/)
+    .before('put'/*, jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')])*/)
+    .before('delete'/*, jwtauth([tokenChecks.hasRole('ROLE_ADMIN')])*/)
+    .route('rm-rf.delete', /*jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]),*/ {
         handler: function(req, res, next) {
-            User.remove({}, /*jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]),*/ function(err) {
+            User.remove({}, function(err) {
                 if (err) {
                     res.statusCode = 400;
                     res.json({
