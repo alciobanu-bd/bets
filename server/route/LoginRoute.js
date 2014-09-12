@@ -28,12 +28,12 @@ router.post('/login', function(req, res) {
     {salt: 0}, // exclude salt
     function (err, users) {
         if (err || users.length == 0) {
-            res.status(401).json({message: "Username doesn't exist."});
+            res.status(401).json({message: "Username doesn't exist."}.end());
         }
         else if (users.length > 1) {
             res.status(500).json({
                     message: "More than one user found with the username " + req.body.username + "."}
-            );
+            ).end();
         }
         else {
             if (users[0].password == password) {
@@ -48,7 +48,7 @@ router.post('/login', function(req, res) {
                     token : tok.token,
                     expires: tok.expires,
                     user: users[0]
-                });
+                }).end();
             }
         }
     });
@@ -58,15 +58,15 @@ router.post('/login', function(req, res) {
 router.post('/salt', function (req, res) {
     User.find({username: req.body.username}, function (err, users) {
         if (err || users.length == 0) {
-            res.status(404).json({message: "Username doesn't exist."});
+            res.status(404).json({message: "Username doesn't exist."}).end();
         }
         else if (users.length > 1) {
             res.status(500).json({
                 message: "More than one user found with the username " + req.body.username + "."}
-            );
+            ).end();
         }
         else {
-            res.status(200).json({salt: users[0].salt});
+            res.status(200).json({salt: users[0].salt}).end();
         }
     });
 });

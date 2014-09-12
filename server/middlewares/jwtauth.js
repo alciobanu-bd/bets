@@ -16,7 +16,7 @@ module.exports = function (callbacks) {
                 if (decoded.exp <= Date.now()) {
                     res.status(401).json({
                         message: "Your token expired. Please log in again."
-                    });
+                    }).end();
                 }
                 else {
                     // get the user
@@ -24,7 +24,7 @@ module.exports = function (callbacks) {
                         if (err) {
                             res.status(401).json({
                                 message: "An error has ocured. We couldn't verify your identity."
-                            });
+                            }).end();
                         }
                         else {
 
@@ -41,12 +41,12 @@ module.exports = function (callbacks) {
             } catch (err) {
                 res.status(401).json({
                     message: "Your token expired. Please log in again."
-                });
+                }).end();
             }
         } else {
             res.status(401).json({
                 message: "You didn't send an authorization token."
-            });
+            }).end();
         }
 
     };

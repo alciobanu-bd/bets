@@ -1,7 +1,7 @@
 userModule
 .controller('RegisterController', [
-'$scope', 'InitUrls', 'CallUrlService',
-function ($scope, InitUrls, CallUrlService) {
+'$scope', 'InitUrls', 'CallUrlService', 'SaltGenerator',
+function ($scope, InitUrls, CallUrlService, SaltGenerator) {
 
     $scope.inputs = {
         username: {
@@ -21,7 +21,7 @@ function ($scope, InitUrls, CallUrlService) {
             error: false
         },
         birthDate: {
-            model: '',
+            model: null,
             error: false
         }
     };
@@ -57,10 +57,12 @@ function ($scope, InitUrls, CallUrlService) {
                 return [key, item.model];
             }));
 
+            accountData.salt = SaltGenerator.generate();
+
             CallUrlService.post({uri: urls.user.address}, accountData,
             function (data) {
                 $scope.status.success = true;
-                $scope.status.message = data.message;
+                $scope.status.message = "Your account was successfully created.";
             },
             function (response) {
 
@@ -92,5 +94,11 @@ function ($scope, InitUrls, CallUrlService) {
 
         });
     }
+
+    $scope.dateOptions = {
+        changeYear: true,
+        changeMonth: true,
+        yearRange: '1940:-0'
+    };
 
 }]);

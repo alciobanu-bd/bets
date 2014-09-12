@@ -16,11 +16,12 @@
                 <input type="text" ng-model="inputs.email.model" class="form-control cornered-input" ng-class="inputs.email.error ? 'red-border' : ''" placeholder="E-mail">
             </div>
             <div class="form-group">
-                <input type="text" ng-model="inputs.birthDate.model" class="form-control cornered-input" ng-class="inputs.birthDate.error ? 'red-border' : ''" placeholder="Birth date">
+<!--                <span class="input-group-addon glyphicon glyphicon-calendar"></span>-->
+                <input ui-date="dateOptions" ng-model="inputs.birthDate.model" class="form-control cornered-input" ng-class="inputs.birthDate.error ? 'red-border' : ''" placeholder="Birth date">
             </div>
         </div>
-        <div style="margin-top: 1em" ng-click="register()">
-            <a class="btn btn-info">
+        <div style="margin-top: 1em">
+            <a class="btn btn-info" ng-click="register()">
                 Register
             </a>
         </div>

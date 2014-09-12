@@ -11,6 +11,18 @@
     color: #EBEBEB !important;
 }
 
+.header-bg-color {
+    background-color: #29548C !important;
+}
+
+.brand-color {
+    color: #12A4E3 !important;
+}
+
+.header-menu-color li a{
+    color: #00b3ee !important;
+}
+
 .centered {
     margin: 0 auto;
     float: none;
@@ -24,8 +36,10 @@
 .top-buffer-0-5-em {
     margin-top: 0.5em;
 }
+
 .red-border {
-    border-style: solid;
-    border-color: #ff0000;
-    border-width: 0.2em;
+/*    border-style: solid;
+    border-color: #ff0000;*/
+    border-width: 0.1em;
+    box-shadow: 0 0 0 0.2em #ff0000 inset;
 }
