@@ -12,7 +12,8 @@ var UserSchema = mongoose.Schema({
     registerDate: {type: 'date', required: false},
     points: {type: 'number', required: false},
     place: {type: 'number', required: false},
-    registrationIp: {type:'string', required: false}
+    registrationIp: {type:'string', required: false},
+    serverSalt: {type:'string', required: false}
 });
 
 module.exports = restful.model('user', UserSchema);

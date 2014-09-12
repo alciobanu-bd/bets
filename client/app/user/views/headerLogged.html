@@ -1,4 +1,4 @@
-<div class="navbar navbar-inverse">
+<div class="navbar navbar-inverse" ng-controller="UserController">
     <div class="container">
 
         <div class="navbar-header">
@@ -29,15 +29,15 @@
                 </li>
                 <li class="dropdown">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                        Username
+                        {{userInfo.user.username}}
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="">Place: 1/20</a>
+                            <a href="">Place: {{userInfo.user.place}}</a>
                         </li>
                         <li>
-                            <a href="">Points: 42</a>
+                            <a href="">Points: {{userInfo.user.points}}</a>
                         </li>
                         <li>
                             <a href="">History</a>

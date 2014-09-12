@@ -11,7 +11,8 @@
         "method-override": "*",
         "path": "*",
         "moment": "*",
-        "underscore": "*"
+        "underscore": "*",
+        "bcrypt-nodejs": "*"
     },
     "devDependencies": {
         "bower": "*",

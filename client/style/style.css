@@ -38,8 +38,17 @@
 }
 
 .red-border {
-/*    border-style: solid;
-    border-color: #ff0000;*/
     border-width: 0.1em;
     box-shadow: 0 0 0 0.2em #ff0000 inset;
+}
+
+.blue-border {
+    border-width: 0.4em;
+    border-color: white;
+    border-style: solid;
+    border-radius: 1em !important;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
 }

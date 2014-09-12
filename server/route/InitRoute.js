@@ -6,8 +6,8 @@ var initFeed = {
         address: "/api/user"
     },
     auth: {
-        login: "api/auth/login",
-        salt: "api/auth/salt"
+        login: "/api/auth/login",
+        salt: "/api/auth/salt"
     }
 };
 

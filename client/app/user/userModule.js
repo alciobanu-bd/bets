@@ -1,2 +1,2 @@
 
-var userModule = angular.module('user', ['resources', 'utils', 'ui.date']);
+var userModule = angular.module('user', ['resources', 'utils', 'ui.date', 'ngCookies']);

@@ -5,6 +5,7 @@ var User = require('./../model/User.js');
 var Roles = require('./../model/Roles.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
+var bcrypt = require('bcrypt-nodejs');
 
 var _ = require('underscore');
 
@@ -68,7 +69,20 @@ User
                                 req.body.points = 0;
                                 req.body.role = Roles.user.name;
                                 req.body.registrationIp = req.connection.remoteAddress;
-                                next();
+                                req.body.serverSalt = bcrypt.genSaltSync();
+
+                                bcrypt.hash(req.body.password, req.body.serverSalt, null, function(err, hash) {
+                                    if (err) {
+                                        res.status(500).json({
+                                            message: "Account couldn't be created due to server errors."
+                                        }).end();
+                                    }
+                                    else {
+                                        req.body.password = hash;
+                                        next();
+                                    }
+                                });
+
                             }
                         });
                     }
@@ -78,8 +92,19 @@ User
         }
 
     })
-    // only admins are permitted to see all existing users, gets on a specific user are permitted for all users
-//    .before('get', jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')]))
+//  only admins are permitted to see all existing users, gets on a specific user are permitted for all users
+    .before('get'/*, jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')])*/)
+    .after('get', function (req, res, next) {
+
+        // don't wanna see these in front-end
+
+        delete res.locals.bundle.password;
+        delete res.locals.bundle.salt;
+        delete res.locals.bundle.serverSalt;
+
+        next();
+
+    })
     .before('get')
     .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')]))
     .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))

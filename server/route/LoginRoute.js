@@ -5,6 +5,7 @@ var User = require('./../model/User.js');
 var jwt = require('jwt-simple');
 var express = require('express');
 var moment = require('moment');
+var bcrypt = require('bcrypt-nodejs');
 
 var router = express.Router();
 
@@ -36,20 +37,38 @@ router.post('/login', function(req, res) {
             ).end();
         }
         else {
-            if (users[0].password == password) {
-                // user logged in successfully
 
-                var tok = getToken(users[0].id);
+            bcrypt.hash(password, users[0].serverSalt, null, function(err, hash) {
+                if (err) {
+                    res.status(500).json({
+                        message: "Login failed. Server encountered some errors."
+                    }).end();
+                }
+                else {
+                    if (hash == users[0].password) {
+                        // user logged in successfully
 
-                users[0] = users[0].toObject();
-                delete users[0]['password'];
+                        var tok = getToken(users[0].id);
 
-                res.status(200).json({
-                    token : tok.token,
-                    expires: tok.expires,
-                    user: users[0]
-                }).end();
-            }
+                        users[0] = users[0].toObject();
+                        delete users[0]['password'];
+                        delete users[0]['serverSalt'];
+                        delete users[0]['registrationIp'];
+
+                        res.status(200).json({
+                            token : tok.token,
+                            expires: tok.expires,
+                            user: users[0]
+                        }).end();
+                    }
+
+                    else {
+                        res.status(400).json({
+                            message: 'Login failed. Credentials you provided are invalid.'
+                        }).end();
+                    }
+                }
+            });
         }
     });
 
