@@ -96,18 +96,33 @@ User
     .before('get'/*, jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')])*/)
     .after('get', function (req, res, next) {
 
-        // don't wanna see these in front-end
+        var deleteUnnecessaryFields = function (bundle) {
 
-        delete res.locals.bundle.password;
-        delete res.locals.bundle.salt;
-        delete res.locals.bundle.serverSalt;
+            var newBundle = bundle.toObject();
+
+            // don't wanna see these in front-end
+            delete newBundle.password;
+            delete newBundle.salt;
+            delete newBundle.serverSalt;
+
+            return newBundle;
+
+        }
+
+        if (!Array.isArray(res.locals.bundle)) {
+            res.locals.bundle = deleteUnnecessaryFields(res.locals.bundle);
+        }
+        else {
+            for (var i in res.locals.bundle) {
+                res.locals.bundle[i] = deleteUnnecessaryFields(res.locals.bundle[i]);
+            }
+        }
 
         next();
 
     })
-    .before('get')
     .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')]))
-    .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
+    .before('delete', jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]))
     .route('rm-rf.delete', /*jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]),*/ {
         handler: function(req, res, next) {
             User.remove({}, function(err) {
