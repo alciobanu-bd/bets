@@ -12,15 +12,20 @@
 }
 
 .header-bg-color {
-    background-color: #29548C !important;
+    background-color: rgb(0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
 }
 
 .brand-color {
     color: #12A4E3 !important;
 }
 
-.header-menu-color li a{
-    color: #00b3ee !important;
+.header-menu-color li a {
+    color: #00C4F0 !important;
+}
+
+.header-text-size {
+    font-size: 1em;
 }
 
 .centered {
@@ -42,7 +47,7 @@
     box-shadow: 0 0 0 0.2em #ff0000 inset;
 }
 
-.blue-border {
+.menu-link-border {
     border-width: 0.4em;
     border-color: white;
     border-style: solid;
@@ -51,4 +56,14 @@
     margin-right: 1em;
     margin-top: 0.3em;
     margin-bottom: 0.3em;
+    min-width: 7.5em;
+}
+
+body {
+    background-size:   cover;
+    background-repeat: no-repeat;
+}
+
+.half-bg-opacity {
+    background-color: rgba(0, 0, 0, 0.5) !important;
 }
