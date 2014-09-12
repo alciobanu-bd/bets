@@ -11,8 +11,7 @@
         "angular-cookies": "*",
         "angular-sanitize": "*",
         "underscore": "*",
-        "angular-ui-date": "*",
-        "bcrypt": "*"
+        "angular-ui-date": "*"
     },
     "devDependencies": {
         "angular-mocks": "*",
