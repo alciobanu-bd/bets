@@ -41,7 +41,6 @@ var user = require('./route/InitRoute.js');
 // DO NOT MOVE UPSIDE - it should stay AFTER app.use new routes
 app.use('/', express.static(path.resolve('client/')));
 app.use(function(req, res) {
-    console.log("req.connection", req.connection);
     res.sendfile(path.resolve('client/index.html'));
 });
 

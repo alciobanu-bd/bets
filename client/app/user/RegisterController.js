@@ -58,6 +58,8 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator) {
             }));
 
             accountData.salt = SaltGenerator.generate();
+            accountData.password = sha256(accountData.password + accountData.salt);
+            accountData.confirmPassword = sha256(accountData.confirmPassword + accountData.salt);
 
             CallUrlService.post({uri: urls.user.address}, accountData,
             function (data) {
