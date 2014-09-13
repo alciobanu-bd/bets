@@ -25,8 +25,8 @@ function () {
 ])
 
 .factory('UserInformation', [
-'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'InitUrls',
-function (CallUrlService, $q, LoginTokenFactory, SHA2, InitUrls) {
+'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2',
+function (CallUrlService, $q, LoginTokenFactory, SHA2) {
 
     var infoService = {};
 
@@ -105,7 +105,7 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, InitUrls) {
 
     var checkLoginToken = function () {
         var token = LoginTokenFactory.getToken();
-        if (token != null) {
+        if (token != null && new Date() < new Date(token.expires)) {
 
             infoService.isLogged = true;
             setUserDetails(token.user);
@@ -116,6 +116,48 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, InitUrls) {
     checkLoginToken();
 
     return infoService;
+
+}
+])
+
+.factory('RolesFactory', [
+'InitUrls', 'CallUrlService',
+function (InitUrls, CallUrlService) {
+
+    var thisFactory = {};
+
+    thisFactory.rolesError = false;
+    thisFactory.loaded = false;
+
+    InitUrls.then(function (data) {
+
+        CallUrlService.get({uri: data.user.roles},
+        function (data) {
+            thisFactory.roles = data;
+            thisFactory.loaded = true;
+            thisFactory.rolesError = false;
+        },
+        function (response) {
+            thisFactory.rolesError = true;
+        }
+        );
+
+    });
+
+    thisFactory.userHasRole = function (userRoleName, role) {
+        if (!thisFactory.loaded) {
+            return false;
+        }
+        var userRoleObject = _.find(thisFactory.roles, function (item) {
+            return item.name == userRoleName;
+        });
+        if (userRoleObject == null && userRoleObject == undefined) {
+            return false;
+        }
+        return userRoleObject.value >= role.value;
+    }
+
+    return thisFactory;
 
 }
 ])

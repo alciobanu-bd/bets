@@ -122,8 +122,8 @@ User
 
     })
     .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')]))
-    .before('delete', jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]))
-    .route('rm-rf.delete', jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]), {
+    .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]))
+    .route('rm-rf.delete', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]), {
         handler: function(req, res, next) {
             User.remove({}, function(err) {
                 if (err) {

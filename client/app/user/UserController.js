@@ -2,10 +2,11 @@
 userModule
 
 .controller('UserController', [
-'$scope', 'UserInformation', 'InitUrls', 'Templates', '$location',
-function ($scope, UserInformation, InitUrls, Templates, $location) {
+'$scope', 'UserInformation', 'InitUrls', 'RolesFactory',
+function ($scope, UserInformation, InitUrls, RolesFactory) {
 
     $scope.userInfo = UserInformation;
+    $scope.RolesFactory = RolesFactory;
 
     $scope.inputs = {
         username: {
@@ -23,7 +24,7 @@ function ($scope, UserInformation, InitUrls, Templates, $location) {
 
     $scope.login = function () {
 
-        InitUrls.get({}, function (data) {
+        InitUrls.then(function (data) {
             var credentials = _.object(_.map($scope.inputs, function (item, key) {
                 return [key, item.model];
             }));

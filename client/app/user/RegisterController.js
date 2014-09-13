@@ -50,7 +50,7 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
         resetStatus();
         resetInputsError();
 
-        InitUrls.get(function (data) {
+        InitUrls.then(function (data) {
             var urls = data;
 
             var accountData = _.object(_.map($scope.inputs, function (item, key) {

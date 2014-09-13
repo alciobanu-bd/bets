@@ -1,7 +1,7 @@
 betsModule
 .controller('MainController',[
-'$scope', 'Templates', 'UserInformation', '$location',
-function ($scope, Templates, UserInfo, $location) {
+'$scope', 'Templates', 'UserInformation', '$location', 'InitUrls',
+function ($scope, Templates, UserInfo, $location, InitUrls) {
 
     $scope.Templates = Templates;
     $scope.userInfo = UserInfo;
@@ -27,8 +27,8 @@ function ($scope, Templates, UserInfo, $location) {
         $location.path($scope.currentBodyView.route);
     }
 
-    $scope.goToHome = function () {
-//        $scope.currentBodyView = '';
+    $scope.goToRanking = function () {
+        $scope.currentBodyView = Templates.ranking;
         $location.path($scope.currentBodyView.route);
     }
 

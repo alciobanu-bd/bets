@@ -21,7 +21,7 @@
                 <li>
                     <a class="menu-link-border centered" href="">Week #1</a>
                 </li>
-                <li>
+                <li ng-click="goToRanking()">
                     <a class="menu-link-border centered" href="">Ranking</a>
                 </li>
                 <li>
@@ -38,6 +38,12 @@
                         </li>
                         <li>
                             <a href="">Points: {{userInfo.user.points}}</a>
+                        </li>
+                        <li>
+                            <a href="">My profile</a>
+                        </li>
+                        <li ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
+                            <a href="">Admin panel</a>
                         </li>
                         <li>
                             <a href="">History</a>

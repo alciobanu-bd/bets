@@ -1,3 +1,4 @@
+
 var express = require('express');
 var jwt = require('jwt-simple');
 var bodyParser = require('body-parser');
@@ -5,6 +6,8 @@ var restful = require('node-restful');
 var mongoose = restful.mongoose;
 var methodOverride = require('method-override');
 var path = require('path');
+var fs = require("fs");
+
 GLOBAL.app = express();
 
 // configure app to use bodyParser()
@@ -20,7 +23,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.set('jwtTokenSecret', 'YOUR_SECRET_STRING'); // use token service
+// use token service
+var filename = "server/config/secretString";
+var secretString = fs.readFileSync(filename, "utf8");
+app.set('jwtTokenSecret', secretString);
 
 mongoose.connect("mongodb://localhost/bets");
 
@@ -31,19 +37,16 @@ db
 
 var port = 8080;
 
-var user = require('./model/User.js');
-var user = require('./route/UserRoute.js');
-var user = require('./route/LoginRoute.js');
-var user = require('./route/InitRoute.js');
+require('./route/InitRoute.js');
+require('./model/User.js');
+require('./route/UserRoute.js');
+require('./route/LoginRoute.js');
+require('./route/RolesRoute.js');
+require('./route/RankingRoute.js');
 
 // resolve statics
-// use client folder root path / and server index.html
-// DO NOT MOVE UPSIDE - it should stay AFTER app.use new routes
+// use client folder as root path /
 app.use('/', express.static(path.resolve('client/')));
-app.use(function(req, res) {
-    res.sendfile(path.resolve('client/index.html'));
-});
-
 
 // START THE SERVER
 app.listen(port);

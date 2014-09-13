@@ -10,7 +10,10 @@ configModule
 
             return {
                 request: function (config) {
-                    config.headers['x-access-token'] = LoginTokenFactory.getToken();
+                    var token = LoginTokenFactory.getToken();
+                    if (token) {
+                        config.headers['x-access-token'] = token.token;
+                    }
                     return config|| $q.when(config);
                 }
             }

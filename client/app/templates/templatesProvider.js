@@ -36,6 +36,10 @@ var templates =
             html: 'app/main/views/welcomeNotLogged.html',
             route: ''
         }
+    },
+    ranking: {
+        html: 'app/ranking/views/ranking.html',
+        route: 'ranking'
     }
 }
 

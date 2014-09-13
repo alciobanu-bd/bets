@@ -9,13 +9,11 @@ module.exports = function (callbacks) {
 
         var token = req.headers['x-access-token'];
 
-        console.log("token", token);
-
         if (token) {
             try {
                 var decoded = jwt.decode(token, app.get('jwtTokenSecret'));
 
-                if (decoded.exp <= Date.now()) {
+                if (decoded.exp <= new Date()) {
                     res.status(401).json({
                         message: "Your token expired. Please log in again."
                     }).end();

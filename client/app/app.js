@@ -6,7 +6,8 @@ var betsModule = angular.module(
         'templates',
         'user',
         'resources',
-        'config'
+        'config',
+        'ranking'
     ]
 );
 
