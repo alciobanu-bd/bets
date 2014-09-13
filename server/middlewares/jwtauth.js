@@ -9,6 +9,8 @@ module.exports = function (callbacks) {
 
         var token = req.headers['x-access-token'];
 
+        console.log("token", token);
+
         if (token) {
             try {
                 var decoded = jwt.decode(token, app.get('jwtTokenSecret'));

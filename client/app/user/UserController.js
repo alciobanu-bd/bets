@@ -2,8 +2,8 @@
 userModule
 
 .controller('UserController', [
-'$scope', 'UserInformation', 'InitUrls',
-function ($scope, UserInformation, InitUrls) {
+'$scope', 'UserInformation', 'InitUrls', 'Templates', '$location',
+function ($scope, UserInformation, InitUrls, Templates, $location) {
 
     $scope.userInfo = UserInformation;
 
@@ -14,7 +14,12 @@ function ($scope, UserInformation, InitUrls) {
         password: {
             model: ''
         }
-    }
+    };
+
+    $scope.error = {
+        message: '',
+        encounteredError: false
+    };
 
     $scope.login = function () {
 
@@ -22,9 +27,26 @@ function ($scope, UserInformation, InitUrls) {
             var credentials = _.object(_.map($scope.inputs, function (item, key) {
                 return [key, item.model];
             }));
-            UserInformation.login(data, credentials);
+            var loginPromise = UserInformation.login(data, credentials);
+
+            loginPromise.then(
+            function (data) {
+                $scope.encounteredError = false;
+                $scope.goHome();
+            },
+            function (rejection) {
+                $scope.error.encounteredError = true;
+                $scope.error.message = rejection.data.message;
+            }
+            );
+
         });
 
+    }
+
+    $scope.logout = function () {
+        UserInformation.logout();
+        $scope.goHome();
     }
 
 }

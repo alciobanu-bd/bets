@@ -93,7 +93,7 @@ User
 
     })
 //  only admins are permitted to see all existing users, gets on a specific user are permitted for all users
-    .before('get'/*, jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')])*/)
+    .before('get', jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')]))
     .after('get', function (req, res, next) {
 
         var deleteUnnecessaryFields = function (bundle) {
@@ -123,7 +123,7 @@ User
     })
     .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')]))
     .before('delete', jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]))
-    .route('rm-rf.delete', /*jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]),*/ {
+    .route('rm-rf.delete', jwtauth([tokenChecks.hasRole('ROLE_SUPERUSER')]), {
         handler: function(req, res, next) {
             User.remove({}, function(err) {
                 if (err) {
