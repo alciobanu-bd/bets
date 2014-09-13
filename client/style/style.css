@@ -48,7 +48,7 @@
 }
 
 .menu-link-border {
-    border-width: 0.4em;
+    border-width: 0.2em;
     border-color: white;
     border-style: solid;
     border-radius: 1em !important;
@@ -67,3 +67,4 @@ body {
 .half-bg-opacity {
     background-color: rgba(0, 0, 0, 0.5) !important;
 }
+

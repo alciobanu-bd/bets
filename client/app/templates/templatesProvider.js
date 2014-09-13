@@ -40,6 +40,10 @@ var templates =
     ranking: {
         html: 'app/ranking/views/ranking.html',
         route: 'ranking'
+    },
+    week: {
+        html: 'app/week/views/week.html',
+        route: 'week'
     }
 }
 

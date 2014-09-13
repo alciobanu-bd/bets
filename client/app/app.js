@@ -7,8 +7,9 @@ var betsModule = angular.module(
         'user',
         'resources',
         'config',
-        'ranking'
+        'ranking',
+        'week'
     ]
 );
 
-var REST_HOSTNAME = '';
+var REST_HOSTNAME = ''; // relative path to local rest provider

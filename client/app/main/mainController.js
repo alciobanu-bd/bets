@@ -1,10 +1,14 @@
 betsModule
 .controller('MainController',[
-'$scope', 'Templates', 'UserInformation', '$location', 'InitUrls',
-function ($scope, Templates, UserInfo, $location, InitUrls) {
+'$scope', 'Templates', 'UserInformation', '$location', 'WeekFactory',
+function ($scope, Templates, UserInfo, $location, WeekFactory) {
 
     $scope.Templates = Templates;
     $scope.userInfo = UserInfo;
+    $scope.WeekFactory = WeekFactory;
+
+    WeekFactory.resetWeekFactory();
+    WeekFactory.fetchCurrentWeek();
 
     $scope.goHome = function () {
         if ($scope.userInfo.isLogged) {
@@ -29,6 +33,11 @@ function ($scope, Templates, UserInfo, $location, InitUrls) {
 
     $scope.goToRanking = function () {
         $scope.currentBodyView = Templates.ranking;
+        $location.path($scope.currentBodyView.route);
+    }
+
+    $scope.goToWeek = function () {
+        $scope.currentBodyView = Templates.week;
         $location.path($scope.currentBodyView.route);
     }
 

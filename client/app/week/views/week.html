@@ -1,0 +1,89 @@
+<div class="container" ng-controller="WeekController">
+
+    <div class="jumbotron centered white half-bg-opacity">
+        <h2 ng-if="WeekFactory.currentWeek.number > 0">Weeks and bets</h2>
+        <h2 ng-if="WeekFactory.currentWeek.number == 0">Fun hasn't start yet. Please come back soon.</h2>
+
+        <div class="panel panel-default" ng-if="WeekFactory.currentWeek.number > 0">
+            <div class="panel-heading">
+                <h3 class="panel-title">Week {{WeekFactory.currentWeek.number}}</h3>
+            </div>
+            <div class="panel-body">
+            </div>
+        </div>
+
+        <div class="panel panel-default" ng-if="WeekFactory.beforeCurrentWeek.number > 0">
+            <div class="panel-heading">
+                <h3 class="panel-title">Week {{WeekFactory.beforeCurrentWeek.number}}</h3>
+            </div>
+            <div class="panel-body">
+            </div>
+        </div>
+
+    </div>
+
+    <!--    ADMIN panel     -->
+    <div class="jumbotron centered white half-bg-opacity"
+     ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
+
+        <div ng-click="newWeekPanel = !!!newWeekPanel" style="cursor: pointer">
+            <span class="glyphicon glyphicon-align-justify white"></span>
+            Add new week
+        </div>
+
+
+        <div class="panel-heading" ng-show="newWeekPanel">
+            <div class="row">
+                <h2 class="panel-title">Week {{WeekFactory.currentWeek.number + 1}}</h2>
+            </div>
+            <div class="row">
+                Write how many total matches you want to add and how many of them should be required for users to be played.
+                Recommended numbers are 3-5 for total and 3 for required.
+                Imediately after you hit publish, the other users will see the matches and will be able to place their bets.
+            </div>
+
+            <div class="panel-body">
+
+                <div class="row form-inline top-buffer-0-5-em">
+                    <span style="width: 20%" class="input-group">
+                        <input type="text" ng-model="matchesNumber.total" class="form-control cornered-input" placeholder="Total matches">
+                    </span>
+                </div>
+
+                <div class="row form-inline top-buffer-0-5-em">
+                    <span style="width: 20%" class="input-group">
+                        <input type="text" ng-model="matchesNumber.required" class="form-control cornered-input" placeholder="Required">
+                    </span>
+                </div>
+
+                <div class="row form-inline top-buffer-0-5-em" ng-repeat="i in range(matchesNumber.total)">
+                    <span style="width: 30%" class="input-group">
+                        <input type="text" class="form-control cornered-input" placeholder="Home team">
+                    </span>
+                    <span style="width: 10%">
+                        vs
+                    </span>
+                    <span style="width: 30%" class="input-group">
+                        <input type="text" class="form-control cornered-input" placeholder="Away team">
+                    </span>
+                    <span style="width: 10%" class="input-group">
+                        <input ui-date="dateOptions" class="form-control cornered-input" placeholder="Start date">
+                    </span>
+                    <span style="width: 8%" class="input-group">
+                        <input class="form-control cornered-input" placeholder="HH:MM">
+                    </span>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 1em" ng-show="matchesNumber.total > 0">
+                <button type="button" class="btn btn-info" style="width: 40%" ng-click="login()">
+                    Publish
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

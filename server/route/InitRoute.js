@@ -10,6 +10,11 @@ var initFeed = {
     auth: {
         login: "/api/auth/login",
         salt: "/api/auth/salt"
+    },
+    week: {
+        address: "/api/week",
+        current: "/api/week/last",
+        beforeLast: "/api/week/beforeLast"
     }
 };
 

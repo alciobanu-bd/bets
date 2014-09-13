@@ -13,7 +13,6 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
 
     User.find({},
     {password: 0, salt: 0, serverSalt: 0, _v: 0, email: 0, birthDate: 0, registrationIp: 0},
-    {sort: {points: -1}},
     function (err, users) {
 
         if (err) {
@@ -25,7 +24,7 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
         }
 
     }
-    );
+    ).sort({points: -1});
 
 });
 

@@ -35,7 +35,7 @@ db
     .on('error', function () {console.error('DB connection error.')})
     .once('open', function() {console.log('DB Connection established.')});
 
-var port = 8080;
+var port = 80;
 
 require('./route/InitRoute.js');
 require('./model/User.js');
@@ -43,6 +43,7 @@ require('./route/UserRoute.js');
 require('./route/LoginRoute.js');
 require('./route/RolesRoute.js');
 require('./route/RankingRoute.js');
+require('./route/WeekRoute.js');
 
 // resolve statics
 // use client folder as root path /
