@@ -1,0 +1,44 @@
+
+<!--    ADMIN panel     -->
+<div class="jumbotron centered white half-bg-opacity">
+
+    <div class="panel-heading">
+        <div class="row">
+            <h2 class="panel-title">Week {{WeekFactory.currentWeek.number}}</h2>
+        </div>
+        <div class="row">
+            {{WeekFactory.currentWeek.events.length}} total matches.
+            You are required to play {{WeekFactory.currentWeek.required}} of them.
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in WeekFactory.currentWeek.events">
+                    <span style="width: 30%" class="input-group">
+                        {{match.homeTeam}}
+                    </span>
+                    <span style="width: 5%" class="input-group">
+                        <input class="form-control cornered-input" />
+                    </span>
+                    <span style="width: 2%" class="input-group">
+                        -
+                    </span>
+                    <span style="width: 5%" class="input-group">
+                        <input class="form-control cornered-input" />
+                    </span>
+                    <span style="width: 30%" class="input-group">
+                        {{match.awayTeam}}
+                    </span>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 1em">
+            <button type="button" class="btn btn-info" style="width: 40%">
+                Bet
+            </button>
+        </div>
+
+    </div>
+
+</div>

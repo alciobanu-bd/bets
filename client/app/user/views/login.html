@@ -15,8 +15,11 @@
                 Come on in
             </button>
         </div>
-        <div ng-show="error.encounteredError" class="alert-danger">
-            {{error.message}}
+        <div ng-show="error.encounteredError" class="top-buffer-0-5-em centered cornered-input error-div"
+         style= "width: 40%;">
+            <span class="error-success-inner">
+                {{error.message}}
+            </span>
         </div>
 
     </div>

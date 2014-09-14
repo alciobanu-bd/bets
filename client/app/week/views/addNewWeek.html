@@ -1,0 +1,73 @@
+
+<!--    ADMIN panel     -->
+<div class="jumbotron centered white half-bg-opacity" ng-controller="NewWeekController"
+     ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
+
+    <div ng-click="newWeekPanel = !!!newWeekPanel" style="cursor: pointer">
+        <span class="glyphicon glyphicon-align-justify white"></span>
+        Add new week
+    </div>
+
+
+    <div class="panel-heading" ng-show="newWeekPanel">
+        <div class="row">
+            <h2 class="panel-title">Week {{WeekFactory.currentWeek.number + 1}}</h2>
+        </div>
+        <div class="row">
+            Write how many total matches you want to add and how many of them should be required for users to be played.
+            Recommended numbers are 3-5 for total and 3 for required.
+            Imediately after you hit publish, the other users will see the matches and will be able to place their bets.
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row form-inline top-buffer-0-5-em">
+                    <span style="width: 20%" class="input-group">
+                        <input type="text" ng-model="matchesNumber.total" ng-change="validateNumberOfMatches(); setMatchesArray()"
+                               class="form-control cornered-input" placeholder="Total matches" />
+                    </span>
+            </div>
+
+            <div class="row form-inline top-buffer-0-5-em">
+                    <span style="width: 20%" class="input-group">
+                        <input type="text" ng-model="matchesNumber.required" class="form-control cornered-input"
+                               ng-change="validateNumberOfMatches()" placeholder="Required" />
+                    </span>
+            </div>
+
+            <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in matches track by $index">
+                    <span style="width: 30%" class="input-group">
+                        <input type="text" ng-model="match.homeTeam" class="form-control cornered-input" placeholder="Home team" />
+                    </span>
+                    <span style="width: 10%">
+                        vs
+                    </span>
+                    <span style="width: 30%" class="input-group">
+                        <input type="text" ng-model="match.awayTeam" class="form-control cornered-input" placeholder="Away team" />
+                    </span>
+                    <span style="width: 10%" class="input-group">
+                        <input ui-date="dateOptions" ng-model="match.startDate" class="form-control cornered-input" placeholder="Start date" />
+                    </span>
+                    <span style="width: 8%" class="input-group">
+                        <input ng-model="match.startTime" class="form-control cornered-input" placeholder="HH:MM" />
+                    </span>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 1em" ng-show="matchesNumber.total > 0">
+            <button type="button" class="btn btn-info" style="width: 40%" ng-click="publish()" ng-disabled="publishError()">
+                Publish
+            </button>
+        </div>
+
+        <div ng-show="afterSave.error" class="top-buffer-0-5-em centered cornered-input error-div"
+             style= "width: 40%;">
+            <span class="error-success-inner">
+                {{afterSave.message}}
+            </span>
+        </div>
+
+    </div>
+
+</div>

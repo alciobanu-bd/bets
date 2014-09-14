@@ -1,2 +1,2 @@
 
-var weekModule = angular.module('week', ['resources', 'ui.date']);
+var weekModule = angular.module('week', ['resources', 'ui.date', 'settings']);

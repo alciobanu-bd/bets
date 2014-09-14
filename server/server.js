@@ -6,7 +6,7 @@ var restful = require('node-restful');
 var mongoose = restful.mongoose;
 var methodOverride = require('method-override');
 var path = require('path');
-var fs = require("fs");
+var fs = require('fs');
 
 GLOBAL.app = express();
 
@@ -52,5 +52,3 @@ app.use('/', express.static(path.resolve('client/')));
 // START THE SERVER
 app.listen(port);
 console.log('Server started on port ' + port);
-
-

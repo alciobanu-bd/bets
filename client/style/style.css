@@ -43,8 +43,9 @@
 }
 
 .red-border {
-    border-width: 0.1em;
-    box-shadow: 0 0 0 0.2em #ff0000 inset;
+    border-style: solid;
+    border-color: #ff0000;
+    border-width: 0.2em;
 }
 
 .menu-link-border {
@@ -60,11 +61,46 @@
 }
 
 body {
-    background-size:   cover;
-    background-repeat: no-repeat;
+    background: url(./../images/ball_00.jpg) no-repeat center center fixed;
+    background-size: cover;
 }
+
+body    {overflow-y:scroll;}
 
 .half-bg-opacity {
     background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
+.error-div {
+    min-height: 4em;
+    display: inline-flex;
+    border-color: #ff0046;
+    border-style: solid;
+    background-color: #ff6354;
+}
+
+.success-div {
+    min-height: 4em;
+    display: inline-flex;
+    border-color: #25bc6c;
+    border-style: solid;
+    background-color: #00e15a;
+}
+
+.error-success-inner {
+    margin: auto
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    border-radius: 15px;
+}
+
+::-webkit-scrollbar-track {
+    border: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 0.4em solid #92978d;
+    border-radius: 15px;
+}
