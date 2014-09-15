@@ -71,7 +71,7 @@ function (InitUrls, CallUrlService) {
 
         InitUrls.then(
             function (data) {
-                CallUrlService.get({uri: data.week.current},
+                CallUrlService.get({uri: data.week.beforeLast},
                     function (data) {
                         thisFactory.beforeCurrentWeek = data;
                     },
@@ -148,6 +148,34 @@ function (InitUrls, CallUrlService) {
     }
 
     return thisFactory;
+
+}
+])
+
+.factory('BetFactory',[
+'InitUrls', 'CallUrlService',
+function (InitUrls, CallUrlService) {
+
+    var betFactory = {};
+
+    betFactory.place = function (bets) {
+
+        InitUrls.then(function (data) {
+
+            CallUrlService.post({uri: data.bet.place}, bets,
+            function (data) {
+
+            },
+            function (response) {
+
+            }
+            );
+
+        });
+
+    }
+
+    return betFactory;
 
 }
 ])

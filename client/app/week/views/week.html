@@ -4,8 +4,9 @@
         <h2 ng-if="WeekFactory.currentWeek.number > 0">Weeks and bets</h2>
         <h2 ng-if="WeekFactory.currentWeek.number == 0">Fun hasn't start yet. Please come back soon.</h2>
 
-        <ng-include src="'app/week/views/weekCurrent.html'"></ng-include>
-        <ng-include src="'app/week/views/weekBeforeCurrent.html'"></ng-include>
+        <week week="WeekFactory.currentWeek"></week>
+        <br />
+        <week week="WeekFactory.beforeCurrentWeek"></week>
 
     </div>
 

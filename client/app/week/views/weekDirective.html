@@ -1,0 +1,43 @@
+
+<div class="jumbotron centered white half-bg-opacity" ng-show="week.number > 0">
+
+    <div class="panel-heading">
+        <div class="row">
+            <h2 class="panel-title">Week {{week.number}}</h2>
+        </div>
+        <div class="row">
+            {{week.events.length}} total matches.
+            You are required to play {{week.required}} of them.
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in week.events">
+                <span style="width: 30%" class="input-group">
+                    {{match.homeTeam}}
+                </span>
+                <span style="width: 5%" class="input-group">
+                    <input class="form-control cornered-input" ng-model="match.homeScore" />
+                </span>
+                <span style="width: 25%" class="input-group">
+                    {{match.startDate | date: 'MMM d, y h:mm a'}}
+                </span>
+                <span style="width: 5%" class="input-group">
+                    <input class="form-control cornered-input" ng-model="match.awayScore" />
+                </span>
+                <span style="width: 30%" class="input-group">
+                    {{match.awayTeam}}
+                </span>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 1em">
+            <button type="button" class="btn btn-info" style="width: 40%" ng-click="place()">
+                Bet
+            </button>
+        </div>
+
+    </div>
+
+</div>

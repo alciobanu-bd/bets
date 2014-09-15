@@ -25,7 +25,8 @@ function ($scope, Settings, CallUrlService, InitUrls) {
                 homeTeam: '',
                 awayTeam: '',
                 startDate: null,
-                startTime: ''
+                startTime: '',
+                index: i
             });
         }
     }

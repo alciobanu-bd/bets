@@ -8,6 +8,16 @@ var tokenChecks = require('./../middlewares/tokenChecks.js');
 Week
 .methods(['get', 'post', 'put', 'delete'])
 
+.before('post',
+function (req, res, next) {
+
+    req.body.locked = false;
+    req.body.ended = false;
+
+    next();
+
+})
+
 .before('post', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
 .before('put', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
 .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
@@ -15,7 +25,8 @@ Week
 .route('last.get',
 function (req, res, next) {
 
-    Week.find({},
+    Week.find({}, {},
+    {sort: {number: -1}, limit: 1},
     function (err, weeks) {
 
         if (err) {
@@ -33,14 +44,15 @@ function (req, res, next) {
             }
         }
 
-    }).sort({number: -1}).limit(1);
+    });
 
 })
 
 .route('beforeLast.get',
 function (req, res, next) {
 
-    Week.find({},
+    Week.find({}, {},
+        {sort: {number: -1}, limit: 2},
         function (err, weeks) {
 
             if (err) {
@@ -58,7 +70,7 @@ function (req, res, next) {
                 }
             }
 
-        }).sort({number: -1}).limit(2);
+        });
 
 })
 

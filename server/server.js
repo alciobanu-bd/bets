@@ -18,8 +18,10 @@ app.use(express.query());
 app.use(methodOverride());
 app.use(function (req, res, next) {
     // url decoding middleware
+    var oldUrl = req.url;
     req.url = decodeURIComponent(req.url);
     req.url = req.url.replace(/[/]+/g, '/');
+    console.log(oldUrl, req.url);
     next();
 });
 
@@ -44,6 +46,7 @@ require('./route/LoginRoute.js');
 require('./route/RolesRoute.js');
 require('./route/RankingRoute.js');
 require('./route/WeekRoute.js');
+require('./route/BetRoute.js');
 
 // resolve statics
 // use client folder as root path /

@@ -21,6 +21,7 @@ module.exports = function (callbacks) {
                 else {
                     // get the user
                     User.findOne({ _id: decoded.iss }, function(err, user) {
+
                         if (err) {
                             res.status(401).json({
                                 message: "An error has ocured. We couldn't verify your identity."

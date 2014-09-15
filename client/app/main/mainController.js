@@ -1,14 +1,10 @@
 betsModule
 .controller('MainController',[
-'$scope', 'Templates', 'UserInformation', '$location', 'WeekFactory',
-function ($scope, Templates, UserInfo, $location, WeekFactory) {
+'$scope', 'Templates', 'UserInformation', '$location',
+function ($scope, Templates, UserInfo, $location) {
 
     $scope.Templates = Templates;
     $scope.userInfo = UserInfo;
-    $scope.WeekFactory = WeekFactory;
-
-    WeekFactory.resetWeekFactory();
-    WeekFactory.fetchCurrentWeek();
 
     $scope.goHome = function () {
         if ($scope.userInfo.isLogged) {

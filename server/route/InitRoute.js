@@ -15,6 +15,9 @@ var initFeed = {
         address: "/api/week",
         current: "/api/week/last",
         beforeLast: "/api/week/beforeLast"
+    },
+    bet: {
+        place: "/api/bet"
     }
 };
 
