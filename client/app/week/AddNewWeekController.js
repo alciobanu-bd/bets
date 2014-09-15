@@ -57,7 +57,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
             return startDate > today00;
         });
 
-         var correctTime =  _.every($scope.matches, function (match) {
+         var correctTime = _.every($scope.matches, function (match) {
             var timeRegex = RegExp(/[0-9][0-9]?:[0-9][0-9]/);
             if (!timeRegex.test(match.startTime)) {
                 return false;
@@ -82,9 +82,11 @@ function ($scope, Settings, CallUrlService, InitUrls) {
 
     var getMatches = function () {
         return _.map($scope.matches, function (match) {
-            match.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
-            delete match.startTime;
-            return match;
+            var newMatch = {};
+            angular.extend(newMatch, match);
+            newMatch.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
+            delete newMatch.startTime;
+            return newMatch;
         });
     }
 
