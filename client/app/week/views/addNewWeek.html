@@ -68,6 +68,15 @@
             </span>
         </div>
 
+        <div ng-show="afterSave.success" class="top-buffer-0-5-em centered cornered-input success-div"
+             style= "width: 40%;">
+            <span class="error-success-inner">
+                {{afterSave.message}}
+            </span>
+        </div>
+
     </div>
+
+    {{save.inProgress}}
 
 </div>

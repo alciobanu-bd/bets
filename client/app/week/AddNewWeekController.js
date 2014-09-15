@@ -46,7 +46,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
             return true;
         }
 
-        if ($scope.inPrgress) {
+        if ($scope.save.inProgress) {
             return true;
         }
 
@@ -90,6 +90,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
 
     $scope.afterSave = {
         error: false,
+        success: false,
         message: ''
     };
     $scope.save = {
@@ -99,6 +100,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
     $scope.publish = function () {
 
         $scope.afterSave.error = false;
+        $scope.afterSave.success = false;
         $scope.save.inProgress = true;
 
         var newWeek = {
@@ -111,16 +113,19 @@ function ($scope, Settings, CallUrlService, InitUrls) {
             CallUrlService.post({uri: data.week.address}, newWeek,
                 function (data) {
                     $scope.afterSave.error = false;
+                    $scope.afterSave.success = true;
                     $scope.save.inProgress = false;
+                    $scope.afterSave.message = "Week saved successfully.";
                 },
                 function (response) {
                     $scope.afterSave.error = true;
+                    $scope.afterSave.success = false;
+                    $scope.save.inProgress = false;
                     if (response.data.message) {
                         $scope.afterSave.message = response.data.message;
                     }
                     else {
                         $scope.afterSave.message = "Week didn't save. Please try again.";
-                        $scope.save.inProgress = false;
                     }
                 }
             );
