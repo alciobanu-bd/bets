@@ -10,7 +10,6 @@ var BetSchema = mongoose.Schema({
     scores: {type: Array, required: true},
     points: {type: 'number', required: false},
     ended: {type: Boolean, required: false},
-    username: {type: 'string', required: false},
     userId: {type: ObjectId, required: false},
     status: {type: 'string', required: false}
 });

@@ -120,21 +120,22 @@ User
         next();
 
     })
-    .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN')]))
-    .before('put', jwtauth([function(req, res, next, user) {
-        // prevent users to save role if they don't have admin role
+    .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN'),
+        function(req, res, next, user) {
+            // prevent users to save role if they don't have admin role
 
-        if (Role.roleValue(user.role) < Role.admin.value) {
-
-            if (req.body.role) {
-                delete req.body.role;
-                delete req.body.registrationIp;
+            if (Role.roleValue(user.role) < Role.admin.value) {
+                if (req.body.role) {
+                    delete req.body.role;
+                    delete req.body.registrationIp;
+                }
             }
 
         }
+    ]))
 
-    }]))
     .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]))
+
 /*    .route('rm-rf.delete', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]), {
         handler: function(req, res, next) {
             User.remove({}, function(err) {
@@ -152,6 +153,7 @@ User
                 }
             });
         }
-    });*/
+    });
+*/
 
 User.register(app, '/api/user');

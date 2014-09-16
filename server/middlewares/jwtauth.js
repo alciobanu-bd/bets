@@ -24,7 +24,7 @@ module.exports = function (callbacks) {
 
                         if (err) {
                             res.status(401).json({
-                                message: "An error has ocured. We couldn't verify your identity."
+                                message: "An error has occured. We couldn't verify your identity."
                             }).end();
                         }
                         else {

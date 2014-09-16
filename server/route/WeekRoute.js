@@ -13,7 +13,6 @@ function (req, res, next) {
 
     req.body.locked = false;
     req.body.ended = false;
-
     next();
 
 })

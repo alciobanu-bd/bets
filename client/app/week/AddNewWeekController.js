@@ -136,6 +136,16 @@ function ($scope, Settings, CallUrlService, InitUrls) {
 
     }
 
+    $scope.showConfirm = function () {
+        $scope.showConfirm = true;
+    }
+
+    $scope.hideConfirm = function () {
+        $scope.showConfirm = false;
+    }
+
+    $scope.hideConfirm();
+
 }
 ]
 )
