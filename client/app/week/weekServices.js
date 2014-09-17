@@ -16,15 +16,15 @@ function (InitUrls, CallUrlService) {
             active: false,
             message: ''
         },
+        currentBet: {
+            active: false,
+            message: ''
+        },
+        beforeCurrentBet: {
+            active: false,
+            message: ''
+        },
         all: {
-            active: false,
-            message: ''
-        },
-        newWeekSave: {
-            active: false,
-            message: ''
-        },
-        alteredWeek: {
             active: false,
             message: ''
         }
@@ -39,45 +39,89 @@ function (InitUrls, CallUrlService) {
         }));
 
         thisFactory.currentWeek = null;
+        thisFactory.currentWeekBet = null;
         thisFactory.beforeCurrentWeek = null;
+        thisFactory.beforeCurrentWeekBet = null;
         thisFactory.allWeeks = null;
 
     }
 
-    thisFactory.fetchCurrentWeek = function () {
-
-        thisFactory.error.current.active = false;
-        thisFactory.currentWeek = null;
+    thisFactory.fetchCurrentWeek = function (callWhenDone) {
 
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.week.current},
                     function (data) {
+                        thisFactory.error.current.active = false;
                         thisFactory.currentWeek = data;
+                        callWhenDone();
                     },
                     function (response) {
                         thisFactory.error.current.active = true;
-                        thisFactory.error.current.message = "An error occured.";
+                        thisFactory.error.current.message = "An error occured while trying to fetch a week.";
                     }
                 );
             }
         );
     }
 
-    thisFactory.fetchBeforeCurrentWeek = function () {
+    thisFactory.fetchCurrentWeekBet = function () {
+        InitUrls.then(
+            function (data) {
+                CallUrlService.get({uri: data.bet.byWeek, weekNumber: thisFactory.currentWeek.number},
+                    function (data) {
+                        thisFactory.error.currentBet.active = false;
+                        thisFactory.currentWeekBet = data;
+                    },
+                    function (response) {
+                        thisFactory.error.currentBet.active = true;
+                        if (response.data.message) {
+                            thisFactory.error.currentBet.message = response.data.message;
+                        }
+                        else {
+                            thisFactory.error.currentBet.message = "An error occured while trying to fetch your bets.";
+                        }
+                    }
+                );
+            }
+        );
+    }
 
-        thisFactory.error.beforeCurrent.active = false;
-        thisFactory.beforeCurrentWeek = null;
+    thisFactory.fetchBeforeCurrentWeekBet = function () {
+        InitUrls.then(
+            function (data) {
+                CallUrlService.get({uri: data.bet.byWeek, weekNumber: thisFactory.beforeCurrentWeek.number},
+                    function (data) {
+                        thisFactory.error.beforeCurrentBet.active = false;
+                        thisFactory.beforeCurrentWeekBet = data;
+                    },
+                    function (response) {
+                        thisFactory.error.beforeCurrentBet.active = true;
+                        if (response.data.message) {
+                            thisFactory.error.beforeCurrentBet.message = response.data.message;
+                        }
+                        else {
+                            thisFactory.error.beforeCurrentBet.message = "An error occured while trying to fetch your bets.";
+                        }
+                    }
+                );
+            }
+        );
+    }
+
+    thisFactory.fetchBeforeCurrentWeek = function (callWhenDone) {
 
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.week.beforeLast},
                     function (data) {
+                        thisFactory.error.beforeCurrent.active = false;
                         thisFactory.beforeCurrentWeek = data;
+                        callWhenDone();
                     },
                     function (response) {
                         thisFactory.error.beforeCurrent.active = true;
-                        thisFactory.error.beforeCurrent.message = "An error occured.";
+                        thisFactory.error.beforeCurrent.message = "An error occured while trying to fetch a week.";
                     }
                 );
             }
@@ -85,9 +129,6 @@ function (InitUrls, CallUrlService) {
     }
 
     thisFactory.fetchAllWeeks = function () {
-
-        thisFactory.allWeeks = null;
-        thisFactory.error.all.active = false;
 
         InitUrls.then(function (data) {
 
@@ -103,48 +144,6 @@ function (InitUrls, CallUrlService) {
 
         });
 
-    }
-
-    thisFactory.saveANewWeek = function (newWeek, successCallback) {
-
-        thisFactory.error.newWeekSave.active = false;
-
-        InitUrls.then(function (data) {
-
-            CallUrlService.post({uri: data.week.address}, newWeek,
-                function (data) {
-                    successCallback({
-                        message: "Week saved successfully."
-                    });
-                },
-                function (response) {
-                    thisFactory.error.newWeekSave.active = true;
-                    thisFactory.error.newWeekSave.message = "Week wasn't saved. An error occured.";
-                }
-            );
-
-        });
-    }
-
-    thisFactory.alterWeek = function (alteredWeek, successCallback) {
-
-        thisFactory.error.alteredWeek.active = true;
-
-        InitUrls.then(function (data) {
-
-            CallUrlService.post({uri: data.week.address}, newWeek,
-                function (data) {
-                    successCallback({
-                        message: "Week saved successfully."
-                    });
-                },
-                function (response) {
-                    thisFactory.error.alteredWeek.active = true;
-                    thisFactory.error.alteredWeek.message = "Week wasn't saved. An error occured.";
-                }
-            );
-
-        });
     }
 
     return thisFactory;
@@ -180,7 +179,7 @@ function (InitUrls, CallUrlService) {
 
         InitUrls.then(function (data) {
 
-            CallUrlService.post({uri: data.bet.place}, bets,
+            CallUrlService.post({uri: data.bet.address}, bets,
             function (data) {
                 self.afterPlacement.message = 'Your bet was successfully placed.';
                 self.afterPlacement.success = true;

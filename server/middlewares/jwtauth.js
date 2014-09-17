@@ -28,11 +28,21 @@ module.exports = function (callbacks) {
                         }
                         else {
 
+                            var errorFromCallbacks = false;
                             for (var i in callbacks) {
-                                callbacks[i](req, res, next, user);
+                                callbacks[i](req, res, next, user, function () {
+                                    errorFromCallbacks = true;
+                                });
                             }
 
-                            next();
+                            if (!errorFromCallbacks) {
+                                res.data = {
+                                    local: {
+                                        user: user
+                                    }
+                                };
+                                next();
+                            }
 
                         }
                     });

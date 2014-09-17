@@ -17,7 +17,7 @@ function (req, res, next) {
 
 })
 
-.before('post', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
+.before('post', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]))
 .before('put', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
 .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
 

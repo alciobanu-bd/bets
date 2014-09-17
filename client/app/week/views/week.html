@@ -4,9 +4,9 @@
         <h2 ng-if="WeekFactory.currentWeek.number > 0">Weeks and bets</h2>
         <h2 ng-if="WeekFactory.currentWeek.number == 0">Fun hasn't start yet. Please come back soon.</h2>
 
-        <week week="WeekFactory.currentWeek"></week>
+        <week week="WeekFactory.currentWeek" bets="WeekFactory.currentWeekBet"></week>
         <br />
-        <week week="WeekFactory.beforeCurrentWeek"></week>
+        <week week="WeekFactory.beforeCurrentWeek" bets="WeekFactory.beforeCurrentWeekBet"></week>
 
     </div>
 

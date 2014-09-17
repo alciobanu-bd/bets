@@ -15,6 +15,7 @@ var Schema = mongoose.Schema,
 var setUserId = function(req, res, next, user) {
     // set userId
     req.body.userId = user._id;
+    req.body.username = user.username;
 }
 
 Bet
@@ -39,44 +40,8 @@ function(req, res, next) {
 .before('put', jwtauth([tokenChecks.hasRole('ROLE_USER'), setUserId]))
 .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
 
-/*
-Expects a query parameter named weekNumber
- */
-.route('getBetByWeek.get',  function (req, res, next) {
-        console.log("here")
-        res.status(200).json({message: "123"}).end();
-    })
-
 ;
 
+
+
 Bet.register(app, '/api/bet');
-
-/*
-jwtauth([tokenChecks.hasRole('ROLE_USER'),
-    function (req, res, next, user) {
-
-        if (!req.query.weekNumber) {
-            res.status(500).json({
-                message: 'No week number to look for.'
-            }).end();
-        }
-
-        else {
-            Bet.findOne({username: user.username, weekNumber: req.query.weekNumber}, function (err, bet) {
-
-                if (err || !bet) {
-                    res.status(500).json({
-                        message: 'An error occured while fetching your last bets.'
-                    }).end();
-                }
-
-                else {
-                    res.status(200).json(bet).end();
-                }
-
-            });
-        }
-
-    }
-]),
-*/

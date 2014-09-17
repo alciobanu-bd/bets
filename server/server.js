@@ -20,7 +20,6 @@ app.use(function (req, res, next) {
     // url decoding middleware
     req.url = decodeURIComponent(req.url);
     req.url = req.url.replace(/[/]+/g, '/');
-    console.log(req.url);
     next();
 });
 
@@ -38,6 +37,7 @@ db
 
 var port = 80;
 
+require('./route/TestRoute.js');
 require('./route/InitRoute.js');
 require('./model/User.js');
 require('./route/UserRoute.js');
@@ -46,6 +46,7 @@ require('./route/RolesRoute.js');
 require('./route/RankingRoute.js');
 require('./route/WeekRoute.js');
 require('./route/BetRoute.js');
+require('./route/BetsPerWeek.js');
 
 // resolve statics
 // use client folder as root path /

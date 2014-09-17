@@ -120,16 +120,19 @@ User
         next();
 
     })
-    .before('put', jwtauth([tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN'),
+    .before('put', jwtauth([
         function(req, res, next, user) {
             // prevent users to save role if they don't have admin role
 
             if (Role.roleValue(user.role) < Role.admin.value) {
                 if (req.body.role) {
+                    // if a user is not admin and tries to set role, delete role and registrationIp
                     delete req.body.role;
                     delete req.body.registrationIp;
                 }
             }
+
+            next();
 
         }
     ]))

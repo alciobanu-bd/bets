@@ -1,15 +1,16 @@
 
 var Week = require('./../model/Week.js');
 
-var checkIfWeekEnded = function (req, res, next, week) {
+var checkIfWeekEnded = function (req, res, next, week, onError) {
     if (week.locked || week.ended) {
         res.status(500).json({
             message: 'Bet placement on this week is locked.'
-        }).end;
+        }).end();
+        onError();
     }
 }
 
-var checkIfCorrectNumberOfMatches = function (req, res, next, week) {
+var checkIfCorrectNumberOfMatches = function (req, res, next, week, onError) {
 
     var numberOfBets;
     if (req.body.scores) {
@@ -19,12 +20,11 @@ var checkIfCorrectNumberOfMatches = function (req, res, next, week) {
         numberOfBets = 0;
     }
 
-    console.log("week.required != numberOfBets", week.required, numberOfBets);
-
     if (week.required != numberOfBets) {
         res.status(500).json({
             message: 'You are required to play ' + week.required + ' matches. You placed ' + numberOfBets + '.'
-        }).end;
+        }).end();
+        onError();
     }
 
 }
@@ -39,18 +39,29 @@ var weekChecks = function (callbacks) {
             if (err) {
                 res.status(500).json({
                     message: 'Server encountered an error. Please try again'
-                }).end;
+                }).end();
             }
 
             else {
 
                 if (week) {
 
+                    var errorFromCallbacks = false;
+
                     for (var i in callbacks) {
-                        callbacks[i](req, res, next, week);
+                        callbacks[i](req, res, next, week, function () {
+                            errorFromCallbacks = true;
+                        });
                     }
 
-                    next();
+                    if (!errorFromCallbacks) {
+                        res.data = {
+                            local: {
+                                week: week
+                            }
+                        };
+                        next();
+                    }
 
                 }
 
@@ -58,7 +69,7 @@ var weekChecks = function (callbacks) {
                     // week not found
                     res.status(500).json({
                         message: 'The week number you sent is malformed.'
-                    }).end;
+                    }).end();
                 }
 
             }

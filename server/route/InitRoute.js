@@ -17,7 +17,8 @@ var initFeed = {
         beforeLast: "/api/week/beforeLast"
     },
     bet: {
-        place: "/api/bet"
+        address: "/api/bet",
+        byWeek: "/api/bets/getBetByWeek"
     }
 };
 

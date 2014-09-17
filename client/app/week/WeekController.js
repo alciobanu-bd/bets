@@ -7,8 +7,12 @@ function ($scope, WeekFactory, RolesFactory, UserInformation) {
 
     $scope.WeekFactory = WeekFactory;
     WeekFactory.resetWeekFactory();
-    WeekFactory.fetchCurrentWeek();
-    WeekFactory.fetchBeforeCurrentWeek();
+    WeekFactory.fetchCurrentWeek(function () {
+        WeekFactory.fetchCurrentWeekBet();
+    });
+    WeekFactory.fetchBeforeCurrentWeek(function () {
+        WeekFactory.fetchBeforeCurrentWeekBet();
+    });
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
