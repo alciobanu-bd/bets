@@ -18,10 +18,9 @@ app.use(express.query());
 app.use(methodOverride());
 app.use(function (req, res, next) {
     // url decoding middleware
-    var oldUrl = req.url;
     req.url = decodeURIComponent(req.url);
     req.url = req.url.replace(/[/]+/g, '/');
-    console.log(oldUrl, req.url);
+    console.log(req.url);
     next();
 });
 

@@ -1,6 +1,5 @@
 
 var User = require('./../model/User.js');
-var Roles = require('./../model/Roles.js');
 var jwt = require('jwt-simple');
 
 module.exports = function (callbacks) {

@@ -86,6 +86,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
             var newMatch = {};
             angular.extend(newMatch, match);
             newMatch.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
+            newMatch.index = parseInt(match.index);
             delete newMatch.startTime;
             return newMatch;
         });
@@ -94,7 +95,20 @@ function ($scope, Settings, CallUrlService, InitUrls) {
     $scope.afterSave = {
         error: false,
         success: false,
-        message: ''
+        message: '',
+        refresh: function () {
+            $scope.newWeekPanel = false;
+            $scope.matchesNumber.total = '';
+            $scope.matchesNumber.required = '';
+            $scope.matches = [];
+            $scope.afterSave.error = false;
+            $scope.afterSave.success = false;
+            $scope.afterSave.message = '';
+            $scope.save.inProgress = false;
+            $scope.WeekFactory.resetWeekFactory();
+            $scope.WeekFactory.fetchCurrentWeek();
+            $scope.WeekFactory.fetchBeforeCurrentWeek();
+        }
     };
     $scope.save = {
         inProgress: false
@@ -136,15 +150,16 @@ function ($scope, Settings, CallUrlService, InitUrls) {
 
     }
 
+    $scope.beforeSave = {
+        showConfirm: false
+    };
     $scope.showConfirm = function () {
-        $scope.showConfirm = true;
+        $scope.beforeSave.showConfirm = true;
     }
 
     $scope.hideConfirm = function () {
-        $scope.showConfirm = false;
+        $scope.beforeSave.showConfirm = false;
     }
-
-    $scope.hideConfirm();
 
 }
 ]

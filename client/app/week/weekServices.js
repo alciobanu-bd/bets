@@ -152,22 +152,49 @@ function (InitUrls, CallUrlService) {
 }
 ])
 
-.factory('BetFactory',[
+.service('BetService',[
 'InitUrls', 'CallUrlService',
 function (InitUrls, CallUrlService) {
 
-    var betFactory = {};
+    var BetService = function () {
+        this.inProgress = false;
+        this.afterPlacement = {
+            error: false,
+            success: false,
+            message: ''
+        };
+        return this;
+    };
 
-    betFactory.place = function (bets) {
+    BetService.prototype.resetBetService = function () {
+        this.inProgress = false;
+        this.afterPlacement.error = false;
+        this.afterPlacement.success = false;
+        this.afterPlacement.message = '';
+    }
+
+    BetService.prototype.place = function (bets) {
+
+        this.resetBetService();
+        var self = this;
 
         InitUrls.then(function (data) {
 
             CallUrlService.post({uri: data.bet.place}, bets,
             function (data) {
-
+                self.afterPlacement.message = 'Your bet was successfully placed.';
+                self.afterPlacement.success = true;
+                self.inProgress = false;
             },
             function (response) {
-
+                if (response.data.message) {
+                    self.afterPlacement.message = response.data.message;
+                }
+                else {
+                    self.afterPlacement.message = 'Your bet wasn\'t placed. Please try again.';
+                }
+                self.afterPlacement.error = true;
+                self.inProgress = false;
             }
             );
 
@@ -175,7 +202,11 @@ function (InitUrls, CallUrlService) {
 
     }
 
-    return betFactory;
+    return {
+        newBetManager: function () {
+            return new BetService();
+        }
+    };
 
 }
 ])

@@ -16,7 +16,8 @@
         <div class="row">
             Write how many total matches you want to add and how many of them should be required for users to be played.
             Recommended numbers are 3-5 for total and 3 for required.
-            Imediately after you hit publish, the other users will see the matches and will be able to place their bets.
+            Imediately after you publish the events, other users will see the matches and will be able to place their bets.
+            After saving a new week, you can press refresh to see that it really saved successfully.
         </div>
 
         <div class="panel-body">
@@ -55,16 +56,14 @@
 
         </div>
 
-        {{showConfirm}}
-
-        <span ng-show="matchesNumber.total > 0">
-            <div style="margin-top: 1em" ng-hide="showConfirm">
+        <span ng-show="matchesNumber.total > 0 && matches.total != ''">
+            <div style="margin-top: 1em" ng-hide="beforeSave.showConfirm">
                 <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm();" ng-disabled="publishError()">
                     Publish
                 </button>
             </div>
 
-            <div style="margin-top: 1em" ng-show="showConfirm">
+            <div style="margin-top: 1em" ng-show="beforeSave.showConfirm">
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="publish(); hideConfirm();">
                     Yes
                 </button>
@@ -86,6 +85,12 @@
             <span class="error-success-inner">
                 {{afterSave.message}}
             </span>
+        </div>
+
+        <div style="margin-top: 1em" ng-show="afterSave.success">
+            <button type="button" class="btn btn-info" style="width: 40%" ng-click="afterSave.refresh();">
+                Refresh
+            </button>
         </div>
 
     </div>
