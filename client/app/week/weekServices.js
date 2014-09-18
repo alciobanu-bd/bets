@@ -54,7 +54,9 @@ function (InitUrls, CallUrlService) {
                     function (data) {
                         thisFactory.error.current.active = false;
                         thisFactory.currentWeek = data;
-                        callWhenDone();
+                        if (typeof callWhenDone === 'function') {
+                            callWhenDone();
+                        }
                     },
                     function (response) {
                         thisFactory.error.current.active = true;
@@ -117,7 +119,9 @@ function (InitUrls, CallUrlService) {
                     function (data) {
                         thisFactory.error.beforeCurrent.active = false;
                         thisFactory.beforeCurrentWeek = data;
-                        callWhenDone();
+                        if (typeof callWhenDone === 'function') {
+                            callWhenDone();
+                        }
                     },
                     function (response) {
                         thisFactory.error.beforeCurrent.active = true;

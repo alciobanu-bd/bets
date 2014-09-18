@@ -33,7 +33,6 @@ weekModule
 
                     scope.week.events = _.map(scope.week.events, function (event) {
                         var score = eventScore(event);
-                        console.log(event);
                         if (score) {
                             event.homeScore = score.homeScore;
                             event.awayScore = score.awayScore;
@@ -46,8 +45,6 @@ weekModule
                         event = _.map();
                     }
 
-                    console.log(scope.week);
-                    console.log(scope.bets);
                 }
 
             });
@@ -64,7 +61,8 @@ weekModule
                 });
 
                 return _.filter(events, function (event) {
-                    return parseInt(event.awayScore) != NaN && parseInt(event.homeScore);
+                    return event.awayScore && event.homeScore &&
+                        parseInt(event.awayScore) != NaN && parseInt(event.homeScore) != NaN;
                 });
 
             }

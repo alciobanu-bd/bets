@@ -4,6 +4,7 @@
 var Week = require('./../model/Week.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
+var _ = require('underscore');
 
 Week
 .methods(['get', 'post', 'put', 'delete'])
@@ -13,6 +14,15 @@ function (req, res, next) {
 
     req.body.locked = false;
     req.body.ended = false;
+
+
+    var eventWithMinTime = _.min(req.body.events, function (event) {
+        return new Date(event.startDate).getTime();
+    });
+
+    req.body.endDate = new Date(eventWithMinTime.startDate);
+    req.body.endDate = req.body.endDate.setHours(req.body.endDate.getHours() - 1);
+
     next();
 
 })
