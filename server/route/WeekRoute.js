@@ -13,8 +13,6 @@ Week
 function (req, res, next) {
 
     req.body.locked = false;
-    req.body.ended = false;
-
 
     var eventWithMinTime = _.min(req.body.events, function (event) {
         return new Date(event.startDate).getTime();
