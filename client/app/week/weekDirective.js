@@ -9,13 +9,18 @@ weekModule
         replace: true,
         scope: {
             week: '=',
-            bets: '='
+            bets: '=',
+            errorObject: '='
         },
         templateUrl: "app/week/views/weekDirective.html",
         link: function(scope, element, attrs) {
 
-            scope.BetService = BetService.newBetManager();
-            scope.BetService.resetBetService();
+            scope.resetBetManager = function () {
+                scope.BetService = BetService.newBetManager();
+                scope.BetService.resetBetService();
+            }
+
+            scope.resetBetManager();
 
             scope.$watch('bets', function () {
 
@@ -83,19 +88,22 @@ weekModule
                 scope.BetService.place({
                     scores: events,
                     weekNumber: weekNumber
+                },
+                function () { // on success
+                    scope.errorObject.active = false;
                 });
 
             }
 
-            scope.week = {
+            scope.weekOptions = {
                 showConfirm: false
             };
             scope.showConfirm = function () {
-                scope.week.showConfirm = true;
+                scope.weekOptions.showConfirm = true;
             }
 
             scope.hideConfirm = function () {
-                scope.week.showConfirm = false;
+                scope.weekOptions.showConfirm = false;
             }
 
             scope.$on('$destroy', function () {

@@ -9,21 +9,33 @@
             {{week.events.length}} total matches.
             You are required to play {{week.required}} of them.
         </div>
+        <div class="row" ng-show="errorObject.active && week.available">
+            <span style="color: #ff0026">
+                {{errorObject.message}}
+            </span>
+        </div>
+        <div class="row" ng-show="!week.available">
+            <span style="color: #ff0026">
+                Bet placement isn't available anymore for this week.
+            </span>
+        </div>
 
         <div class="panel-body">
 
-            <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in week.events">
+            <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in week.events track by $index">
                 <span style="width: 30%" class="input-group">
                     {{match.homeTeam}}
                 </span>
                 <span style="width: 5%" class="input-group">
-                    <input class="form-control cornered-input" ng-model="match.homeScore" ng-change="match.homeScore = validateScore(match.homeScore)" />
+                    <input class="form-control cornered-input" ng-model="match.homeScore"
+                           ng-change="match.homeScore = validateScore(match.homeScore)" ng-readonly="!week.available" />
                 </span>
                 <span style="width: 25%" class="input-group">
                     {{match.startDate | date: 'MMM d, y h:mm a'}}
                 </span>
                 <span style="width: 5%" class="input-group">
-                    <input class="form-control cornered-input" ng-model="match.awayScore" ng-change="match.awayScore = validateScore(match.awayScore)" />
+                    <input class="form-control cornered-input" ng-model="match.awayScore"
+                           ng-change="match.awayScore = validateScore(match.awayScore)" ng-readonly="!week.available" />
                 </span>
                 <span style="width: 30%" class="input-group">
                     {{match.awayTeam}}
@@ -32,13 +44,13 @@
 
         </div>
 
-        <div style="margin-top: 1em" ng-hide="week.showConfirm">
+        <div style="margin-top: 1em" ng-hide="weekOptions.showConfirm">
             <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm()">
                 Bet
             </button>
         </div>
 
-        <div style="margin-top: 1em" ng-show="week.showConfirm">
+        <div style="margin-top: 1em" ng-show="weekOptions.showConfirm">
             <button type="button" class="btn btn-info" style="width: 20%" ng-click="place(); hideConfirm();">
                 Yes
             </button>

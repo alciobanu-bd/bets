@@ -15,9 +15,17 @@ GLOBAL.app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.query());
-app.use(methodOverride());
+//app.use(methodOverride());
 app.use(function (req, res, next) {
     // url decoding middleware
+    req.url = req.url
+        .replace(/\&/gi, '%26')
+        .replace(/=/gi, '%3D')
+        .replace(/\+/gi, '%2B')
+        .replace(/@/gi, '%40')
+        .replace(/:/gi, '%3A')
+        .replace(/\$/g, '%24')
+        .replace(/,/gi, '%2C');
     req.url = decodeURIComponent(req.url);
     req.url = req.url.replace(/[/]+/g, '/');
     next();

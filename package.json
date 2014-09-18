@@ -12,7 +12,8 @@
         "path": "*",
         "moment": "*",
         "underscore": "*",
-        "bcrypt-nodejs": "*"
+        "bcrypt-nodejs": "*",
+        "url": "*"
     },
     "devDependencies": {
         "bower": "*",

@@ -106,8 +106,12 @@ function ($scope, Settings, CallUrlService, InitUrls) {
             $scope.afterSave.message = '';
             $scope.save.inProgress = false;
             $scope.WeekFactory.resetWeekFactory();
-            $scope.WeekFactory.fetchCurrentWeek();
-            $scope.WeekFactory.fetchBeforeCurrentWeek();
+            $scope.WeekFactory.fetchCurrentWeek(function () {
+                $scope.WeekFactory.fetchCurrentWeekBet();
+            });
+            $scope.WeekFactory.fetchBeforeCurrentWeek(function () {
+                $scope.WeekFactory.fetchBeforeCurrentWeekBet();
+            });
         }
     };
     $scope.save = {

@@ -46,6 +46,13 @@ function (req, res, next) {
 
         else {
             if (weeks.length > 0) {
+                weeks[0] = weeks[0].toObject();
+                if (new Date(weeks[0].endDate) > new Date()) {
+                    weeks[0].available = true;
+                }
+                else {
+                    weeks[0].available = false;
+                }
                 res.status(200).json(weeks[0]).end();
             }
             else {
@@ -72,6 +79,13 @@ function (req, res, next) {
 
             else {
                 if (weeks.length > 1) {
+                    weeks[1] = weeks[1].toObject();
+                    if (new Date(weeks[1].endDate) > new Date()) {
+                        weeks[1].available = true;
+                    }
+                    else {
+                        weeks[1].available = false;
+                    }
                     res.status(200).json(weeks[1]).end();
                 }
                 else {

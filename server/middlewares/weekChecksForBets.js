@@ -2,9 +2,9 @@
 var Week = require('./../model/Week.js');
 
 var checkIfWeekEnded = function (req, res, next, week, onError) {
-    if (week.locked || week.ended) {
+    if (week.locked || week.ended || week.endDate < new Date()) {
         res.status(500).json({
-            message: 'Bet placement on this week is locked.'
+            message: 'Bet placement on this week is not available.'
         }).end();
         onError();
     }

@@ -68,6 +68,9 @@ function (InitUrls, CallUrlService) {
     }
 
     thisFactory.fetchCurrentWeekBet = function () {
+        if (thisFactory.currentWeek.number < 1) {
+            return;
+        }
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.bet.byWeek, weekNumber: thisFactory.currentWeek.number},
@@ -90,6 +93,9 @@ function (InitUrls, CallUrlService) {
     }
 
     thisFactory.fetchBeforeCurrentWeekBet = function () {
+        if (thisFactory.beforeCurrentWeek.number < 1) {
+            return;
+        }
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.bet.byWeek, weekNumber: thisFactory.beforeCurrentWeek.number},
@@ -176,7 +182,7 @@ function (InitUrls, CallUrlService) {
         this.afterPlacement.message = '';
     }
 
-    BetService.prototype.place = function (bets) {
+    BetService.prototype.place = function (bets, onSuccess, onError) {
 
         this.resetBetService();
         var self = this;
@@ -188,10 +194,16 @@ function (InitUrls, CallUrlService) {
                 self.afterPlacement.message = 'Your bet was successfully placed.';
                 self.afterPlacement.success = true;
                 self.inProgress = false;
+                if (typeof onSuccess === 'function') {
+                    onSuccess();
+                }
             },
             function (response) {
                 if (response.data.message) {
                     self.afterPlacement.message = response.data.message;
+                    if (typeof onError === 'function') {
+                        onError();
+                    }
                 }
                 else {
                     self.afterPlacement.message = 'Your bet wasn\'t placed. Please try again.';
