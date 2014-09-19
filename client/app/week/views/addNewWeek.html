@@ -3,9 +3,11 @@
 <div class="jumbotron centered white half-bg-opacity" ng-controller="NewWeekController"
      ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
 
-    <div ng-click="newWeekPanel = !!!newWeekPanel" style="cursor: pointer">
-        <span class="glyphicon glyphicon-align-justify white"></span>
-        Add new week
+    <div style="cursor: pointer">
+        <span ng-click="newWeekPanel = !!!newWeekPanel">
+            <span class="glyphicon glyphicon-align-justify white"></span>
+            Add new week
+        </span>
     </div>
 
 

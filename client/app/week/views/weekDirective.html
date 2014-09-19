@@ -32,14 +32,16 @@
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.homeScore"
-                           ng-change="match.homeScore = validateScore(match.homeScore)" ng-readonly="!week.available" />
+                           ng-change="match.homeScore = validateScore(match.homeScore)"
+                           ng-readonly="!week.available && !updateScoreMode" />
                 </span>
                 <span style="width: 25%" class="input-group">
                     {{match.startDate | date: 'MMM d, y h:mm a'}}
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.awayScore"
-                           ng-change="match.awayScore = validateScore(match.awayScore)" ng-readonly="!week.available" />
+                           ng-change="match.awayScore = validateScore(match.awayScore)"
+                           ng-readonly="!week.available && !updateScoreMode" />
                 </span>
                 <span style="width: 30%" class="input-group">
                     {{match.awayTeam}}
@@ -77,6 +79,56 @@
                     {{BetService.afterPlacement.message}}
                 </span>
             </div>
+        </span>
+
+        <span ng-if="!week.available && RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
+            <div ng-click="updateModeOn(); prepareEventsForResultsSaving()" style="cursor: pointer">
+                <span class="glyphicon glyphicon-align-justify white"></span>
+                Update results
+            </div>
+            <div ng-show="updateScoreMode" style="color: #00a4ff">
+                <div>
+                    You are in update mode. Enter the correct results for each event like when you normally play them.
+                </div>
+                <div>
+                    They will be saved as results and not as a bet.
+                </div>
+            </div>
+            <div ng-show="updateScoreMode" ng-click="updateModeOff(); refreshEventsForNonUpdateMode()" style="cursor: pointer">
+                <span class="glyphicon glyphicon-align-justify white"></span>
+                Toggle back to normal mode
+            </div>
+
+
+            <div style="margin-top: 1em" ng-show="updateScoreMode && !confirmResults">
+                <button type="button" class="btn btn-info" style="width: 40%" ng-click="confirmResults = true">
+                    Save results
+                </button>
+            </div>
+
+            <div style="margin-top: 1em" ng-show="updateScoreMode && confirmResults">
+                <button type="button" class="btn btn-info" style="width: 20%" ng-click="updateResults(); confirmResults = false">
+                    Yes
+                </button>
+                <button type="button" class="btn btn-info" style="width: 20%" ng-click="confirmResults = false">
+                    No
+                </button>
+            </div>
+
+            <div ng-show="BetService.afterPlacement.error" class="top-buffer-0-5-em centered cornered-input error-div"
+                 style= "width: 40%;">
+                <span class="error-success-inner">
+                    {{BetService.afterPlacement.message}}
+                </span>
+            </div>
+
+            <div ng-show="BetService.afterPlacement.success" class="top-buffer-0-5-em centered cornered-input success-div"
+                 style= "width: 40%;">
+                <span class="error-success-inner">
+                    {{BetService.afterPlacement.message}}
+                </span>
+            </div>
+
         </span>
 
     </div>

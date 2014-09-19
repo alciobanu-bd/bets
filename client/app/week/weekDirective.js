@@ -2,8 +2,8 @@
 weekModule
 
 .directive('week', [
-    'BetService',
-    function(BetService) {
+    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation',
+    function(BetService, WeekFactory, RolesFactory, UserInformation) {
     return {
         restrict: 'E',
         replace: true,
@@ -16,6 +16,9 @@ weekModule
         templateUrl: "app/week/views/weekDirective.html",
         link: function(scope, element, attrs) {
 
+            scope.RolesFactory = RolesFactory;
+            scope.userInfo = UserInformation;
+
             scope.resetBetManager = function () {
                 scope.BetService = BetService.newBetManager();
                 scope.BetService.resetBetService();
@@ -23,33 +26,32 @@ weekModule
 
             scope.resetBetManager();
 
+            var updateBetsForThisWeek = function () {
+                var eventScore = function (event) {
+                    for (var i in scope.bets.scores) {
+                        if (scope.bets.scores[i].index == event.index) {
+                            return scope.bets.scores[i];
+                        }
+                    }
+                    return null;
+                }
+
+                scope.week.events = _.map(scope.week.events, function (event) {
+                    var score = eventScore(event);
+                    if (score) {
+                        event.homeScore = score.homeScore;
+                        event.awayScore = score.awayScore;
+                    }
+                    return event;
+                });
+            }
+
             scope.$watch('bets', function () {
 
                 if (scope.bets) {
                     // bet loaded
 
-                    var eventScore = function (event) {
-                        for (var i in scope.bets.scores) {
-                            if (scope.bets.scores[i].index == event.index) {
-                                return scope.bets.scores[i];
-                            }
-                        }
-                        return null;
-                    }
-
-                    scope.week.events = _.map(scope.week.events, function (event) {
-                        var score = eventScore(event);
-                        if (score) {
-                            event.homeScore = score.homeScore;
-                            event.awayScore = score.awayScore;
-                        }
-                        return event;
-                    });
-
-                    for (var i in scope.week.events) {
-                        var event = scope.week.events[i];
-                        event = _.map();
-                    }
+                    updateBetsForThisWeek();
 
                 }
 
@@ -109,6 +111,36 @@ weekModule
 
             scope.hideConfirm = function () {
                 scope.weekOptions.showConfirm = false;
+            }
+
+            scope.updateScoreMode = false;
+
+            scope.updateModeOn = function () {
+                scope.updateScoreMode = true;
+            }
+
+            scope.updateModeOff = function () {
+                scope.updateScoreMode = false;
+            }
+
+            scope.prepareEventsForResultsSaving = function () {
+                scope.week.events = _.map(scope.week.events, function (event) {
+
+                    event.homeScore = '';
+                    event.awayScore = '';
+
+                    return event;
+                });
+            }
+
+            scope.refreshEventsForNonUpdateMode = function () {
+                updateBetsForThisWeek();
+            }
+
+            scope.updateResults = function () {
+                WeekFactory.updateResults(scope.week.events, scope.week._id, function () {
+                    console.log('scored updated');
+                });
             }
 
             scope.$on('$destroy', function () {

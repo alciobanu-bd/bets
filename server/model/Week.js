@@ -7,7 +7,8 @@ var WeekSchema = mongoose.Schema({
     events: {type: Array, required: true},
     locked: {type: Boolean, required: false},
     endDate: {type: Date, required: false},
-    required: {type: 'number', required: true}
+    required: {type: 'number', required: true},
+    resultsReady: {type: Boolean, required: false}
 });
 
 module.exports = restful.model('week', WeekSchema);

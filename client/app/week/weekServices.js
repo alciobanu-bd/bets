@@ -138,6 +138,28 @@ function (InitUrls, CallUrlService) {
         );
     }
 
+    thisFactory.updateResults = function (eventsWithResults, week_id, onSuccess, onError) {
+
+        InitUrls.then(
+            function (data) {
+                CallUrlService.put({uri: data.week.address, id: week_id},
+                    {events: eventsWithResults}, // put data
+                    function (data) {
+                        if (typeof onSuccess === 'function') {
+                            onSuccess();
+                        }
+                    },
+                    function (response) {
+                        if (typeof onError === 'function') {
+                            onError();
+                        }
+                    }
+                );
+            }
+        );
+
+    }
+
     thisFactory.fetchAllWeeks = function () {
 
         InitUrls.then(function (data) {
