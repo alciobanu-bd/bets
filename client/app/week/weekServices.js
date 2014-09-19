@@ -182,38 +182,82 @@ function (InitUrls, CallUrlService) {
         this.afterPlacement.message = '';
     }
 
-    BetService.prototype.place = function (bets, onSuccess, onError) {
-
-        this.resetBetService();
-        var self = this;
+    var postBet = function (bets, onSuccess, onError, self) {
 
         InitUrls.then(function (data) {
 
             CallUrlService.post({uri: data.bet.address}, bets,
-            function (data) {
-                self.afterPlacement.message = 'Your bet was successfully placed.';
-                self.afterPlacement.success = true;
-                self.inProgress = false;
-                if (typeof onSuccess === 'function') {
-                    onSuccess();
-                }
-            },
-            function (response) {
-                if (response.data.message) {
-                    self.afterPlacement.message = response.data.message;
-                    if (typeof onError === 'function') {
-                        onError();
+                function (data) {
+                    self.afterPlacement.message = 'Your bet was successfully placed.';
+                    self.afterPlacement.success = true;
+                    self.inProgress = false;
+                    if (typeof onSuccess === 'function') {
+                        onSuccess();
                     }
+                },
+                function (response) {
+                    if (response.data.message) {
+                        self.afterPlacement.message = response.data.message;
+                        if (typeof onError === 'function') {
+                            onError();
+                        }
+                    }
+                    else {
+                        self.afterPlacement.message = 'Your bet wasn\'t placed. Please try again.';
+                    }
+                    self.afterPlacement.error = true;
+                    self.inProgress = false;
                 }
-                else {
-                    self.afterPlacement.message = 'Your bet wasn\'t placed. Please try again.';
-                }
-                self.afterPlacement.error = true;
-                self.inProgress = false;
-            }
             );
 
         });
+    }
+
+    var putBet = function (bets, currentBet, onSuccess, onError, self) {
+
+        InitUrls.then(function (data) {
+
+            CallUrlService.put({uri: data.bet.address, id: currentBet._id}, bets,
+                function (data) {
+                    self.afterPlacement.message = 'Your bet was successfully changed.';
+                    self.afterPlacement.success = true;
+                    self.inProgress = false;
+                    if (typeof onSuccess === 'function') {
+                        onSuccess();
+                    }
+                },
+                function (response) {
+                    if (response.data.message) {
+                        self.afterPlacement.message = response.data.message;
+                        if (typeof onError === 'function') {
+                            onError();
+                        }
+                    }
+                    else {
+                        self.afterPlacement.message = 'Your bet wasn\'t placed. Please try again.';
+                    }
+                    self.afterPlacement.error = true;
+                    self.inProgress = false;
+                }
+            );
+
+        });
+    }
+
+    BetService.prototype.place = function (bets, currentBet, onSuccess, onError) {
+
+        var self = this;
+
+        this.resetBetService();
+
+        if (currentBet) {
+            // it means user has already placed a bet -- method: PUT
+            putBet(bets, currentBet, onSuccess, onError, self);
+        }
+        else {
+            // it means user has not placed a bet - method: POST
+            postBet(bets, onSuccess, onError, self);
+        }
 
     }
 

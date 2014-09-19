@@ -29,7 +29,7 @@ Bet
 
 .before('post',
 function (req, res, next) {
-    // check if bet already placed
+    // check if bet was already placed
 
     Bet.findOne({userId: req.body.userId, weekNumber: req.body.weekNumber},
     function (err, bet) {
@@ -51,6 +51,17 @@ function (req, res, next) {
 })
 
 .before('post',
+function(req, res, next) {
+
+    req.body.points = 0;
+    req.body.ended = false;
+    req.body.status = BetStatus.active;
+
+    next();
+
+})
+
+.before('put',
 function(req, res, next) {
 
     req.body.points = 0;

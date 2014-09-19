@@ -14,6 +14,11 @@ function ($scope, WeekFactory, RolesFactory, UserInformation) {
         WeekFactory.fetchBeforeCurrentWeekBet();
     });
 
+    $scope.refreshBets = function () {
+        WeekFactory.fetchCurrentWeekBet();
+        WeekFactory.fetchBeforeCurrentWeekBet();
+    }
+
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
 }

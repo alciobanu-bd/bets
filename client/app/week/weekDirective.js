@@ -10,7 +10,8 @@ weekModule
         scope: {
             week: '=',
             bets: '=',
-            errorObject: '='
+            errorObject: '=',
+            refreshBets: '&'
         },
         templateUrl: "app/week/views/weekDirective.html",
         link: function(scope, element, attrs) {
@@ -89,8 +90,12 @@ weekModule
                     scores: events,
                     weekNumber: weekNumber
                 },
+                scope.bets,
                 function () { // on success
                     scope.errorObject.active = false;
+
+                    scope.refreshBets();
+
                 });
 
             }
