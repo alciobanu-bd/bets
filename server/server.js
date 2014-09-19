@@ -26,7 +26,12 @@ app.use(function (req, res, next) {
         .replace(/:/gi, '%3A')
         .replace(/\$/g, '%24')
         .replace(/,/gi, '%2C');
-    req.url = decodeURIComponent(req.url);
+    try {
+        req.url = decodeURIComponent(req.url);
+    }
+    catch (err) {
+        console.log(req.url);
+    }
     req.url = req.url.replace(/[/]+/g, '/');
     next();
 });

@@ -66,7 +66,7 @@ weekModule
                 });
 
                 return _.filter(events, function (event) {
-                    return event.awayScore && event.homeScore &&
+                    return (event.awayScore || event.awayScore == 0) && (event.homeScore || event.homeScore == '0') &&
                         parseInt(event.awayScore) != NaN && parseInt(event.homeScore) != NaN;
                 });
 
