@@ -46,12 +46,24 @@ function (InitUrls, CallUrlService) {
 
     }
 
-    thisFactory.fetchCurrentWeek = function (callWhenDone) {
+    thisFactory.fetchCurrentWeek = function (callEventsWithRealScores, callWhenDone) {
 
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.week.current},
                     function (data) {
+                        if (typeof callEventsWithRealScores === 'function') {
+                            callEventsWithRealScores(data);
+                        }
+                        data.events = _.map(data.events, function (event) {
+                            if (event.awayScore || event.awayScore == 0) {
+                                delete event.awayScore;
+                            }
+                            if (event.homeScore || event.homeScore == 0) {
+                                delete event.homeScore;
+                            }
+                            return event;
+                        });
                         thisFactory.error.current.active = false;
                         thisFactory.currentWeek = data;
                         if (typeof callWhenDone === 'function') {
@@ -117,12 +129,24 @@ function (InitUrls, CallUrlService) {
         );
     }
 
-    thisFactory.fetchBeforeCurrentWeek = function (callWhenDone) {
+    thisFactory.fetchBeforeCurrentWeek = function (callEventsWithRealScores, callWhenDone) {
 
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.week.beforeLast},
                     function (data) {
+                        if (typeof callEventsWithRealScores === 'function') {
+                            callEventsWithRealScores(data);
+                        }
+                        data.events = _.map(data.events, function (event) {
+                            if (event.awayScore || event.awayScore == 0) {
+                                delete event.awayScore;
+                            }
+                            if (event.homeScore || event.homeScore == 0) {
+                                delete event.homeScore;
+                            }
+                            return event;
+                        });
                         thisFactory.error.beforeCurrent.active = false;
                         thisFactory.beforeCurrentWeek = data;
                         if (typeof callWhenDone === 'function') {
@@ -143,7 +167,7 @@ function (InitUrls, CallUrlService) {
         InitUrls.then(
             function (data) {
                 CallUrlService.put({uri: data.week.address, id: week_id},
-                    {events: eventsWithResults}, // put data
+                    {events: eventsWithResults, updateScore: true}, // put data
                     function (data) {
                         if (typeof onSuccess === 'function') {
                             onSuccess();

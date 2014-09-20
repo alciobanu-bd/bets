@@ -35,8 +35,11 @@
                            ng-change="match.homeScore = validateScore(match.homeScore)"
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
-                <span style="width: 25%" class="input-group">
+                <span ng-show="!week.ended" style="width: 25%" class="input-group">
                     {{match.startDate | date: 'MMM d, y h:mm a'}}
+                </span>
+                <span ng-show="week.ended" style="width: 25%" class="input-group">
+                    Real score here
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.awayScore"
@@ -101,7 +104,8 @@
 
 
             <div style="margin-top: 1em" ng-show="updateScoreMode && !confirmResults">
-                <button type="button" class="btn btn-info" style="width: 40%" ng-click="confirmResults = true">
+                <button type="button" class="btn btn-info" style="width: 40%" ng-disabled="isResultsSaveDisabled()"
+                ng-click="confirmResults = true">
                     Save results
                 </button>
             </div>
@@ -115,17 +119,18 @@
                 </button>
             </div>
 
-            <div ng-show="BetService.afterPlacement.error" class="top-buffer-0-5-em centered cornered-input error-div"
+            <div ng-show="afterUpdateResults.error" class="top-buffer-0-5-em centered cornered-input error-div"
                  style= "width: 40%;">
                 <span class="error-success-inner">
-                    {{BetService.afterPlacement.message}}
+                    {{afterUpdateResults.message}}
                 </span>
             </div>
 
-            <div ng-show="BetService.afterPlacement.success" class="top-buffer-0-5-em centered cornered-input success-div"
+            <div ng-show="afterUpdateResults.success"
+                 class="top-buffer-0-5-em centered cornered-input success-div"
                  style= "width: 40%;">
                 <span class="error-success-inner">
-                    {{BetService.afterPlacement.message}}
+                    {{afterUpdateResults.message}}
                 </span>
             </div>
 

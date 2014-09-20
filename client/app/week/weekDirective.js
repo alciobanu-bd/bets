@@ -11,7 +11,8 @@ weekModule
             week: '=',
             bets: '=',
             errorObject: '=',
-            refreshBets: '&'
+            refreshBets: '&',
+            realScoreEvents: '='
         },
         templateUrl: "app/week/views/weekDirective.html",
         link: function(scope, element, attrs) {
@@ -69,7 +70,7 @@ weekModule
                 });
 
                 return _.filter(events, function (event) {
-                    return (event.awayScore || event.awayScore == 0) && (event.homeScore || event.homeScore == '0') &&
+                    return (event.awayScore || event.awayScore == '0') && (event.homeScore || event.homeScore == '0') &&
                         parseInt(event.awayScore) != NaN && parseInt(event.homeScore) != NaN;
                 });
 
@@ -139,9 +140,33 @@ weekModule
                 updateBetsForThisWeek();
             }
 
+            scope.afterUpdateResults = {
+                error: false,
+                success: false,
+                message: ''
+            }
+
+            scope.isResultsSaveDisabled = function () {
+                if (!scope.week || !scope.week.events) {
+                    return true;
+                }
+                return !_.every(scope.week.events, function (event) {
+                    return (event.awayScore || event.awayScore == '0') && (event.homeScore || event.homeScore == '0') &&
+                        parseInt(event.awayScore) != NaN && parseInt(event.homeScore) != NaN;
+                });
+            }
+
             scope.updateResults = function () {
+                scope.afterUpdateResults.success = false;
+                scope.afterUpdateResults.error = false;
                 WeekFactory.updateResults(scope.week.events, scope.week._id, function () {
-                    console.log('scored updated');
+                    scope.afterUpdateResults.success = true;
+                    scope.afterUpdateResults.message = 'The results were saved successfully.';
+                }, function () {
+                    scope.afterUpdateResults.error = true;
+                    scope.afterUpdateResults.message = 'The results saved with errors.' +
+                        'Please try to save them again urgently.' +
+                        'If the problem persists, contact the developers as soon as you can.';
                 });
             }
 

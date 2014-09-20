@@ -7,10 +7,20 @@ function ($scope, WeekFactory, RolesFactory, UserInformation) {
 
     $scope.WeekFactory = WeekFactory;
     WeekFactory.resetWeekFactory();
-    WeekFactory.fetchCurrentWeek(function () {
+    WeekFactory.fetchCurrentWeek(
+    function (weekWithRealScores) {
+        $scope.currentWeekWithScores = {};
+        angular.extend($scope.currentWeekWithScores, weekWithRealScores);
+    },
+    function () {
         WeekFactory.fetchCurrentWeekBet();
     });
-    WeekFactory.fetchBeforeCurrentWeek(function () {
+    WeekFactory.fetchBeforeCurrentWeek(
+    function (weekWithRealScores) {
+        $scope.beforeCurrentWeekWithScores = {};
+        angular.extend($scope.beforeCurrentWeekWithScores, weekWithRealScores);
+    },
+    function () {
         WeekFactory.fetchBeforeCurrentWeekBet();
     });
 

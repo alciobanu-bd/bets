@@ -10,7 +10,7 @@ var updatePointsForBets = function (req, res, next) {
             return event.hasOwnProperty('homeScore') && event.hasOwnProperty('awayScore')}
     )) {
 
-        var weekId = req.param("id");
+        var weekId = req.params.id;
 
         Bet.find({weekId: weekId}, // find all bets of this week
             function (err, bets) {
@@ -40,6 +40,11 @@ var updatePointsForBets = function (req, res, next) {
 
                                 if (score.index == event.index) {
 
+                                    score.homeScore = parseInt(score.homeScore);
+                                    event.homeScore = parseInt(event.homeScore);
+                                    score.awayScore = parseInt(score.awayScore);
+                                    event.awayScore = parseInt(event.awayScore);
+
                                     if (score.homeScore == event.homeScore && score.awayScore == event.awayScore) {
                                         // user guessed the correct score --> 3 points
                                         points += 3;
@@ -62,6 +67,7 @@ var updatePointsForBets = function (req, res, next) {
 
                         // save points
                         bet.points = points;
+                        bet.ended = true;
                         bet.save(function (err) {
 
                             if (err) {
@@ -89,7 +95,7 @@ var updatePointsForBets = function (req, res, next) {
     }
 }
 
-var updatePointsForUsers = function (req,res, next) {
+var updatePointsForUsers = function (req, res, next) {
 
     // update all users' points
 
@@ -108,6 +114,7 @@ var updatePointsForUsers = function (req,res, next) {
             else {
 
                 var savedUsers = 0;
+                var errorUsers = 0;
 
                 for (var i in aggregatedBets) {
                     var betsForAUser = aggregatedBets[i];
@@ -128,11 +135,8 @@ var updatePointsForUsers = function (req,res, next) {
                                     user.save(function (err) {
 
                                         if (err) {
-                                            res.status(500).json({
-                                                message: "An error occured while trying to update users' points."
-                                            });
+                                            errorUsers++;
                                         }
-
                                         else {
                                             savedUsers++;
                                         }
@@ -140,19 +144,26 @@ var updatePointsForUsers = function (req,res, next) {
                                         if (savedUsers == aggregatedBets.length) {
                                             next();
                                         }
+                                        else if (savedUsers + errorUsers == aggregatedBets.length) {
+                                            res.status(500).json({
+                                                message: "An error occured while trying to update users' points."
+                                            });
+                                        }
 
                                     });
 
                                 }
                                 else {
-                                    res.status(500).json({
-                                        message: "An error occured while trying to update users' points."
-                                    });
+                                    errorUsers++;
+                                    if (savedUsers + errorUsers == aggregatedBets.length) {
+                                        res.status(500).json({
+                                            message: "An error occured while trying to update users' points."
+                                        });
+                                    }
                                 }
                             }
 
                         });
-
                 }
 
             }
@@ -174,6 +185,7 @@ var updateUsersPlace = function (req, res, next) {
         else {
 
             var savedUsers = 0;
+            var errorUsers = 0;
 
             for (var i in users) {
                 var user = users[i];
@@ -184,21 +196,22 @@ var updateUsersPlace = function (req, res, next) {
 
                 user.save(function (err) {
                     if (err) {
-                        res.status(500).json({
-                            message: "An error occured while trying to update users' place."
-                        });
+                        errorUsers++;
                     }
                     else {
                         savedUsers++;
                     }
                     if (savedUsers == users.length) {
-                        next();
+                        res.status(200).json(res.localData.week).end();
+                    }
+                    else if (savedUsers + errorUsers == users.length) {
+                        res.status(500).json({
+                            message: "An error occured while trying to update users' place."
+                        });
                     }
                 });
 
             }
-
-            next();
 
         }
 
