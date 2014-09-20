@@ -7,6 +7,7 @@ var Schema = mongoose.Schema,
 
 var BetSchema = mongoose.Schema({
     weekNumber: {type: 'number', required: true},
+    weekId: {type: ObjectId, required: true},
     scores: {type: Array, required: false},
     points: {type: 'number', required: false},
     ended: {type: Boolean, required: false},

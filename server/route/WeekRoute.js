@@ -2,9 +2,12 @@
 // NOTE that app is defined globally
 
 var Week = require('./../model/Week.js');
+var User = require('./../model/User.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
+var pointsManagementFunctions = require('./../middlewares/pointsManagement.js');
 var _ = require('underscore');
+
 
 Week
 .methods(['get', 'post', 'put', 'delete'])
@@ -13,7 +16,6 @@ Week
 function (req, res, next) {
 
     req.body.locked = false;
-    req.body.resultsReady = false;
 
     var eventWithMinTime = _.min(req.body.events, function (event) {
         return new Date(event.startDate).getTime();
@@ -29,6 +31,14 @@ function (req, res, next) {
 .before('post', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]))
 .before('put', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
 .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
+
+.after('put',
+    [
+        pointsManagementFunctions.updatePointsForBets,
+        pointsManagementFunctions.updatePointsForUsers,
+        pointsManagementFunctions.updateUsersPlace
+    ]
+)
 
 .route('last.get',
 function (req, res, next) {

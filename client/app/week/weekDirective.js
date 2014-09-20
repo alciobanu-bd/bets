@@ -87,10 +87,12 @@ weekModule
 
                 var events = getEvents();
                 var weekNumber = scope.week.number;
+                var weekId = scope.week._id;
 
                 scope.BetService.place({
                     scores: events,
-                    weekNumber: weekNumber
+                    weekNumber: weekNumber,
+                    weekId: weekId
                 },
                 scope.bets,
                 function () { // on success
