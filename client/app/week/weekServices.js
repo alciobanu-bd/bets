@@ -46,20 +46,19 @@ function (InitUrls, CallUrlService) {
 
     }
 
-    thisFactory.fetchCurrentWeek = function (callEventsWithRealScores, callWhenDone) {
+    thisFactory.fetchCurrentWeek = function (callWhenDone) {
 
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.week.current},
                     function (data) {
-                        if (typeof callEventsWithRealScores === 'function') {
-                            callEventsWithRealScores(data);
-                        }
                         data.events = _.map(data.events, function (event) {
                             if (event.awayScore || event.awayScore == 0) {
+                                event.realAwayScore = event.awayScore;
                                 delete event.awayScore;
                             }
                             if (event.homeScore || event.homeScore == 0) {
+                                event.realHomeScore = event.homeScore;
                                 delete event.homeScore;
                             }
                             return event;
@@ -72,7 +71,7 @@ function (InitUrls, CallUrlService) {
                     },
                     function (response) {
                         thisFactory.error.current.active = true;
-                        thisFactory.error.current.message = "An error occured while trying to fetch a week.";
+                        thisFactory.error.current.message = "An error occurred while trying to fetch a week.";
                     }
                 );
             }
@@ -96,7 +95,7 @@ function (InitUrls, CallUrlService) {
                             thisFactory.error.currentBet.message = response.data.message;
                         }
                         else {
-                            thisFactory.error.currentBet.message = "An error occured while trying to fetch your bets.";
+                            thisFactory.error.currentBet.message = "An error occurred while trying to fetch your bets.";
                         }
                     }
                 );
@@ -121,7 +120,7 @@ function (InitUrls, CallUrlService) {
                             thisFactory.error.beforeCurrentBet.message = response.data.message;
                         }
                         else {
-                            thisFactory.error.beforeCurrentBet.message = "An error occured while trying to fetch your bets.";
+                            thisFactory.error.beforeCurrentBet.message = "An error occurred while trying to fetch your bets.";
                         }
                     }
                 );
@@ -129,20 +128,20 @@ function (InitUrls, CallUrlService) {
         );
     }
 
-    thisFactory.fetchBeforeCurrentWeek = function (callEventsWithRealScores, callWhenDone) {
+    thisFactory.fetchBeforeCurrentWeek = function (callWhenDone) {
 
         InitUrls.then(
             function (data) {
                 CallUrlService.get({uri: data.week.beforeLast},
                     function (data) {
-                        if (typeof callEventsWithRealScores === 'function') {
-                            callEventsWithRealScores(data);
-                        }
+
                         data.events = _.map(data.events, function (event) {
                             if (event.awayScore || event.awayScore == 0) {
+                                event.realAwayScore = event.awayScore;
                                 delete event.awayScore;
                             }
                             if (event.homeScore || event.homeScore == 0) {
+                                event.realHomeScore = event.homeScore;
                                 delete event.homeScore;
                             }
                             return event;
@@ -155,7 +154,7 @@ function (InitUrls, CallUrlService) {
                     },
                     function (response) {
                         thisFactory.error.beforeCurrent.active = true;
-                        thisFactory.error.beforeCurrent.message = "An error occured while trying to fetch a week.";
+                        thisFactory.error.beforeCurrent.message = "An error occurred while trying to fetch a week.";
                     }
                 );
             }
@@ -163,6 +162,16 @@ function (InitUrls, CallUrlService) {
     }
 
     thisFactory.updateResults = function (eventsWithResults, week_id, onSuccess, onError) {
+
+        eventsWithResults = _.map(eventsWithResults, function (event) {
+            if (event.realHomeScore || event.realHomeScore == 0) {
+                delete event.realHomeScore;
+            }
+            if (event.awayHomeScore || event.awayHomeScore == 0) {
+                delete event.awayHomeScore;
+            }
+            return event;
+        });
 
         InitUrls.then(
             function (data) {
@@ -194,7 +203,7 @@ function (InitUrls, CallUrlService) {
             },
             function (response) {
                 thisFactory.error.all.active = true;
-                thisFactory.error.all.message = "An error occured.";
+                thisFactory.error.all.message = "An error occurred.";
             }
             );
 

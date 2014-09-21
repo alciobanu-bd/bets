@@ -18,7 +18,8 @@ var initFeed = {
     },
     bet: {
         address: "/api/bet",
-        byWeek: "/api/bets/getBetByWeek"
+        byWeek: "/api/bets/getBetByWeek",
+        history: "/api/bet/history"
     }
 };
 

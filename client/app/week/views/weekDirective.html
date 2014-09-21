@@ -35,11 +35,11 @@
                            ng-change="match.homeScore = validateScore(match.homeScore)"
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
-                <span ng-show="!week.ended" style="width: 25%" class="input-group">
+                <span ng-show="!week.ended || updateScoreMode" style="width: 25%" class="input-group">
                     {{match.startDate | date: 'MMM d, y h:mm a'}}
                 </span>
-                <span ng-show="week.ended" style="width: 25%" class="input-group">
-                    Real score here
+                <span ng-show="week.ended && !updateScoreMode" style="width: 25%" class="input-group">
+                    {{match.realHomeScore}} - {{match.realAwayScore}}
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.awayScore"
@@ -83,6 +83,21 @@
                 </span>
             </div>
         </span>
+
+        <div class="white" ng-if="week.ended" style="margin: 2em">
+            <span ng-if="bets.points > 1">
+                You won {{bets.points}} points this week.
+            </span>
+            <span ng-if="bets.points == 1">
+                You won 1 point this week.
+            </span>
+            <span ng-if="bets.points == 0">
+                You won no points this week.
+            </span>
+            <ng-if ng-if="!bets">
+                You didn't place a bet this week. Therefore you won no points.
+            </ng-if>
+        </div>
 
         <span ng-if="!week.available && RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
             <div ng-click="updateModeOn(); prepareEventsForResultsSaving()" style="cursor: pointer">

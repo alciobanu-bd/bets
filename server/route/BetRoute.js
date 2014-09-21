@@ -1,8 +1,9 @@
 
 // NOTE that app is defined globally
 
+var express = require('express');
+
 var Bet = require('./../model/Bet.js');
-var BetStatus = require('./../model/BetStatus.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 var weekChecks = require('./../middlewares/weekChecksForBets.js');
@@ -18,65 +19,132 @@ var setUserId = function(req, res, next, user) {
     req.body.username = user.username;
 }
 
-Bet
-.methods(['get', 'post', 'put', 'delete'])
+var router = express.Router();
 
-.before('post', jwtauth([tokenChecks.hasRole('ROLE_USER'), setUserId]))
-.before('put', jwtauth([tokenChecks.hasRole('ROLE_USER'), setUserId]))
+router.get('/',
+jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
+function (req, res, next) {
 
-.before('post', weekChecks.weekMiddleware([weekChecks.callbacks.checkIfWeekEnded, weekChecks.callbacks.checkIfCorrectNumberOfMatches]))
-.before('put', weekChecks.weekMiddleware([weekChecks.callbacks.checkIfWeekEnded, weekChecks.callbacks.checkIfCorrectNumberOfMatches]))
+    Bet.find({}, function (err, bets) {
+        if (err) {
+            res.status(500).json({
+                message: "Oops. Bets couldn't be fetched from the database."
+            }).end();
+        }
+        else {
+            res.status(200).json(bets).end();
+        }
+    });
 
-.before('post',
+});
+
+router.get('/:id([0-9a-fA-F]{24})',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+function (req, res, next) {
+
+    Bet.findOne({_id: req.params.id}, function (err, bet) {
+        if (err) {
+            res.status(500).json({
+                message: "Oops. Bet couldn't bet fetched from the database."
+            }).end();
+        }
+        else {
+            res.status(200).json(bet).end();
+        }
+    });
+
+});
+
+router.post('/',
+jwtauth([tokenChecks.hasRole('ROLE_USER'), setUserId]),
+weekChecks.weekMiddleware([weekChecks.callbacks.checkIfWeekEnded, weekChecks.callbacks.checkIfCorrectNumberOfMatches]),
+
 function (req, res, next) {
     // check if bet was already placed
 
     Bet.findOne({userId: req.body.userId, weekNumber: req.body.weekNumber},
-    function (err, bet) {
+        function (err, bet) {
+            if (err) {
+                res.status(500).json({
+                    message: 'An error has occurred. You cannot place a bet for the moment.'
+                }).end();
+            }
+            else if (bet) {
+                res.status(500).json({
+                    message: 'It seems that you already placed a bet this week and you try to place it again.'
+                }).end();
+            }
+            else {
+                next();
+            }
+        });
+
+},
+
+function (req, res, next) {
+
+    var bet = new Bet();
+
+    bet.points = 0;
+    bet.ended = false;
+
+    for (var i in req.body) {
+        bet[i] = req.body[i];
+    }
+
+    bet.save(function (err) {
         if (err) {
             res.status(500).json({
-                message: 'An error has occured. You cannot place a bet for the moment.'
-            }).end();
-        }
-        else if (bet) {
-            res.status(500).json({
-                message: 'It seems that you already placed a bet this week and you try to place it again.'
+                message: "An error occurred while trying to save bet."
             }).end();
         }
         else {
-            next();
+            res.status(201).json(bet).end();
         }
     });
 
-})
+});
 
-.before('post',
-function(req, res, next) {
+router.put('/:id([0-9a-fA-F]{24})',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+weekChecks.weekMiddleware([weekChecks.callbacks.checkIfWeekEnded, weekChecks.callbacks.checkIfCorrectNumberOfMatches]),
 
-    req.body.points = 0;
-    req.body.ended = false;
-    req.body.status = BetStatus.active;
+function (req, res, next) {
 
-    next();
+    Bet.findOne({_id: req.params.id}, function (err, bet) {
+        if (err) {
+            res.status(500).json({
+                message: "Oops. Couldn't save the bet to database."
+            }).end();
+        }
+        else {
 
-})
+            // check if user who's trying to save bet is the one who posted the bet
+            if (res.data.local.user._id != bet.userId) {
+                res.status(500).json({
+                    message: "You are not permitted to save another user's bet."
+                }).end();
+            }
+            else {
+                bet.points = 0; // you cannot save the bet after points are calculated, so there is no risk to overwrite results
+                bet.ended = false; // the same, no risk that bet ended and you save as not ended
 
-.before('put',
-function(req, res, next) {
+                bet.save(function (err) {
+                    if (err) {
+                        res.status(500).json({
+                            message: "Oops. The bet couldn't be saved."
+                        }).end();
+                    }
+                    else {
+                        res.status(200).json(bet).end();
+                    }
+                });
 
-    req.body.points = 0;
-    req.body.ended = false;
-    req.body.status = BetStatus.active;
+            }
 
-    next();
+        }
+    });
 
-})
+});
 
-.before('get', jwtauth([tokenChecks.hasRoleWithId('ROLE_USER'), tokenChecks.hasRoleWithoutId('ROLE_ADMIN')]))
-.before('delete', jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]))
-
-;
-
-
-
-Bet.register(app, '/api/bet');
+app.use('/api/bet', router);

@@ -107,7 +107,7 @@ function (req, res, next) {
             });
         }
         else {
-            res.status(200).json(week).end();
+            res.status(201).json(week).end();
         }
     });
 

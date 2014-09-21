@@ -8,7 +8,9 @@ var betsModule = angular.module(
         'resources',
         'config',
         'ranking',
-        'week'
+        'week',
+        'profile',
+        'history'
     ]
 );
 

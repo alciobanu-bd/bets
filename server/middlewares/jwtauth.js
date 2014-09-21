@@ -23,7 +23,7 @@ module.exports = function (callbacks) {
 
                         if (err) {
                             res.status(401).json({
-                                message: "An error has occured. We couldn't verify your identity."
+                                message: "An error has occurred. We couldn't verify your identity."
                             }).end();
                         }
                         else {
@@ -36,11 +36,12 @@ module.exports = function (callbacks) {
                             }
 
                             if (!errorFromCallbacks) {
-                                res.data = {
-                                    local: {
-                                        user: user
-                                    }
-                                };
+                                if (!res.data || !res.data.local) {
+                                    res.data = {
+                                        local: {}
+                                    };
+                                }
+                                res.data.local.user = user;
                                 next();
                             }
 

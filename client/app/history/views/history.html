@@ -1,0 +1,41 @@
+
+
+<div class="jumbotron centered white half-bg-opacity" ng-controller="HistoryController">
+
+    <div class="panel-heading">
+        <div class="row">
+            <h2 class="panel-title">History</h2>
+        </div>
+    </div>
+
+    <div class="panel-body">
+
+        {{HistoryFactory.betHistory}}
+
+        <div class="row form-inline top-buffer-0-5-em" ng-repeat="week in HistoryFactory.betHistory track by $index">
+
+            <div ng-repeat="event in week.weekEvents" class="row">
+                <span style="width: 30%" class="input-group">
+                    {{event.homeTeam}}
+                </span>
+                <span style="width: 5%" class="input-group">
+                </span>
+                <span ng-show="!week.ended || updateScoreMode" style="width: 25%" class="input-group">
+                    {{match.startDate | date: 'MMM d, y h:mm a'}}
+                </span>
+                <span style="width: 25%" class="input-group">
+                    {{match.realHomeScore}} - {{match.realAwayScore}}
+                </span>
+                <span style="width: 5%" class="input-group">
+                </span>
+                <span style="width: 30%" class="input-group">
+                    {{event.awayTeam}}
+                </span>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

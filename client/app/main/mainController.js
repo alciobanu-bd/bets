@@ -37,5 +37,15 @@ function ($scope, Templates, UserInfo, $location) {
         $location.path($scope.currentBodyView.route);
     }
 
+    $scope.goToProfile = function () {
+        $scope.currentBodyView = Templates.account.profile;
+        $location.path($scope.currentBodyView.route);
+    }
+
+    $scope.goToHistory = function () {
+        $scope.currentBodyView = Templates.bet.history;
+        $location.path($scope.currentBodyView.route);
+    }
+
 }
 ]);

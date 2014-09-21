@@ -60,6 +60,7 @@ require('./route/RankingRoute.js');
 require('./route/WeekRoute.js');
 require('./route/BetRoute.js');
 require('./route/BetsPerWeek.js');
+require('./route/BetHistoryRoute.js');
 
 // resolve statics
 // use client folder as root path /

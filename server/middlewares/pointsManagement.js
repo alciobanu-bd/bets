@@ -17,7 +17,7 @@ var updatePointsForBets = function (req, res, next) {
 
                 if (err) {
                     res.status(500).json({
-                        message: "An error occured when trying to update points for this week's bets."
+                        message: "An error occurred when trying to update points for this week's bets."
                     });
                 }
 
@@ -84,7 +84,7 @@ var updatePointsForBets = function (req, res, next) {
                             else if (savedBets + errorBets == bets.length) {
                                 // some bets didn't save
                                 res.status(500).json({
-                                    message: "An error occured when trying to update points for this week's bets."
+                                    message: "An error occurred when trying to update points for this week's bets."
                                 });
                             }
 
@@ -108,7 +108,7 @@ var updatePointsForUsers = function (req, res, next) {
 
             if (err) {
                 res.status(500).json({
-                    message: "An error occured while trying to update users' points."
+                    message: "An error occurred while trying to update users' points."
                 });
             }
             else {
@@ -124,7 +124,7 @@ var updatePointsForUsers = function (req, res, next) {
 
                             if (err) {
                                 res.status(500).json({
-                                    message: "An error occured while trying to update users' points."
+                                    message: "An error occurred while trying to update users' points."
                                 });
                             }
 
@@ -146,7 +146,7 @@ var updatePointsForUsers = function (req, res, next) {
                                         }
                                         else if (savedUsers + errorUsers == aggregatedBets.length) {
                                             res.status(500).json({
-                                                message: "An error occured while trying to update users' points."
+                                                message: "An error occurred while trying to update users' points."
                                             });
                                         }
 
@@ -157,7 +157,7 @@ var updatePointsForUsers = function (req, res, next) {
                                     errorUsers++;
                                     if (savedUsers + errorUsers == aggregatedBets.length) {
                                         res.status(500).json({
-                                            message: "An error occured while trying to update users' points."
+                                            message: "An error occurred while trying to update users' points."
                                         });
                                     }
                                 }
@@ -178,7 +178,7 @@ var updateUsersPlace = function (req, res, next) {
 
         if (err) {
             res.status(500).json({
-                message: "An error occured while trying to update users' place."
+                message: "An error occurred while trying to update users' place."
             });
         }
 
@@ -206,7 +206,7 @@ var updateUsersPlace = function (req, res, next) {
                     }
                     else if (savedUsers + errorUsers == users.length) {
                         res.status(500).json({
-                            message: "An error occured while trying to update users' place."
+                            message: "An error occurred while trying to update users' place."
                         });
                     }
                 });

@@ -44,6 +44,18 @@ var templates =
     week: {
         html: 'app/week/views/week.html',
         route: 'week'
+    },
+    account: {
+        profile: {
+            html: 'app/profile/views/profile.html',
+            route: 'profile'
+        }
+    },
+    bet: {
+        history: {
+            html: 'app/history/views/history.html',
+            route: 'history'
+        }
     }
 }
 

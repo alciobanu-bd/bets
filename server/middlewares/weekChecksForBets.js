@@ -55,11 +55,12 @@ var weekChecks = function (callbacks) {
                     }
 
                     if (!errorFromCallbacks) {
-                        res.data = {
-                            local: {
-                                week: week
-                            }
-                        };
+                        if (!res.data || !res.data.local) {
+                            res.data = {
+                                local: {}
+                            };
+                        }
+                        res.data.local.week = week;
                         next();
                     }
 

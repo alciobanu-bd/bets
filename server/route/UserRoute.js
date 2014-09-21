@@ -145,7 +145,7 @@ User
                 if (err) {
                     res.statusCode = 400;
                     res.json({
-                        message: "An error has occured."
+                        message: "An error has occurred."
                     }).end();
                 }
                 else{

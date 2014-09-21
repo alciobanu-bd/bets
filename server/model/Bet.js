@@ -12,8 +12,7 @@ var BetSchema = mongoose.Schema({
     points: {type: 'number', required: false},
     ended: {type: Boolean, required: false},
     userId: {type: ObjectId, required: false},
-    username: {type: 'string', required: false},
-    status: {type: 'string', required: false}
+    username: {type: 'string', required: false}
 });
 
 module.exports = restful.model('bet', BetSchema);

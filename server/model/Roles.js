@@ -4,15 +4,18 @@ var _ = require("underscore");
 var roles = {
     user: {
         name: 'ROLE_USER',
-        value: -1000
+        value: -1000,
+        beautifulName: 'user'
     },
     admin: {
         name: 'ROLE_ADMIN',
-        value: -90
+        value: -90,
+        beautifulName: 'admin'
     },
     root: {
         name: 'ROLE_ROOT',
-        value: 0
+        value: 0,
+        beautifulName: 'root'
     }
 };
 

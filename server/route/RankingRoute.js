@@ -17,7 +17,7 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
     function (err, users) {
 
         if (err) {
-            res.json({message: "An error has occured."}).end();
+            res.json({message: "An error has occurred."}).end();
         }
 
         else {

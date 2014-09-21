@@ -157,6 +157,15 @@ function (InitUrls, CallUrlService) {
         return userRoleObject.value >= role.value;
     }
 
+    thisFactory.findRoleByName = function (roleName) {
+        if (!thisFactory.loaded) {
+            return null;
+        }
+        return _.find(thisFactory.roles, function (role) {
+            return role.name == roleName;
+        });
+    }
+
     return thisFactory;
 
 }

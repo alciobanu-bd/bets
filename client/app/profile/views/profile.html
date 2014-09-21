@@ -1,0 +1,78 @@
+
+<div class="jumbotron centered white half-bg-opacity" ng-controller="ProfileController">
+
+    <div class="panel-heading">
+        <div class="row">
+            <h2 class="panel-title">My profile</h2>
+        </div>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    Username
+                </span>
+                <span style="width: 15%" class="input-group">
+                    {{ProfileFactory.profileInformation.username}}
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    E-mail
+                </span>
+                <span style="width: 15%" class="input-group">
+                    {{ProfileFactory.profileInformation.email}}
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    Birth date
+                </span>
+                <span style="width: 15%" class="input-group">
+                    {{ProfileFactory.profileInformation.birthDate | date: 'MMM d, y'}}
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    Register date
+                </span>
+                <span style="width: 15%" class="input-group">
+                    {{ProfileFactory.profileInformation.registerDate | date: 'MMM d, y'}}
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    Place
+                </span>
+                <span style="width: 15%" class="input-group">
+                    {{ProfileFactory.profileInformation.place}}
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    Points
+                </span>
+                <span style="width: 15%" class="input-group">
+                    {{ProfileFactory.profileInformation.points}}
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    Role
+                </span>
+                <span style="width: 15%" class="input-group">
+                    {{RolesFactory.findRoleByName(ProfileFactory.profileInformation.role).beautifulName}}
+                </span>
+        </div>
+
+    </div>
+
+
+</div>

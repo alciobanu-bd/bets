@@ -30,7 +30,7 @@ function(req, res) {
 
         if (err) {
             res.status(500).json({
-                message: 'An error occured while fetching your last bets.'
+                message: 'An error occurred while fetching your last bets.'
             }).end();
         }
 
