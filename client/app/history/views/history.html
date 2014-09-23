@@ -1,41 +1,77 @@
 
+<div class="container" ng-controller="HistoryController">
+    <div class="jumbotron centered half-bg-opacity">
 
-<div class="jumbotron centered white half-bg-opacity" ng-controller="HistoryController">
+        <h2 class="white" style="margin-bottom: 1em">Bet history</h2>
 
-    <div class="panel-heading">
-        <div class="row">
-            <h2 class="panel-title">History</h2>
-        </div>
-    </div>
-
-    <div class="panel-body">
-
-        {{HistoryFactory.betHistory}}
-
-        <div class="row form-inline top-buffer-0-5-em" ng-repeat="week in HistoryFactory.betHistory track by $index">
-
-            <div ng-repeat="event in week.weekEvents" class="row">
-                <span style="width: 30%" class="input-group">
-                    {{event.homeTeam}}
-                </span>
-                <span style="width: 5%" class="input-group">
-                </span>
-                <span ng-show="!week.ended || updateScoreMode" style="width: 25%" class="input-group">
-                    {{match.startDate | date: 'MMM d, y h:mm a'}}
-                </span>
-                <span style="width: 25%" class="input-group">
-                    {{match.realHomeScore}} - {{match.realAwayScore}}
-                </span>
-                <span style="width: 5%" class="input-group">
-                </span>
-                <span style="width: 30%" class="input-group">
-                    {{event.awayTeam}}
-                </span>
+        <div class="panel panel-primary" ng-repeat="week in historyObject track by $index">
+            <div class="panel-heading">
+                <div class="row">
+                    <h2 class="panel-title">
+                        Week {{week.weekNumber}}
+                        <span ng-if="!week.available">
+                            &nbsp;(ended on: {{week.weekEndDate | date: 'MMM d, y h:mm a'}})
+                        </span>
+                        <span ng-if="week.available">
+                            &nbsp;(in progress)
+                        </span>
+                    </h2>
+                </div>
 
             </div>
+
+            <div class="panel-body">
+
+                {{week.placed}} {{week.available}}
+                <div ng-if="!week.available && !week.placed" class="row" style="margin-top: 1em; margin-bottom: 1em;">
+                    N/A
+                </div>
+
+                <div class="row" style="margin-top: 1em; margin-bottom: 1em; font-size: 1.3em">
+                    <span class="col-xs-2">
+                        <b>Starting time</b>
+                    </span>
+                    <span class="col-xs-4">
+                        <b>Match</b>
+                    </span>
+                    <span class="col-xs-2">
+                        <b>Your bet</b>
+                    </span>
+                    <span class="col-xs-2">
+                        <b>Result</b>
+                    </span>
+                    <span class="col-xs-2">
+                        <b>Points</b>
+                    </span>
+                </div>
+
+                <div ng-repeat="event in week.events" class="row">
+                    <span class="col-xs-2">
+                        {{event.startDate | date: 'MMM d, y h:mm a'}}
+                    </span>
+                    <span class="col-xs-4">
+                        {{event.homeTeam}} - {{event.awayTeam}}
+                    </span>
+                    <span class="col-xs-2">
+                        {{event.score.bet.home}} - {{event.score.bet.away}}
+                    </span>
+                    <span class="col-xs-2">
+                        {{event.score.real.home}} - {{event.score.real.away}}
+                    </span>
+                    <span class="col-xs-2">
+                        {{event.points}}
+                    </span>
+                </div>
+
+                <div class="row top-buffer-1-em">
+                    <span class="col-xs-2 pull-right">
+                        Total points: {{week.points}}
+                    </span>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
-
-
 </div>

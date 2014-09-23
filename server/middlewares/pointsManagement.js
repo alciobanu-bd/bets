@@ -45,19 +45,24 @@ var updatePointsForBets = function (req, res, next) {
                                     score.awayScore = parseInt(score.awayScore);
                                     event.awayScore = parseInt(event.awayScore);
 
+                                    var pointsPerEvent = 0;
+
                                     if (score.homeScore == event.homeScore && score.awayScore == event.awayScore) {
                                         // user guessed the correct score --> 3 points
-                                        points += 3;
+                                        pointsPerEvent += 3;
                                     }
                                     else if (score.homeScore - score.awayScore == event.homeScore - event.awayScore) {
                                         // user guessed the correct difference --> 2 points
-                                        points += 2;
+                                        pointsPerEvent += 2;
                                     }
                                     else if (((score.homeScore > score.awayScore) == (event.homeScore > event.awayScore)) &&
                                             (score.homeScore < score.awayScore) == (event.homeScore < event.awayScore)){
                                         // user guessed the correct team to win the match --> 1 point
-                                        points += 1;
+                                        pointsPerEvent += 1;
                                     }
+
+                                    points += pointsPerEvent;
+                                    score.points = pointsPerEvent;
 
                                 }
 
@@ -68,6 +73,9 @@ var updatePointsForBets = function (req, res, next) {
                         // save points
                         bet.points = points;
                         bet.ended = true;
+
+                        bet.markModified('scores');
+
                         bet.save(function (err) {
 
                             if (err) {

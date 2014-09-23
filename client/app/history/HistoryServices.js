@@ -8,13 +8,19 @@ function (InitUrls, CallUrlService) {
     var thisFactory = {};
     thisFactory.betHistory = null;
 
-    thisFactory.loadHistory = function () {
+    thisFactory.loadHistory = function (onSuccess, onError) {
         InitUrls.then(function (data) {
             CallUrlService.getArray({uri: data.bet.history},
             function (data) {
                 thisFactory.betHistory = data;
-            }, function (resposne) {
-
+                if (typeof onSuccess === 'function') {
+                    onSuccess();
+                }
+            },
+            function (resposne) {
+                if (typeof onError === 'function') {
+                    onError();
+                }
             });
         })
     }

@@ -42,6 +42,10 @@
     margin-top: 0.5em;
 }
 
+.top-buffer-1-em {
+    margin-top: 0.5em;
+}
+
 .red-border {
     border-style: solid;
     border-color: #ff0000;
