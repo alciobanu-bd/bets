@@ -98,6 +98,11 @@ var updatePointsForBets = function (req, res, next) {
 
                         });
                     }
+
+                    if (bets.length == 0) {
+                        next();
+                    }
+
                 }
             });
     }
@@ -174,8 +179,13 @@ var updatePointsForUsers = function (req, res, next) {
                         });
                 }
 
+                if (aggregatedBets.length == 0) {
+                    next();
+                }
+
             }
         }
+
     );
 }
 
@@ -219,6 +229,10 @@ var updateUsersPlace = function (req, res, next) {
                     }
                 });
 
+            }
+
+            if (users.length == 0) {
+                res.status(200).json(res.localData.week).end();
             }
 
         }
