@@ -62,6 +62,27 @@ require('./route/BetRoute.js');
 require('./route/BetsPerWeek.js');
 require('./route/BetHistoryRoute.js');
 
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+var transporter = nodemailer.createTransport(smtpTransport({
+    host: 'localhost',
+    port: 25,
+    debug: true,
+    /*    auth: {
+     user: 'alin',
+     pass: 'pass'
+     },*/
+    maxConnections: 5,
+    maxMessages: 10
+}));
+
+transporter.sendMail({
+    from: 'alin@address.com',
+    to: 'alin.ciobanu@teamnet.ro',
+    subject: 'hi',
+    text: 'hello world!'
+});
+
 // resolve statics
 // use client folder as root path /
 app.use('/', express.static(path.resolve('client/')));

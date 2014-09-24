@@ -13,7 +13,8 @@
         "moment": "*",
         "underscore": "*",
         "bcrypt-nodejs": "*",
-        "url": "*"
+        "nodemailer": "*",
+        "nodemailer-smtp-transport": "*"
     },
     "devDependencies": {
         "bower": "*",
