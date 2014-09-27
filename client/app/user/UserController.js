@@ -2,8 +2,8 @@
 userModule
 
 .controller('UserController', [
-'$scope', 'UserInformation', 'InitUrls', 'RolesFactory',
-function ($scope, UserInformation, InitUrls, RolesFactory) {
+'$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'RoutesFactory',
+function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
@@ -30,12 +30,12 @@ function ($scope, UserInformation, InitUrls, RolesFactory) {
             var credentials = _.object(_.map($scope.inputs, function (item, key) {
                 return [key, item.model];
             }));
-            var loginPromise = UserInformation.login(data, credentials);
+            var loginPromise = UserInformationCalls.login(data, credentials);
 
             loginPromise.then(
             function (data) {
                 $scope.encounteredError = false;
-                $scope.goHome();
+                RoutesFactory.goHome();
                 $scope.loginInProgress = false;
             },
             function (rejection) {
@@ -50,8 +50,8 @@ function ($scope, UserInformation, InitUrls, RolesFactory) {
     }
 
     $scope.logout = function () {
-        UserInformation.logout();
-        $scope.goHome();
+        UserInformationCalls.logout();
+        RoutesFactory.goHome();
     }
 
 }

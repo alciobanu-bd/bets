@@ -2,12 +2,13 @@
 configModule
 
 .factory('RoutesFactory', [
-function () {
+'UserInformation', 'Templates', '$location',
+function (UserInformation, Templates, $location) {
 
     var thisFactory = {};
 
     thisFactory.goHome = function () {
-        if (thisFactory.userInfo.isLogged) {
+        if (UserInformation.isLogged) {
             thisFactory.currentBodyView = Templates.welcome.logged;
         }
         else {
@@ -44,6 +45,11 @@ function () {
     thisFactory.goToHistory = function () {
         thisFactory.currentBodyView = Templates.bet.history;
         $location.path(thisFactory.currentBodyView.route);
+    }
+
+    thisFactory.goToActivation = function () {
+        thisFactory.currentBodyView = Templates.activation;
+        $location.path(Templates.activation.route);
     }
 
     return thisFactory;

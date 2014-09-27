@@ -25,13 +25,37 @@ function () {
 ])
 
 .factory('UserInformation', [
-'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2',
-function (CallUrlService, $q, LoginTokenFactory, SHA2) {
+function () {
+
+    var thisFactory = {};
+
+    thisFactory.isLogged = false;
+    thisFactory.user = {};
+
+    thisFactory.setUserDetails = function (user) {
+        thisFactory.user = {
+            _id: user._id,
+            active: user.active,
+            birthDate: user.birthDate,
+            email: user.email,
+            place: user.place,
+            points: user.points,
+            registerDate: user.registerDate,
+            role: user.role,
+            username: user.username
+        };
+    }
+
+    return thisFactory;
+
+}
+])
+
+.factory('UserInformationCalls', [
+'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation',
+function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation) {
 
     var infoService = {};
-
-    infoService.isLogged = false;
-    infoService.user = {};
 
     infoService.getSalt = function (saltAddress, username) {
 
@@ -50,19 +74,6 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2) {
 
     }
 
-    var setUserDetails = function (user) {
-        infoService.user = {
-            _id: user._id,
-            birthDate: user.birthDate,
-            email: user.email,
-            place: user.place,
-            points: user.points,
-            registerDate: user.registerDate,
-            role: user.role,
-            username: user.username
-        };
-    }
-
     infoService.login = function (initUrls, credentials) {
 
         var saltPromise = infoService.getSalt(initUrls.auth.salt, credentials.username);
@@ -75,17 +86,17 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2) {
 
             CallUrlService.post({uri: initUrls.auth.login}, credentials,
             function (data) {
-                infoService.isLogged = true;
+                UserInformation.isLogged = true;
                 LoginTokenFactory.setToken({
                     token: data.token,
                     expires: data.expires,
                     user: data.user
                 });
-                setUserDetails(data.user);
+                UserInformation.setUserDetails(data.user);
                 defered.resolve({message: "Logged in successfully."});
             },
             function (response) {
-                infoService.isLogged = false;
+                UserInformation.isLogged = false;
                 defered.reject(response);
             }
             );
@@ -99,7 +110,7 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2) {
     };
 
     infoService.logout = function () {
-        infoService.isLogged = false;
+        UserInformation.isLogged = false;
         LoginTokenFactory.deleteToken();
     }
 
@@ -107,8 +118,8 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2) {
         var token = LoginTokenFactory.getToken();
         if (token != null && new Date() < new Date(token.expires)) {
 
-            infoService.isLogged = true;
-            setUserDetails(token.user);
+            UserInformation.isLogged = true;
+            UserInformation.setUserDetails(token.user);
 
         }
     }

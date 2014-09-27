@@ -3,20 +3,18 @@ configModule
 
     .config(['$provide', '$httpProvider', function ($provide, $httpProvider) {
 
-
         $provide.factory('NonActiveUserInterceptor', [
-            '$q', 'UserInformation', '$location', 'Templates',
-            function ($q, UserInformation, $location, Templates) {
+            '$q', 'UserInformation', '$location', 'Templates', 'RoutesFactory',
+            function ($q, UserInformation, $location, Templates, RoutesFactory) {
 
                 return {
-                    response: function (config) {
-                        if (config.url.indexOf("api") >= 0) {
+                    response: function (response) {
+                        if (response.config.url && response.config.url.indexOf("api") >= 0) {
                             if (UserInformation.isLogged && !UserInformation.user.active) {
-                                $scope.currentBodyView = Templates.activation;
-                                $location.path(Templates.activation.route);
+                                RoutesFactory.goToActivation();
                             }
                         }
-                        return config|| $q.when(config);
+                        return response || $q.when(response);
                     }
                 }
             }

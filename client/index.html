@@ -18,7 +18,7 @@
             <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
             <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
 
-            <ng-include src="currentBodyView.html"></ng-include>
+            <ng-include src="RoutesFactory.currentBodyView.html"></ng-include>
 
         </span>
     </span>
@@ -52,6 +52,7 @@
     <script src="app/user/RegisterController.js"></script>
 
     <script src="app/config/configModule.js"></script>
+    <script src="app/config/RoutesFactory.js"></script>
     <script src="app/config/TokenInterceptor.js"></script>
     <script src="app/config/NonActiveUserInterceptor.js"></script>
 
