@@ -56,6 +56,10 @@ var templates =
             html: 'app/history/views/history.html',
             route: 'history'
         }
+    },
+    activation: {
+        html: 'app/user/views/activation.html',
+        route: 'activation'
     }
 }
 
