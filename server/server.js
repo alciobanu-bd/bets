@@ -48,6 +48,17 @@ db
     .on('error', function () {console.error('DB connection error.')})
     .once('open', function() {console.log('DB Connection established.')});
 
+/*
+ * Mail setup
+ */
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+
+GLOBAL.mailTransporter = nodemailer.createTransport(smtpTransport({
+    host: 'smtp.rdslink.ro',
+    port: 25
+}));
+
 var port = 80;
 
 require('./route/TestRoute.js');
@@ -61,27 +72,6 @@ require('./route/WeekRoute.js');
 require('./route/BetRoute.js');
 require('./route/BetsPerWeek.js');
 require('./route/BetHistoryRoute.js');
-
-var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
-var transporter = nodemailer.createTransport(smtpTransport({
-    host: 'localhost',
-    port: 25,
-    debug: true,
-    /*    auth: {
-     user: 'alin',
-     pass: 'pass'
-     },*/
-    maxConnections: 5,
-    maxMessages: 10
-}));
-
-transporter.sendMail({
-    from: 'alin@address.com',
-    to: 'alin.ciobanu@teamnet.ro',
-    subject: 'hi',
-    text: 'hello world!'
-});
 
 // resolve statics
 // use client folder as root path /

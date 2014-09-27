@@ -26,34 +26,6 @@ var hasSameId = function () {
     }
 }
 
-var hasRoleWithId = function (role) { // for /get/:id
-    return function (req, res, next, user, onError) {
-
-        if (req.params.id) {
-            if (role && Roles.roleValue(user.role) < Roles.roleValue(role)) {
-                res.status(401).json({
-                    message: "You are not permitted to execute this method."
-                }).end();
-                onError();
-            }
-        }
-    }
-}
-
-var hasRoleWithoutId = function (role) { // for /get (withoud :id)
-    return function (req, res, next, user, onError) {
-
-        if (req.params.id == undefined) {
-            if (role && Roles.roleValue(user.role) < Roles.roleValue(role)) {
-                res.status(401).json({
-                    message: "You are not permitted to execute this method."
-                }).end();
-                onError();
-            }
-        }
-    }
-}
-
 var hasSameIdOrHasRole = function (role) {
     return function (req, res, next, user, onError) {
         if (req.params.id) {
@@ -74,7 +46,5 @@ var hasSameIdOrHasRole = function (role) {
 module.exports = {
     hasRole: hasRole,
     hasSameId: hasSameId,
-    hasRoleWithId: hasRoleWithId,
-    hasRoleWithoutId: hasRoleWithoutId,
     hasSameIdOrHasRole: hasSameIdOrHasRole
 };

@@ -24,6 +24,8 @@ function ($scope, UserInformation, InitUrls, RolesFactory) {
 
     $scope.login = function () {
 
+        $scope.loginInProgress = true;
+
         InitUrls.then(function (data) {
             var credentials = _.object(_.map($scope.inputs, function (item, key) {
                 return [key, item.model];
@@ -34,10 +36,12 @@ function ($scope, UserInformation, InitUrls, RolesFactory) {
             function (data) {
                 $scope.encounteredError = false;
                 $scope.goHome();
+                $scope.loginInProgress = false;
             },
             function (rejection) {
                 $scope.error.encounteredError = true;
                 $scope.error.message = rejection.data.message;
+                $scope.loginInProgress = false;
             }
             );
 

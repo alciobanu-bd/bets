@@ -26,6 +26,11 @@ module.exports = function (callbacks) {
                                 message: "An error has occurred. We couldn't verify your identity."
                             }).end();
                         }
+                        else if (user && !user.active) {
+                            res.status(401).json({
+                                message: "Your account is inactive."
+                            }).end();
+                        }
                         else {
 
                             var errorFromCallbacks = false;

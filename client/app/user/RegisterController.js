@@ -27,6 +27,7 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
     };
 
     $scope.status = {
+        inProgress: false,
         success: false,
         error: false,
         message: ''
@@ -50,6 +51,8 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
         resetStatus();
         resetInputsError();
 
+        $scope.status.inProgress = true;
+
         InitUrls.then(function (data) {
             var urls = data;
 
@@ -65,6 +68,7 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
             function (data) {
                 $scope.status.success = true;
                 $scope.status.message = "Your account was successfully created.";
+                $scope.status.inProgress = false;
             },
             function (response) {
 
@@ -90,6 +94,8 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
                         $scope.inputs[i].error = true;
                     }
                 }
+
+                $scope.status.inProgress = false;
 
             }
             );

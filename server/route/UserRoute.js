@@ -3,160 +3,325 @@
 
 var User = require('./../model/User.js');
 var Roles = require('./../model/Roles.js');
+var RegistrationCode = require('./../model/RegistrationCode.js');
+var Random = require('./../services/Random.js');
+var express = require('express');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 var bcrypt = require('bcrypt-nodejs');
 
+var mailServices = require('./../services/mailServices.js');
+
 var _ = require('underscore');
+var router = express.Router();
 
-User
-    .methods(['get', 'post', 'put', 'delete'])
-    .before('post', function (req, res, next) {
+router.get('/user/:id([0-9a-fA-F]{24})',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+function (req, res, next) {
 
-        if (req.body.password != req.body.confirmPassword) {
-            var errorFields = {password: true, confirmPassword: true};
+    User.findOne({_id: req.params.id},
+        {password: -1, salt: -1, serverSalt: -1},
+        function (err, user) {
+            if (err) {
+                res.status(500).json({
+                    message: "Error fetching user from database."
+                }).end();
+            }
+            else {
+                user = deleteUnnecessaryFields(user);
+                res.status(200).json(user).end();
+            }
+        });
+
+});
+
+router.get('/user',
+jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
+function (req, res, next) {
+
+    User.find({},
+        {password: -1, salt: -1, serverSalt: -1},
+        function (err, users) {
+            if (err) {
+                res.status(500).json({
+                    message: "Error fetching users from database."
+                }).end();
+            }
+            else {
+                res.status(200).json(users).end();
+            }
+        });
+
+});
+
+router.post('/user',
+function (req, res, next) {
+
+    if (req.body.password != req.body.confirmPassword) {
+        var errorFields = {password: true, confirmPassword: true};
+        res.status(500).json({
+            message: "Account couldn't be created. Passwords are not matching.",
+            errorFields: errorFields
+        }).end();
+    }
+
+    else {
+
+        User.find({$or: [
+            {username: req.body.username},
+            {email: req.body.email}
+        ]}, function (err, foundUsers) {
+
+            if (err) {
+                res.status(500).json({
+                    message: "Account couldn't be created due to server errors."
+                });
+                res.end();
+            }
+            else {
+
+                if (foundUsers.length > 0) {
+
+                    var errorFields = {username: false, email: false};
+
+                    for (var i in foundUsers) {
+                        var fUser = foundUsers[i];
+                        errorFields.username = fUser.username == req.body.username;
+                        errorFields.email = fUser.email == req.body.email;
+                    }
+
+                    res.status(409).json({
+                        message: "Account couldn't be created. Some fields are already taken.",
+                        errorFields: errorFields
+                    }).end();
+                }
+
+                else {
+
+                    User.find({}, {place: 1, points: 1}, function (err, userPlaces) {
+                        if (err) {
+                            res.status(500).json({
+                                message: "Account couldn't be created due to server errors."
+                            }).end();
+                        }
+                        else {
+
+                            //calculate place (number of users which have more points than zero + 1)
+                            req.body.place = _.filter(userPlaces, function (user) {
+                                return user.points > 0;
+                            }).length + 1;
+
+                            req.body.registerDate = new Date();
+                            req.body.points = 0;
+                            req.body.role = Roles.user.name;
+                            req.body.registrationIp = req.connection.remoteAddress;
+                            req.body.serverSalt = bcrypt.genSaltSync();
+                            req.body.active = false;
+
+                            bcrypt.hash(req.body.password, req.body.serverSalt, null, function (err, hash) {
+                                if (err) {
+                                    res.status(500).json({
+                                        message: "Account couldn't be created due to server errors."
+                                    }).end();
+                                }
+                                else {
+                                    req.body.password = hash;
+                                    next();
+                                }
+                            });
+
+                        }
+                    });
+                }
+
+            }
+        });
+    }
+},
+
+function (req, res, next) {
+
+    var user = new User();
+
+    for (var i in req.body) {
+        user[i] = req.body[i];
+    };
+
+    user.save(function (err) {
+        if (err) {
             res.status(500).json({
-                message: "Account couldn't be created. Passwords are not matching.",
-                errorFields: errorFields
-            }).end();
+                message: "Account couldn't be saved to database. Please try again."
+            });
+        }
+        else {
+            req.data = {
+                user: user
+            };
+            next();
+        }
+    });
+
+},
+function (req, res, next) {
+
+
+    RegistrationCode.findOne({userId: req.data.user._id},
+    function (err, regCode) {
+
+        if (err) {
+            res.status(500).json({
+                message: "Account was saved, but a registration code couldn't be provided via e-mail. " +
+                    "Please login and request a new one."
+            });
         }
 
         else {
 
-            User.find({$or: [{username: req.body.username}, {email: req.body.email}]}, function (err, foundUsers) {
+            if (!regCode) {
+                regCode = new RegistrationCode();
+            }
+            regCode.userId = req.data.user._id;
+            var now = new Date();
+            regCode.expirationDate = now.setHours(now.getHours() + 24 * 5);
+            regCode.registrationCode = Random.randomString();
 
+            regCode.save(function (err) {
                 if (err) {
                     res.status(500).json({
-                        message: "Account couldn't be created due to server errors."
+                        message: "Account was saved, but a registration code couldn't be provided via e-mail. " +
+                            "Please login and request a new one."
                     });
-                    res.end();
                 }
                 else {
 
-                    if (foundUsers.length > 0) {
+                    mailServices.sendConfirmationLinkOnRegistration(req.data.user.username, req.data.user.email, regCode.registrationCode,
+                        function (info) {
 
-                        var errorFields = {username: false, email:false};
+                            // success
+                            res.status(201).json(req.data.user).end();
 
-                        for (var i in foundUsers) {
-                            var fUser = foundUsers[i];
-                            errorFields.username = fUser.username == req.body.username;
-                            errorFields.email = fUser.email == req.body.email;
-                        }
+                        },
+                        function (err) {
 
-                        res.status(409).json({
-                            message: "Account couldn't be created. Some fields are already taken.",
-                            errorFields: errorFields
-                        }).end();
-                    }
+                            // error
+                            console.log("registration mail couldn't be delivered", err);
+                            res.status(500).json({
+                                message: "Account was saved, but a registration code couldn't be provided via e-mail. " +
+                                    "Please login and request a new one."
+                            });
 
-                    else {
-
-                        User.find({}, {place: 1, points: 1}, function (err, userPlaces) {
-                            if (err) {
-                                res.status(500).json({
-                                    message: "Account couldn't be created due to server errors."
-                                }).end();
-                            }
-                            else {
-
-                                //calculate place (number of users which have more points than zero + 1)
-                                req.body.place = _.filter(userPlaces, function (user) {
-                                    return user.points > 0;
-                                }).length + 1;
-
-                                req.body.registerDate = new Date();
-                                req.body.points = 0;
-                                req.body.role = Roles.user.name;
-                                req.body.registrationIp = req.connection.remoteAddress;
-                                req.body.serverSalt = bcrypt.genSaltSync();
-
-                                bcrypt.hash(req.body.password, req.body.serverSalt, null, function(err, hash) {
-                                    if (err) {
-                                        res.status(500).json({
-                                            message: "Account couldn't be created due to server errors."
-                                        }).end();
-                                    }
-                                    else {
-                                        req.body.password = hash;
-                                        next();
-                                    }
-                                });
-
-                            }
                         });
-                    }
-
                 }
             });
-        }
 
-    })
-//  only admins are permitted to see all existing users, gets on a specific user are permitted for all users
-    .before('get', jwtauth([tokenChecks.hasRoleWithoutId('ROLE_ADMIN'), tokenChecks.hasRoleWithId('ROLE_USER')]))
-    .after('get', function (req, res, next) {
-
-        var deleteUnnecessaryFields = function (bundle) {
-
-            var newBundle = bundle.toObject();
-
-            // don't wanna see these in front-end
-            delete newBundle.password;
-            delete newBundle.salt;
-            delete newBundle.serverSalt;
-
-            return newBundle;
-
-        }
-
-        if (!Array.isArray(res.locals.bundle)) {
-            res.locals.bundle = deleteUnnecessaryFields(res.locals.bundle);
-        }
-        else {
-            for (var i in res.locals.bundle) {
-                res.locals.bundle[i] = deleteUnnecessaryFields(res.locals.bundle[i]);
-            }
-        }
-
-        next();
-
-    })
-    .before('put', jwtauth([
-        function(req, res, next, user) {
-            // prevent users to save role if they don't have admin role
-
-            if (Role.roleValue(user.role) < Role.admin.value) {
-                if (req.body.role) {
-                    // if a user is not admin and tries to set role, delete role and registrationIp
-                    delete req.body.role;
-                    delete req.body.registrationIp;
-                }
-            }
-
-            next();
-
-        }
-    ]))
-
-    .before('delete', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]))
-
-/*    .route('rm-rf.delete', jwtauth([tokenChecks.hasRole('ROLE_ROOT')]), {
-        handler: function(req, res, next) {
-            User.remove({}, function(err) {
-                if (err) {
-                    res.statusCode = 400;
-                    res.json({
-                        message: "An error has occurred."
-                    }).end();
-                }
-                else{
-                    res.json({
-                        message: "Success."
-                    }).end();
-                    console.log('User collection removed');
-                }
-            });
         }
     });
-*/
 
-User.register(app, '/api/user');
+});
+
+router.put('/user/:id([0-9a-fA-F]{24})',
+jwtauth([
+    tokenChecks.hasSameIdOrHasRole('ROLE_ROOT'),
+    function(req, res, next, user, onError) {
+
+        // prevent users to save role if they don't have admin role
+        if (Role.roleValue(user.role) < Role.admin.value) {
+            if (req.body.role) {
+                // if a user is not admin and tries to set role, delete role and registrationIp
+                delete req.body.role;
+                delete req.body.active;
+            }
+        }
+
+        if (req.body.registrationIp) {
+            delete req.body.registrationIp;
+        }
+
+        if (req.body.points) {
+            delete req.body.points;
+        }
+
+        if (req.body.place) {
+            delete req.body.place;
+        }
+
+    }
+]),
+function(req, res, next) {
+
+    User.findOne({_id: req.params.id},
+        function (err, user) {
+            if (err || !user) {
+                res.status(500).json({
+                    message: "User couldn't be found in the database."
+                }).end();
+            }
+            else {
+                for (var i in req.body) {
+                    user[i] = req.body[i];
+                }
+
+                user.save(function (err) {
+                    if (err) {
+                        res.status(500).json({
+                            message: "User couldn't be saved in the database. Please try again."
+                        }).end();
+                    }
+                    else {
+                        res.status(200).json(user).end();
+                    }
+                });
+
+            }
+        });
+
+}
+);
+
+/*
+ * Expects a registration code in body json.
+ */
+router.post('/user/activate',
+jwtauth([function (req, res, next, user, onError) {
+
+    RegistrationCode.findOne({userId: user._id},
+    function (err, regCode) {
+        if (err) {
+            res.status(500).json({
+                message: "An error occurred with the database."
+            }).end();
+        }
+        else {
+            if (req.body.registrationCode != regCode.registrationCode) {
+                res.status(500).json({
+                    message: "The registration code you entered is not valid."
+                }).end();
+            }
+            else {
+
+                if (new Date(regCode.expirationDate) < new Date()) {
+                    res.status(500).json({
+                        message: "The registration code you entered expired. Please request another one."
+                    }).end();
+                }
+
+                user.active = true;
+                user.save(function (err) {
+                    if (err) {
+                        res.status(500).json({
+                            message: "User couldn't be activated due to database errors."
+                        }).end();
+                    }
+                    else {
+                        res.status(200).json(user).end();
+                    }
+                });
+            }
+        }
+    });
+
+}]),
+function (req, res, next) {
+});
+
+app.use('/api', router);
