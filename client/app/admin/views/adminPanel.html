@@ -1,0 +1,22 @@
+
+<div class="container" ng-controller="AdminPanelController">
+
+    <div class="jumbotron centered white half-bg-opacity">
+
+        <h2>Admin panel</h2>
+
+        <span>
+            <ul class="nav nav-tabs" role="tablist">
+                <li ng-repeat="tab in tabs track by $index" ng-class="tab.active ? 'active' : ''">
+                    <a href="" ng-click="activateTab(tab)">{{tab.name}}</a>
+                </li>
+            </ul>
+
+            <div style="margin-top: 3em">
+                <ng-include src="activeTab().templateUrl"></ng-include>
+            </div>
+        </span>
+
+    </div>
+
+</div>

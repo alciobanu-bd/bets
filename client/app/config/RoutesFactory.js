@@ -52,6 +52,11 @@ function (UserInformation, Templates, $location) {
         $location.path(Templates.activation.route);
     }
 
+    thisFactory.goToAdminPanel = function () {
+        thisFactory.currentBodyView = Templates.admin;
+        $location.path(Templates.admin.route);
+    }
+
     return thisFactory;
 
 }]);

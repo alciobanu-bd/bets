@@ -20,8 +20,16 @@
     color: #12A4E3 !important;
 }
 
-.header-menu-color li a {
-    color: #00C4F0 !important;
+.navbar-nav li a {
+    color: #43cfff !important;
+}
+
+.nav-tabs li a {
+    color: #1998ff !important;
+}
+
+.dropdown li a {
+    color: #4a95ff !important;
 }
 
 .header-text-size {
@@ -53,15 +61,29 @@
 }
 
 .menu-link-border {
+    background-color: rgb(0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    min-width: 7em;
+    border: 0.2em solid rgba(255,255,255, 0);
+    border-radius: 0.6em !important;
+}
+
+.menu-link-border:hover {
+    background-color: rgb(0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
     border-width: 0.2em;
     border-color: white;
     border-style: solid;
-    border-radius: 1em !important;
-    margin-left: 1em;
-    margin-right: 1em;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
-    min-width: 7.5em;
+    border-radius: 0.6em !important;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    min-width: 7em;
 }
 
 body {

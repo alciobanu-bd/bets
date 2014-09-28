@@ -10,7 +10,8 @@ var betsModule = angular.module(
         'ranking',
         'week',
         'profile',
-        'history'
+        'history',
+        'admin'
     ]
 );
 

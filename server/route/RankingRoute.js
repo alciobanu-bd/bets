@@ -3,6 +3,7 @@
 
 var User = require('./../model/User.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
+var pointsManagementFunctions = require('./../middlewares/pointsManagement.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 
 var express = require('express');
@@ -28,6 +29,13 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
     );
 
 });
+
+router.get('/ranking/recalculate',
+    jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
+    pointsManagementFunctions.updatePointsForBets,
+    pointsManagementFunctions.updatePointsForUsers,
+    pointsManagementFunctions.updateUsersPlace
+);
 
 app.use('/api', router);
 

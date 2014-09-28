@@ -60,6 +60,10 @@ var templates =
     activation: {
         html: 'app/user/views/activation.html',
         route: 'activation'
+    },
+    admin: {
+        html: 'app/admin/views/adminPanel.html',
+        route: 'admin'
     }
 }
 

@@ -119,6 +119,10 @@ var updatePointsForUsers = function (req, res, next) {
             }}
         ], function (err, aggregatedBets) {
 
+            /**
+             * BUG HERE
+             */
+
             if (err) {
                 res.status(500).json({
                     message: "An error occurred while trying to update users' points."
