@@ -2,7 +2,7 @@
 var User = require('./../model/User.js');
 var jwt = require('jwt-simple');
 
-module.exports = function (callbacks) {
+module.exports = function (callbacks, activationCheck) {
 
     return function(req, res, next) {
 
@@ -26,28 +26,46 @@ module.exports = function (callbacks) {
                                 message: "An error has occurred. We couldn't verify your identity."
                             }).end();
                         }
-                        else if (user && !user.active) {
-                            res.status(401).json({
-                                message: "Your account is inactive."
-                            }).end();
-                        }
                         else {
 
-                            var errorFromCallbacks = false;
-                            for (var i in callbacks) {
-                                callbacks[i](req, res, next, user, function () {
-                                    errorFromCallbacks = true;
-                                });
-                            }
+                            if (user) {
 
-                            if (!errorFromCallbacks) {
-                                if (!res.data || !res.data.local) {
-                                    res.data = {
-                                        local: {}
-                                    };
+                                if ((!user.active && activationCheck && !activationCheck.skipActivationCheck) ||
+                                    (!user.active && !activationCheck)) {
+                                    res.status(401).json({
+                                        message: "Your account is inactive."
+                                    }).end();
                                 }
-                                res.data.local.user = user;
-                                next();
+                                else {
+
+                                    var successCallbacks = 0;
+
+                                    for (var i in callbacks) {
+                                        callbacks[i](req, res, next, user, function () {
+                                            // on error
+                                        },
+                                        function () {
+                                            // on success
+                                            successCallbacks++;
+
+                                            if (successCallbacks == callbacks.length) {
+                                                if (!res.data || !res.data.local) {
+                                                    res.data = {
+                                                        local: {}
+                                                    };
+                                                }
+                                                res.data.local.user = user;
+                                                next();
+                                            }
+                                        });
+                                    }
+
+                                }
+                            }
+                            else {
+                                res.status(401).json({
+                                    message: "Login token is invalid."
+                                }).end();
                             }
 
                         }

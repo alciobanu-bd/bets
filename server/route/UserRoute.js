@@ -20,7 +20,7 @@ jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
     User.findOne({_id: req.params.id},
-        {password: -1, salt: -1, serverSalt: -1},
+        {password: 0, salt: 0, serverSalt: 0},
         function (err, user) {
             if (err) {
                 res.status(500).json({
@@ -28,7 +28,6 @@ function (req, res, next) {
                 }).end();
             }
             else {
-                user = deleteUnnecessaryFields(user);
                 res.status(200).json(user).end();
             }
         });
@@ -164,7 +163,6 @@ function (req, res, next) {
 },
 function (req, res, next) {
 
-
     RegistrationCode.findOne({userId: req.data.user._id},
     function (err, regCode) {
 
@@ -222,7 +220,7 @@ function (req, res, next) {
 router.put('/user/:id([0-9a-fA-F]{24})',
 jwtauth([
     tokenChecks.hasSameIdOrHasRole('ROLE_ROOT'),
-    function(req, res, next, user, onError) {
+    function(req, res, next, user, onError, onSuccess) {
 
         // prevent users to save role if they don't have admin role
         if (Role.roleValue(user.role) < Role.admin.value) {
@@ -244,6 +242,8 @@ jwtauth([
         if (req.body.place) {
             delete req.body.place;
         }
+
+        onSuccess();
 
     }
 ]),
@@ -282,7 +282,7 @@ function(req, res, next) {
  * Expects a registration code in body json.
  */
 router.post('/user/activate',
-jwtauth([function (req, res, next, user, onError) {
+jwtauth([function (req, res, next, user, onError, onSuccess) {
 
     RegistrationCode.findOne({userId: user._id},
     function (err, regCode) {
@@ -290,12 +290,15 @@ jwtauth([function (req, res, next, user, onError) {
             res.status(500).json({
                 message: "An error occurred with the database."
             }).end();
+            onError();
         }
         else {
+
             if (req.body.registrationCode != regCode.registrationCode) {
                 res.status(500).json({
                     message: "The registration code you entered is not valid."
                 }).end();
+                onError();
             }
             else {
 
@@ -303,25 +306,36 @@ jwtauth([function (req, res, next, user, onError) {
                     res.status(500).json({
                         message: "The registration code you entered expired. Please request another one."
                     }).end();
+                    onError();
                 }
 
-                user.active = true;
-                user.save(function (err) {
-                    if (err) {
-                        res.status(500).json({
-                            message: "User couldn't be activated due to database errors."
-                        }).end();
-                    }
-                    else {
-                        res.status(200).json(user).end();
-                    }
-                });
+                else {
+                    onSuccess();
+                }
+
             }
         }
     });
 
-}]),
+}], {skipActivationCheck: true}),
 function (req, res, next) {
+
+    var user = res.data.local.user;
+
+    user.active = true;
+    user.save(function (err) {
+        if (err) {
+            res.status(500).json({
+                message: "User couldn't be activated due to database errors."
+            }).end();
+        }
+        else {
+            res.status(200).json(user).end();
+            RegistrationCode.remove({registrationCode: req.body.registrationCode});
+        }
+    });
+
+
 });
 
 app.use('/api', router);

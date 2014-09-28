@@ -1,16 +1,19 @@
 
 var Week = require('./../model/Week.js');
 
-var checkIfWeekEnded = function (req, res, next, week, onError) {
+var checkIfWeekEnded = function (req, res, next, week, onError, onSuccess) {
     if (week.locked || week.ended || week.endDate < new Date()) {
         res.status(500).json({
             message: 'Bet placement on this week is not available.'
         }).end();
         onError();
     }
+    else {
+        onSuccess();
+    }
 }
 
-var checkIfCorrectNumberOfMatches = function (req, res, next, week, onError) {
+var checkIfCorrectNumberOfMatches = function (req, res, next, week, onError, onSuccess) {
 
     var numberOfBets;
     if (req.body.scores) {
@@ -25,6 +28,9 @@ var checkIfCorrectNumberOfMatches = function (req, res, next, week, onError) {
             message: 'You are required to play ' + week.required + ' matches. You placed ' + numberOfBets + '.'
         }).end();
         onError();
+    }
+    else {
+        onSuccess();
     }
 
 }
@@ -46,22 +52,28 @@ var weekChecks = function (callbacks) {
 
                 if (week) {
 
-                    var errorFromCallbacks = false;
+                    var successCallbacks = 0;
 
                     for (var i in callbacks) {
-                        callbacks[i](req, res, next, week, function () {
-                            errorFromCallbacks = true;
-                        });
-                    }
+                        callbacks[i](req, res, next, week,
+                        function () {
+                            // on error
+                        },
+                        function () {
+                            // on success
+                            successCallbacks++;
 
-                    if (!errorFromCallbacks) {
-                        if (!res.data || !res.data.local) {
-                            res.data = {
-                                local: {}
-                            };
-                        }
-                        res.data.local.week = week;
-                        next();
+                            if (successCallbacks == callbacks.length) {
+                                if (!res.data || !res.data.local) {
+                                    res.data = {
+                                        local: {}
+                                    };
+                                }
+                                res.data.local.week = week;
+                                next();
+                            }
+
+                        });
                     }
 
                 }

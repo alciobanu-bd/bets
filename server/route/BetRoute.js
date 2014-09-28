@@ -13,10 +13,12 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-var setUserId = function(req, res, next, user) {
+var setUserId = function(req, res, next, user, onError, onSuccess) {
     // set userId
     req.body.userId = user._id;
     req.body.username = user.username;
+    onSuccess();
+
 }
 
 var router = express.Router();

@@ -12,12 +12,15 @@ var router = express.Router();
 
 router.get('/getBetByWeek',
 jwtauth([
-    function (req, res, next, user, onError) {
+    function (req, res, next, user, onError, onSuccess) {
         if (!req.query.weekNumber) {
             res.status(500).json({
                 message: 'No week number to look for.'
             }).end();
             onError();
+        }
+        else {
+            onSuccess();
         }
     },
     tokenChecks.hasRole('ROLE_USER')])

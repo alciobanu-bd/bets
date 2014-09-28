@@ -5,7 +5,8 @@ var initFeed = {
     user: {
         address: "/api/user",
         roles: "/api/roles",
-        ranking: "/api/ranking"
+        ranking: "/api/ranking",
+        activate: "/api/user/activate"
     },
     auth: {
         login: "/api/auth/login",

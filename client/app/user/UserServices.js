@@ -181,4 +181,55 @@ function (InitUrls, CallUrlService) {
 
 }
 ])
+
+.factory('ActivationFactory', [
+'InitUrls', 'CallUrlService',
+function (InitUrls, CallUrlService) {
+
+    var thisFactory = {};
+
+    thisFactory.status = {
+        success: false,
+        error: false,
+        inProgress: false,
+        message: ''
+    };
+
+    thisFactory.activate = function (regCode, onSuccess, onError) {
+
+        thisFactory.status.inProgress = true;
+
+        InitUrls.then(function (urls) {
+            CallUrlService.post({uri: urls.user.activate},
+            {registrationCode: regCode},
+            function (data) {
+                thisFactory.status.inProgress = false;
+                thisFactory.status.success = true;
+                thisFactory.status.error = false;
+                if (typeof onSuccess === 'function') {
+                    onSuccess(data);
+                }
+            },
+            function (response) {
+                thisFactory.status.inProgress = false;
+                thisFactory.status.success = false;
+                thisFactory.status.error = true;
+                if (response.data.message) {
+                    thisFactory.status.message = response.data.message;
+                }
+                else {
+                    thisFactory.status.message = "Account couldn't be activated";
+                }
+                if (typeof onError === 'function') {
+                    onError();
+                }
+            });
+        });
+    }
+
+    return thisFactory;
+
+}
+])
+
 ;

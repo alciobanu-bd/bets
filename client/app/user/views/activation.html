@@ -1,2 +1,26 @@
 
-Please activate before you continue.
+<div class="container" ng-controller="AccountActivationController">
+
+    <div class="jumbotron centered white half-bg-opacity">
+        <h2>Activation</h2>
+        <div class="input-group centered" style="min-width: 40%;">
+            <div class="form-group">
+                <input type="text" class="form-control cornered-input" ng-model="inputs.registrationCode" placeholder="Registration code">
+            </div>
+        </div>
+        <div style="margin-top: 1em">
+            <button type="button" class="btn btn-info" style="width: 40%" ng-disabled="status.inProgress" ng-click="activate()">
+                Activate
+            </button>
+        </div>
+
+        <div ng-show="ActivationFactory.status.error" class="top-buffer-0-5-em centered cornered-input error-div"
+             style= "width: 40%;">
+            <span class="error-success-inner">
+                {{ActivationFactory.status.message}}
+            </span>
+        </div>
+
+    </div>
+
+</div>
