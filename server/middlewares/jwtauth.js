@@ -14,7 +14,7 @@ module.exports = function (callbacks, activationCheck) {
 
                 if (decoded.exp <= new Date()) {
                     res.status(401).json({
-                        message: "Your token expired. Please log in again."
+                        message: "Your token has expired. Please log in again."
                     }).end();
                 }
                 else {
@@ -74,7 +74,7 @@ module.exports = function (callbacks, activationCheck) {
 
             } catch (err) {
                 res.status(401).json({
-                    message: "Your token expired. Please log in again."
+                    message: "Your token has expired. Please log in again."
                 }).end();
             }
         } else {

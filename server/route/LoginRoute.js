@@ -36,6 +36,11 @@ router.post('/login', function(req, res) {
                     message: "More than one user found with the username " + req.body.username + "."}
             ).end();
         }
+        else if (users[0].disabled) {
+            res.status(401).json({
+                message: "Login failed. Your account is disabled."
+            }).end();
+        }
         else {
 
             bcrypt.hash(password, users[0].serverSalt, null, function(err, hash) {

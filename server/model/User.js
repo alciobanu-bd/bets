@@ -14,7 +14,8 @@ var UserSchema = mongoose.Schema({
     place: {type: 'number', required: false},
     registrationIp: {type:'string', required: false},
     serverSalt: {type:'string', required: false},
-    active: {type: Boolean, required: false}
+    active: {type: Boolean, required: false},
+    disabled: {type: Boolean, required: false}
 });
 
 module.exports = restful.model('user', UserSchema);

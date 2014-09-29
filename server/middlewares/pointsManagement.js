@@ -6,7 +6,7 @@ var _ = require('underscore');
 var updatePointsForBets = function (req, res, next) {
     // calculate points for every bet of this week based on results
 
-    if (req.body.events && _.every(req.body.events, function (event) {
+    if (req.body.events != undefined && _.every(req.body.events, function (event) {
             return event.hasOwnProperty('homeScore') && event.hasOwnProperty('awayScore')}
     )) {
 
@@ -106,6 +106,13 @@ var updatePointsForBets = function (req, res, next) {
                 }
             });
     }
+
+    else {
+        res.status(500).json({
+            message: "You didn't provide any results for the events."
+        });
+    }
+
 }
 
 var updatePointsForUsers = function (req, res, next) {
@@ -118,10 +125,6 @@ var updatePointsForUsers = function (req, res, next) {
                 points: { $sum: '$points'}
             }}
         ], function (err, aggregatedBets) {
-
-            /**
-             * BUG HERE
-             */
 
             if (err) {
                 res.status(500).json({
@@ -136,51 +139,28 @@ var updatePointsForUsers = function (req, res, next) {
                 for (var i in aggregatedBets) {
                     var betsForAUser = aggregatedBets[i];
 
-                    User.findOne({_id: betsForAUser._id},
-                        function (err, user) {
+                    var userPoints = betsForAUser.points;;
 
-                            if (err) {
-                                res.status(500).json({
-                                    message: "An error occurred while trying to update users' points."
-                                });
-                            }
+                    User.update({_id: betsForAUser._id}, {$set: {points: userPoints}}, function (err) {
 
-                            else {
-                                if (user) {
+                        if (err) {
+                            errorUsers++;
+                        }
+                        else {
+                            savedUsers++;
+                        }
 
-                                    user.points = betsForAUser.points;
-                                    user.save(function (err) {
+                        if (savedUsers == aggregatedBets.length) {
+                            next();
+                        }
+                        else if (savedUsers + errorUsers == aggregatedBets.length) {
+                            res.status(500).json({
+                                message: "An error occurred while trying to update users' points."
+                            });
+                        }
 
-                                        if (err) {
-                                            errorUsers++;
-                                        }
-                                        else {
-                                            savedUsers++;
-                                        }
+                    });
 
-                                        if (savedUsers == aggregatedBets.length) {
-                                            next();
-                                        }
-                                        else if (savedUsers + errorUsers == aggregatedBets.length) {
-                                            res.status(500).json({
-                                                message: "An error occurred while trying to update users' points."
-                                            });
-                                        }
-
-                                    });
-
-                                }
-                                else {
-                                    errorUsers++;
-                                    if (savedUsers + errorUsers == aggregatedBets.length) {
-                                        res.status(500).json({
-                                            message: "An error occurred while trying to update users' points."
-                                        });
-                                    }
-                                }
-                            }
-
-                        });
                 }
 
                 if (aggregatedBets.length == 0) {

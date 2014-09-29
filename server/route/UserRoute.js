@@ -39,7 +39,7 @@ jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
 function (req, res, next) {
 
     User.find({},
-        {password: -1, salt: -1, serverSalt: -1},
+        {password: 0, salt: 0, serverSalt: 0},
         function (err, users) {
             if (err) {
                 res.status(500).json({
@@ -48,6 +48,25 @@ function (req, res, next) {
             }
             else {
                 res.status(200).json(users).end();
+            }
+        });
+
+});
+
+router.get('/user/details',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+function (req, res, next) {
+
+    User.findOne({_id: res.data.local.user._id},
+        {password: 0, salt: 0, serverSalt: 0},
+        function (err, user) {
+            if (err) {
+                res.status(500).json({
+                    message: "Error fetching details from database."
+                }).end();
+            }
+            else {
+                res.status(200).json(user).end();
             }
         });
 

@@ -52,8 +52,8 @@ function () {
 ])
 
 .factory('UserInformationCalls', [
-'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation',
-function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation) {
+'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls',
+function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls) {
 
     var infoService = {};
 
@@ -108,6 +108,20 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation) {
         return defered.promise;
 
     };
+
+    infoService.fetchUserDetails = function () {
+
+        InitUrls.then(function (urls) {
+            CallUrlService.get({uri: urls.user.details},
+            function (data) {
+                UserInformation.setUserDetails(data);
+            },
+            function (response) {
+
+            });
+        });
+
+    }
 
     infoService.logout = function () {
         UserInformation.isLogged = false;
