@@ -241,6 +241,22 @@ function (InitUrls, CallUrlService) {
         });
     }
 
+    thisFactory.resendRegistrationCode = function () {
+        InitUrls.then(function (urls) {
+            CallUrlService.get({uri: urls.user.resend_regcode},
+                function (data) {
+                    if (typeof onSuccess === 'function') {
+                        onSuccess(data);
+                    }
+                },
+                function (response) {
+                    if (typeof onError === 'function') {
+                        onError();
+                    }
+                });
+        });
+    }
+
     return thisFactory;
 
 }

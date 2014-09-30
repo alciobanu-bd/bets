@@ -236,6 +236,61 @@ function (req, res, next) {
 
 });
 
+router.get('/user/resend_regcode',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+function (req, res, next) {
+
+    RegistrationCode.findOne({userId: res.data.local.user},
+        function (err, regCode) {
+
+            if (err) {
+                res.status(500).json({
+                    message: "A registration code couldn't be provided."
+                });
+            }
+
+            else {
+
+                if (!regCode) {
+                    regCode = new RegistrationCode();
+                }
+                regCode.userId = req.data.user._id;
+                var now = new Date();
+                regCode.expirationDate = now.setHours(now.getHours() + 24 * 5);
+                regCode.registrationCode = Random.randomString();
+
+                regCode.save(function (err) {
+                    if (err) {
+                        res.status(500).json({
+                            message: "A registration code couldn't be provided."
+                        });
+                    }
+                    else {
+
+                        mailServices.sendConfirmationLinkOnRegistration(req.data.user.username, req.data.user.email, regCode.registrationCode,
+                            function (info) {
+
+                                // success
+                                res.status(201).json(req.data.user).end();
+
+                            },
+                            function (err) {
+
+                                // error
+                                console.log("Registration code via mail failed", err);
+                                res.status(500).json({
+                                    message: "A registration code couldn't be provided."
+                                });
+
+                            });
+                    }
+                });
+
+            }
+        });
+
+});
+
 router.put('/user/:id([0-9a-fA-F]{24})',
 jwtauth([
     tokenChecks.hasSameIdOrHasRole('ROLE_ROOT'),

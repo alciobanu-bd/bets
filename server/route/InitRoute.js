@@ -7,7 +7,8 @@ var initFeed = {
         roles: "/api/roles",
         ranking: "/api/ranking",
         activate: "/api/user/activate",
-        details: "/api/user/details"
+        details: "/api/user/details",
+        resendRegistrationCode: "/api/user/resend_regcode"
     },
     auth: {
         login: "/api/auth/login",
