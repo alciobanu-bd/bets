@@ -3,7 +3,7 @@ var Bet = require('./../model/Bet.js');
 var User = require('./../model/User.js');
 var _ = require('underscore');
 
-var updatePointsForBets = function (req, res, next) {
+var updatePointsForBetsOfThisWeek = function (req, res, next) {
     // calculate points for every bet of this week based on results
 
     if (req.body.events != undefined && _.every(req.body.events, function (event) {
@@ -26,15 +26,15 @@ var updatePointsForBets = function (req, res, next) {
                     var savedBets = 0;
                     var errorBets = 0;
 
-                    for (var j in bets) {
+                    for (var j = 0; j < bets.length; j++) {
                         // iterate over bets
                         var bet = bets[j];
                         var points = 0; // this is how many points a bet gets
 
-                        for (var k in bet.scores) {
+                        for (var k = 0; k < bet.scores.length; k++) {
                             var score = bet.scores[k];
 
-                            for (var i in req.body.events) {
+                            for (var i = 0; i < req.body.events.length; i++) {
                                 var event = req.body.events[i];
                                 // compare every score of the bet with every event
 
@@ -114,6 +114,11 @@ var updatePointsForBets = function (req, res, next) {
     }
 
 }
+
+/*
+ * TODO
+ * Reset users' points before aggregating.
+ */
 
 var updatePointsForUsers = function (req, res, next) {
 
@@ -225,7 +230,7 @@ var updateUsersPlace = function (req, res, next) {
 }
 
 module.exports = {
-    updatePointsForBets: updatePointsForBets,
+    updatePointsForBetsOfThisWeek: updatePointsForBetsOfThisWeek,
     updatePointsForUsers: updatePointsForUsers,
     updateUsersPlace: updateUsersPlace
 };

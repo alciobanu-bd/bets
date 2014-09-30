@@ -20,16 +20,9 @@
             </div>
         </div>
         <div style="margin-top: 1em;">
-            <button type="button" style="min-width: 40%;" class="btn btn-info" ng-click="register()" ng-disabled="inputs.password.model.length == 0">
+            <button type="button" style="min-width: 40%;" class="btn btn-info" ng-click="register()" ng-disabled="inputs.password.model.length == 0 || status.inProgress">
                 Register
             </button>
-        </div>
-
-        <div ng-show="status.inProgress" class="top-buffer-0-5-em centered" style="width: 40%">
-            <img src="/images/spinner.gif" />
-            <span>
-                A confirmation email is being sent to you.
-            </span>
         </div>
 
         <div ng-show="status.success || status.error" class="top-buffer-0-5-em centered cornered-input "

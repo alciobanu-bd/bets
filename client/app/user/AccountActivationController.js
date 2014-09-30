@@ -2,8 +2,8 @@
 userModule
 
 .controller('AccountActivationController', [
-'$scope', 'ActivationFactory', 'RoutesFactory', 'UserInformation',
-function ($scope, ActivationFactory, RoutesFactory, UserInformation) {
+'$scope', 'ActivationFactory', 'RoutesFactory', 'UserInformation', 'ActivationFactory',
+function ($scope, ActivationFactory, RoutesFactory, UserInformation, ActivationFactory) {
 
     $scope.inputs = {
         registrationCode: ''
@@ -22,6 +22,17 @@ function ($scope, ActivationFactory, RoutesFactory, UserInformation) {
             function () {
                 // on error
             }
+        );
+    }
+
+    $scope.resend = function () {
+
+        var setMessage = function (data) {
+            $scope.resendMessage = data.message;
+        }
+
+        ActivationFactory.resendRegistrationCode(
+            setMessage, setMessage
         );
     }
 

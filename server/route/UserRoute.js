@@ -54,7 +54,7 @@ function (req, res, next) {
 });
 
 router.get('/user/details',
-jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+jwtauth([tokenChecks.hasRole('ROLE_USER')], {skipActivationCheck: true}),
 function (req, res, next) {
 
     User.findOne({_id: res.data.local.user._id},
@@ -102,10 +102,14 @@ function (req, res, next) {
 
                     var errorFields = {username: false, email: false};
 
-                    for (var i in foundUsers) {
+                    for (var i = 0; i < foundUsers.length; i++) {
                         var fUser = foundUsers[i];
-                        errorFields.username = fUser.username == req.body.username;
-                        errorFields.email = fUser.email == req.body.email;
+                        if (fUser.username == req.body.username) {
+                            errorFields.username = true;
+                        }
+                        if (fUser.email == req.body.email) {
+                            errorFields.email = true;
+                        }
                     }
 
                     res.status(409).json({
@@ -213,15 +217,11 @@ function (req, res, next) {
 
                     mailServices.sendConfirmationLinkOnRegistration(req.data.user.username, req.data.user.email, regCode.registrationCode,
                         function (info) {
-
                             // success
-
                         },
                         function (err) {
-
                             // error
                             console.log("registration mail couldn't be delivered", err);
-
                         });
 
                     res.status(201).json(req.data.user).end();
@@ -235,16 +235,16 @@ function (req, res, next) {
 });
 
 router.get('/user/resend_regcode',
-jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+jwtauth([tokenChecks.hasRole('ROLE_USER')], {skipActivationCheck: true}),
 function (req, res, next) {
 
-    RegistrationCode.findOne({userId: res.data.local.user},
+    RegistrationCode.findOne({userId: res.data.local.user._id},
         function (err, regCode) {
 
             if (err) {
                 res.status(500).json({
                     message: "A registration code couldn't be provided."
-                });
+                }).end();
             }
 
             else {
@@ -252,7 +252,7 @@ function (req, res, next) {
                 if (!regCode) {
                     regCode = new RegistrationCode();
                 }
-                regCode.userId = req.data.user._id;
+                regCode.userId = res.data.local.user._id;
                 var now = new Date();
                 regCode.expirationDate = now.setHours(now.getHours() + 24 * 5);
                 regCode.registrationCode = Random.randomString();
@@ -261,26 +261,23 @@ function (req, res, next) {
                     if (err) {
                         res.status(500).json({
                             message: "A registration code couldn't be provided."
-                        });
+                        }).end();
                     }
                     else {
 
-                        mailServices.sendConfirmationLinkOnRegistration(req.data.user.username, req.data.user.email, regCode.registrationCode,
+                        mailServices.sendConfirmationLinkOnRegistration(res.data.local.user.username, res.data.local.user.email, regCode.registrationCode,
                             function (info) {
-
                                 // success
-                                res.status(201).json(req.data.user).end();
-
                             },
                             function (err) {
-
                                 // error
                                 console.log("Registration code via mail failed", err);
-                                res.status(500).json({
-                                    message: "A registration code couldn't be provided."
-                                });
-
                             });
+
+                        res.status(200).json({
+                            message: "An e-mail containing an activation code will be sent to your e-mail shortly."
+                        }).end();
+
                     }
                 });
 

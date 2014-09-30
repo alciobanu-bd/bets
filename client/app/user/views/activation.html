@@ -4,9 +4,11 @@
     <div class="jumbotron centered white half-bg-opacity">
         <h2>Activation</h2>
         <div>
-            If you don't have a registration code, you can
-            <span style="cursor: pointer; color: #73d1ff; text-decoration: underline;">resend</span>
+            If you don't have an activation code, you can
+            <span ng-click="resend()" style="cursor: pointer; color: #73d1ff; text-decoration: underline;">resend</span>
             one to your e-mail.
+        </div>
+        <div style="color: #ff003f" ng-bind="resendMessage">
         </div>
         <div class="input-group centered top-buffer-0-5-em" style="width: 40%;">
             <div class="form-group">

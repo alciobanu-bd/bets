@@ -15,8 +15,15 @@ Settings) {
 
     RoutesFactory.goHome();
 
-    UserInformationCalls.fetchUserDetails();
-    $interval(UserInformationCalls.fetchUserDetails, Settings.user.detailsRefreshInterval, 0, true);
+    var refreshUserDetails = function () {
+        if (!UserInformation.isLogged) {
+            return;
+        }
+        UserInformationCalls.fetchUserDetails();
+    }
+
+    refreshUserDetails();
+    $interval(refreshUserDetails, Settings.user.detailsRefreshInterval, 0, true);
 
 }
 ]);

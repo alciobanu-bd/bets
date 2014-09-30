@@ -22,6 +22,13 @@ function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory,
         encounteredError: false
     };
 
+    $scope.loginOnEnterKey = function (ev) {
+        if (ev.keyCode == 13) {
+            $scope.login();
+        }
+        return false;
+    }
+
     $scope.login = function () {
 
         $scope.loginInProgress = true;

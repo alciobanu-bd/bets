@@ -4,10 +4,10 @@
         <h2>Login</h2>
         <div class="input-group centered" style="min-width: 40%;">
             <div class="form-group">
-                <input type="text" class="form-control cornered-input" ng-model="inputs.username.model" placeholder="Username">
+                <input type="text" class="form-control cornered-input" ng-keydown="loginOnEnterKey($event)" ng-model="inputs.username.model" placeholder="Username">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control cornered-input" ng-model="inputs.password.model" placeholder="Password">
+                <input type="password" class="form-control cornered-input" ng-keydown="loginOnEnterKey($event)" ng-model="inputs.password.model" placeholder="Password">
             </div>
         </div>
         <div style="margin-top: 1em">

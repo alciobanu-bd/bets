@@ -67,7 +67,8 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
             CallUrlService.post({uri: urls.user.address}, accountData,
             function (data) {
                 $scope.status.success = true;
-                $scope.status.message = "Your account was successfully created.";
+                $scope.status.message = "Your account was successfully created. " +
+                    "An activation code will be e-mailed to you shortly.";
                 $scope.status.inProgress = false;
             },
             function (response) {
@@ -90,9 +91,10 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
                 }
                 else {
                     $scope.status.message = response.message;
-                    for (var i in response.errorFields) {
-                        $scope.inputs[i].error = true;
-                    }
+
+                    $scope.inputs.username.error = response.errorFields.username;
+                    $scope.inputs.email.error = response.errorFields.email;
+
                 }
 
                 $scope.status.inProgress = false;

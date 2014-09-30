@@ -128,6 +128,18 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
         LoginTokenFactory.deleteToken();
     }
 
+    var extendTokenExpiration = function () {
+        /**
+         * TODO
+         * Extend token expiration.
+         */
+        LoginTokenFactory.setToken({
+            token: data.token,
+            expires: data.expires,
+            user: data.user
+        });
+    }
+
     var checkLoginToken = function () {
         var token = LoginTokenFactory.getToken();
         if (token != null && new Date() < new Date(token.expires)) {
@@ -241,9 +253,9 @@ function (InitUrls, CallUrlService) {
         });
     }
 
-    thisFactory.resendRegistrationCode = function () {
+    thisFactory.resendRegistrationCode = function (onSuccess, onError) {
         InitUrls.then(function (urls) {
-            CallUrlService.get({uri: urls.user.resend_regcode},
+            CallUrlService.get({uri: urls.user.resendRegistrationCode},
                 function (data) {
                     if (typeof onSuccess === 'function') {
                         onSuccess(data);
@@ -251,7 +263,7 @@ function (InitUrls, CallUrlService) {
                 },
                 function (response) {
                     if (typeof onError === 'function') {
-                        onError();
+                        onError(response.data);
                     }
                 });
         });

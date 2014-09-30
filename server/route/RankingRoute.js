@@ -32,7 +32,7 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
 
 router.get('/ranking/recalculate',
     jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
-    pointsManagementFunctions.updatePointsForBets,
+    pointsManagementFunctions.updatePointsForBetsOfThisWeek,
     pointsManagementFunctions.updatePointsForUsers,
     pointsManagementFunctions.updateUsersPlace
 );

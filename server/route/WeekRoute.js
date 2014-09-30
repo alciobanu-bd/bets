@@ -192,7 +192,7 @@ function(req, res, next) {
 
 },
 
-pointsManagementFunctions.updatePointsForBets,
+pointsManagementFunctions.updatePointsForBetsOfThisWeek,
 pointsManagementFunctions.updatePointsForUsers,
 pointsManagementFunctions.updateUsersPlace
 );

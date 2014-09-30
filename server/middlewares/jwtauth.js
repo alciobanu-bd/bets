@@ -40,7 +40,7 @@ module.exports = function (callbacks, activationCheck) {
 
                                     var successCallbacks = 0;
 
-                                    for (var i in callbacks) {
+                                    for (var i = 0; i < callbacks.length; i++) {
                                         callbacks[i](req, res, next, user, function () {
                                             // on error
                                         },
