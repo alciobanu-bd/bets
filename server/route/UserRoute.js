@@ -215,19 +215,17 @@ function (req, res, next) {
                         function (info) {
 
                             // success
-                            res.status(201).json(req.data.user).end();
 
                         },
                         function (err) {
 
                             // error
                             console.log("registration mail couldn't be delivered", err);
-                            res.status(500).json({
-                                message: "Account was saved, but a registration code couldn't be provided via e-mail. " +
-                                    "Please login and request a new one."
-                            });
 
                         });
+
+                    res.status(201).json(req.data.user).end();
+
                 }
             });
 
