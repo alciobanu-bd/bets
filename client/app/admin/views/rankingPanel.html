@@ -1,2 +1,17 @@
 
-Panel page
+<div ng-controller="AdminRankingPanel">
+    <div>
+        Use the above button to recalculate points and places for all users. DO NOT abuse this button!
+    </div>
+    <div class="top-buffer-0-5-em">
+        <button type="button" class="btn btn-info" style="width: 40%" ng-disabled="status.inProgress" ng-click="recalculate()">
+            Recalculate
+        </button>
+    </div>
+    <div ng-show="status.success || status.error" class="top-buffer-0-5-em centered cornered-input "
+         ng-class="status.success ? 'success-div' : 'error-div'" style="width: 40%">
+            <span class="error-success-inner">
+                {{status.message}}
+            </span>
+    </div>
+</div>

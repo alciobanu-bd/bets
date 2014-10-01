@@ -1,2 +1,16 @@
 
-Search <input style="color: #304861" type="text" />
+<div ng-controller="AdminUsersPanel">
+
+    Search <input style="color: #304861" type="text" />
+
+    <div ng-repeat="user in users" class="row">
+        <span class="col-xs-2">{{user.username}}</span>
+        <span class="col-xs-3">{{user.email}}</span>
+        <span class="col-xs-2">{{user.birthDate | date:'MMM d, y'}}</span>
+        <span class="col-xs-2">{{user.registerDate | date:'MMM d, y'}}</span>
+        <span class="col-xs-1">{{user.place}}</span>
+        <span class="col-xs-1">{{user.points}}</span>
+        <span class="col-xs-1">{{RolesFactory.findRoleByName(user.role).beautifulName}}</span>
+    </div>
+
+</div>

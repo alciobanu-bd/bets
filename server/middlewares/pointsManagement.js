@@ -112,13 +112,20 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
             message: "You didn't provide any results for the events."
         });
     }
-
 }
 
-/*
- * TODO
- * Reset users' points before aggregating.
- */
+var resetUsersPointsBeforeAggregating = function (req, res, next) {
+
+    User.update({}, {$set: {points: 0}}, function (err) {
+        if (err) {
+            res.status(500).json({
+                message: "An error occurred while trying to update users' points."
+            });
+            return;
+        }
+        next();
+    });
+}
 
 var updatePointsForUsers = function (req, res, next) {
 
@@ -209,7 +216,9 @@ var updateUsersPlace = function (req, res, next) {
                         savedUsers++;
                     }
                     if (savedUsers == users.length) {
-                        res.status(200).json(res.localData.week).end();
+                        res.status(200).json({
+                            message: "Points and places were update for every user."
+                        }).end();
                     }
                     else if (savedUsers + errorUsers == users.length) {
                         res.status(500).json({
@@ -221,7 +230,9 @@ var updateUsersPlace = function (req, res, next) {
             }
 
             if (users.length == 0) {
-                res.status(200).json(res.localData.week).end();
+                res.status(200).json({
+                    message: "Points and places were update for every user."
+                }).end();
             }
 
         }
@@ -231,6 +242,7 @@ var updateUsersPlace = function (req, res, next) {
 
 module.exports = {
     updatePointsForBetsOfThisWeek: updatePointsForBetsOfThisWeek,
+    resetUsersPointsBeforeAggregating: resetUsersPointsBeforeAggregating,
     updatePointsForUsers: updatePointsForUsers,
     updateUsersPlace: updateUsersPlace
 };

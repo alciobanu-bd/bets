@@ -25,6 +25,9 @@ var initFeed = {
         address: "/api/bet",
         byWeek: "/api/bets/getBetByWeek",
         history: "/api/bet/history"
+    },
+    admin: {
+        rankingRecalculate: "/api/ranking/recalculate"
     }
 };
 

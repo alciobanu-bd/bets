@@ -231,6 +231,7 @@ function(req, res, next) {
 },
 
 pointsManagementFunctions.updatePointsForBetsOfThisWeek,
+pointsManagementFunctions.resetUsersPointsBeforeAggregating,
 pointsManagementFunctions.updatePointsForUsers,
 pointsManagementFunctions.updateUsersPlace
 );
