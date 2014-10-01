@@ -146,6 +146,44 @@ function (req, res, next) {
 
 })
 
+router.get('/week/getByNumber/:number',
+function (req, res, next) {
+
+    Week.findOne(
+        {number: req.params.number},
+        function (err, week) {
+
+            if (err) {
+                res.status(500).json({
+                    message: "Error fetching week with number +"
+                        + req.params.number +
+                        "."
+                }).end();
+            }
+
+            else {
+
+                if (week) {
+                    week = week.toObject();
+                    if (new Date(week.endDate) > new Date()) {
+                        week.available = true;
+                    }
+                    else {
+                        week.available = false;
+                    }
+                    res.status(200).json(week).end();
+                }
+
+                else {
+                    res.status(200).json({number: 0}).end();
+                }
+
+            }
+
+        });
+
+})
+
 router.put('/week/:id([0-9a-fA-F]{24})',
 jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
 

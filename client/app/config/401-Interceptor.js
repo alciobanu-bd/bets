@@ -20,7 +20,7 @@ configModule
                             RoutesFactory.goToLogin();
 
                         }
-                        return config|| $q.when(config);
+                        return $q.reject(config);
                     }
                 }
             }

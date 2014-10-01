@@ -24,6 +24,21 @@ function () {
 }
 ])
 
+.factory('CheckActivationStatus' , [
+'UserInformation', 'RoutesFactory',
+function (UserInformation, RoutesFactory) {
+
+    return {
+        check: function () {
+            if (UserInformation.isLogged && !UserInformation.user.active) {
+                RoutesFactory.goToActivation();
+            }
+        }
+    };
+
+}
+])
+
 .factory('UserInformation', [
 function () {
 
@@ -44,6 +59,7 @@ function () {
             role: user.role,
             username: user.username
         };
+
     }
 
     return thisFactory;
@@ -52,8 +68,8 @@ function () {
 ])
 
 .factory('UserInformationCalls', [
-'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls',
-function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls) {
+'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls', 'CheckActivationStatus',
+function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls, CheckActivationStatus) {
 
     var infoService = {};
 
@@ -93,6 +109,7 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
                     user: data.user
                 });
                 UserInformation.setUserDetails(data.user);
+                CheckActivationStatus.check();
                 defered.resolve({message: "Logged in successfully."});
             },
             function (response) {
@@ -115,6 +132,7 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
             CallUrlService.get({uri: urls.user.details},
             function (data) {
                 UserInformation.setUserDetails(data);
+                CheckActivationStatus.check();
             },
             function (response) {
 

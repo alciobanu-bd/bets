@@ -17,7 +17,8 @@ var initFeed = {
     week: {
         address: "/api/week",
         current: "/api/week/last",
-        beforeLast: "/api/week/beforeLast"
+        beforeLast: "/api/week/beforeLast",
+        getByNumber: '/api/week/getByNumber'
     },
     bet: {
         address: "/api/bet",

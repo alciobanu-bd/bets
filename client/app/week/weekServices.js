@@ -27,7 +27,9 @@ function (InitUrls, CallUrlService) {
         all: {
             active: false,
             message: ''
-        }
+        },
+        weeksByNumberError: {},
+        betsByWeekNumberError: {}
     };
 
     thisFactory.resetWeekFactory = function () {
@@ -44,6 +46,46 @@ function (InitUrls, CallUrlService) {
         thisFactory.beforeCurrentWeekBet = null;
         thisFactory.allWeeks = null;
 
+        thisFactory.weeksByNumber = {};
+        thisFactory.betsByWeekNumber = {};
+
+    }
+
+    thisFactory.fetchWeekByNumber = function (callWhenDone, weekNo) {
+        InitUrls.then(
+            function (data) {
+                CallUrlService.get({uri: data.week.getByNumber}, {number: weekNo},
+                    function (data) {
+                        data.events = _.map(data.events, function (event) {
+                            if (event.awayScore || event.awayScore == 0) {
+                                event.realAwayScore = event.awayScore;
+                                delete event.awayScore;
+                            }
+                            if (event.homeScore || event.homeScore == 0) {
+                                event.realHomeScore = event.homeScore;
+                                delete event.homeScore;
+                            }
+                            return event;
+                        });
+                        if (!angular.isDefined(thisFactory.error.weeksByNumberError[weekNo])) {
+                            thisFactory.error.weeksByNumberError[weekNo] = {};
+                        }
+                        thisFactory.error.weeksByNumberError[data.number].active = false;
+                        thisFactory.weeksByNumber[weekNo] = data;
+                        if (typeof callWhenDone === 'function') {
+                            callWhenDone();
+                        }
+                    },
+                    function (response) {
+                        if (!angular.isDefined(thisFactory.error.weeksByNumberError[weekNo])) {
+                            thisFactory.error.weeksByNumberError[weekNo] = {};
+                        }
+                        thisFactory.error.weeksByNumberError[weekNo].active = true;
+                        thisFactory.error.weeksByNumberError[weekNo].message = "An error occurred while trying to fetch a week.";
+                    }
+                );
+            }
+        );
     }
 
     thisFactory.fetchCurrentWeek = function (callWhenDone) {
@@ -72,6 +114,37 @@ function (InitUrls, CallUrlService) {
                     function (response) {
                         thisFactory.error.current.active = true;
                         thisFactory.error.current.message = "An error occurred while trying to fetch a week.";
+                    }
+                );
+            }
+        );
+    }
+
+    thisFactory.fetchBetForWeekByNumber = function (weekObject) {
+        if (weekObject.number < 1) {
+            return;
+        }
+        InitUrls.then(
+            function (data) {
+                CallUrlService.get({uri: data.bet.byWeek, weekNumber: weekObject.number},
+                    function (data) {
+                        if (!angular.isDefined(thisFactory.error.betsByWeekNumberError[weekObject.number])) {
+                            thisFactory.error.betsByWeekNumberError[weekObject.number] = {};
+                        }
+                        thisFactory.error.betsByWeekNumberError[weekObject.number].active = false;
+                        thisFactory.betsByWeekNumber[weekObject.number] = data;
+                    },
+                    function (response) {
+                        if (!angular.isDefined(thisFactory.error.betsByWeekNumberError[weekObject.number])) {
+                            thisFactory.error.betsByWeekNumberError[weekObject.number] = {};
+                        }
+                        thisFactory.error.betsByWeekNumberError[weekObject.number].active = true;
+                        if (response.data.message) {
+                            thisFactory.error.betsByWeekNumberError[weekObject.number].message = response.data.message;
+                        }
+                        else {
+                            thisFactory.error.betsByWeekNumberError[weekObject.number].message = "An error occurred while trying to fetch your bets.";
+                        }
                     }
                 );
             }
