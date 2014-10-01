@@ -38,6 +38,13 @@ module.exports = function (callbacks, activationCheck) {
                                 }
                                 else {
 
+                                    if (user.disabled) {
+                                        res.status(401).json({
+                                            message: "Login failed. Your account is disabled."
+                                        }).end();
+                                        return;
+                                    }
+
                                     var successCallbacks = 0;
 
                                     for (var i = 0; i < callbacks.length; i++) {

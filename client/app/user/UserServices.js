@@ -109,7 +109,6 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
                     user: data.user
                 });
                 UserInformation.setUserDetails(data.user);
-                CheckActivationStatus.check();
                 defered.resolve({message: "Logged in successfully."});
             },
             function (response) {
@@ -146,15 +145,23 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
         LoginTokenFactory.deleteToken();
     }
 
-    var extendTokenExpiration = function () {
-        /**
-         * TODO
-         * Extend token expiration.
-         */
-        LoginTokenFactory.setToken({
-            token: data.token,
-            expires: data.expires,
-            user: data.user
+    infoService.extendTokenExpiration = function () {
+        InitUrls.then(function (urls) {
+            CallUrlService.get({uri: urls.auth.extendToken},
+                function (data) {
+                    UserInformation.isLogged = true;
+                    LoginTokenFactory.setToken({
+                        token: data.token,
+                        expires: data.expires,
+                        user: data.user
+                    });
+                    UserInformation.setUserDetails(data.user);
+                    CheckActivationStatus.check();
+                },
+                function (response) {
+                    console.log("Couldn't extend token.");
+                    infoService.logout();
+                });
         });
     }
 
@@ -165,6 +172,11 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
             UserInformation.isLogged = true;
             UserInformation.setUserDetails(token.user);
 
+            infoService.extendTokenExpiration();
+
+        }
+        else {
+            infoService.logout();
         }
     }
 

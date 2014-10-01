@@ -22,8 +22,16 @@ Settings) {
         UserInformationCalls.fetchUserDetails();
     }
 
+    var extendToken = function () {
+        if (!UserInformation.isLogged) {
+            return;
+        }
+        UserInformationCalls.extendTokenExpiration();
+    }
+
     refreshUserDetails();
     $interval(refreshUserDetails, Settings.user.detailsRefreshInterval, 0, true);
+    $interval(extendToken, Settings.user.tokenRefreshInterval);
 
 }
 ]);

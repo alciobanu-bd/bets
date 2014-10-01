@@ -7,11 +7,14 @@ var express = require('express');
 var moment = require('moment');
 var bcrypt = require('bcrypt-nodejs');
 
+var jwtauth = require('./../middlewares/jwtauth.js');
+var tokenChecks = require('./../middlewares/tokenChecks.js');
+
 var router = express.Router();
 
 // login
 var getToken = function (userId) {
-    var expires = moment().add(7, 'days').valueOf();
+    var expires = moment().add(4, 'hours').valueOf();
     var token = jwt.encode({
         iss: userId,
         exp: expires
@@ -53,10 +56,11 @@ router.post('/login', function(req, res) {
                     if (hash == users[0].password) {
                         // user logged in successfully
 
-                        var tok = getToken(users[0].id);
+                        var tok = getToken(users[0]._id);
 
                         users[0] = users[0].toObject();
                         delete users[0]['password'];
+                        delete users[0]['salt'];
                         delete users[0]['serverSalt'];
                         delete users[0]['registrationIp'];
 
@@ -78,6 +82,33 @@ router.post('/login', function(req, res) {
     });
 
 });
+
+router.get('/extend_expiration_token',
+jwtauth([tokenChecks.hasRole('ROLE_USER')], {skipActivationCheck: true}),
+function (req, res, next) {
+    // if the user hits this middleware, it means his/her token is active
+    // so the token expiration can be changed
+
+    var user = res.data.local.user;
+
+    var tok = getToken(user._id);
+
+    user = user.toObject();
+    delete user['password'];
+    delete user['serverSalt'];
+    delete user['salt'];
+    delete user['registrationIp'];
+
+    console.log(new Date(), "extended token for user: " + user.username + " (expires: " + new Date(tok.expires) + ")");
+
+    res.status(200).json({
+        token : tok.token,
+        expires: tok.expires,
+        user: user
+    }).end();
+
+}
+);
 
 router.post('/salt', function (req, res) {
     User.find({username: req.body.username}, function (err, users) {

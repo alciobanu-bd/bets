@@ -12,7 +12,8 @@ var initFeed = {
     },
     auth: {
         login: "/api/auth/login",
-        salt: "/api/auth/salt"
+        salt: "/api/auth/salt",
+        extendToken: "/api/auth/extend_expiration_token"
     },
     week: {
         address: "/api/week",

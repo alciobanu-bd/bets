@@ -2,8 +2,8 @@
 userModule
 
 .controller('UserController', [
-'$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'RoutesFactory',
-function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory) {
+'$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'RoutesFactory', 'CheckActivationStatus',
+function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory, CheckActivationStatus) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
@@ -43,6 +43,7 @@ function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory,
             function (data) {
                 $scope.encounteredError = false;
                 RoutesFactory.goHome();
+                CheckActivationStatus.check();
                 $scope.loginInProgress = false;
             },
             function (rejection) {
