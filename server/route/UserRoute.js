@@ -171,9 +171,7 @@ function (req, res, next) {
 
     user.save(function (err) {
         if (err) {
-            res.status(500).json({
-                message: "Account couldn't be saved to database. Please try again."
-            });
+            res.status(500).json(err);
         }
         else {
             req.data = {

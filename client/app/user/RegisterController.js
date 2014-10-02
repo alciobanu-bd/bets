@@ -78,10 +78,28 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
 
                 if (response.name == "ValidationError") {
                     // mongoose validation
-                    $scope.status.message = 'Account wasn\'t created. Highlighted fields are required.';
+
+                    var requiredErr = false;
 
                     for (var i in response.errors) {
-                        $scope.inputs[i].error = true;
+                        var err = response.errors[i];
+                        if (err.type == "required") {
+                            requiredErr = true;
+                            $scope.inputs[i].error = true;
+                            $scope.status.message = 'Account wasn\'t created. Highlighted fields are required.';
+                        }
+                    }
+
+                    if (!requiredErr) {
+                        $scope.status.message = "";
+                        for (var i in response.errors) {
+                            $scope.inputs[i].error = false;
+                            var err = response.errors[i];
+                            if (err.type != "required") {
+                                $scope.inputs[i].error = true;
+                                $scope.status.message += err.message + '\n';
+                            }
+                        }
                     }
 
                     if ($scope.inputs.password.error) {

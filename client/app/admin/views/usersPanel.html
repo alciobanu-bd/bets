@@ -3,13 +3,23 @@
 
     Search <input style="color: #304861" type="text" />
 
+    <div class="row">
+        <span class="col-xs-1">&nbsp;</span>
+        <span class="col-xs-2">Username</span>
+        <span class="col-xs-3">E-mail</span>
+        <span class="col-xs-2">Birth date</span>
+        <span class="col-xs-2">Register date</span>
+        <span class="col-xs-1">Place/Points</span>
+        <span class="col-xs-1">Rank</span>
+    </div>
+
     <div ng-repeat="user in users" class="row">
+        <span class="col-xs-1 glyphicon glyphicon-chevron-down"></span>
         <span class="col-xs-2">{{user.username}}</span>
         <span class="col-xs-3">{{user.email}}</span>
         <span class="col-xs-2">{{user.birthDate | date:'MMM d, y'}}</span>
         <span class="col-xs-2">{{user.registerDate | date:'MMM d, y'}}</span>
-        <span class="col-xs-1">{{user.place}}</span>
-        <span class="col-xs-1">{{user.points}}</span>
+        <span class="col-xs-1">{{user.place}}/{{user.points}}</span>
         <span class="col-xs-1">{{RolesFactory.findRoleByName(user.role).beautifulName}}</span>
     </div>
 
