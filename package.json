@@ -14,7 +14,13 @@
         "underscore": "*",
         "bcrypt-nodejs": "*",
         "nodemailer": "*",
-        "nodemailer-smtp-transport": "*"
+        "nodemailer-smtp-transport": "*",
+        "grunt": "*",
+        "grunt-contrib-clean": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-concat": "*",
+        "load-grunt-tasks": "*",
+        "time-grunt": "*"
     },
     "devDependencies": {
         "bower": "*",
