@@ -2,7 +2,21 @@
 
     <div class="jumbotron centered white half-bg-opacity">
 
-        Welcome, {{userInfo.user.username}}.
+        <div style="margin-bottom: 4em">
+            Welcome, {{userInfo.user.username}}.
+        </div>
+
+        <div height="100%; width: 100%;">
+            <carousel interval="Settings.home.carouselInterval">
+                <slide ng-repeat="slide in carouselSlides" active="slide.active">
+                    <img ng-src="{{slide.image}}" style="margin:auto; height: 80%; width: 80%">
+                    <div class="carousel-caption">
+                        <h4>{{slide.title}}</h4>
+                        <p>{{slide.description}}</p>
+                    </div>
+                </slide>
+            </carousel>
+        </div>
 
     </div>
 

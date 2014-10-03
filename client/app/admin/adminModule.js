@@ -1,2 +1,2 @@
 
-var adminModule = angular.module('admin', ['resources', 'templates']);
+var adminModule = angular.module('admin', ['resources', 'templates', 'ui.bootstrap']);

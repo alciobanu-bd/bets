@@ -345,6 +345,34 @@ function(req, res, next) {
 }
 );
 
+router.post('/user/activateAsAdmin',
+jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
+function (req, res, next) {
+
+    var userId = req.body.userId;
+    var activationOption = req.body.activationOption;
+
+    if (!userId) {
+        res.status(500).json({
+            message: "No user id was sent."
+        }).end();
+        return;
+    }
+
+    User.update({_id: userId}, {$set: {active: activationOption}}, function (err) {
+        if (err) {
+            res.status(500).json({
+                message: "An error occurred while trying to activate user."
+            }).end();
+        }
+        else {
+            res.status(200).json({ok: true}).end();
+        }
+    });
+
+}
+);
+
 /*
  * Expects a registration code in body json.
  */

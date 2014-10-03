@@ -23,7 +23,7 @@ UserSchema.path('username').validate(function (v) {
 }, 'Username can\'t have more than 20 characters.');
 
 UserSchema.path('email').validate(function (v) {
-    return v.length < 21;
+    return v.length < 41;
 }, 'E-mail can\'t have more than 40 characters.');
 
 UserSchema.path('email').validate(function (v) {

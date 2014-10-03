@@ -14,19 +14,29 @@
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-right">
                 <li ng-click="RoutesFactory.goHome()">
-                    <a class="menu-link-border centered" href="">Home</a>
+                    <a class="menu-link-border centered" href="">
+                        <span class="glyphicon glyphicon-home"></span>
+                        Home
+                    </a>
                 </li>
                 <li ng-click="RoutesFactory.goToWeek()">
-                    <a class="menu-link-border centered" href="">Play</a>
+                    <a class="menu-link-border centered" href="">
+                        <span class="glyphicon glyphicon-fire"></span>
+                        Play
+                    </a>
                 </li>
                 <li ng-click="RoutesFactory.goToRanking()">
-                    <a class="menu-link-border centered" href="">Ranking</a>
+                    <a class="menu-link-border centered" href="">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                        Ranking
+                    </a>
                 </li>
                 <li>
                     <a class="menu-link-border centered" href="">Rules</a>
                 </li>
                 <li class="dropdown">
                     <a class="menu-link-border centered" href="" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span>
                         {{userInfo.user.username}}
                         <b class="caret"></b>
                     </a>
@@ -49,7 +59,10 @@
                     </ul>
                 </li>
                 <li ng-click="logout()">
-                    <a class="menu-link-border centered" href="">Logout</a>
+                    <a class="menu-link-border centered" href="">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        Logout
+                    </a>
                 </li>
 
             </ul>

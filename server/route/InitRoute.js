@@ -8,7 +8,8 @@ var initFeed = {
         ranking: "/api/ranking",
         activate: "/api/user/activate",
         details: "/api/user/details",
-        resendRegistrationCode: "/api/user/resend_regcode"
+        resendRegistrationCode: "/api/user/resend_regcode",
+        activateAsAdmin: "/api/user/activateAsAdmin"
     },
     auth: {
         login: "/api/auth/login",
