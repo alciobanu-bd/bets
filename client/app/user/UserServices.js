@@ -233,6 +233,13 @@ function (InitUrls, CallUrlService) {
         });
     }
 
+    thisFactory.roleCompare = function (roleName1, roleName2) {
+        if (thisFactory.findRoleByName(roleName1).value == thisFactory.findRoleByName(roleName2).value) {
+            return 0;
+        }
+        return (thisFactory.findRoleByName(roleName1).value > thisFactory.findRoleByName(roleName2).value) ? 1 : -1;
+    }
+
     return thisFactory;
 
 }

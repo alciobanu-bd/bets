@@ -6,7 +6,7 @@
             Welcome, {{userInfo.user.username}}.
         </div>
 
-        <div height="100%; width: 100%;">
+        <div style="height: 100%; width: 100%;">
             <carousel interval="Settings.home.carouselInterval">
                 <slide ng-repeat="slide in carouselSlides" active="slide.active">
                     <img ng-src="{{slide.image}}" style="margin:auto; height: 80%; width: 80%">

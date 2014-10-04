@@ -130,3 +130,7 @@ body    {overflow-y:scroll;}
     border: 0.4em solid #92978d;
     border-radius: 15px;
 }
+
+.pleasedontfloat {
+    clear:both;
+}

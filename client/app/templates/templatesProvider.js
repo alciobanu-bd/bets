@@ -64,6 +64,10 @@ var templates =
     admin: {
         html: 'app/admin/views/adminPanel.html',
         route: 'admin'
+    },
+    rules: {
+        html: 'app/rules/views/rules.html',
+        route: 'rules'
     }
 }
 

@@ -19,6 +19,7 @@
             <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
 
             <ng-include src="RoutesFactory.currentBodyView.html"></ng-include>
+            <ng-view></ng-view>
 
         </span>
     </span>
@@ -31,6 +32,7 @@
     <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="lib/angular-ui-date/src/date.js"></script>
     <script src="lib/angular-resource/angular-resource.js"></script>
+    <script src="lib/angular-route/angular-route.js"></script>
     <script src="lib/angular-cookies/angular-cookies.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="lib/underscore/underscore-min.js"></script>
@@ -80,6 +82,9 @@
     <script src="app/admin/AdminPanelController.js"></script>
     <script src="app/admin/AdminRankingPanel.js"></script>
     <script src="app/admin/AdminUsersPanel.js"></script>
+
+    <script src="app/rules/rulesModule.js"></script>
+    <script src="app/rules/RulesController.js"></script>
 
     <script src="app/app.js"></script>
 

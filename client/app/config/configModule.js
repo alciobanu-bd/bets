@@ -1,2 +1,2 @@
 
-var configModule = angular.module('config', []);
+var configModule = angular.module('config', ['ngRoute']);

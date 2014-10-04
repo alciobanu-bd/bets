@@ -2,8 +2,10 @@
 adminModule
 
 .controller('AdminPanelController', [
-'$scope',
-function ($scope) {
+'$scope', 'RolesFactory', 'UserInformation', 'RoutesFactory',
+function ($scope, RolesFactory, UserInformation, RoutesFactory) {
+
+    $scope.RolesFactory = RolesFactory;
 
     $scope.tabs = [
         {

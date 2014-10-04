@@ -54,7 +54,7 @@ var weekChecks = function (callbacks) {
 
                     var successCallbacks = 0;
 
-                    for (var i in callbacks) {
+                    for (var i = 0; i < callbacks.length; i++) {
                         callbacks[i](req, res, next, week,
                         function () {
                             // on error

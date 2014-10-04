@@ -11,7 +11,8 @@ var betsModule = angular.module(
         'week',
         'profile',
         'history',
-        'admin'
+        'admin',
+        'rules'
     ]
 );
 

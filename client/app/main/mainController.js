@@ -8,12 +8,11 @@ Settings) {
      * UserInformationCalls is injected because it sets the user information.
      */
 
-
     $scope.Templates = Templates;
     $scope.userInfo = UserInformation;
     $scope.RoutesFactory = RoutesFactory;
 
-    RoutesFactory.goHome();
+    RoutesFactory.loadDefault();
 
     var refreshUserDetails = function () {
         if (!UserInformation.isLogged) {

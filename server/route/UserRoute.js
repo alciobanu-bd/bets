@@ -286,15 +286,21 @@ function (req, res, next) {
 
 router.put('/user/:id([0-9a-fA-F]{24})',
 jwtauth([
-    tokenChecks.hasSameIdOrHasRole('ROLE_ROOT'),
+    tokenChecks.hasSameIdOrHasRole('ROLE_ADMIN'),
     function(req, res, next, user, onError, onSuccess) {
 
         // prevent users to save role if they don't have admin role
-        if (Role.roleValue(user.role) < Role.admin.value) {
+        if (Roles.roleValue(user.role) < Roles.admin.value ||
+            (req.body.role && Roles.roleValue(user.role) <= Roles.roleValue(req.body.role))) {
+
             if (req.body.role) {
-                // if a user is not admin and tries to set role, delete role and registrationIp
                 delete req.body.role;
+            }
+            if (req.body.active) {
                 delete req.body.active;
+            }
+            if (req.body.disabled) {
+                delete req.body.disabled;
             }
         }
 

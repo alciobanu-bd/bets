@@ -18,7 +18,7 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
                 if (err) {
                     res.status(500).json({
                         message: "An error occurred when trying to update points for this week's bets."
-                    });
+                    }).end();
                 }
 
                 else {
@@ -93,7 +93,7 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
                                 // some bets didn't save
                                 res.status(500).json({
                                     message: "An error occurred when trying to update points for this week's bets."
-                                });
+                                }).end();
                             }
 
                         });
@@ -110,7 +110,7 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
     else {
         res.status(500).json({
             message: "You didn't provide any results for the events."
-        });
+        }).end();
     }
 }
 
@@ -120,10 +120,11 @@ var resetUsersPointsBeforeAggregating = function (req, res, next) {
         if (err) {
             res.status(500).json({
                 message: "An error occurred while trying to update users' points."
-            });
-            return;
+            }).end();
         }
-        next();
+        else {
+            next();
+        }
     });
 }
 
@@ -141,7 +142,7 @@ var updatePointsForUsers = function (req, res, next) {
             if (err) {
                 res.status(500).json({
                     message: "An error occurred while trying to update users' points."
-                });
+                }).end();
             }
             else {
 
@@ -168,7 +169,7 @@ var updatePointsForUsers = function (req, res, next) {
                         else if (savedUsers + errorUsers == aggregatedBets.length) {
                             res.status(500).json({
                                 message: "An error occurred while trying to update users' points."
-                            });
+                            }).end();
                         }
 
                     });
@@ -193,7 +194,7 @@ var updateUsersPlace = function (req, res, next) {
         if (err) {
             res.status(500).json({
                 message: "An error occurred while trying to update users' place."
-            });
+            }).end();
         }
 
         else {
@@ -223,7 +224,7 @@ var updateUsersPlace = function (req, res, next) {
                     else if (savedUsers + errorUsers == users.length) {
                         res.status(500).json({
                             message: "An error occurred while trying to update users' place."
-                        });
+                        }).end();
                     }
                 });
 

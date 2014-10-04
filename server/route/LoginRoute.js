@@ -69,6 +69,9 @@ router.post('/login', function(req, res) {
                             expires: tok.expires,
                             user: users[0]
                         }).end();
+
+                        console.log(new Date() + ", " + users[0].username + " logged in. ");
+
                     }
 
                     else {

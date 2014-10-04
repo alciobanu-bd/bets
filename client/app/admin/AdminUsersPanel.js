@@ -25,22 +25,6 @@ function ($scope, InitUrls, CallUrlService, RolesFactory, $modal) {
 
     $scope.retrieveUsers();
 
-    $scope.openActivateModal = function (user) {
-        var modalInstance = $modal.open({
-            templateUrl: 'activateAdminModal.html',
-            controller: 'ActivateAdminController',
-            resolve: {
-                user: function () {
-                    return user;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (resolvedUser) {
-            user = resolvedUser;
-        });
-
-    }
 
     var getUserByUsername = function (username) {
         for (var i = 0; i < $scope.users.length; i++) {
@@ -63,6 +47,11 @@ function ($scope, InitUrls, CallUrlService, RolesFactory, $modal) {
             return;
         }
 
+        $scope.openModal(user);
+
+    }
+
+    $scope.openModal = function (user) {
         var modalInstance = $modal.open({
             templateUrl: 'profileViewModalAdmin.html',
             controller: 'ProfileViewAdminController',
@@ -74,66 +63,52 @@ function ($scope, InitUrls, CallUrlService, RolesFactory, $modal) {
         });
 
         modalInstance.result.then(function (resolvedUser) {
-            user = resolvedUser;
+            console.log(resolvedUser)
+            for (var i in resolvedUser) {
+                user[i] = resolvedUser[i];
+            }
+        }, function (dismissedUser) {
+            for (var i in dismissedUser) {
+                user[i] = dismissedUser[i];
+            }
         });
-
     }
-
 }
 ]);
 
 adminModule
 .controller('ProfileViewAdminController', [
-'$scope', '$modalInstance', 'user', 'InitUrls', 'CallUrlService', 'RolesFactory',
-function ($scope, $modalInstance, user, InitUrls, CallUrlService, RolesFactory) {
+'$scope', '$modalInstance', 'user', 'InitUrls', 'CallUrlService', 'RolesFactory', 'UserInformation',
+function ($scope, $modalInstance, user, InitUrls, CallUrlService, RolesFactory, UserInformation) {
 
     $scope.RolesFactory = RolesFactory;
-
+    $scope.userInfo = UserInformation;
     $scope.user = user;
+    var initialUser = {};
+    angular.extend(initialUser, user);
 
     $scope.ok = function () {
-    }
-
-    $scope.cancel = function () {
-    }
-
-}
-]);
-
-
-adminModule
-.controller('ActivateAdminController', [
-'$scope', '$modalInstance', 'user', 'InitUrls', 'CallUrlService',
-function ($scope, $modalInstance, user, InitUrls, CallUrlService) {
-
-    $scope.user = user;
-    $scope.activationModel = user.active;
-
-    $scope.toggleActive = function () {
-        $scope.activationModel = !$scope.activationModel;
-    }
-
-    $scope.ok = function () {
-
         $scope.errorSaving = false;
-
         InitUrls.then(function (urls) {
-            CallUrlService.post({uri: urls.user.activateAsAdmin},
-            {userId: user._id, activationOption: $scope.activationModel},
+            CallUrlService.put({uri: urls.user.address, id: $scope.user._id},
+            {
+                role: $scope.user.role,
+                disabled: $scope.user.disabled,
+                active: $scope.user.active
+            },
             function (data) {
-                $scope.user.active = $scope.activationModel;
-                $modalInstance.close($scope.user);
+                $modalInstance.close(data);
             },
             function (response) {
                 $scope.errorSaving = true;
             });
         });
-
     }
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('Cancelled');
+        $modalInstance.dismiss(initialUser);
     }
 
 }
 ]);
+

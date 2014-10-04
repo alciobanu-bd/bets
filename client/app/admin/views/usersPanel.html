@@ -9,28 +9,22 @@
         <span class="col-xs-1">&nbsp;</span>
         <span class="col-xs-2">Username</span>
         <span class="col-xs-3">E-mail</span>
-        <span class="col-xs-2">Birth date</span>
         <span class="col-xs-2">Register date</span>
-        <span class="col-xs-1">Place/Points</span>
+        <span class="col-xs-2">Place/Points</span>
         <span class="col-xs-1">Rank</span>
+        <span class="col-xs-1">Disabled</span>
     </div>
 
     <div ng-repeat="user in users" class="row top-buffer-0-5-em">
-        <span class="btn-group col-xs-1">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="" ng-click="openActivateModal(user)">Activate</a></li>
-                <li><a href="">Ban</a></li>
-            </ul>
+        <span class="col-xs-1">
+            <span class="glyphicon glyphicon-cog" ng-click="openModal(user)" style="cursor: pointer;"></span>
         </span>
         <span class="col-xs-2">{{user.username}}</span>
         <span class="col-xs-3">{{user.email}}</span>
-        <span class="col-xs-2">{{user.birthDate | date:'MMM d, y'}}</span>
         <span class="col-xs-2">{{user.registerDate | date:'MMM d, y'}}</span>
-        <span class="col-xs-1">{{user.place}}/{{user.points}}</span>
+        <span class="col-xs-2">{{user.place}}/{{user.points}}</span>
         <span class="col-xs-1">{{RolesFactory.findRoleByName(user.role).beautifulName}}</span>
+        <span class="col-xs-1">{{!!user.disabled ? 'Yes' : 'No'}}</span>
     </div>
 
 </div>
@@ -73,7 +67,29 @@
                 {{user.points}}
             </span>
         </div>
-        <div class="row">
+        <div class="row dropdown"
+             ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.root) &&
+             RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
+            <span class="col-xs-3">
+                User Rank
+            </span>
+            <span class="col-xs-9">
+                <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuRole"
+                  data-toggle="dropdown" style="cursor: pointer">
+                    {{RolesFactory.findRoleByName(user.role).beautifulName}}
+                    <span class="caret"></span>
+                </span>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRole">
+                    <li role="presentation" ng-repeat="role in RolesFactory.roles">
+                        <a role="menuitem" tabindex="-1" ng-click="user.role = role.name">
+                            {{role.beautifulName}}
+                        </a>
+                    </li>
+                </ul>
+            </span>
+        </div>
+        <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.root) ||
+            RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
             <span class="col-xs-3">
                 User rank
             </span>
@@ -105,48 +121,62 @@
                 {{user.registrationIp}}
             </span>
         </div>
-        <div class="row">
+        <div class="row dropdown"  ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) &&
+            RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
             <span class="col-xs-3">
                 Active
             </span>
             <span class="col-xs-9">
-                {{!!user.active}}
+                <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuActive"
+                data-toggle="dropdown" style="cursor: pointer">
+                    {{!!user.active ? 'Yes' : 'No'}}
+                    <span class="caret"></span>
+                </span>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuActive">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = true">Yes</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = false">No</a></li>
+                </ul>
             </span>
         </div>
-        <div class="row">
+        <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) ||
+        RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
+            <span class="col-xs-3">
+                Active
+            </span>
+            <span class="col-xs-9">
+                {{!!user.active ? 'Yes' : 'No'}}
+            </span>
+        </div>
+        <div class="row dropdown" ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) &&
+        RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
             <span class="col-xs-3">
                 Disabled
             </span>
             <span class="col-xs-9">
-                {{!!user.disabled}}
+                <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuDisabled"
+                data-toggle="dropdown" style="cursor: pointer">
+                    {{!!user.disabled ? 'Yes' : 'No'}}
+                    <span class="caret"></span>
+                </span>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDisabled">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = true">Yes</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = false">No</a></li>
+                </ul>
             </span>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    </div>
-</script>
-
-
-<script type="text/ng-template" id="activateAdminModal.html">
-    <div class="modal-header">
-        <h3 class="modal-title">Account activation</h3>
-    </div>
-    <div class="modal-body">
-        <div>
-            Current status: {{user.username}} is
-            <span>{{user.active ? ' active': ' not active'}}</span>
+        <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) ||
+        RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
+            <span class="col-xs-3">
+                Disabled
+            </span>
+            <span class="col-xs-9">
+                {{!!user.disabled ? 'Yes' : 'No'}}
+            </span>
         </div>
-        <div class="top-buffer-0-5-em">
-            <button class="btn btn-primary" ng-click="toggleActive()">Toggle</button>
-        </div>
-        <div class="top-buffer-0-5-em">
-            Hit OK to <span>{{activationModel ? ' activate ' : ' deactivate '}}</span> {{user.username}}.
-            Hit toggle to change status.
-        </div>
-        <div class="top-buffer-0-5-em" style="color: red" ng-if="errorSaving">
-            An error occured. Your option wasn't saved.
+        <div class="row" ng-if="errorSaving">
+            <span class="col-xs-12" style="color: red;">
+                An error has occurred. Your options weren't saved.
+            </span>
         </div>
     </div>
     <div class="modal-footer">
