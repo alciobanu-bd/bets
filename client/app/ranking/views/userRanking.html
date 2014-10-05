@@ -1,0 +1,57 @@
+
+<div class="modal-header">
+    <h3 class="modal-title">{{user.username}}</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+            <span class="col-xs-3">
+                Username
+            </span>
+            <span class="col-xs-9">
+                {{user.username}}
+            </span>
+    </div>
+    <div class="row">
+            <span class="col-xs-3">
+                Place
+            </span>
+            <span class="col-xs-9">
+                {{user.place}}
+            </span>
+    </div>
+    <div class="row">
+            <span class="col-xs-3">
+                Points
+            </span>
+            <span class="col-xs-9">
+                {{user.points}}
+            </span>
+    </div>
+    <div class="row">
+            <span class="col-xs-3">
+                Average
+            </span>
+            <span class="col-xs-9">
+                {{user.avgPoints.toFixed(2)}}%
+            </span>
+    </div>
+    <div class="row">
+            <span class="col-xs-3">
+                User rank
+            </span>
+            <span class="col-xs-9">
+                {{RolesFactory.findRoleByName(user.role).beautifulName}}
+            </span>
+    </div>
+    <div class="row">
+            <span class="col-xs-3">
+                Register date
+            </span>
+            <span class="col-xs-9">
+                {{user.registerDate | date:'MMM d, y'}}
+            </span>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">Close</button>
+</div>

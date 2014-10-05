@@ -116,7 +116,7 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
 
 var resetUsersPointsBeforeAggregating = function (req, res, next) {
 
-    User.update({}, {$set: {points: 0}}, function (err) {
+    User.update({}, {$set: {points: 0, noOfBets: 0, avgPoints: 0}}, function (err) {
         if (err) {
             res.status(500).json({
                 message: "An error occurred while trying to update users' points."
@@ -135,7 +135,8 @@ var updatePointsForUsers = function (req, res, next) {
     Bet.aggregate([
             { $group: {
                 _id: '$userId',
-                points: { $sum: '$points'}
+                points: { $sum: '$points'},
+                count: { $sum: { $cond: [ '$ended', { $size: '$scores' }, 0 ] } }
             }}
         ], function (err, aggregatedBets) {
 
@@ -151,10 +152,11 @@ var updatePointsForUsers = function (req, res, next) {
 
                 for (var i in aggregatedBets) {
                     var betsForAUser = aggregatedBets[i];
+                    var avgPts = (betsForAUser.points * 100) / (betsForAUser.count * 3);
 
-                    var userPoints = betsForAUser.points;;
-
-                    User.update({_id: betsForAUser._id}, {$set: {points: userPoints}}, function (err) {
+                    User.update({_id: betsForAUser._id},
+                    {$set: {points: betsForAUser.points, avgPoints: avgPts}},
+                    function (err) {
 
                         if (err) {
                             errorUsers++;

@@ -12,7 +12,8 @@
         "angular-sanitize": "*",
         "underscore": "*",
         "angular-ui-date": "*",
-        "angular-bootstrap": "*"
+        "angular-bootstrap": "*",
+        "jsPDF": "https://raw.githubusercontent.com/MrRio/jsPDF/master/dist/jspdf.min.js"
     },
     "devDependencies": {
         "angular-mocks": "*",

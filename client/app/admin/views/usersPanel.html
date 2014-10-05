@@ -67,6 +67,14 @@
                 {{user.points}}
             </span>
         </div>
+        <div class="row">
+            <span class="col-xs-3">
+                Average
+            </span>
+            <span class="col-xs-9">
+                {{user.avgPoints.toFixed(2)}}%
+            </span>
+        </div>
         <div class="row dropdown"
              ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.root) &&
              RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">

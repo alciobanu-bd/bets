@@ -188,28 +188,39 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
 ])
 
 .factory('RolesFactory', [
-'InitUrls', 'CallUrlService',
-function (InitUrls, CallUrlService) {
+'InitUrls', 'CallUrlService', '$q',
+function (InitUrls, CallUrlService, $q) {
 
     var thisFactory = {};
 
     thisFactory.rolesError = false;
     thisFactory.loaded = false;
 
-    InitUrls.then(function (data) {
+    thisFactory.load = function () {
 
-        CallUrlService.get({uri: data.user.roles},
-        function (data) {
-            thisFactory.roles = data;
-            thisFactory.loaded = true;
-            thisFactory.rolesError = false;
-        },
-        function (response) {
-            thisFactory.rolesError = true;
-        }
-        );
+        var deferred = $q.defer();
 
-    });
+        InitUrls.then(function (data) {
+
+            CallUrlService.get({uri: data.user.roles},
+                function (data) {
+                    thisFactory.roles = data;
+                    thisFactory.loaded = true;
+                    thisFactory.rolesError = false;
+                    deferred.resolve();
+                },
+                function (response) {
+                    thisFactory.rolesError = true;
+                    deffered.reject();
+                }
+            );
+        });
+
+        return deferred.promise;
+
+    }
+
+    thisFactory.load();
 
     thisFactory.userHasRole = function (userRoleName, role) {
         if (!thisFactory.loaded) {

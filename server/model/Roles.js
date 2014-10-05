@@ -5,17 +5,21 @@ var roles = {
     user: {
         name: 'ROLE_USER',
         value: -1000,
-        beautifulName: 'user'
+        beautifulName: 'user',
+        description: 'User is the one who keeps the community alive by guessing the scores every week.'
     },
     admin: {
         name: 'ROLE_ADMIN',
         value: -90,
-        beautifulName: 'admin'
+        beautifulName: 'admin',
+        description: 'The one who administrates the site, chooses matches, posts the results, ' +
+            'assures that everything is working properly.'
     },
     root: {
         name: 'ROLE_ROOT',
         value: 0,
-        beautifulName: 'root'
+        beautifulName: 'root',
+        description: 'Developer and founder of the application.'
     }
 };
 

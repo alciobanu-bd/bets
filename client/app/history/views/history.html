@@ -4,6 +4,10 @@
 
         <h2 class="white" style="margin-bottom: 1em">Bet history</h2>
 
+        <h3 class="white" style="margin-bottom: 1em" ng-if="historyObject.length == 0">
+            No history is available at the moment.
+        </h3>
+
         <div class="panel panel-primary" ng-repeat="week in historyObject track by $index">
             <div class="panel-heading">
                 <div class="row">

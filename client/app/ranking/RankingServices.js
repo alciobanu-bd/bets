@@ -23,6 +23,7 @@ function (InitUrls, CallUrlService) {
                     _id: item._id,
                     place: item.place,
                     points: item.points,
+                    avgPoints: item.avgPoints,
                     registerDate: item.registerDate,
                     role: item.role,
                     username: item.username
