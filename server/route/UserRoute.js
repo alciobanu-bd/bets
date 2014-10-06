@@ -352,30 +352,118 @@ function(req, res, next) {
 }
 );
 
-router.post('/user/activateAsAdmin',
-jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
+router.post('/user/changePassword',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
-    var userId = req.body.userId;
-    var activationOption = req.body.activationOption;
+    var oldPassword = req.body.oldPassword;
+    var newPassword = req.body.newPassword;
+    var confirmPassword = req.body.confirmPassword;
 
-    if (!userId) {
+    var user = res.data.local.user;
+
+    if (newPassword != confirmPassword) {
         res.status(500).json({
-            message: "No user id was sent."
+            message: "New password and confirm password do not match."
         }).end();
-        return;
     }
 
-    User.update({_id: userId}, {$set: {active: activationOption}}, function (err) {
+    bcrypt.hash(oldPassword, user.serverSalt, null, function (err, oldPwHash) {
         if (err) {
             res.status(500).json({
-                message: "An error occurred while trying to activate user."
+                message: "We couldn't change your password. Please try again."
             }).end();
         }
         else {
-            res.status(200).json({ok: true}).end();
+
+            if (oldPwHash != user.password) {
+                res.status(500).json({
+                    message: "Old password you entered is wrong."
+                }).end();
+            }
+            else {
+
+
+                bcrypt.hash(newPassword, user.serverSalt, null, function (err, hash) {
+                    if (err) {
+                        res.status(500).json({
+                            message: "We couldn't change your password. Please try again."
+                        }).end();
+                    }
+                    else {
+
+                        User.update({_id: user._id},
+                            {$set: {active: false, password: hash}},
+                            function (err) {
+                                if (err) {
+                                    res.status(500).json({
+                                        message: "We couldn't change your password. Please try again."
+                                    }).end();
+                                }
+                                else {
+                                    next();
+                                }
+                            });
+
+                    }
+                });
+
+
+            }
+
         }
     });
+},
+function (req, res, next) {
+
+    RegistrationCode.findOne({userId: res.data.local.user._id},
+        function (err, regCode) {
+
+            if (err) {
+                res.status(500).json({
+                    message: "New password was saved, but no confirmation e-mail could be sent." +
+                        "Please login and request a new one."
+                });
+            }
+
+            else {
+
+                if (!regCode) {
+                    regCode = new RegistrationCode();
+                }
+                regCode.userId = res.data.local.user._id;
+                var now = new Date();
+                regCode.expirationDate = now.setHours(now.getHours() + 24 * 5);
+                regCode.registrationCode = Random.randomString();
+
+                regCode.save(function (err) {
+                    if (err) {
+                        res.status(500).json({
+                            message: "New password was saved, but no confirmation e-mail could be sent. " +
+                                "Please login and request a new one."
+                        });
+                    }
+                    else {
+
+                        mailServices.sendConfirmationLinkOnPasswordChange(res.data.local.user.username,
+                            res.data.local.user.email,
+                            regCode.registrationCode,
+
+                            function (info) {
+                                // success
+                            },
+                            function (err) {
+                                // error
+                                console.log("change password mail couldn't be delivered", err);
+                            });
+
+                        res.status(200).json({changed: "ok"}).end();
+
+                    }
+                });
+
+            }
+        });
 
 }
 );

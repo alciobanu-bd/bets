@@ -29,8 +29,21 @@ Settings) {
     }
 
     refreshUserDetails();
-    $interval(refreshUserDetails, Settings.user.detailsRefreshInterval, 0, true);
+    var userDetailsInterval = undefined;
+
     $interval(extendToken, Settings.user.tokenRefreshInterval);
+
+    $scope.startUserDetailsInterval = function () {
+        userDetailsInterval = $interval(refreshUserDetails, Settings.user.detailsRefreshInterval, 0, true);
+    }
+
+    $scope.clearUserDetailsInterval = function () {
+        if (userDetailsInterval) {
+            $interval.cancel(userDetailsInterval);
+        }
+    }
+
+    $scope.startUserDetailsInterval();
 
 }
 ]);

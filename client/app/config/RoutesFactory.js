@@ -18,80 +18,93 @@ function (UserInformation, Templates, $location, $routeParams) {
     }
 
     thisFactory.goToLogin = function () {
-        thisFactory.currentBodyView = Templates.user.login;
-        $location.path(thisFactory.currentBodyView.route);
-
         if (UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
         }
+        thisFactory.currentBodyView = Templates.user.login;
+        $location.path(thisFactory.currentBodyView.route);
     }
 
     thisFactory.goToRegister = function () {
-        thisFactory.currentBodyView = Templates.user.register;
-        $location.path(thisFactory.currentBodyView.route);
-
         if (UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
         }
+        thisFactory.currentBodyView = Templates.user.register;
+        $location.path(thisFactory.currentBodyView.route);
     }
 
     thisFactory.goToRanking = function () {
+        if (!UserInformation.isLogged) {
+            thisFactory.goHome();
+            return;
+        }
         thisFactory.currentBodyView = Templates.ranking;
         $location.path(thisFactory.currentBodyView.route);
     }
 
     thisFactory.goToWeek = function () {
-        thisFactory.currentBodyView = Templates.week;
-        $location.path(thisFactory.currentBodyView.route);
-
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
         }
+        thisFactory.currentBodyView = Templates.week;
+        $location.path(thisFactory.currentBodyView.route);
     }
 
     thisFactory.goToProfile = function () {
-        thisFactory.currentBodyView = Templates.account.profile;
-        $location.path(thisFactory.currentBodyView.route);
-
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
         }
+        thisFactory.currentBodyView = Templates.account.profile;
+        $location.path(thisFactory.currentBodyView.route);
     }
 
     thisFactory.goToHistory = function () {
-        thisFactory.currentBodyView = Templates.bet.history;
-        $location.path(thisFactory.currentBodyView.route);
-
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
         }
+        thisFactory.currentBodyView = Templates.bet.history;
+        $location.path(thisFactory.currentBodyView.route);
     }
 
     thisFactory.goToActivation = function () {
+        if (!UserInformation.isLogged || (UserInformation.isLogged && UserInformation.user.active)) {
+            thisFactory.goHome();
+            return;
+        }
         thisFactory.currentBodyView = Templates.activation;
         $location.path(Templates.activation.route);
-
-        if (!UserInformation.isLogged) {
-            thisFactory.goHome();
-        }
     }
 
     thisFactory.goToAdminPanel = function () {
-        thisFactory.currentBodyView = Templates.admin;
-        $location.path(Templates.admin.route);
-
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
         }
+        thisFactory.currentBodyView = Templates.admin;
+        $location.path(Templates.admin.route);
     }
 
     thisFactory.goToRules = function () {
-        thisFactory.currentBodyView = Templates.rules;
-        $location.path(Templates.rules.route);
-
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
         }
+        thisFactory.currentBodyView = Templates.rules;
+        $location.path(Templates.rules.route);
+    }
+
+    thisFactory.goToChangePassword = function () {
+        if (!UserInformation.isLogged) {
+            thisFactory.goHome();
+            return;
+        }
+        thisFactory.currentBodyView = Templates.user.changePassword;
+        $location.path(Templates.user.changePassword.route);
     }
 
     thisFactory.mappings = [
@@ -134,6 +147,10 @@ function (UserInformation, Templates, $location, $routeParams) {
         {
             mainRoute: ['rules'],
             fn: thisFactory.goToRules
+        },
+        {
+            mainRoute: ['change-password'],
+            fn: thisFactory.goToChangePassword
         }
     ];
 

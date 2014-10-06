@@ -25,6 +25,10 @@ var templates =
         register: {
             html: 'app/user/views/register.html',
             route: 'register'
+        },
+        changePassword: {
+            html: 'app/user/views/changePassword.html',
+            route: 'change-password'
         }
     },
     welcome: {

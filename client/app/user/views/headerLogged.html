@@ -53,6 +53,9 @@
                         <li>
                             <a href="" ng-click="RoutesFactory.goToProfile()">My profile</a>
                         </li>
+                        <li>
+                            <a href="" ng-click="RoutesFactory.goToChangePassword()">Change Password</a>
+                        </li>
                         <li ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
                             <a href="" ng-click="RoutesFactory.goToAdminPanel()">Admin panel</a>
                         </li>

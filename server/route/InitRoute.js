@@ -9,7 +9,8 @@ var initFeed = {
         activate: "/api/user/activate",
         details: "/api/user/details",
         resendRegistrationCode: "/api/user/resend_regcode",
-        activateAsAdmin: "/api/user/activateAsAdmin"
+        activateAsAdmin: "/api/user/activateAsAdmin",
+        changePassword: "/api/user/changePassword"
     },
     auth: {
         login: "/api/auth/login",
