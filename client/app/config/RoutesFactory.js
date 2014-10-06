@@ -40,6 +40,10 @@ function (UserInformation, Templates, $location, $routeParams) {
             thisFactory.goHome();
             return;
         }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
+            return;
+        }
         thisFactory.currentBodyView = Templates.ranking;
         $location.path(thisFactory.currentBodyView.route);
     }
@@ -47,6 +51,10 @@ function (UserInformation, Templates, $location, $routeParams) {
     thisFactory.goToWeek = function () {
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
+        }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
             return;
         }
         thisFactory.currentBodyView = Templates.week;
@@ -58,6 +66,10 @@ function (UserInformation, Templates, $location, $routeParams) {
             thisFactory.goHome();
             return;
         }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
+            return;
+        }
         thisFactory.currentBodyView = Templates.account.profile;
         $location.path(thisFactory.currentBodyView.route);
     }
@@ -65,6 +77,10 @@ function (UserInformation, Templates, $location, $routeParams) {
     thisFactory.goToHistory = function () {
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
+        }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
             return;
         }
         thisFactory.currentBodyView = Templates.bet.history;
@@ -85,6 +101,10 @@ function (UserInformation, Templates, $location, $routeParams) {
             thisFactory.goHome();
             return;
         }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
+            return;
+        }
         thisFactory.currentBodyView = Templates.admin;
         $location.path(Templates.admin.route);
     }
@@ -94,6 +114,10 @@ function (UserInformation, Templates, $location, $routeParams) {
             thisFactory.goHome();
             return;
         }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
+            return;
+        }
         thisFactory.currentBodyView = Templates.rules;
         $location.path(Templates.rules.route);
     }
@@ -101,6 +125,10 @@ function (UserInformation, Templates, $location, $routeParams) {
     thisFactory.goToChangePassword = function () {
         if (!UserInformation.isLogged) {
             thisFactory.goHome();
+            return;
+        }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
             return;
         }
         thisFactory.currentBodyView = Templates.user.changePassword;
