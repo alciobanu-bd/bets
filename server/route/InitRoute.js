@@ -10,11 +10,14 @@ var initFeed = {
         details: "/api/user/details",
         resendRegistrationCode: "/api/user/resend_regcode",
         activateAsAdmin: "/api/user/activateAsAdmin",
-        changePassword: "/api/user/changePassword"
+        changePassword: "/api/user/changePassword",
+        forgotPassword: "/api/user/forgotPassword",
+        resetPassword: "/api/user/resetPassword"
     },
     auth: {
         login: "/api/auth/login",
         salt: "/api/auth/salt",
+        resetSalt: "/api/auth/reset-salt",
         extendToken: "/api/auth/extend_expiration_token"
     },
     week: {

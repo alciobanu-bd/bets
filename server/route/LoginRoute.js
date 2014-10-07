@@ -2,6 +2,7 @@
 // NOTE that app is defined globally
 
 var User = require('./../model/User.js');
+var ForgotPasswordCode = require('./../model/ForgotPasswordCode.js');
 var jwt = require('jwt-simple');
 var express = require('express');
 var moment = require('moment');
@@ -127,6 +128,39 @@ router.post('/salt', function (req, res) {
             res.status(200).json({salt: users[0].salt}).end();
         }
     });
+});
+
+router.post('/reset-salt',
+function (req, res) {
+
+    var receivedCode = req.body.code;
+
+    ForgotPasswordCode.findOne({forgotPasswordCode: receivedCode},
+    function (err, code) {
+        if (err) {
+            res.status(500).json({
+                message: "Error fetching reset code."
+            }).end();
+        }
+        else {
+
+            User.find({_id: code.userId}, function (err, users) {
+                if (err || users.length == 0) {
+                    res.status(404).json({message: "This reset code doesn't belong to any user."}).end();
+                }
+                else if (users.length > 1) {
+                    res.status(500).json({
+                            message: "This reset code doesn't belong to any user. Please contact an administrator."}
+                    ).end();
+                }
+                else {
+                    res.status(200).json({salt: users[0].salt}).end();
+                }
+            });
+
+        }
+    });
+
 });
 
 app.use('/api/auth', router);

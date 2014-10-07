@@ -1,12 +1,16 @@
 
 userModule
 
-.controller('UserController', [
+.controller(
+'UserController', [
 '$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'RoutesFactory', 'CheckActivationStatus',
-function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory, CheckActivationStatus) {
+'RoutesFactory',
+function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory, CheckActivationStatus,
+RoutesFactory) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
+    $scope.RoutesFactory = RoutesFactory;
 
     $scope.inputs = {
         username: {

@@ -135,6 +135,28 @@ function (UserInformation, Templates, $location, $routeParams) {
         $location.path(Templates.user.changePassword.route);
     }
 
+    thisFactory.goToForgotPassword = function () {
+        if (UserInformation.isLogged) {
+            thisFactory.goHome();
+            return;
+        }
+        thisFactory.currentBodyView = Templates.user.forgotPassword;
+        $location.path(Templates.user.forgotPassword.route);
+    }
+
+    thisFactory.goToResetPassword = function () {
+        if (UserInformation.isLogged) {
+            UserInformation.isLogged = false;
+        }
+        thisFactory.currentBodyView = Templates.user.resetPassword;
+        var route = Templates.user.resetPassword.route;
+        var params = thisFactory.getParams();
+        if (params[1]) {
+            route += "/" + params[1];
+        }
+        $location.path(route);
+    }
+
     thisFactory.mappings = [
         {
             mainRoute: [''],
@@ -179,20 +201,45 @@ function (UserInformation, Templates, $location, $routeParams) {
         {
             mainRoute: ['change-password'],
             fn: thisFactory.goToChangePassword
+        },
+        {
+            mainRoute: ['forgot-password'],
+            fn: thisFactory.goToForgotPassword
+        },
+        {
+            mainRoute: ['reset-password'],
+            fn: thisFactory.goToResetPassword
         }
     ];
 
     thisFactory.loadDefault = function () {
+        var splitPath = $location.path().split("/");
+        if (splitPath.length > 1) {
+            splitPath.splice(0, 1);
+        }
         for (var i = 0; i < thisFactory.mappings.length; i++) {
             var route = thisFactory.mappings[i];
             for (var j = 0; j < route.mainRoute.length; j++) {
-                if ("/" + route.mainRoute[j] == $location.path()) {
+                if (splitPath[0] == route.mainRoute[j]) {
                     route.fn();
                     return;
                 }
             }
         }
         thisFactory.goHome();
+    }
+
+    thisFactory.getParams = function () {
+        var splitUri = $location.path().split("/");
+        var params = {};
+        var paramIndex = 0;
+        for (var i = 0; i < splitUri.length; i++) {
+            if (splitUri[i] != "") {
+                params[paramIndex] = splitUri[i];
+                paramIndex++;
+            }
+        }
+        return params;
     }
 
     return thisFactory;

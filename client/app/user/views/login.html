@@ -2,7 +2,11 @@
 
     <div class="jumbotron centered white half-bg-opacity">
         <h2>Login</h2>
-        <div class="input-group centered" style="min-width: 40%;">
+        <div>
+            <span style="cursor: pointer; color: #73d1ff; text-decoration: underline;"
+              ng-click="RoutesFactory.goToForgotPassword()">Forgot password</span>
+        </div>
+        <div class="input-group centered top-buffer-1-em" style="min-width: 40%;">
             <div class="form-group">
                 <input type="text" class="form-control cornered-input" ng-keydown="loginOnEnterKey($event)" ng-model="inputs.username.model" placeholder="Username">
             </div>

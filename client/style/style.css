@@ -51,7 +51,11 @@
 }
 
 .top-buffer-1-em {
-    margin-top: 0.5em;
+    margin-top: 1em;
+}
+
+.top-buffer-2-em {
+    margin-top: 2em;
 }
 
 .red-border {

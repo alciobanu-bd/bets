@@ -4,6 +4,7 @@
 var User = require('./../model/User.js');
 var Roles = require('./../model/Roles.js');
 var RegistrationCode = require('./../model/RegistrationCode.js');
+var ForgotPasswordCode = require('./../model/ForgotPasswordCode.js');
 var Random = require('./../services/Random.js');
 var express = require('express');
 var jwtauth = require('./../middlewares/jwtauth.js');
@@ -352,6 +353,84 @@ function(req, res, next) {
 }
 );
 
+router.post('/user/forgotPassword',
+function (req, res, next) {
+
+    var usernameOrEmail = req.body.usernameOrEmail;
+
+    User.findOne({$or: [
+        {username: usernameOrEmail},
+        {email: usernameOrEmail}
+    ]}, function (err, user) {
+        if (err) {
+            res.status(500).json({
+                message: "An error occurred while trying to fetch your details."
+            }).end();
+        }
+        else {
+            if (!user) {
+                res.status(404).json({
+                    message: "We couldn't find your account. It seems that you entered wrong details."
+                }).end();
+            }
+            else {
+
+                ForgotPasswordCode.findOne({userId: user._id},
+                    function (err, code) {
+
+
+                        if (err) {
+                            res.status(500).json({
+                                message: "A reset code couldn't be provided."
+                            }).end();
+                        }
+
+                        else {
+
+                            if (!code) {
+                                code = new ForgotPasswordCode();
+                            }
+                            code.userId = user._id;
+                            var now = new Date();
+                            code.expirationDate = now.setHours(now.getHours() + 24 * 1);
+                            code.forgotPasswordCode = Random.randomString();
+
+                            code.save(function (err) {
+                                if (err) {
+                                    res.status(500).json({
+                                        message: "A reset code couldn't be provided."
+                                    }).end();
+                                }
+                                else {
+
+                                    mailServices.sendConfirmationLinkOnForgotPassword(user.username,
+                                        user.email,
+                                        code.forgotPasswordCode,
+                                        function (info) {
+                                            // success
+                                        },
+                                        function (err) {
+                                            // error
+                                            console.log("Forgot password code via mail failed", err);
+                                        });
+
+                                    res.status(200).json({
+                                        message: "An e-mail containing the code needed to reset your password" +
+                                            " will be sent to your e-mail shortly."
+                                    }).end();
+
+                                }
+                            });
+
+                        }
+                    });
+
+            }
+        }
+    });
+
+});
+
 router.post('/user/changePassword',
 jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
@@ -468,6 +547,96 @@ function (req, res, next) {
 }
 );
 
+router.post('/user/resetPassword',
+function (req, res, next) {
+
+    var receivedCode = req.body.code;
+
+    ForgotPasswordCode.findOne({forgotPasswordCode: receivedCode},
+    function (err, code) {
+        if (err) {
+            res.status(500).json({
+                message: "An error occurred while trying to fetch the reset code."
+            }).end();
+        }
+        else {
+
+            if (!code) {
+                res.status(500).json({
+                    message: "The reset code you entered couldn't be found."
+                }).end();
+                return;
+            }
+
+            if (new Date(code.expirationDate) < new Date()) {
+                res.status(500).json({
+                    message: "The reset code you entered expired. Please request another one."
+                }).end();
+            }
+            else {
+
+                req.body.userId = code.userId;
+
+                next();
+
+            }
+
+        }
+    });
+
+},
+function (req, res) {
+
+    var newPassword = req.body.newPassword;
+    var confirmPassword = req.body.confirmPassword;
+
+    if (newPassword != confirmPassword) {
+        res.status(500).json({
+            message: "New password and confirm password do not match."
+        }).end();
+    }
+
+    var userId = req.body.userId;
+
+    User.findOne({_id: userId},
+    function (err, user) {
+
+        if (err || !user) {
+            res.status(500).json({
+                message: "We couldn't change your password. Please try again."
+            }).end();
+        }
+        else {
+
+            bcrypt.hash(newPassword, user.serverSalt, null, function (err, hash) {
+                if (err) {
+                    res.status(500).json({
+                        message: "We couldn't change your password. Please try again."
+                    }).end();
+                }
+                else {
+
+                    User.update({_id: user._id},
+                        {$set: {password: hash}},
+                        function (err) {
+                            if (err) {
+                                res.status(500).json({
+                                    message: "We couldn't change your password. Please try again."
+                                }).end();
+                            }
+                            else {
+                                res.status(200).json({ok: true}).end();
+                            }
+                        });
+
+                }
+            });
+
+        }
+
+    });
+});
+
 /*
  * Expects a registration code in body json.
  */
@@ -524,8 +693,6 @@ function (req, res, next) {
             RegistrationCode.remove({registrationCode: req.body.registrationCode});
         }
     });
-
-
 });
 
 app.use('/api', router);

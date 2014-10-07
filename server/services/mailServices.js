@@ -59,7 +59,41 @@ var sendConfirmationLinkOnPasswordChange = function (username, emailAddress, cod
 
 }
 
+var sendConfirmationLinkOnForgotPassword = function (username, emailAddress, code, onSuccess, onError) {
+    var mailOptions = {
+        from: 'no-reply <no-reply@guessthescore.com>',
+        to: emailAddress,
+        subject: 'Password reset at GuessTheScore.com',
+        text: 'Dear ' + username + ',' +
+            '\r\n' +
+            'You recently required a code to reset your password.' +
+            '\r\n\r\n' +
+            'In order to change your password, use the next link:' +
+            '\r\n' +
+            domainName + "/#/reset-password/" + code +
+            '\r\n\r\n' +
+            'If the link doesn\'t work, please go to ' + domainName + "/#/reset-password" +
+            ' and use the following code:' +
+            '\r\n' + code
+    };
+
+    mailTransporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            if (typeof onError === 'function') {
+                onError(error);
+            }
+        }
+        else {
+            if (typeof onSuccess === 'function') {
+                onSuccess(info);
+            }
+        }
+    });
+
+}
+
 module.exports = {
     sendConfirmationLinkOnRegistration: sendConfirmationLinkOnRegistration,
-    sendConfirmationLinkOnPasswordChange: sendConfirmationLinkOnPasswordChange
+    sendConfirmationLinkOnPasswordChange: sendConfirmationLinkOnPasswordChange,
+    sendConfirmationLinkOnForgotPassword: sendConfirmationLinkOnForgotPassword
 }

@@ -10,6 +10,8 @@ var fs = require('fs');
 
 GLOBAL.app = express();
 
+GLOBAL.domainName = "http://localhost";
+
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));

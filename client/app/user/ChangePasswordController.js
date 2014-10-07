@@ -6,6 +6,8 @@ userModule
 '$scope', 'InitUrls', 'CallUrlService', '$timeout', 'SHA-2', 'UserInformation',
 function ($scope, InitUrls, CallUrlService, $timeout, SHA2, UserInformation) {
 
+    $scope.clearUserDetailsInterval();
+
     $scope.inputs = {
         oldPassword: '',
         newPassword: '',
@@ -41,12 +43,14 @@ function ($scope, InitUrls, CallUrlService, $timeout, SHA2, UserInformation) {
                         confirmPassword: confirmPwHash
                     },
                     function (data) {
+                        $scope.startUserDetailsInterval();
                         $scope.status.success = true;
                         $scope.status.error = false;
                         $scope.status.message = "Your password was changed successfully. Please check your e-mail.";
                         $scope.status.inProgress = false;
                     },
                     function (response) {
+                        $scope.startUserDetailsInterval();
                         $scope.status.success = false;
                         $scope.status.error = true;
                         if (response.data.message) {

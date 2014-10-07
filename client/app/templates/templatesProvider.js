@@ -29,6 +29,14 @@ var templates =
         changePassword: {
             html: 'app/user/views/changePassword.html',
             route: 'change-password'
+        },
+        forgotPassword: {
+            html: 'app/user/views/forgotPassword.html',
+            route: 'forgot-password'
+        },
+        resetPassword: {
+            html: 'app/user/views/resetPassword.html',
+            route: 'reset-password'
         }
     },
     welcome: {
