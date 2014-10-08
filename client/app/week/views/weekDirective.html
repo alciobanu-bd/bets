@@ -18,6 +18,9 @@
                 {{errorObject.message}}
             </span>
         </div>
+        <div class="row" style="color: #03b2ff" ng-show="week.available">
+            Deadline: {{week.endDate | date:'MMM d, y h:mm a'}}
+        </div>
         <div class="row" ng-show="!week.available">
             <span style="color: #ff0026">
                 Bet placement isn't available anymore for this week.
