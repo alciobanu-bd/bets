@@ -50,6 +50,9 @@ db
     .on('error', function () {console.error('DB connection error.')})
     .once('open', function() {console.log('DB Connection established.')});
 
+var mkdirp = require('mkdirp');
+mkdirp('logs');
+
 /*
  * Mail setup
  */

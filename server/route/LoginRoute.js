@@ -11,6 +11,10 @@ var bcrypt = require('bcrypt-nodejs');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 
+var fs = require('fs');
+var LOG_EXTEND_TOK_FILE_NAME = 'logs/extend_tok_log.txt';
+var LOG_LOGIN_FILE_NAME = 'logs/login_log.txt';
+
 var router = express.Router();
 
 // login
@@ -71,7 +75,7 @@ router.post('/login', function(req, res) {
                             user: users[0]
                         }).end();
 
-                        console.log(new Date() + ", " + users[0].username + " logged in. ");
+                        fs.appendFile(LOG_LOGIN_FILE_NAME, new Date() + ", " + users[0].username + " logged in. " + '\r\n');
 
                     }
 
@@ -103,7 +107,8 @@ function (req, res, next) {
     delete user['salt'];
     delete user['registrationIp'];
 
-    console.log(new Date(), "extended token for user: " + user.username + " (expires: " + new Date(tok.expires) + ")");
+    fs.appendFile(LOG_EXTEND_TOK_FILE_NAME,
+        new Date() + "extended token for user: " + user.username + " (expires: " + new Date(tok.expires) + ")" + '\r\n');
 
     res.status(200).json({
         token : tok.token,

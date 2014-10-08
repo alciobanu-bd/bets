@@ -13,6 +13,9 @@ var bcrypt = require('bcrypt-nodejs');
 
 var mailServices = require('./../services/mailServices.js');
 
+var fs = require('fs');
+var LOG_USER_MAIL_FILE_NAME = 'logs/user_mail_log.txt';
+
 var _ = require('underscore');
 var router = express.Router();
 
@@ -221,7 +224,7 @@ function (req, res, next) {
                         },
                         function (err) {
                             // error
-                            console.log("registration mail couldn't be delivered", err);
+                            fs.appendFile(LOG_USER_MAIL_FILE_NAME, "registration mail couldn't be delivered " + err + '\r\n');
                         });
 
                     res.status(201).json(req.data.user).end();
@@ -271,7 +274,7 @@ function (req, res, next) {
                             },
                             function (err) {
                                 // error
-                                console.log("Registration code via mail failed", err);
+                                fs.appendFile(LOG_USER_MAIL_FILE_NAME, "Registration code via mail failed" + err + '\r\n');
                             });
 
                         res.status(200).json({
@@ -411,7 +414,7 @@ function (req, res, next) {
                                         },
                                         function (err) {
                                             // error
-                                            console.log("Forgot password code via mail failed", err);
+                                            fs.appendFile(LOG_USER_MAIL_FILE_NAME, "Forgot password code via mail failed" + err + '\r\n');
                                         });
 
                                     res.status(200).json({
@@ -533,7 +536,7 @@ function (req, res, next) {
                             },
                             function (err) {
                                 // error
-                                console.log("change password mail couldn't be delivered", err);
+                                fs.appendFile(LOG_USER_MAIL_FILE_NAME, "change password mail couldn't be delivered" + err + '\r\n');
                             });
 
                         res.status(200).json({changed: "ok"}).end();

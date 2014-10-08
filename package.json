@@ -13,6 +13,7 @@
         "moment": "*",
         "underscore": "*",
         "bcrypt-nodejs": "*",
+        "mkdirp": "*",
         "nodemailer": "*",
         "nodemailer-smtp-transport": "*",
         "grunt": "*",

@@ -68,7 +68,7 @@ module.exports = function (callbacks, activationCheck) {
                                     }
 
                                     if (callbacks.length == 0) {
-                                        console.log("MAJOR FAULT: jwtauth was called without callback params");
+                                        next();
                                     }
 
                                 }
