@@ -3,8 +3,8 @@ var sendConfirmationLinkOnRegistration = function (username, emailAddress, code,
     var mailOptions = {
         from: 'no-reply <no-reply@guessthescore.com>',
         to: emailAddress,
-        subject: 'Registration at GuessTheScore.com',
-        text: 'Welcome to GuessTheScore.com, ' +
+        subject: 'Registration at ' + domainName.beautifulName,
+        text: 'Welcome to ' + domainName.beautifulName + ', ' +
             '\r\n\r\n' +
             'Dear ' + username + ',' +
             '\r\n' +
@@ -34,7 +34,7 @@ var sendConfirmationLinkOnPasswordChange = function (username, emailAddress, cod
     var mailOptions = {
         from: 'no-reply <no-reply@guessthescore.com>',
         to: emailAddress,
-        subject: 'Changed password at GuessTheScore.com',
+        subject: 'Changed password at ' + domainName.beautifulName,
         text: 'Dear ' + username + ',' +
             '\r\n' +
             'We detected that you changed your password.' +
@@ -63,16 +63,16 @@ var sendConfirmationLinkOnForgotPassword = function (username, emailAddress, cod
     var mailOptions = {
         from: 'no-reply <no-reply@guessthescore.com>',
         to: emailAddress,
-        subject: 'Password reset at GuessTheScore.com',
+        subject: 'Password reset at ' + domainName.beautifulName,
         text: 'Dear ' + username + ',' +
             '\r\n' +
             'You recently required a code to reset your password.' +
             '\r\n\r\n' +
             'In order to change your password, use the next link:' +
             '\r\n' +
-            domainName + "/#/reset-password/" + code +
+            domainName.address + "/#/reset-password/" + code +
             '\r\n\r\n' +
-            'If the link doesn\'t work, please go to ' + domainName + "/#/reset-password" +
+            'If the link doesn\'t work, please go to ' + domainName.address + "/#/reset-password" +
             ' and use the following code:' +
             '\r\n' + code
     };

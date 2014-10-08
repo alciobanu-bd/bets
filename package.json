@@ -1,6 +1,6 @@
 {
     "name": "bets",
-    "version": "0.0.0",
+    "version": "0.0.2",
     "description": "Bets app based on MEAN stack",
     "dependencies": {
         "express": "~4.0.0",

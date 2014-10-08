@@ -7,10 +7,11 @@ var mongoose = restful.mongoose;
 var methodOverride = require('method-override');
 var path = require('path');
 var fs = require('fs');
+var Settings = require('./config/Settings.js');
 
 GLOBAL.app = express();
 
-GLOBAL.domainName = "http://localhost:1111";
+GLOBAL.domainName = Settings.domainName;
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -64,8 +65,6 @@ GLOBAL.mailTransporter = nodemailer.createTransport(smtpTransport({
     port: 25
 }));
 
-var PORT_DEV = 1111;
-
 require('./route/TestRoute.js');
 require('./route/InitRoute.js');
 require('./model/User.js');
@@ -83,5 +82,5 @@ require('./route/BetHistoryRoute.js');
 app.use('/', express.static(path.resolve('client/')));
 
 // START THE SERVER
-app.listen(PORT_DEV);
-console.log('Server started on port ' + PORT_DEV);
+app.listen(Settings.port);
+console.log('Server started on port ' + Settings.port);
