@@ -152,7 +152,14 @@ var updatePointsForUsers = function (req, res, next) {
 
                 for (var i in aggregatedBets) {
                     var betsForAUser = aggregatedBets[i];
-                    var avgPts = (betsForAUser.points * 100) / (betsForAUser.count * 3);
+
+                    var avgPts;
+                    if (betsForAUser.count != 0) {
+                        avgPts = (betsForAUser.points * 100) / (betsForAUser.count * 3);
+                    }
+                    else {
+                        avgPts = 0;
+                    }
 
                     User.update({_id: betsForAUser._id},
                     {$set: {points: betsForAUser.points, avgPoints: avgPts}},
