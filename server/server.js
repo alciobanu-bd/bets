@@ -10,7 +10,7 @@ var fs = require('fs');
 
 GLOBAL.app = express();
 
-GLOBAL.domainName = "http://localhost";
+GLOBAL.domainName = "http://localhost:1111";
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -43,7 +43,7 @@ var filename = "server/config/secretString";
 var secretString = fs.readFileSync(filename, "utf8");
 app.set('jwtTokenSecret', secretString);
 
-mongoose.connect("mongodb://localhost/bets");
+mongoose.connect("mongodb://localhost/bets-dev");
 
 db = mongoose.connection;
 db
@@ -64,7 +64,7 @@ GLOBAL.mailTransporter = nodemailer.createTransport(smtpTransport({
     port: 25
 }));
 
-var port = 80;
+var PORT_DEV = 1111;
 
 require('./route/TestRoute.js');
 require('./route/InitRoute.js');
@@ -83,5 +83,5 @@ require('./route/BetHistoryRoute.js');
 app.use('/', express.static(path.resolve('client/')));
 
 // START THE SERVER
-app.listen(port);
-console.log('Server started on port ' + port);
+app.listen(PORT_DEV);
+console.log('Server started on port ' + PORT_DEV);

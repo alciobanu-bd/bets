@@ -17,6 +17,7 @@ configModule
                             }
 
                             LoginTokenFactory.deleteToken();
+                            RoutesFactory.resetPath();
                             RoutesFactory.goToLogin();
 
                         }

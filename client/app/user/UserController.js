@@ -46,6 +46,7 @@ RoutesFactory) {
             loginPromise.then(
             function (data) {
                 $scope.encounteredError = false;
+                RoutesFactory.resetPath();
                 RoutesFactory.goHome();
                 CheckActivationStatus.check();
                 $scope.loginInProgress = false;
@@ -63,6 +64,7 @@ RoutesFactory) {
 
     $scope.logout = function () {
         UserInformationCalls.logout();
+        RoutesFactory.resetPath();
         RoutesFactory.goHome();
     }
 

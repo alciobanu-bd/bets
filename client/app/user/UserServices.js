@@ -31,6 +31,7 @@ function (UserInformation, RoutesFactory) {
     return {
         check: function () {
             if (UserInformation.isLogged && !UserInformation.user.active) {
+                RoutesFactory.resetPath();
                 RoutesFactory.goToActivation();
             }
         }

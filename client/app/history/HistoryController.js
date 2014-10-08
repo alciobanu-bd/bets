@@ -2,10 +2,17 @@
 historyModule
 
 .controller('HistoryController', [
-'$scope', 'HistoryFactory',
-function ($scope, HistoryFactory) {
+'$scope', 'HistoryFactory', 'RoutesFactory',
+function ($scope, HistoryFactory, RoutesFactory) {
 
-    HistoryFactory.loadHistory(function () {
+    var userId;
+
+    var urlParams = RoutesFactory.getParams();
+    if (urlParams[1]) {
+        userId = urlParams[1];
+    }
+
+    HistoryFactory.loadHistory(userId, function () {
         $scope.historyObject = HistoryFactory.betHistory;
         for (var i in $scope.historyObject) {
             var events = [];

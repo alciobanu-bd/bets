@@ -9,11 +9,20 @@ var _ = require('underscore');
 
 var router = express.Router();
 
-router.get('/history',
+router.get('/history/:id([0-9a-fA-F]{24})?',
 jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
-    Bet.find({userId: res.data.local.user._id},
+    var userId;
+
+    if (req.params.id) {
+        userId = req.params.id;
+    }
+    else {
+        userId = res.data.local.user._id;
+    }
+
+    Bet.find({userId: userId},
     function (err, bets) {
 
         if (err) {
@@ -73,9 +82,7 @@ function (req, res, next) {
             });
 
         }
-
     });
-
 });
 
 app.use('/api/bet', router);

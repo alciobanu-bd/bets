@@ -8,9 +8,13 @@ function (InitUrls, CallUrlService) {
     var thisFactory = {};
     thisFactory.betHistory = null;
 
-    thisFactory.loadHistory = function (onSuccess, onError) {
+    thisFactory.loadHistory = function (userId, onSuccess, onError) {
         InitUrls.then(function (data) {
-            CallUrlService.getArray({uri: data.bet.history},
+            var reqObject = {uri: data.bet.history};
+            if (userId) {
+                reqObject.id = userId
+            }
+            CallUrlService.getArray(reqObject,
             function (data) {
                 thisFactory.betHistory = data;
                 if (typeof onSuccess === 'function') {

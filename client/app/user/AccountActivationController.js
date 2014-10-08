@@ -17,6 +17,7 @@ function ($scope, ActivationFactory, RoutesFactory, UserInformation, ActivationF
             function (user) {
                 // on success
                 UserInformation.setUserDetails(user);
+                RoutesFactory.resetPath();
                 RoutesFactory.goHome();
             },
             function () {

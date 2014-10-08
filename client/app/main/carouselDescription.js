@@ -12,4 +12,4 @@ var carouselImagesDescription = {
         title: '',
         description: ''
     }
-}
+};

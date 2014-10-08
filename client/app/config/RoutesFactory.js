@@ -2,8 +2,8 @@
 configModule
 
 .factory('RoutesFactory', [
-'UserInformation', 'Templates', '$location', '$routeParams',
-function (UserInformation, Templates, $location, $routeParams) {
+'UserInformation', 'Templates', '$location', 'LoginTokenFactory',
+function (UserInformation, Templates, $location, LoginTokenFactory) {
 
     var thisFactory = {};
 
@@ -84,7 +84,27 @@ function (UserInformation, Templates, $location, $routeParams) {
             return;
         }
         thisFactory.currentBodyView = Templates.bet.history;
-        $location.path(thisFactory.currentBodyView.route);
+        var route = thisFactory.currentBodyView.route;
+        var params = thisFactory.getParams();
+        if (params[1]) {
+            route += "/" + params[1];
+        }
+        $location.path(route);
+    }
+
+    thisFactory.goToHistoryUserId = function (userId) {
+        if (!UserInformation.isLogged) {
+            thisFactory.goHome();
+            return;
+        }
+        if (UserInformation.isLogged && !UserInformation.user.active) {
+            thisFactory.goToActivation();
+            return;
+        }
+        thisFactory.currentBodyView = Templates.bet.history;
+        var route = thisFactory.currentBodyView.route;
+        route += "/" + userId;
+        $location.path(route);
     }
 
     thisFactory.goToActivation = function () {
@@ -145,9 +165,8 @@ function (UserInformation, Templates, $location, $routeParams) {
     }
 
     thisFactory.goToResetPassword = function () {
-        if (UserInformation.isLogged) {
-            UserInformation.isLogged = false;
-        }
+        UserInformation.isLogged = false;
+        LoginTokenFactory.deleteToken();
         thisFactory.currentBodyView = Templates.user.resetPassword;
         var route = Templates.user.resetPassword.route;
         var params = thisFactory.getParams();
@@ -155,6 +174,10 @@ function (UserInformation, Templates, $location, $routeParams) {
             route += "/" + params[1];
         }
         $location.path(route);
+    }
+
+    thisFactory.resetPath = function () {
+        $location.path("/");
     }
 
     thisFactory.mappings = [
