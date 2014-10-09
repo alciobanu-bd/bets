@@ -7,7 +7,11 @@ var User = require('./../model/User.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 var pointsManagementFunctions = require('./../middlewares/pointsManagement.js');
+var mailServices = require('./../services/mailServices.js');
 var _ = require('underscore');
+
+var fs = require('fs');
+var LOG_WEEK_MAIL_FILE_NAME = 'logs/user_mail_log.txt';
 
 var router = express.Router();
 
@@ -78,6 +82,91 @@ function (req, res, next) {
 
 });
 
+router.get('/week/mail-notification',
+jwtauth([tokenChecks.hasRole("ROLE_ADMIN")]),
+function (req, res) {
+
+    Week.find({}, {},
+    {sort: {number: -1}, limit: 1},
+    function (err, weeks) {
+
+        if (err) {
+            res.status(500).json({
+                message: "Error fetching current week."
+            }).end();
+        }
+
+        else {
+            if (weeks.length > 0) {
+                weeks[0] = weeks[0].toObject();
+                if (new Date(weeks[0].endDate) < new Date()) {
+                    res.status(500).json({
+                        message: "Week is not available anymore."
+                    }).end();
+                }
+                else {
+
+                    User.find({}, function (err, users) {
+                        if (err) {
+                            res.status(500).json({
+                                message: "Error fetching users."
+                            }).end();
+                        }
+                        else {
+
+                            if (weeks[0].mailNotificationSent) {
+                                // an e-mail was already sent on this week
+                                res.status(500).json({
+                                    message: "An e-mail notification was already sent for this week."
+                                }).end();
+                                return;
+                            }
+
+                            var doneUpdate = false;
+
+                            for (var i = 0; i < users.length; i++) {
+
+                                var user = users[i];
+
+                                mailServices.sendNotificationAboutNewWeek (
+                                    weeks[0], user.username, user.email, function () {
+                                    // on success
+
+                                    // if a single user receives the message,
+                                    // the week notification is considered sent for current week
+
+                                        if (!doneUpdate) {
+                                            Week.update({_id: weeks[0]._id}, {$set: {mailNotificationSent: true}},
+                                            function (err) {
+                                                // nothing
+                                            });
+                                            doneUpdate = true;
+                                        }
+
+                                }, function (error) {
+                                    // on error
+
+                                    fs.appendFile(LOG_WEEK_MAIL_FILE_NAME, err + '\r\n');
+
+                                });
+                            }
+
+                            res.status(200).json({
+                                message: "Mails were queued and are about to be sent."
+                            }).end();
+
+                        }
+                    });
+                }
+            }
+            else {
+                res.status(200).json({number: 0}).end();
+            }
+        }
+
+    });
+});
+
 router.post('/week',
 jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
 function (req, res, next) {
@@ -87,6 +176,7 @@ function (req, res, next) {
 
     week.locked = false;
     week.ended = false;
+    week.mailNotificationSent = false;
 
     var eventWithMinTime = _.min(req.body.events, function (event) {
         return new Date(event.startDate).getTime();
@@ -98,7 +188,7 @@ function (req, res, next) {
 
     for (var i in req.body) {
         week[i] = req.body[i];
-    };
+    }
 
     week.save(function (err) {
         if (err) {

@@ -1,4 +1,21 @@
 
+var humanize = require('humanize');
+
+var sendMail = function (mailOptions, onSuccess, onError) {
+    mailTransporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            if (typeof onError === 'function') {
+                onError(error);
+            }
+        }
+        else {
+            if (typeof onSuccess === 'function') {
+                onSuccess(info);
+            }
+        }
+    });
+}
+
 var sendConfirmationLinkOnRegistration = function (username, emailAddress, code, onSuccess, onError) {
     var mailOptions = {
         from: 'no-reply <no-reply@guessthescore.com>',
@@ -15,18 +32,7 @@ var sendConfirmationLinkOnRegistration = function (username, emailAddress, code,
             code
     };
 
-    mailTransporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            if (typeof onError === 'function') {
-                onError(error);
-            }
-        }
-        else {
-            if (typeof onSuccess === 'function') {
-                onSuccess(info);
-            }
-        }
-    });
+    sendMail(mailOptions, onSuccess, onError);
 
 }
 
@@ -44,18 +50,7 @@ var sendConfirmationLinkOnPasswordChange = function (username, emailAddress, cod
             code
     };
 
-    mailTransporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            if (typeof onError === 'function') {
-                onError(error);
-            }
-        }
-        else {
-            if (typeof onSuccess === 'function') {
-                onSuccess(info);
-            }
-        }
-    });
+    sendMail(mailOptions, onSuccess, onError);
 
 }
 
@@ -77,23 +72,44 @@ var sendConfirmationLinkOnForgotPassword = function (username, emailAddress, cod
             '\r\n' + code
     };
 
-    mailTransporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            if (typeof onError === 'function') {
-                onError(error);
-            }
-        }
-        else {
-            if (typeof onSuccess === 'function') {
-                onSuccess(info);
-            }
-        }
-    });
+    sendMail(mailOptions, onSuccess, onError);
+
+}
+
+var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuccess, onError) {
+
+    var events = week.events;
+    var eventsText = '';
+
+    for (var i = 0; i < events.length; i++) {
+        eventsText += events[i].homeTeam + ' vs ' + events[i].awayTeam + '\r\n';
+    }
+
+    var mailOptions = {
+        from: 'no-reply <no-reply@guessthescore.com>',
+        to: emailAddress,
+        subject: 'New week at ' + domainName.beautifulName,
+        text: 'Dear ' + username + ',' +
+            '\r\n' +
+            'We are glad to announce you that a new week (#' + week.number + ') is available on ' +
+            domainName.beautifulName + '.' +
+            '\r\n\r\n' +
+            'The matches we selected for this week are: ' +
+            '\r\n' + eventsText +
+            '\r\n\r\n' +
+            'The deadline since you can guess the scores is ' +
+            humanize.date('d.m.Y h:i A', week.endDate) + '.\r\n' +
+            'Don\'t miss it. Act now!'
+
+    };
+
+    sendMail(mailOptions, onSuccess, onError);
 
 }
 
 module.exports = {
     sendConfirmationLinkOnRegistration: sendConfirmationLinkOnRegistration,
     sendConfirmationLinkOnPasswordChange: sendConfirmationLinkOnPasswordChange,
-    sendConfirmationLinkOnForgotPassword: sendConfirmationLinkOnForgotPassword
+    sendConfirmationLinkOnForgotPassword: sendConfirmationLinkOnForgotPassword,
+    sendNotificationAboutNewWeek: sendNotificationAboutNewWeek
 }

@@ -24,7 +24,8 @@ var initFeed = {
         address: "/api/week",
         current: "/api/week/last",
         beforeLast: "/api/week/beforeLast",
-        getByNumber: '/api/week/getByNumber'
+        getByNumber: '/api/week/getByNumber',
+        mailNotificationOnNewWeek: "/api/week/mail-notification"
     },
     bet: {
         address: "/api/bet",

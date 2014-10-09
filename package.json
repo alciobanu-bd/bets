@@ -21,7 +21,8 @@
         "grunt-contrib-uglify": "*",
         "grunt-contrib-concat": "*",
         "load-grunt-tasks": "*",
-        "time-grunt": "*"
+        "time-grunt": "*",
+        "humanize": "*"
     },
     "devDependencies": {
         "bower": "*",

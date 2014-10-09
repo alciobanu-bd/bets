@@ -7,7 +7,7 @@ var mongoose = restful.mongoose;
 var methodOverride = require('method-override');
 var path = require('path');
 var fs = require('fs');
-var Settings = require('./config/Settings.js');
+var Settings = require('./config/Settings.js').dev;
 
 GLOBAL.app = express();
 
@@ -44,7 +44,7 @@ var filename = "server/config/secretString";
 var secretString = fs.readFileSync(filename, "utf8");
 app.set('jwtTokenSecret', secretString);
 
-mongoose.connect("mongodb://localhost/bets-dev");
+mongoose.connect(Settings.dbPath);
 
 db = mongoose.connection;
 db

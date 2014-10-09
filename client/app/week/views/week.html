@@ -4,6 +4,44 @@
         <h2 ng-if="WeekFactory.currentWeek.number > 0">Weeks and bets</h2>
         <h2 ng-if="WeekFactory.currentWeek.number == 0">Fun hasn't start yet. Please come back soon.</h2>
 
+
+        <span ng-if="WeekFactory.currentWeek.number > 0 && WeekFactory.currentWeek.available">
+            <div>
+                Send e-mails to all users of the site to notify them there's a new week that they can play.
+                They'll receive a list of all matches of the latest week.
+            </div>
+            <div style="margin-top: 1em">
+                <button type="button" class="btn btn-info" style="width: 40%" ng-show="!showConfirm"
+                        ng-disabled="mailNotificationStatus.inProgress" ng-click="showConfirm = true">
+                    Send mail notifications
+                </button>
+
+                <button type="button" class="btn btn-info" style="width: 20%" ng-show="showConfirm"
+                        ng-click="sendMailNotificationOnNewWeek(); showConfirm = false">
+                    Yes
+                </button>
+                <button type="button" class="btn btn-info" style="width: 20%" ng-show="showConfirm"
+                        ng-click="showConfirm = false">
+                    No
+                </button>
+            </div>
+
+            <div ng-show="mailNotificationStatus.success" class="top-buffer-0-5-em centered cornered-input success-div"
+                 style= "width: 40%;">
+                <span class="error-success-inner">
+                    {{mailNotificationStatus.message}}
+                </span>
+            </div>
+
+            <div ng-show="mailNotificationStatus.error" class="top-buffer-0-5-em centered cornered-input error-div"
+                 style= "width: 40%;">
+                <span class="error-success-inner">
+                    {{mailNotificationStatus.message}}
+                </span>
+            </div>
+        </span>
+
+
         <week week="WeekFactory.currentWeek" bets="WeekFactory.currentWeekBet"
               error-object="WeekFactory.error.currentBet" refresh-bets="refreshBets()"></week>
         <br />
