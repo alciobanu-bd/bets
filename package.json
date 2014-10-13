@@ -22,7 +22,8 @@
         "grunt-contrib-concat": "*",
         "load-grunt-tasks": "*",
         "time-grunt": "*",
-        "humanize": "*"
+        "humanize": "*",
+        "nodemailer-dkim": "*"
     },
     "devDependencies": {
         "bower": "*",

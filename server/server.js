@@ -61,9 +61,29 @@ var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 
 GLOBAL.mailTransporter = nodemailer.createTransport(smtpTransport({
-    host: 'smtp.rdslink.ro',
-    port: 25
+    host: Settings.mail.smtp.host,
+    port: Settings.mail.smtp.port
 }));
+
+mailTransporter.use('stream', require('nodemailer-dkim').signer({
+    domainName: Settings.domainName.dns,
+    keySelector: 'default',
+    privateKey: fs.readFileSync('server/config/privatekey.txt')
+}));
+
+var verifyKeys = require('nodemailer-dkim').verifyKeys;
+verifyKeys({
+    domainName: Settings.domainName.dns,
+    keySelector: 'default',
+    privateKey: fs.readFileSync('server/config/privatekey.txt')
+}, function(err, success){
+    if(err){
+        console.log('DKIM verification failed');
+        console.log(err);
+    }else if(success){
+        console.log('DKIM verification successful, keys match');
+    }
+});
 
 require('./route/TestRoute.js');
 require('./route/InitRoute.js');
