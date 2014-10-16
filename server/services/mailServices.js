@@ -28,7 +28,7 @@ var sendConfirmationLinkOnRegistration = function (username, emailAddress, code,
             '\r\n' +
             'We are pleased that you registered at our site. We hope you will have a pleasant staying.' +
             '\r\n\r\n' +
-            'In order to activate your account, use the next code after you login to GuessTheScore.com' +
+            'In order to activate your account, use the next code after you login ' +
             '\r\n' +
             code
     };
