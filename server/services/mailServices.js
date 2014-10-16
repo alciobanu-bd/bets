@@ -18,8 +18,9 @@ var sendMail = function (mailOptions, onSuccess, onError) {
 
 var sendConfirmationLinkOnRegistration = function (username, emailAddress, code, onSuccess, onError) {
     var mailOptions = {
-        from: 'no-reply <no-reply@guessthescore.com>',
+        from: 'CanIHazBets <contact@canihazbets.me>',
         to: emailAddress,
+        replyTo: 'contact@canihazbets.me',
         subject: 'Registration at ' + domainName.beautifulName,
         text: 'Welcome to ' + domainName.beautifulName + ', ' +
             '\r\n\r\n' +
@@ -38,8 +39,9 @@ var sendConfirmationLinkOnRegistration = function (username, emailAddress, code,
 
 var sendConfirmationLinkOnPasswordChange = function (username, emailAddress, code, onSuccess, onError) {
     var mailOptions = {
-        from: 'no-reply <no-reply@guessthescore.com>',
+        from: 'CanIHazBets <contact@canihazbets.me>',
         to: emailAddress,
+        replyTo: 'contact@canihazbets.me',
         subject: 'Changed password at ' + domainName.beautifulName,
         text: 'Dear ' + username + ',' +
             '\r\n' +
@@ -56,8 +58,9 @@ var sendConfirmationLinkOnPasswordChange = function (username, emailAddress, cod
 
 var sendConfirmationLinkOnForgotPassword = function (username, emailAddress, code, onSuccess, onError) {
     var mailOptions = {
-        from: 'no-reply <no-reply@guessthescore.com>',
+        from: 'CanIHazBets <contact@canihazbets.me>',
         to: emailAddress,
+        replyTo: 'contact@canihazbets.me',
         subject: 'Password reset at ' + domainName.beautifulName,
         text: 'Dear ' + username + ',' +
             '\r\n' +
@@ -86,8 +89,9 @@ var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuc
     }
 
     var mailOptions = {
-        from: 'no-reply <no-reply@guessthescore.com>',
+        from: 'CanIHazBets <contact@canihazbets.me>',
         to: emailAddress,
+        replyTo: 'contact@canihazbets.me',
         subject: 'New week at ' + domainName.beautifulName,
         text: 'Dear ' + username + ',' +
             '\r\n' +
