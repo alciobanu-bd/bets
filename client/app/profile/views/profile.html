@@ -72,6 +72,45 @@
                 </span>
         </div>
 
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 30%" class="input-group">
+                    <input type="checkbox" ng-model="userModel.isMailNotificationOn" id="notificationOption" />
+                    &nbsp;
+                    <label for="notificationOption">Notify me via e-mail about site news.</label>
+                </span>
+        </div>
+
+
+        <div style="margin-top: 1em">
+            <button type="button" class="btn btn-info" style="width: 30%" ng-show="!showConfirm"
+                    ng-disabled="status.inProgress" ng-click="showConfirm = true">
+                Save changes
+            </button>
+
+            <button type="button" class="btn btn-info" style="width: 15%" ng-show="showConfirm"
+                    ng-click="updateProfile(); showConfirm = false">
+                Yes
+            </button>
+            <button type="button" class="btn btn-info" style="width: 15%" ng-show="showConfirm"
+                    ng-click="showConfirm = false">
+                No
+            </button>
+        </div>
+
+        <div ng-show="status.success" class="top-buffer-0-5-em centered cornered-input success-div"
+             style= "width: 40%;">
+            <span class="error-success-inner">
+                {{status.message}}
+            </span>
+        </div>
+
+        <div ng-show="status.error" class="top-buffer-0-5-em centered cornered-input error-div"
+             style= "width: 40%;">
+            <span class="error-success-inner">
+                {{status.message}}
+            </span>
+        </div>
+
     </div>
 
 

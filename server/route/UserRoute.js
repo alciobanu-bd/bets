@@ -144,6 +144,7 @@ function (req, res, next) {
                             req.body.registrationIp = req.connection.remoteAddress;
                             req.body.serverSalt = bcrypt.genSaltSync();
                             req.body.active = false;
+                            req.body.isMailNotificationOn = true;
 
                             bcrypt.hash(req.body.password, req.body.serverSalt, null, function (err, hash) {
                                 if (err) {
@@ -346,6 +347,12 @@ function(req, res, next) {
                         }).end();
                     }
                     else {
+
+                        delete user['password'];
+                        delete user['salt'];
+                        delete user['serverSalt'];
+                        delete user['registrationIp'];
+
                         res.status(200).json(user).end();
                     }
                 });

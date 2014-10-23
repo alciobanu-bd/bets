@@ -7,7 +7,7 @@ var mongoose = restful.mongoose;
 var methodOverride = require('method-override');
 var path = require('path');
 var fs = require('fs');
-var Settings = require('./config/Settings.js').prod;
+var Settings = require('./config/Settings.js').dev;
 
 GLOBAL.app = express();
 

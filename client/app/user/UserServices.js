@@ -58,7 +58,8 @@ function () {
             points: user.points,
             registerDate: user.registerDate,
             role: user.role,
-            username: user.username
+            username: user.username,
+            isMailNotificationOn: user.isMailNotificationOn
         };
 
     }
