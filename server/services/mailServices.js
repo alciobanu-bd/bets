@@ -99,7 +99,7 @@ var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuc
             domainName.beautifulName + '.' +
             '\r\n\r\n' +
             'The matches we selected for this week are: ' +
-            '\r\n' + eventsText +
+            '\r\n\r\n' + eventsText +
             '\r\n\r\n' +
             'The deadline since you can guess the scores is ' +
             humanize.date('d.m.Y h:i A', week.endDate) + '.\r\n' +
