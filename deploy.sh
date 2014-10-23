@@ -6,6 +6,7 @@ scp . root@canihazbets.me:/root/bets;
 scp ./client/. root@canihazbets.me:/root/bets;
 scp -r ./client/dist root@canihazbets.me:/root/bets/client;
 scp -r ./client/images root@canihazbets.me:/root/bets/client;
+scp -r ./client/app root@canihazbets.me:/root/bets/client;
 scp -r ./client/style root@canihazbets.me:/root/bets/client;
 scp ./client/index.html root@canihazbets.me:/root/bets/client;
 scp -r ./server root@canihazbets.me:/root/bets;
