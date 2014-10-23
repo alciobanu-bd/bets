@@ -128,6 +128,10 @@ function (req, res) {
 
                                 var user = users[i];
 
+                                if (!user.isMailNotificationOn) {
+                                    continue;
+                                }
+
                                 mailServices.sendNotificationAboutNewWeek (
                                     weeks[0], user.username, user.email, function () {
                                     // on success
