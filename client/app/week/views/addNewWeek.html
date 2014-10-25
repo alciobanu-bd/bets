@@ -39,13 +39,13 @@
             </div>
 
             <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in matches track by $index">
-                    <span style="width: 30%" class="input-group">
+                    <span style="width: 25%" class="input-group">
                         <input type="text" ng-model="match.homeTeam" class="form-control cornered-input" placeholder="Home team" />
                     </span>
-                    <span style="width: 10%">
+                    <span style="width: 5%">
                         vs
                     </span>
-                    <span style="width: 30%" class="input-group">
+                    <span style="width: 25%" class="input-group">
                         <input type="text" ng-model="match.awayTeam" class="form-control cornered-input" placeholder="Away team" />
                     </span>
                     <span style="width: 10%" class="input-group">
@@ -53,6 +53,9 @@
                     </span>
                     <span style="width: 8%" class="input-group">
                         <input ng-model="match.startTime" class="form-control cornered-input" placeholder="HH:MM" />
+                    </span>
+                    <span style="width: 25%" class="input-group">
+                        <input type="text" ng-model="match.competition" class="form-control cornered-input" placeholder="Competition" />
                     </span>
             </div>
 

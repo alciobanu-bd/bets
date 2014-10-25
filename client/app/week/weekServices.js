@@ -54,7 +54,7 @@ function (InitUrls, CallUrlService) {
     thisFactory.fetchWeekByNumber = function (callWhenDone, weekNo) {
         InitUrls.then(
             function (data) {
-                CallUrlService.get({uri: data.week.getByNumber}, {number: weekNo},
+                CallUrlService.get({uri: data.week.getByNumber, number: weekNo},
                     function (data) {
                         data.events = _.map(data.events, function (event) {
                             if (event.awayScore || event.awayScore == 0) {
@@ -81,7 +81,7 @@ function (InitUrls, CallUrlService) {
                             thisFactory.error.weeksByNumberError[weekNo] = {};
                         }
                         thisFactory.error.weeksByNumberError[weekNo].active = true;
-                        thisFactory.error.weeksByNumberError[weekNo].message = "An error occurred while trying to fetch a week.";
+                        thisFactory.error.weeksByNumberError[weekNo].message = "An error occurred while trying to fetch week #" + weekNo;
                     }
                 );
             }

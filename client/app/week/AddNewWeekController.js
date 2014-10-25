@@ -24,6 +24,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
             $scope.matches.push({
                 homeTeam: '',
                 awayTeam: '',
+                competition: '',
                 startDate: null,
                 startTime: '',
                 index: i
