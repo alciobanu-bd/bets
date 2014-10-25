@@ -37,6 +37,7 @@ function ($scope, HistoryFactory, RoutesFactory) {
                             away: bet ? bet.awayScore : ''
                         }
                     },
+                    competition: weekEvent.competition,
                     points: bet ? bet.points : ''
                 });
             }

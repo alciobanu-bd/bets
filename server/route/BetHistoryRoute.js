@@ -70,6 +70,7 @@ function (req, res, next) {
                             weekEndDate: week.endDate,
                             betScores: bet.scores,
                             weekEvents: week.events,
+                            competition: week.competition,
                             available: new Date(week.endDate) > new Date()
                         };
 

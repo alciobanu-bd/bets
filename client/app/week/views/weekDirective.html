@@ -38,11 +38,16 @@
                            ng-change="match.homeScore = validateScore(match.homeScore)"
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
-                <span ng-show="!week.ended || updateScoreMode" style="width: 25%" class="input-group">
-                    {{match.startDate | date: 'MMM d, y h:mm a'}}
-                </span>
-                <span ng-show="week.ended && !updateScoreMode" style="width: 25%" class="input-group">
-                    {{match.realHomeScore}} - {{match.realAwayScore}}
+                <span style="width: 25%;" class="input-group">
+                    <span ng-show="!week.ended || updateScoreMode" style="display: block">
+                        {{match.startDate | date: 'MMM d, y h:mm a'}}
+                    </span>
+                    <span ng-show="week.ended && !updateScoreMode" style="display: block">
+                        {{match.realHomeScore}} - {{match.realAwayScore}}
+                    </span>
+                    <span style="display: block">
+                        {{match.competition}}
+                    </span>
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.awayScore"

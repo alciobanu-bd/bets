@@ -240,17 +240,20 @@ function (req, res, next) {
 
 })
 
-router.get('/week/getByNumber/:number',
+/**
+ * Weeknumber given as url query param (@number)
+ */
+router.get('/week/getByNumber',
 function (req, res, next) {
 
     Week.findOne(
-        {number: req.params.number},
+        {number: req.query.number},
         function (err, week) {
 
             if (err) {
                 res.status(500).json({
                     message: "Error fetching week with number +"
-                        + req.params.number +
+                        + req.query.number +
                         "."
                 }).end();
             }
