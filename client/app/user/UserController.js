@@ -35,6 +35,7 @@ Settings) {
         if (parseInt($scope.inputs.keepMeLoggedIn.days) > Settings.login.maxDaysOfKeepMeLoggedIn) {
             $scope.inputs.keepMeLoggedIn.days = Settings.login.maxDaysOfKeepMeLoggedIn;
         }
+        $scope.keepMeLoggedIn.active = true;
     }
 
     $scope.error = {
