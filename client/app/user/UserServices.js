@@ -147,6 +147,7 @@ KeepMeLoggedInStorage) {
     infoService.logout = function () {
         UserInformation.isLogged = false;
         LoginTokenFactory.deleteToken();
+        KeepMeLoggedInStorage.setDays(null);
     }
 
     infoService.extendTokenExpiration = function () {
