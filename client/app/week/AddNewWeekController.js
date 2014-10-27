@@ -84,8 +84,8 @@ function ($scope, Settings, CallUrlService, InitUrls) {
 
     var getMatches = function () {
         return _.map($scope.matches, function (match) {
-            var newMatch = {};
-            angular.extend(newMatch, match);
+            var newMatch = JSON.parse(JSON.stringify(match));
+            newMatch.startDate = new Date(newMatch.startDate);
             newMatch.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
             newMatch.index = parseInt(match.index);
             delete newMatch.startTime;
