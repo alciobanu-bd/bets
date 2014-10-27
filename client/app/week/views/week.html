@@ -5,7 +5,7 @@
         <h2 ng-if="WeekFactory.currentWeek.number == 0">Fun hasn't start yet. Please come back soon.</h2>
 
         <div class="top-buffer-1-em">
-            <span ng-if="WeekFactory.currentWeek.number > 2">
+            <span>
                 <div>
                     Search week by number
                     <span class="form-inline">
@@ -65,16 +65,17 @@
 
         <div class="top-buffer-1-em">
             <span ng-if="!searchOn">
-                <week week="WeekFactory.currentWeek" bets="WeekFactory.currentWeekBet"
+                <week week="WeekFactory.currentWeek" bets="WeekFactory.currentWeekBet" reload="loadLastTwoWeeks()"
                       error-object="WeekFactory.error.currentBet" refresh-bets="refreshBets()"></week>
                 <br />
-                <week week="WeekFactory.beforeCurrentWeek" bets="WeekFactory.beforeCurrentWeekBet"
+                <week week="WeekFactory.beforeCurrentWeek" bets="WeekFactory.beforeCurrentWeekBet" reload="loadLastTwoWeeks()"
                       error-object="WeekFactory.error.beforeCurrentBet" refresh-bets="refreshBets()"></week>
             </span>
             <span ng-if="searchOn">
                 <week week="WeekFactory.weeksByNumber[searchedWeek.number]" bets="WeekFactory.betsByWeekNumber[searchedWeek.number]"
                       error-object="WeekFactory.error.betsByWeekNumberError[searchedWeek.number]"
-                      refresh-bets="refreshSearchedWeek()"></week>
+                      reload="loadSpecificWeekByNumber(weekNumber)"
+                      refresh-bets="refreshSearchedWeek()" searched-week-number="searchedWeek.number"></week>
             </span>
         </div>
 

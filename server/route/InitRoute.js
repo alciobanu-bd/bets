@@ -22,6 +22,7 @@ var initFeed = {
     },
     week: {
         address: "/api/week",
+        edit: "/api/week/update",
         current: "/api/week/last",
         beforeLast: "/api/week/beforeLast",
         getByNumber: '/api/week/getByNumber',

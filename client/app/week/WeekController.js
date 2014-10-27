@@ -20,6 +20,13 @@ function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlS
 
     $scope.loadLastTwoWeeks();
 
+    $scope.loadSpecificWeekByNumber = function (weekNo) {
+        WeekFactory.resetWeekFactory();
+        WeekFactory.fetchWeekByNumber(function () {
+            WeekFactory.fetchBetForWeekByNumber({number: weekNo});
+        }, weekNo);
+    }
+
     $scope.searchOn = false;
     $scope.searchedWeek = {
         model: '',
@@ -28,16 +35,16 @@ function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlS
 
     $scope.searchWeek = function () {
 
-        $scope.searchOn = true;
-
         var weekNo = parseInt($scope.searchedWeek.model);
         $scope.searchedWeek.number = weekNo;
         if (isNaN(weekNo)) {
             return;
         }
-        WeekFactory.fetchWeekByNumber(function () {
-            WeekFactory.fetchBetForWeekByNumber({number: weekNo});
-        }, weekNo);
+
+        $scope.searchOn = true;
+
+        $scope.loadSpecificWeekByNumber(weekNo);
+
     }
 
     $scope.searchOff = function () {

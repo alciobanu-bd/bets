@@ -3,7 +3,13 @@
 
     <div class="panel-heading">
         <div class="row">
-            <h2 class="panel-title">Week {{week.number}}</h2>
+            <h2 class="panel-title">
+            Week {{week.number}}
+            &nbsp;
+            <span ng-click="openEditWeekModal()" style="cursor: pointer; color: #73d1ff; text-decoration: underline; font-size: 90%">
+                Edit
+            </span>
+            </h2>
         </div>
         <div class="row" ng-show="week.available">
             {{week.events.length}} total matches.

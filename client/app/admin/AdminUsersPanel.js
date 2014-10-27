@@ -63,7 +63,6 @@ function ($scope, InitUrls, CallUrlService, RolesFactory, $modal) {
         });
 
         modalInstance.result.then(function (resolvedUser) {
-            console.log(resolvedUser)
             for (var i in resolvedUser) {
                 user[i] = resolvedUser[i];
             }
