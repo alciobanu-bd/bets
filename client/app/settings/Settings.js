@@ -15,6 +15,9 @@ function () {
         },
         home: {
             carouselInterval: 5000
+        },
+        login: {
+            maxDaysOfKeepMeLoggedIn: 20
         }
 
     };

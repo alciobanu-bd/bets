@@ -226,13 +226,6 @@ weekModule
                 return true;
             }
 
-            var dateAfterToday = _.every($scope.week.events, function (match) {
-                var startDate = new Date(match.startDate);
-                var today00 = new Date();
-                today00.setHours(0, 0);
-                return startDate > today00;
-            });
-
             var correctTime = _.every($scope.week.events, function (match) {
                 var timeRegex = RegExp(/[0-9][0-9]?:[0-9][0-9]/);
                 if (!timeRegex.test(match.startTime)) {
@@ -242,7 +235,7 @@ weekModule
                 return splitted[0] >= 0 && splitted[0] <= 24 && splitted[1] >= 0 && splitted[1] <= 59;
             });
 
-            return !dateAfterToday || !correctTime;
+            return !correctTime;
         }
 
         $scope.removeMatch = function (index) {
