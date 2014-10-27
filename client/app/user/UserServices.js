@@ -71,7 +71,9 @@ function () {
 
 .factory('UserInformationCalls', [
 'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls', 'CheckActivationStatus',
-function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls, CheckActivationStatus) {
+'KeepMeLoggedInStorage',
+function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls, CheckActivationStatus,
+KeepMeLoggedInStorage) {
 
     var infoService = {};
 
@@ -149,7 +151,8 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
 
     infoService.extendTokenExpiration = function () {
         InitUrls.then(function (urls) {
-            CallUrlService.get({uri: urls.auth.extendToken},
+            CallUrlService.post({uri: urls.auth.extendToken},
+                {days: KeepMeLoggedInStorage.getDays()},
                 function (data) {
                     UserInformation.isLogged = true;
                     LoginTokenFactory.setToken({
@@ -185,6 +188,36 @@ function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls
     checkLoginToken();
 
     return infoService;
+
+}
+])
+
+.factory('KeepMeLoggedInStorage', [
+function () {
+
+    var keepMeLoggedObject = localStorage.getItem('KeepMeLoggedIn');
+    if (keepMeLoggedObject == null) {
+        keepMeLoggedObject = {
+            days: null
+        };
+    }
+    else {
+        keepMeLoggedObject = JSON.parse(keepMeLoggedObject);
+    }
+
+    var setDays = function (days) {
+        keepMeLoggedObject.days = days;
+        localStorage.setItem('KeepMeLoggedIn', JSON.stringify(keepMeLoggedObject));
+    }
+
+    var getDays = function () {
+        return keepMeLoggedObject.days;
+    }
+
+    return {
+        setDays: setDays,
+        getDays: getDays
+    };
 
 }
 ])

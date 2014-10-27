@@ -4,9 +4,9 @@ userModule
 .controller(
 'UserController', [
 '$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'RoutesFactory', 'CheckActivationStatus',
-'Settings',
+'Settings', 'KeepMeLoggedInStorage',
 function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory, CheckActivationStatus,
-Settings) {
+Settings, KeepMeLoggedInStorage) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
@@ -35,6 +35,7 @@ Settings) {
         if (parseInt($scope.inputs.keepMeLoggedIn.days) > Settings.login.maxDaysOfKeepMeLoggedIn) {
             $scope.inputs.keepMeLoggedIn.days = Settings.login.maxDaysOfKeepMeLoggedIn;
         }
+        $scope.inputs.keepMeLoggedIn.active = true;
     }
 
     $scope.error = {
@@ -59,6 +60,11 @@ Settings) {
             }));
             credentials.keepMeLoggedIn = $scope.inputs.keepMeLoggedIn.active;
             credentials.keepMeLoggedFor = $scope.inputs.keepMeLoggedIn.days;
+
+            if ($scope.inputs.keepMeLoggedIn.active) {
+                KeepMeLoggedInStorage.setDays($scope.inputs.keepMeLoggedIn.days);
+            }
+
             var loginPromise = UserInformationCalls.login(data, credentials);
 
             loginPromise.then(
