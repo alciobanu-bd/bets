@@ -12,7 +12,6 @@ weekModule
             bets: '=',
             errorObject: '=',
             refreshBets: '&',
-            realScoreEvents: '=',
             reload: '&',
             searchedWeekNumber: '='
         },
@@ -63,8 +62,7 @@ weekModule
             var getEvents = function () {
 
                 var events = _.map(scope.week.events, function (event) {
-                    var newEvent = {};
-                    angular.extend(newEvent, event);
+                    var newEvent = JSON.parse(JSON.stringify(event));
                     delete newEvent.homeTeam;
                     delete newEvent.awayTeam;
                     delete newEvent.startDate;
@@ -210,7 +208,17 @@ weekModule
             var date = new Date(event.startDate);
             event.startTime = ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2);
             event.dateOpened = false;
+            if (event.realHomeScore || event.realHomeScore == 0) {
+                event.homeScore = event.realHomeScore;
+                delete event.realHomeScore;
+            }
+            if (event.realAwayScore || event.realAwayScore == 0) {
+                event.awayScore = event.realAwayScore;
+                delete event.realAwayScore;
+            }
         }
+
+        $scope.resetScoreCheckbox = false;
 
         $scope.openDate = function (match, $event) {
             $event.preventDefault();
@@ -264,6 +272,7 @@ weekModule
             return _.map($scope.week.events, function (match) {
                 var newMatch = JSON.parse(JSON.stringify(match));
                 newMatch.startDate = new Date(newMatch.startDate);
+                delete newMatch.dateOpened;
                 newMatch.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
                 delete newMatch.startTime;
                 return newMatch;
@@ -283,6 +292,18 @@ weekModule
 
             setIndexesForEvents(updatedWeek);
             $scope.errorSaving = false;
+
+            if ($scope.resetScoreCheckbox) {
+                for (var i = 0; i < updatedWeek.events.length; i++) {
+                    var event = updatedWeek.events[i];
+                    if (event.homeScore || event.homeScore == 0) {
+                        delete event.homeScore;
+                    }
+                    if (event.awayScore || event.awayScore == 0) {
+                        delete event.awayScore;
+                    }
+                }
+            }
 
             InitUrls.then(function (urls) {
                 CallUrlService.put({uri: urls.week.edit, id: $scope.week._id},
