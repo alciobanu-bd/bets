@@ -98,15 +98,21 @@ router.post('/login', function(req, res) {
 
 });
 
-router.get('/extend_expiration_token',
+router.post('/extend_expiration_token',
 jwtauth([tokenChecks.hasRole('ROLE_USER')], {skipActivationCheck: true}),
 function (req, res, next) {
     // if the user hits this middleware, it means his/her token is active
     // so the token expiration can be changed
 
     var user = res.data.local.user;
+    var tok;
 
-    var tok = getToken(user._id);
+    if (req.body.days) {
+        tok = getToken(user._id, [req.body.days, 'days']);
+    }
+    else {
+        tok = getToken(user._id, [4, 'hours']);
+    }
 
     user = user.toObject();
     delete user['password'];
