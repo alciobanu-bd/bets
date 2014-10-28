@@ -120,7 +120,7 @@ function (InitUrls, CallUrlService) {
         );
     }
 
-    thisFactory.fetchBetForWeekByNumber = function (weekObject) {
+    thisFactory.fetchBetForWeekByNumber = function (weekObject, onSuccess, onError) {
         if (weekObject.number < 1) {
             return;
         }
@@ -133,6 +133,11 @@ function (InitUrls, CallUrlService) {
                         }
                         thisFactory.error.betsByWeekNumberError[weekObject.number].active = false;
                         thisFactory.betsByWeekNumber[weekObject.number] = data;
+
+                        if (typeof onSuccess === 'function') {
+                            onSuccess();
+                        }
+
                     },
                     function (response) {
                         if (!angular.isDefined(thisFactory.error.betsByWeekNumberError[weekObject.number])) {
@@ -145,6 +150,11 @@ function (InitUrls, CallUrlService) {
                         else {
                             thisFactory.error.betsByWeekNumberError[weekObject.number].message = "An error occurred while trying to fetch your bets.";
                         }
+
+                        if (typeof onError === 'function') {
+                            onError();
+                        }
+
                     }
                 );
             }

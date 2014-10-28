@@ -2,8 +2,8 @@
 weekModule
 
 .controller('WeekController', [
-'$scope', 'WeekFactory', 'RolesFactory', 'UserInformation', 'InitUrls', 'CallUrlService',
-function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlService) {
+'$scope', 'WeekFactory', 'RolesFactory', 'UserInformation', 'InitUrls', 'CallUrlService', '$timeout',
+function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlService, $timeout) {
 
     $scope.WeekFactory = WeekFactory;
     $scope.parseInt = parseInt;
@@ -23,7 +23,13 @@ function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlS
     $scope.loadSpecificWeekByNumber = function (weekNo) {
         WeekFactory.resetWeekFactory();
         WeekFactory.fetchWeekByNumber(function () {
-            WeekFactory.fetchBetForWeekByNumber({number: weekNo});
+            WeekFactory.fetchBetForWeekByNumber({number: weekNo},
+            function () {
+                $scope.searchOn = true;
+            },
+            function () {
+                $scope.searchOn = true;
+            });
         }, weekNo);
     }
 
@@ -40,8 +46,6 @@ function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlS
         if (isNaN(weekNo)) {
             return;
         }
-
-        $scope.searchOn = true;
 
         $scope.loadSpecificWeekByNumber(weekNo);
 

@@ -15,7 +15,7 @@
 <body style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode';">
 
     <span ng-app="bets">
-        <span ng-controller="MainController">
+        <span ng-controller="MainController" ng-cloak>
 
             <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
             <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
