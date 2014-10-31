@@ -25,7 +25,15 @@
             </span>
         </div>
         <div class="row" style="color: #03b2ff" ng-show="week.available">
-            Deadline: {{week.endDate | date:'MMM d, y h:mm a'}}
+            <span ng-if="isToday()">
+                Deadline: Today, {{week.endDate | date: 'h:mm a'}}
+            </span>
+            <span ng-if="isTomorrow()">
+                Deadline: Tomorrow, {{week.endDate | date: 'h:mm a'}}
+            </span>
+            <span ng-if="!isToday() && !isTomorrow()">
+                Deadline: {{week.endDate | date:'MMM d, y h:mm a'}}
+            </span>
         </div>
         <div class="row" ng-show="!week.available">
             <span style="color: #ff0026">

@@ -28,6 +28,29 @@ weekModule
 
             scope.resetBetManager();
 
+            var sameDates = function (date1, date2) {
+                return date1.getDate() == date2.getDate()
+                    && date1.getMonth() == date2.getMonth()
+                    && date1.getYear() == date2.getYear();
+            }
+
+            scope.isToday = function () {
+                if (!scope.week) {
+                    return false;
+                }
+                var today = new Date();
+                return sameDates(today, new Date(scope.week.endDate));
+            }
+
+            scope.isTomorrow = function () {
+                if (!scope.week) {
+                    return false;
+                }
+                var tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                return sameDates(tomorrow, new Date(scope.week.endDate));
+            }
+
             var updateBetsForThisWeek = function () {
                 var eventScore = function (event) {
                     for (var i in scope.bets.scores) {
@@ -170,6 +193,20 @@ weekModule
                 });
             }
 
+            var prepareWeekBeforeOpeningEditModal = function (week) {
+                var preparedWeek = JSON.parse(JSON.stringify(week));
+                for (var i = 0; i < preparedWeek.events.length; i++) {
+                    var event = preparedWeek.events[i];
+                    if (event.homeScore || event.homeScore == 0) {
+                        delete event.homeScore;
+                    }
+                    if (event.awayScore || event.awayScore == 0) {
+                        delete event.awayScore;
+                    }
+                }
+                return preaparedWeek;
+            }
+
             scope.openEditWeekModal = function () {
                 var modalInstance = $modal.open({
                     templateUrl: 'app/week/views/weekEdit.html',
@@ -177,7 +214,7 @@ weekModule
                     size: 'lg',
                     resolve: {
                         week: function () {
-                            return scope.week;
+                            return prepareWeekBeforeOpeningEditModal(scope.week);
                         }
                     }
                 });
