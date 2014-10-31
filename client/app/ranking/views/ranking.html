@@ -34,7 +34,7 @@
                 </div>
             </li>
 
-            <li ng-repeat="user in RankingFactory.ranking" class="list-group-item half-bg-opacity">
+            <li ng-repeat="user in RankingFactory.ranking | limitTo: limitUsersTo track by user._id" class="list-group-item half-bg-opacity">
                 <div class="row" style="cursor: pointer" ng-click="openModal(user)">
                     <span class="col-xs-1"><span class="badge" style="background-color: #60a2ff !important;">{{user.place}}</span></span>
                     <span class="col-xs-3">{{user.username}}</span>
@@ -43,6 +43,12 @@
                     <span class="col-xs-4">{{user.registerDate | date: 'fullDate'}}</span>
                 </div>
             </li>
+            <div class="top-buffer-1-em centered" ng-show="limitUsersTo < RankingFactory.ranking.length">
+                <span ng-click="loadMore()" style="cursor: pointer; color: #73d1ff; text-decoration: underline;">
+                    Load more
+                </span>
+            </div>
+
         </ul>
 
     </div>

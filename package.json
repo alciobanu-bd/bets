@@ -4,7 +4,7 @@
     "description": "Bets app based on MEAN stack",
     "dependencies": {
         "express": "~4.0.0",
-        "mongoose": "*",
+        "mongoose": "~3.8.18",
         "body-parser": "*",
         "jwt-simple": "*",
         "node-restful": "*",
