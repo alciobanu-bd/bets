@@ -1,13 +1,18 @@
 
 rankingModule
 .controller('RankingController', [
-'$scope', 'RankingFactory', '$modal',
-function ($scope, RankingFactory, $modal) {
+'$scope', 'RankingFactory', '$modal', 'Settings',
+function ($scope, RankingFactory, $modal, Settings) {
 
     $scope.RankingFactory = RankingFactory;
     RankingFactory.fetchRanking();
 
     $scope.searchedUser = "";
+    $scope.limitUsersTo = Settings.ranking.limitUsers;
+
+    $scope.loadMore = function () {
+        $scope.limitUsersTo += Settings.ranking.limitUsers;
+    }
 
     var getUserByUsername = function (username) {
         for (var i = 0; i < RankingFactory.ranking.length; i++) {

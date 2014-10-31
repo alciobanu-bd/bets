@@ -18,6 +18,9 @@ function () {
         },
         login: {
             maxDaysOfKeepMeLoggedIn: 20
+        },
+        ranking: {
+            limitUsers: 15
         }
 
     };

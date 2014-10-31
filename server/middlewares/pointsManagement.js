@@ -220,6 +220,7 @@ var updateUsersPlace = function (req, res, next) {
 
                 user.save(function (err) {
                     if (err) {
+                        console.log(err)
                         errorUsers++;
                     }
                     else {
