@@ -204,7 +204,7 @@ weekModule
                         delete event.awayScore;
                     }
                 }
-                return preaparedWeek;
+                return preparedWeek;
             }
 
             scope.openEditWeekModal = function () {

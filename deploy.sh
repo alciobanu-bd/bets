@@ -2,7 +2,6 @@
 npm install;
 bower install;
 grunt cat-min;
-scp . root@canihazbets.me:/root/bets;
 scp -r ./client/images root@canihazbets.me:/root/bets/client;
 scp -r ./client/app root@canihazbets.me:/root/bets/client;
 scp -r ./client/style root@canihazbets.me:/root/bets/client;
