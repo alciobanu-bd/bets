@@ -122,7 +122,7 @@ function (req, res, next) {
         else {
 
             // check if user who's trying to save bet is the one who posted the bet
-            if (res.data.local.user._id != bet.userId) {
+            if (res.data.local.user._id.toString() != bet.userId.toString()) {
                 res.status(500).json({
                     message: "You are not permitted to save another user's bet."
                 }).end();

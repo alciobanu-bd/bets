@@ -17,7 +17,8 @@ var UserSchema = mongoose.Schema({
     registrationIp: {type:'string', required: false},
     serverSalt: {type:'string', required: false},
     active: {type: Boolean, required: false},
-    disabled: {type: Boolean, required: false}
+    disabled: {type: Boolean, required: false},
+    isMailNotificationOn: {type: Boolean, required: false}
 });
 
 UserSchema.path('username').validate(function (v) {

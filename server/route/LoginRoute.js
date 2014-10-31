@@ -18,8 +18,8 @@ var LOG_LOGIN_FILE_NAME = 'logs/login_log.txt';
 var router = express.Router();
 
 // login
-var getToken = function (userId) {
-    var expires = moment().add(4, 'hours').valueOf();
+var getToken = function (userId, expireTime) {
+    var expires = moment().add(expireTime[0], expireTime[1]).valueOf();
     var token = jwt.encode({
         iss: userId,
         exp: expires
@@ -61,7 +61,14 @@ router.post('/login', function(req, res) {
                     if (hash == users[0].password) {
                         // user logged in successfully
 
-                        var tok = getToken(users[0]._id);
+                        var tok;
+
+                        if (req.body.keepMeLoggedIn && req.body.keepMeLoggedFor) {
+                            tok = getToken(users[0]._id, [req.body.keepMeLoggedFor, 'days']);
+                        }
+                        else {
+                            tok = getToken(users[0]._id, [4, 'hours']);
+                        }
 
                         users[0] = users[0].toObject();
                         delete users[0]['password'];
@@ -91,15 +98,21 @@ router.post('/login', function(req, res) {
 
 });
 
-router.get('/extend_expiration_token',
+router.post('/extend_expiration_token',
 jwtauth([tokenChecks.hasRole('ROLE_USER')], {skipActivationCheck: true}),
 function (req, res, next) {
     // if the user hits this middleware, it means his/her token is active
     // so the token expiration can be changed
 
     var user = res.data.local.user;
+    var tok;
 
-    var tok = getToken(user._id);
+    if (req.body.days) {
+        tok = getToken(user._id, [req.body.days, 'days']);
+    }
+    else {
+        tok = getToken(user._id, [4, 'hours']);
+    }
 
     user = user.toObject();
     delete user['password'];

@@ -16,7 +16,7 @@ function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
         success: false,
         error: false,
         message: ''
-    }
+    };
 
     var params = RoutesFactory.getParams();
     if (params[1]) {

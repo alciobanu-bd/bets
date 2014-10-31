@@ -15,7 +15,18 @@
             </div>
         </div>
         <div style="margin-top: 1em">
-            <button type="button" class="btn btn-info" style="width: 40%" ng-click="login()">
+            <div style="margin: 0.5em">
+                <input type="checkbox" id="keepMeLoggedInCheckbox" ng-model="inputs.keepMeLoggedIn.active" />
+                <label for="keepMeLoggedInCheckbox" style="font-style: normal; font-weight: normal">
+                    Keep me logged in for
+                    <span class="form-inline">
+                        <input type="number" class="form-control cornered-input" ng-model="inputs.keepMeLoggedIn.days"
+                                style="width: 23%" ng-change="validateNumberOfKeepMeLoggedDays()" />
+                    </span>
+                    days.
+                </label>
+            </div>
+            <button type="button" class="btn btn-info" style="width: 40%" ng-click="login()" ng-disabled="loginInProgress">
                 Come on in
             </button>
         </div>

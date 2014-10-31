@@ -7,7 +7,7 @@ module.exports = {
             dns: "canihazbets.me"
         },
         port: 80,
-        dbPath: "mongodb://localhost/bets-dev",
+        dbPath: "mongodb://localhost/bets",
         mail: {
             smtp: {
                 host: "smtp.rdslink.ro",

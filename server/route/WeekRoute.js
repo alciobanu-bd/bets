@@ -128,6 +128,10 @@ function (req, res) {
 
                                 var user = users[i];
 
+                                if (!user.isMailNotificationOn) {
+                                    continue;
+                                }
+
                                 mailServices.sendNotificationAboutNewWeek (
                                     weeks[0], user.username, user.email, function () {
                                     // on success
@@ -194,10 +198,47 @@ function (req, res, next) {
         if (err) {
             res.status(500).json({
                 message: "Week wasn't saved to database."
-            });
+            }).end();
         }
         else {
             res.status(201).json(week).end();
+        }
+    });
+
+});
+
+router.put('/week/update/:id([0-9a-fA-F]{24})',
+jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
+function (req, res, next) {
+
+    if (req.body.events.length < 1) {
+        res.status(500).json({
+            message: "There are no events in this week."
+        }).end();
+        return;
+    }
+
+    var week = {};
+
+    var eventWithMinTime = _.min(req.body.events, function (event) {
+        return new Date(event.startDate).getTime();
+    });
+
+    var endDate = new Date(eventWithMinTime.startDate);
+    week.endDate = endDate.setHours(endDate.getHours() - 1);
+
+    for (var i in req.body) {
+        week[i] = req.body[i];
+    }
+
+    Week.update({_id: req.params.id}, {$set: week}, function (err) {
+        if (err) {
+            res.status(500).json({
+                message: "Week wasn't saved to database."
+            });
+        }
+        else {
+            res.status(200).json(week).end();
         }
     });
 
@@ -236,17 +277,20 @@ function (req, res, next) {
 
 })
 
-router.get('/week/getByNumber/:number',
+/**
+ * Weeknumber given as url query param (@number)
+ */
+router.get('/week/getByNumber',
 function (req, res, next) {
 
     Week.findOne(
-        {number: req.params.number},
+        {number: req.query.number},
         function (err, week) {
 
             if (err) {
                 res.status(500).json({
                     message: "Error fetching week with number +"
-                        + req.params.number +
+                        + req.query.number +
                         "."
                 }).end();
             }

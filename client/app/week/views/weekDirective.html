@@ -3,7 +3,13 @@
 
     <div class="panel-heading">
         <div class="row">
-            <h2 class="panel-title">Week {{week.number}}</h2>
+            <h2 class="panel-title">
+            Week {{week.number}}
+            &nbsp;
+            <span ng-click="openEditWeekModal()" style="cursor: pointer; color: #73d1ff; text-decoration: underline; font-size: 90%">
+                Edit
+            </span>
+            </h2>
         </div>
         <div class="row" ng-show="week.available">
             {{week.events.length}} total matches.
@@ -38,11 +44,16 @@
                            ng-change="match.homeScore = validateScore(match.homeScore)"
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
-                <span ng-show="!week.ended || updateScoreMode" style="width: 25%" class="input-group">
-                    {{match.startDate | date: 'MMM d, y h:mm a'}}
-                </span>
-                <span ng-show="week.ended && !updateScoreMode" style="width: 25%" class="input-group">
-                    {{match.realHomeScore}} - {{match.realAwayScore}}
+                <span style="width: 25%;" class="input-group">
+                    <span ng-show="!week.ended || updateScoreMode" style="display: block">
+                        {{match.startDate | date: 'MMM d, y h:mm a'}}
+                    </span>
+                    <span ng-show="week.ended && !updateScoreMode" style="display: block">
+                        {{match.realHomeScore}} - {{match.realAwayScore}}
+                    </span>
+                    <span style="display: block">
+                        {{match.competition}}
+                    </span>
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.awayScore"

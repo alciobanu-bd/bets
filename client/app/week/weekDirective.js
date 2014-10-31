@@ -2,8 +2,8 @@
 weekModule
 
 .directive('week', [
-    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation',
-    function(BetService, WeekFactory, RolesFactory, UserInformation) {
+    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation', '$modal',
+    function(BetService, WeekFactory, RolesFactory, UserInformation, $modal) {
     return {
         restrict: 'E',
         replace: true,
@@ -12,7 +12,8 @@ weekModule
             bets: '=',
             errorObject: '=',
             refreshBets: '&',
-            realScoreEvents: '='
+            reload: '&',
+            searchedWeekNumber: '='
         },
         templateUrl: "app/week/views/weekDirective.html",
         link: function(scope, element, attrs) {
@@ -61,8 +62,7 @@ weekModule
             var getEvents = function () {
 
                 var events = _.map(scope.week.events, function (event) {
-                    var newEvent = {};
-                    angular.extend(newEvent, event);
+                    var newEvent = JSON.parse(JSON.stringify(event));
                     delete newEvent.homeTeam;
                     delete newEvent.awayTeam;
                     delete newEvent.startDate;
@@ -170,6 +170,23 @@ weekModule
                 });
             }
 
+            scope.openEditWeekModal = function () {
+                var modalInstance = $modal.open({
+                    templateUrl: 'app/week/views/weekEdit.html',
+                    controller: 'WeekEditController',
+                    size: 'lg',
+                    resolve: {
+                        week: function () {
+                            return scope.week;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    scope.reload({weekNumber: scope.searchedWeekNumber});
+                });
+            }
+
             scope.$on('$destroy', function () {
                 scope.BetService = null;
             });
@@ -177,3 +194,133 @@ weekModule
         }
     }
 }]);
+
+
+weekModule
+.controller('WeekEditController', [
+    '$scope', '$modalInstance', 'week', 'InitUrls', 'CallUrlService',
+    function ($scope, $modalInstance, week, InitUrls, CallUrlService) {
+
+        $scope.week = JSON.parse(JSON.stringify(week)); // trick to deep clone object
+
+        for (var i = 0; i < $scope.week.events.length; i++) {
+            var event = $scope.week.events[i];
+            var date = new Date(event.startDate);
+            event.startTime = ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2);
+            event.dateOpened = false;
+            if (event.realHomeScore || event.realHomeScore == 0) {
+                event.homeScore = event.realHomeScore;
+                delete event.realHomeScore;
+            }
+            if (event.realAwayScore || event.realAwayScore == 0) {
+                event.awayScore = event.realAwayScore;
+                delete event.realAwayScore;
+            }
+        }
+
+        $scope.resetScoreCheckbox = false;
+
+        $scope.openDate = function (match, $event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            match.dateOpened = true;
+        }
+
+        $scope.dateFormat = 'dd-MMMM-yyyy';
+
+        $scope.isSavingDisabled = function () {
+            if (parseInt($scope.week.required) < 1) {
+                return true;
+            }
+
+            var correctTime = _.every($scope.week.events, function (match) {
+                var timeRegex = RegExp(/[0-9][0-9]?:[0-9][0-9]/);
+                if (!timeRegex.test(match.startTime)) {
+                    return false;
+                }
+                var splitted = match.startTime.split(":");
+                return splitted[0] >= 0 && splitted[0] <= 24 && splitted[1] >= 0 && splitted[1] <= 59;
+            });
+
+            return !correctTime;
+        }
+
+        $scope.removeMatch = function (index) {
+            $scope.week.events.splice(index, 1);
+
+            if ($scope.week.events.length < $scope.week.required) {
+                $scope.week.required = $scope.week.events.length;
+            }
+        }
+
+        $scope.addNewEvent = function () {
+            $scope.week.events.push({});
+        }
+
+        var getHour = function (timeString) {
+            var splitted = timeString.split(":");
+            return parseInt(splitted[0]);
+        }
+
+        var getMinutes = function (timeString) {
+            var splitted = timeString.split(":");
+            return parseInt(splitted[1]);
+        }
+
+        var getMatches = function () {
+            return _.map($scope.week.events, function (match) {
+                var newMatch = JSON.parse(JSON.stringify(match));
+                newMatch.startDate = new Date(newMatch.startDate);
+                delete newMatch.dateOpened;
+                newMatch.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
+                delete newMatch.startTime;
+                return newMatch;
+            });
+        }
+
+        var setIndexesForEvents = function (week) {
+            for (var i = 0; i < week.events.length; i++) {
+                week.events[i].index = i;
+            }
+        }
+
+        $scope.ok = function () {
+
+            var updatedWeek = JSON.parse(JSON.stringify($scope.week));
+            updatedWeek.events = getMatches();
+
+            setIndexesForEvents(updatedWeek);
+            $scope.errorSaving = false;
+
+            if ($scope.resetScoreCheckbox) {
+                for (var i = 0; i < updatedWeek.events.length; i++) {
+                    var event = updatedWeek.events[i];
+                    if (event.homeScore || event.homeScore == 0) {
+                        delete event.homeScore;
+                    }
+                    if (event.awayScore || event.awayScore == 0) {
+                        delete event.awayScore;
+                    }
+                }
+            }
+
+            InitUrls.then(function (urls) {
+                CallUrlService.put({uri: urls.week.edit, id: $scope.week._id},
+                    updatedWeek,
+                    function (data) {
+                        $modalInstance.close(data);
+                    },
+                    function (response) {
+                        $scope.errorSaving = true;
+                    });
+            });
+        }
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        }
+
+    }
+]);
+

@@ -28,7 +28,7 @@ var sendConfirmationLinkOnRegistration = function (username, emailAddress, code,
             '\r\n' +
             'We are pleased that you registered at our site. We hope you will have a pleasant staying.' +
             '\r\n\r\n' +
-            'In order to activate your account, use the next code after you login to GuessTheScore.com' +
+            'In order to activate your account, use the next code after you login ' +
             '\r\n' +
             code
     };
@@ -95,15 +95,17 @@ var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuc
         subject: 'New week at ' + domainName.beautifulName,
         text: 'Dear ' + username + ',' +
             '\r\n' +
-            'We are glad to announce you that a new week (#' + week.number + ') is available on ' +
+            'We are happy to announce you that a new week (#' + week.number + ') is available on ' +
             domainName.beautifulName + '.' +
             '\r\n\r\n' +
             'The matches we selected for this week are: ' +
-            '\r\n' + eventsText +
+            '\r\n\r\n' + eventsText +
             '\r\n\r\n' +
             'The deadline since you can guess the scores is ' +
             humanize.date('d.m.Y h:i A', week.endDate) + '.\r\n' +
-            'Don\'t miss it. Act now!'
+            'Don\'t miss it!' + '\r\n\r\n' +
+            'If you want to unsubscribe from these e-mails, login to your account and change your preference from ' +
+            'your profile page.'
 
     };
 
