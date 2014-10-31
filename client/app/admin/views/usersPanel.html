@@ -87,7 +87,7 @@
                     {{RolesFactory.findRoleByName(user.role).beautifulName}}
                     <span class="caret"></span>
                 </span>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRole">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuRole" style="cursor: pointer">
                     <li role="presentation" ng-repeat="role in RolesFactory.roles">
                         <a role="menuitem" tabindex="-1" ng-click="user.role = role.name">
                             {{role.beautifulName}}
@@ -140,7 +140,7 @@
                     {{!!user.active ? 'Yes' : 'No'}}
                     <span class="caret"></span>
                 </span>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuActive">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuActive" style="cursor: pointer">
                     <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = true">Yes</a></li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = false">No</a></li>
                 </ul>
@@ -166,7 +166,7 @@
                     {{!!user.disabled ? 'Yes' : 'No'}}
                     <span class="caret"></span>
                 </span>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDisabled">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDisabled" style="cursor: pointer">
                     <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = true">Yes</a></li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = false">No</a></li>
                 </ul>
