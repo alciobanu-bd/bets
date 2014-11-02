@@ -145,6 +145,8 @@ var sendCongratsToWinners = function (req, res, next) {
                 return;
             }
 
+            var congratsSent = bet.congratsSent;
+
             Bet.update({_id: bet._id}, {$set: {congratsSent: true}},
                 function (err) {
 
@@ -153,13 +155,17 @@ var sendCongratsToWinners = function (req, res, next) {
                     }
                     else {
                         betSaveSucc++;
-                        mailServices.sendCongratulationsToWeekWinners(bet, user.username, user.email,
-                            function () {
-                                // on success
-                            }, function () {
-                                // on error
-                                fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME, err + '\r\n');
-                            });
+                        if (!bet.congratsSent) {
+                            mailServices.sendCongratulationsToWeekWinners(bet, user.username, user.email,
+                                function () {
+                                    // on success
+                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME,
+                                        'delivered to: ' + user.username + ' (weekNumber: ' + bet.weekNumber + ')\r\n');
+                                }, function () {
+                                    // on error
+                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME, err + '\r\n');
+                                });
+                        }
                     }
 
                     if (betSaveSucc + betSaveErr == req.bestBets.length) {
