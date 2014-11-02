@@ -113,9 +113,35 @@ var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuc
 
 }
 
+var sendCongratulationsToWeekWinners = function (bet, username, emailAddress, onSuccess, onError) {
+
+    var mailOptions = {
+        from: 'CanIHazBets <contact@canihazbets.me>',
+        to: emailAddress,
+        replyTo: 'contact@canihazbets.me',
+        subject: 'Winner at ' + domainName.beautifulName,
+        text: 'Dear ' + username + ',' +
+            '\r\n\r\n' +
+            'We would like to congratulate you for winning week #' +
+            bet.weekNumber +
+            ' at ' + domainName.beautifulName + ',' +
+            ' scoring ' + bet.points + ' points.' +
+            '\r\n' +
+            'Keep it up and don\'t miss the next week!' +
+            '\r\n\r\n' +
+            'If you want to unsubscribe from these e-mails, login to your account and change your preference from ' +
+            'your profile page.'
+
+    };
+
+    sendMail(mailOptions, onSuccess, onError);
+
+}
+
 module.exports = {
     sendConfirmationLinkOnRegistration: sendConfirmationLinkOnRegistration,
     sendConfirmationLinkOnPasswordChange: sendConfirmationLinkOnPasswordChange,
     sendConfirmationLinkOnForgotPassword: sendConfirmationLinkOnForgotPassword,
-    sendNotificationAboutNewWeek: sendNotificationAboutNewWeek
+    sendNotificationAboutNewWeek: sendNotificationAboutNewWeek,
+    sendCongratulationsToWeekWinners: sendCongratulationsToWeekWinners
 }

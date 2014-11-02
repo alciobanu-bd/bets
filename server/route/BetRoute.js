@@ -89,6 +89,7 @@ function (req, res, next) {
 
     bet.points = 0;
     bet.ended = false;
+    bet.congratsSent = false;
 
     for (var i in req.body) {
         bet[i] = req.body[i];
