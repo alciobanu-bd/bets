@@ -148,12 +148,16 @@ var sendCongratsToWinners = function (req, res, next) {
     var numberOfPoints = req.bestBets[0].points;
     var weekNumber = req.bestBets[0].weekNumber;
 
-    var bestBetsIds = _.map(req.bestBets, function (bet) {
+    var bestBetsUserIds = _.map(req.bestBets, function (bet) {
         return bet.userId;
     });
 
+    var bestBetsIds = _.map(req.bestBets, function (bet) {
+        return bet._id;
+    });
+
     // send congrats if the bet isn't congrated
-    User.find({_id: {$in: bestBetsIds}},
+    User.find({_id: {$in: bestBetsUserIds}},
     function (err, users) {
 
         if (err) {
@@ -175,7 +179,6 @@ var sendCongratsToWinners = function (req, res, next) {
 
                         for (var i = 0; i < users.length; i++) {
                             var user = users[i];
-                            console.log(user)
                             var bet = {
                                 points: numberOfPoints,
                                 weekNumber: weekNumber
