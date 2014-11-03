@@ -136,54 +136,72 @@ var sendCongratsToWinners = function (req, res, next) {
     var betSaveErr = 0;
     var betSaveSucc = 0;
 
-    for (var i = 0; i < req.bestBets.length; i++) {
-        var bet = req.bestBets[i];
-        User.findOne({_id: bet.userId},
-        function (err, user) {
+    req.bestBets = _.filter(req.bestBets, function (bet) {
+        return !bet.congratsSent;
+    });
 
-            if (err) {
-                return;
-            }
+    if (req.bestBets.length == 0) {
+        next();
+        return;
+    }
 
-            var congratsSent = bet.congratsSent;
+    var numberOfPoints = req.bestBets[0].points;
+    var weekNumber = req.bestBets[0].weekNumber;
 
-            Bet.update({_id: bet._id}, {$set: {congratsSent: true}},
+    var bestBetsUserIds = _.map(req.bestBets, function (bet) {
+        return bet.userId;
+    });
+
+    var bestBetsIds = _.map(req.bestBets, function (bet) {
+        return bet._id;
+    });
+
+    // send congrats if the bet isn't congrated
+    User.find({_id: {$in: bestBetsUserIds}},
+    function (err, users) {
+
+        if (err) {
+            res.status(500).json({
+                message: "Couldn't send congratulations to winners. Please try again."
+            }).end();
+        }
+        else {
+
+            Bet.update({_id: {$in: bestBetsIds}}, {$set: {congratsSent: true}},
                 function (err) {
 
                     if (err) {
-                        betSaveErr++;
+                        res.status(500).json({
+                            message: "Couldn't send congratulations to winners. Please try again."
+                        }).end();
                     }
                     else {
-                        betSaveSucc++;
-                        if (!bet.congratsSent) {
+
+                        for (var i = 0; i < users.length; i++) {
+                            var user = users[i];
+                            var bet = {
+                                points: numberOfPoints,
+                                weekNumber: weekNumber
+                            };
                             mailServices.sendCongratulationsToWeekWinners(bet, user.username, user.email,
                                 function () {
                                     // on success
                                     fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME,
-                                        'delivered to: ' + user.username + ' (weekNumber: ' + bet.weekNumber + ')\r\n');
+                                            'delivered to: ' + user.username + ' (weekNumber: ' + bet.weekNumber + ')\r\n');
                                 }, function () {
                                     // on error
                                     fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME, err + '\r\n');
                                 });
                         }
+
+                        next();
+
                     }
 
-                    if (betSaveSucc + betSaveErr == req.bestBets.length) {
-
-                        if (betSaveErr == 0) {
-                            next();
-                        }
-                        else {
-                            res.status(500).json({
-                                message: "Couldn't send congratulations to winners. Please try again."
-                            }).end();
-                        }
-                    }
                 });
+        }
 
-        });
-    }
-
+    });
 }
 
 var resetUsersPointsBeforeAggregating = function (req, res, next) {
