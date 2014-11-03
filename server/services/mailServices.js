@@ -130,7 +130,8 @@ var sendCongratulationsToWeekWinners = function (bet, username, emailAddress, on
             'Keep it up and don\'t miss the next week!' +
             '\r\n\r\n' +
             'If you want to unsubscribe from these e-mails, login to your account and change your preference from ' +
-            'your profile page.'
+            'your profile page.' +
+            '\r\n'
 
     };
 
