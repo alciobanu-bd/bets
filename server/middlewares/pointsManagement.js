@@ -5,7 +5,7 @@ var mailServices = require('./../services/mailServices.js');
 var _ = require('underscore');
 
 var fs = require('fs');
-var LOG_CONGRATS_MAIL_FILE_NAME = 'logs/congrats_errors.txt';
+var LOG_CONGRATS_MAIL_FILE_NAME = 'logs/congrats_log.txt';
 
 var updatePointsForBetsOfThisWeek = function (req, res, next) {
     // calculate points for every bet of this week based on results
@@ -167,7 +167,7 @@ var sendCongratsToWinners = function (req, res, next) {
         }
         else {
 
-            Bet.update({_id: {$in: bestBetsIds}}, {$set: {congratsSent: true}},
+            Bet.update({_id: {$in: bestBetsIds}}, {$set: {congratsSent: true}}, {multi: true},
                 function (err) {
 
                     if (err) {
@@ -184,13 +184,16 @@ var sendCongratsToWinners = function (req, res, next) {
                                 weekNumber: weekNumber
                             };
                             mailServices.sendCongratulationsToWeekWinners(bet, user.username, user.email,
-                                function () {
+                                function (info) {
                                     // on success
                                     fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME,
-                                            'delivered to: ' + user.username + ' (weekNumber: ' + bet.weekNumber + ')\r\n');
-                                }, function () {
+                                    new Date() +'delivered: ' + JSON.stringify(info) + '\r\n\r\n' +
+                                    '--------------------------------------------------------------------------'
+                                    + '--------------------------------------------------------------------------' +
+                                    '\r\n\r\n');
+                                }, function (err) {
                                     // on error
-                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME, err + '\r\n');
+                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME, new Date() + err + '\r\n');
                                 });
                         }
 

@@ -10,6 +10,7 @@ var sendMail = function (mailOptions, onSuccess, onError) {
         }
         else {
             if (typeof onSuccess === 'function') {
+                info.mailOptions = mailOptions;
                 onSuccess(info);
             }
         }
