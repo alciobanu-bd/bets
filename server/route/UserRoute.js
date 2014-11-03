@@ -144,6 +144,7 @@ function (req, res, next) {
                             req.body.registrationIp = req.connection.remoteAddress;
                             req.body.serverSalt = bcrypt.genSaltSync();
                             req.body.active = false;
+                            req.body.disabled = false;
                             req.body.isMailNotificationOn = true;
 
                             bcrypt.hash(req.body.password, req.body.serverSalt, null, function (err, hash) {

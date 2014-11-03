@@ -1,7 +1,11 @@
 
 var Bet = require('./../model/Bet.js');
 var User = require('./../model/User.js');
+var mailServices = require('./../services/mailServices.js');
 var _ = require('underscore');
+
+var fs = require('fs');
+var LOG_CONGRATS_MAIL_FILE_NAME = 'logs/congrats_errors.txt';
 
 var updatePointsForBetsOfThisWeek = function (req, res, next) {
     // calculate points for every bet of this week based on results
@@ -25,6 +29,9 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
 
                     var savedBets = 0;
                     var errorBets = 0;
+
+                    req.bestBets = []; // calculate best bets and put them in this array
+                    var maxPoints = -1;
 
                     for (var j = 0; j < bets.length; j++) {
                         // iterate over bets
@@ -68,6 +75,16 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
 
                             }
 
+                        }
+
+                        if (points >= maxPoints) {
+
+                            if (points > maxPoints) {
+                                req.bestBets = [];
+                            }
+                            req.bestBets.push(bet);
+
+                            maxPoints = points;
                         }
 
                         // save points
@@ -114,9 +131,64 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
     }
 }
 
+var sendCongratsToWinners = function (req, res, next) {
+
+    var betSaveErr = 0;
+    var betSaveSucc = 0;
+
+    for (var i = 0; i < req.bestBets.length; i++) {
+        var bet = req.bestBets[i];
+        User.findOne({_id: bet.userId},
+        function (err, user) {
+
+            if (err) {
+                return;
+            }
+
+            var congratsSent = bet.congratsSent;
+
+            Bet.update({_id: bet._id}, {$set: {congratsSent: true}},
+                function (err) {
+
+                    if (err) {
+                        betSaveErr++;
+                    }
+                    else {
+                        betSaveSucc++;
+                        if (!bet.congratsSent) {
+                            mailServices.sendCongratulationsToWeekWinners(bet, user.username, user.email,
+                                function () {
+                                    // on success
+                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME,
+                                        'delivered to: ' + user.username + ' (weekNumber: ' + bet.weekNumber + ')\r\n');
+                                }, function () {
+                                    // on error
+                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME, err + '\r\n');
+                                });
+                        }
+                    }
+
+                    if (betSaveSucc + betSaveErr == req.bestBets.length) {
+
+                        if (betSaveErr == 0) {
+                            next();
+                        }
+                        else {
+                            res.status(500).json({
+                                message: "Couldn't send congratulations to winners. Please try again."
+                            }).end();
+                        }
+                    }
+                });
+
+        });
+    }
+
+}
+
 var resetUsersPointsBeforeAggregating = function (req, res, next) {
 
-    User.update({}, {$set: {points: 0, noOfBets: 0, avgPoints: 0}}, function (err) {
+    User.update({}, {$set: {points: 0, avgPoints: 0}}, function (err) {
         if (err) {
             res.status(500).json({
                 message: "An error occurred while trying to update users' points."
@@ -242,7 +314,7 @@ var updateUsersPlace = function (req, res, next) {
 
             if (users.length == 0) {
                 res.status(200).json({
-                    message: "Points and places were update for every user."
+                    message: "Points and places were updated for every user."
                 }).end();
             }
 
@@ -253,6 +325,7 @@ var updateUsersPlace = function (req, res, next) {
 
 module.exports = {
     updatePointsForBetsOfThisWeek: updatePointsForBetsOfThisWeek,
+    sendCongratsToWinners: sendCongratsToWinners,
     resetUsersPointsBeforeAggregating: resetUsersPointsBeforeAggregating,
     updatePointsForUsers: updatePointsForUsers,
     updateUsersPlace: updateUsersPlace
