@@ -17,7 +17,8 @@ var UserSchema = mongoose.Schema({
     serverSalt: {type:'string', required: false},
     active: {type: Boolean, required: false},
     disabled: {type: Boolean, required: false},
-    isMailNotificationOn: {type: Boolean, required: false}
+    isMailNotificationOn: {type: Boolean, required: false},
+    lastLogin: {type: 'date', required: false}
 });
 
 UserSchema.path('username').validate(function (v) {

@@ -17,6 +17,17 @@ var LOG_LOGIN_FILE_NAME = 'logs/login_log.txt';
 
 var router = express.Router();
 
+var markLastLogin = function (userId) {
+
+    User.update({_id: userId}, {$set: {lastLogin: new Date()}}, {upsert: true},
+    function (err) {
+        if (err) {
+            fs.append(LOG_LOGIN_FILE_NAME, 'lastLogin update failed for user ' + userId + ' -- ' + err + '\r\n');
+        }
+    });
+
+}
+
 // login
 var getToken = function (userId, expireTime) {
     var expires = moment().add(expireTime[0], expireTime[1]).valueOf();
@@ -24,6 +35,9 @@ var getToken = function (userId, expireTime) {
         iss: userId,
         exp: expires
     }, app.get('jwtTokenSecret'));
+
+    markLastLogin(userId);
+
     return {token: token, expires: expires};
 }
 
