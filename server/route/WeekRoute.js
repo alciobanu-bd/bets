@@ -175,7 +175,6 @@ router.post('/week',
 jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
 function (req, res, next) {
 
-
     var week = new Week();
 
     week.locked = false;
@@ -218,6 +217,10 @@ function (req, res, next) {
         return;
     }
 
+    if (req.body.endDate) {
+        delete req.body.endDate;
+    }
+
     var week = {};
 
     var eventWithMinTime = _.min(req.body.events, function (event) {
@@ -235,7 +238,7 @@ function (req, res, next) {
         if (err) {
             res.status(500).json({
                 message: "Week wasn't saved to database."
-            });
+            }).end();
         }
         else {
             res.status(200).json(week).end();

@@ -26,7 +26,9 @@ weekModule
                 scope.BetService.resetBetService();
             }
 
-            scope.resetBetManager();
+            scope.$watch('week._id', function () {
+                scope.resetBetManager();
+            });
 
             var sameDates = function (date1, date2) {
                 return date1.getDate() == date2.getDate()
@@ -89,6 +91,7 @@ weekModule
                     delete newEvent.homeTeam;
                     delete newEvent.awayTeam;
                     delete newEvent.startDate;
+                    delete newEvent.competition;
                     return newEvent;
                 });
 

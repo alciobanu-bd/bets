@@ -112,7 +112,7 @@ function (req, res, next) {
                 'PLACEMENT -- ' +
                 'user: ' + bet.username +
                 ', week: ' + wk.number +
-                ', bets: ' + bet.scores +
+                ', bets: ' + JSON.stringify(bet.scores) +
                 ', date: ' + new Date() +
                 '\r\n');
         }
@@ -157,7 +157,7 @@ function (req, res, next) {
                             'CHANGE -- ' +
                             'user: ' + bet.username +
                             ', week: ' + wk.number +
-                            ', bets: ' + bet.scores +
+                            ', bets: ' + JSON.stringify(bet.scores) +
                             ', date: ' + new Date() +
                             '\r\n');
                     }
