@@ -131,13 +131,95 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
     }
 }
 
+var calculateWinners = function (req, res, next) {
+
+    Bet.aggregate([
+        { $group: {
+            _id: '$weekId',
+            points: {$max: '$points'}
+        }}
+    ], function (err, bestPointsPerWeek) {
+
+        if (err) {
+            res.status(500).json({
+                message: "Couldn't calculate winners. Please try again."
+            }).end();
+        }
+        else {
+            bestPointsPerWeek = _.filter(bestPointsPerWeek, function (bet) {
+                return bet.points > 0;
+            });
+
+            bestPointsPerWeek = _.map(bestPointsPerWeek, function (bet) {
+                return {
+                    weekId: bet._id,
+                    points: bet.points
+                };
+            });
+
+            Bet.find({$or: bestPointsPerWeek}, function (err, winningBets) {
+
+                if (err) {
+                    res.status(500).json({
+                        message: "Couldn't calculate winners. Please try again."
+                    }).end();
+                }
+                else {
+
+                    var groupedUsers = _.countBy(winningBets, function (bet) {
+                        return bet.userId;
+                    });
+
+                    var winningUsers = _.map(winningBets, function (bet) {
+                        return {
+                            _id: bet.userId,
+                            wonWeeks: groupedUsers[bet.userId]
+                        };
+                    });
+
+                    var errs = 0;
+                    var succs = 0;
+
+                    for (var i = 0; i < winningUsers.length; i++) {
+                        var user = winningUsers[i];
+                        User.update({_id: user._id}, {$set: {wonWeeks: user.wonWeeks}}, {upsert: true},
+                        function (err) {
+                            if (err) {
+                                errs++;
+                            }
+                            else {
+                                succs++;
+                            }
+
+                            if (errs + succs == winningUsers.length) {
+                                if (errs > 0) {
+                                    res.status(500).json({
+                                        message: "Couldn't calculate winners. Please try again."
+                                    }).end();
+                                }
+                                else {
+                                    next();
+                                }
+                            }
+                        });
+                    }
+
+                }
+
+            });
+        }
+
+    });
+
+}
+
 var sendCongratsToWinners = function (req, res, next) {
 
     var betSaveErr = 0;
     var betSaveSucc = 0;
 
     req.bestBets = _.filter(req.bestBets, function (bet) {
-        return !bet.congratsSent;
+        return !bet.congratsSent && bet.points > 0;
     });
 
     if (req.bestBets.length == 0) {
@@ -347,6 +429,7 @@ var updateUsersPlace = function (req, res, next) {
 module.exports = {
     updatePointsForBetsOfThisWeek: updatePointsForBetsOfThisWeek,
     sendCongratsToWinners: sendCongratsToWinners,
+    calculateWinners: calculateWinners,
     resetUsersPointsBeforeAggregating: resetUsersPointsBeforeAggregating,
     updatePointsForUsers: updatePointsForUsers,
     updateUsersPlace: updateUsersPlace

@@ -368,6 +368,7 @@ function(req, res, next) {
 },
 
 pointsManagementFunctions.updatePointsForBetsOfThisWeek,
+pointsManagementFunctions.calculateWinners,
 pointsManagementFunctions.sendCongratsToWinners,
 pointsManagementFunctions.resetUsersPointsBeforeAggregating,
 pointsManagementFunctions.updatePointsForUsers,
