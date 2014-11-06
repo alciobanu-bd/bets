@@ -18,7 +18,8 @@ var UserSchema = mongoose.Schema({
     active: {type: Boolean, required: false},
     disabled: {type: Boolean, required: false},
     isMailNotificationOn: {type: Boolean, required: false},
-    lastLogin: {type: 'date', required: false}
+    lastLogin: {type: 'date', required: false},
+    wonWeeks: {type: 'number', required: false}
 });
 
 UserSchema.path('username').validate(function (v) {

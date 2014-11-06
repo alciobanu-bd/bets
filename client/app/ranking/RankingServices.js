@@ -26,6 +26,7 @@ function (InitUrls, CallUrlService) {
                     avgPoints: item.avgPoints,
                     registerDate: item.registerDate,
                     role: item.role,
+                    wonWeeks: item.wonWeeks,
                     username: item.username
                 }});
                 thisFactory.errorFetching = false;

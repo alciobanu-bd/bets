@@ -56,10 +56,12 @@ function () {
             email: user.email,
             place: user.place,
             points: user.points,
+            average: user.avgPoints,
             registerDate: user.registerDate,
             role: user.role,
             username: user.username,
-            isMailNotificationOn: user.isMailNotificationOn
+            isMailNotificationOn: user.isMailNotificationOn,
+            wonWeeks: user.wonWeeks
         };
 
     }

@@ -139,6 +139,7 @@ function (req, res, next) {
 
                             req.body.registerDate = new Date();
                             req.body.points = 0;
+                            req.body.wonWeeks = 0;
                             req.body.avgPoints = 0;
                             req.body.role = Roles.user.name;
                             req.body.registrationIp = req.connection.remoteAddress;
