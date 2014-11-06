@@ -25,7 +25,8 @@
         </div>
 
         <div class="top-buffer-1-em">
-            <span ng-if="WeekFactory.currentWeek.number > 0 && WeekFactory.currentWeek.available">
+            <span ng-if="WeekFactory.currentWeek.number > 0 && WeekFactory.currentWeek.available &&
+            RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
                 <div>
                     Send e-mails to all users of the site to notify them there's a new week that they can play.
                     They'll receive a list of all matches of the latest week.
