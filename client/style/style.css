@@ -143,3 +143,14 @@ body    {overflow-y:scroll;}
     color: #ff9124;
 }
 
+.blue-link {
+    cursor: pointer;
+    color: #73d1ff;
+    text-decoration: underline;
+}
+
+.blue-link:hover {
+    cursor: pointer;
+    color: #cffffa;
+    text-decoration: none;
+}
