@@ -20,7 +20,7 @@ function () {
             maxDaysOfKeepMeLoggedIn: 20
         },
         ranking: {
-            limitUsers: 15
+            limitUsers: 10
         }
 
     };
