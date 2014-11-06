@@ -37,6 +37,22 @@
     </div>
     <div class="row">
             <span class="col-xs-3">
+                Won weeks
+            </span>
+            <span class="col-xs-9">
+                {{user.wonWeeks}}
+            </span>
+    </div>
+    <div class="row">
+            <span class="col-xs-3">
+                Awards
+            </span>
+            <span class="col-xs-9">
+                <span ng-if="user.wonWeeks > 0" class="glyphicon glyphicon-certificate week-win-certificate" title="Gained for winning a week."></span>
+            </span>
+    </div>
+    <div class="row">
+            <span class="col-xs-3">
                 User rank
             </span>
             <span class="col-xs-9">
