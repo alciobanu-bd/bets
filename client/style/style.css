@@ -28,6 +28,10 @@
     color: #eafdff !important;
 }
 
+.dropdown ul li a:hover {
+    color: #43cfff !important;
+}
+
 .nav-tabs li a {
     color: #1998ff !important;
 }
