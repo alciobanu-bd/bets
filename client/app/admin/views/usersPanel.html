@@ -129,6 +129,14 @@
                 {{user.registrationIp}}
             </span>
         </div>
+        <div class="row" ng-if="user.lastLogin">
+            <span class="col-xs-3">
+                Last login
+            </span>
+            <span class="col-xs-9">
+                {{toDate(user.lastLogin) | date: 'EEEE, MMM d, y, h:mm a'}}
+            </span>
+        </div>
         <div class="row dropdown"  ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) &&
             RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
             <span class="col-xs-3">

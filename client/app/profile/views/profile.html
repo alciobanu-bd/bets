@@ -65,6 +65,25 @@
 
         <div class="row form-inline top-buffer-0-5-em">
                 <span style="width: 10%" class="input-group">
+                    Average
+                </span>
+                <span style="width: 20%" class="input-group">
+                    {{ProfileFactory.profileInformation.avgPoints.toFixed(2)}}%
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
+                    Awards
+                </span>
+                <span style="width: 20%" class="input-group">
+                    <span ng-if="ProfileFactory.profileInformation.wonWeeks > 0"
+                          class="glyphicon glyphicon-certificate week-win-certificate" title="Gained for winning a week."></span>
+                </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+                <span style="width: 10%" class="input-group">
                     User rank
                 </span>
                 <span style="width: 20%" class="input-group">
@@ -76,7 +95,9 @@
                 <span style="width: 30%" class="input-group">
                     <input type="checkbox" ng-model="userModel.isMailNotificationOn" id="notificationOption" />
                     &nbsp;
-                    <label for="notificationOption">Notify me via e-mail about site news.</label>
+                    <label for="notificationOption" style="font-style: normal; font-weight: normal">
+                        Notify me via e-mail about site news.
+                    </label>
                 </span>
         </div>
 

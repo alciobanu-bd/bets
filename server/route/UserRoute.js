@@ -139,11 +139,13 @@ function (req, res, next) {
 
                             req.body.registerDate = new Date();
                             req.body.points = 0;
+                            req.body.wonWeeks = 0;
                             req.body.avgPoints = 0;
                             req.body.role = Roles.user.name;
                             req.body.registrationIp = req.connection.remoteAddress;
                             req.body.serverSalt = bcrypt.genSaltSync();
                             req.body.active = false;
+                            req.body.disabled = false;
                             req.body.isMailNotificationOn = true;
 
                             bcrypt.hash(req.body.password, req.body.serverSalt, null, function (err, hash) {

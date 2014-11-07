@@ -14,7 +14,8 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
 
     User.find({},
     {password: 0, salt: 0, serverSalt: 0, _v: 0, email: 0, birthDate: 0, registrationIp: 0, active: 0, disabled: 0},
-    {sort: {points: -1}}, // sort by points descending
+    {sort: {points: -1, avgPoints: -1, wonWeeks: -1}},
+    // sort by points descending, then by average points if they are equal and finally by won weeks
     function (err, users) {
 
         if (err) {
@@ -32,6 +33,7 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
 
 router.get('/ranking/recalculate',
     jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
+    pointsManagementFunctions.calculateWinners,
     pointsManagementFunctions.resetUsersPointsBeforeAggregating,
     pointsManagementFunctions.updatePointsForUsers,
     pointsManagementFunctions.updateUsersPlace

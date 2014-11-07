@@ -1,7 +1,11 @@
 
 var Bet = require('./../model/Bet.js');
 var User = require('./../model/User.js');
+var mailServices = require('./../services/mailServices.js');
 var _ = require('underscore');
+
+var fs = require('fs');
+var LOG_CONGRATS_MAIL_FILE_NAME = 'logs/congrats_log.txt';
 
 var updatePointsForBetsOfThisWeek = function (req, res, next) {
     // calculate points for every bet of this week based on results
@@ -25,6 +29,9 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
 
                     var savedBets = 0;
                     var errorBets = 0;
+
+                    req.bestBets = []; // calculate best bets and put them in this array
+                    var maxPoints = -1;
 
                     for (var j = 0; j < bets.length; j++) {
                         // iterate over bets
@@ -68,6 +75,16 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
 
                             }
 
+                        }
+
+                        if (points >= maxPoints) {
+
+                            if (points > maxPoints) {
+                                req.bestBets = [];
+                            }
+                            req.bestBets.push(bet);
+
+                            maxPoints = points;
                         }
 
                         // save points
@@ -114,9 +131,167 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
     }
 }
 
+var calculateWinners = function (req, res, next) {
+
+    Bet.aggregate([
+        { $group: {
+            _id: '$weekId',
+            points: {$max: '$points'}
+        }}
+    ], function (err, bestPointsPerWeek) {
+
+        if (err) {
+            res.status(500).json({
+                message: "Couldn't calculate winners. Please try again."
+            }).end();
+        }
+        else {
+            bestPointsPerWeek = _.filter(bestPointsPerWeek, function (bet) {
+                return bet.points > 0;
+            });
+
+            bestPointsPerWeek = _.map(bestPointsPerWeek, function (bet) {
+                return {
+                    weekId: bet._id,
+                    points: bet.points
+                };
+            });
+
+            Bet.find({$or: bestPointsPerWeek}, function (err, winningBets) {
+
+                if (err) {
+                    res.status(500).json({
+                        message: "Couldn't calculate winners. Please try again."
+                    }).end();
+                }
+                else {
+
+                    var groupedUsers = _.countBy(winningBets, function (bet) {
+                        return bet.userId;
+                    });
+
+                    var winningUsers = _.map(winningBets, function (bet) {
+                        return {
+                            _id: bet.userId,
+                            wonWeeks: groupedUsers[bet.userId]
+                        };
+                    });
+
+                    var errs = 0;
+                    var succs = 0;
+
+                    for (var i = 0; i < winningUsers.length; i++) {
+                        var user = winningUsers[i];
+                        User.update({_id: user._id}, {$set: {wonWeeks: user.wonWeeks}}, {upsert: true},
+                        function (err) {
+                            if (err) {
+                                errs++;
+                            }
+                            else {
+                                succs++;
+                            }
+
+                            if (errs + succs == winningUsers.length) {
+                                if (errs > 0) {
+                                    res.status(500).json({
+                                        message: "Couldn't calculate winners. Please try again."
+                                    }).end();
+                                }
+                                else {
+                                    next();
+                                }
+                            }
+                        });
+                    }
+
+                }
+
+            });
+        }
+
+    });
+
+}
+
+var sendCongratsToWinners = function (req, res, next) {
+
+    var betSaveErr = 0;
+    var betSaveSucc = 0;
+
+    req.bestBets = _.filter(req.bestBets, function (bet) {
+        return !bet.congratsSent && bet.points > 0;
+    });
+
+    if (req.bestBets.length == 0) {
+        next();
+        return;
+    }
+
+    var numberOfPoints = req.bestBets[0].points;
+    var weekNumber = req.bestBets[0].weekNumber;
+
+    var bestBetsUserIds = _.map(req.bestBets, function (bet) {
+        return bet.userId;
+    });
+
+    var bestBetsIds = _.map(req.bestBets, function (bet) {
+        return bet._id;
+    });
+
+    // send congrats if the bet isn't congrated
+    User.find({_id: {$in: bestBetsUserIds}},
+    function (err, users) {
+
+        if (err) {
+            res.status(500).json({
+                message: "Couldn't send congratulations to winners. Please try again."
+            }).end();
+        }
+        else {
+
+            Bet.update({_id: {$in: bestBetsIds}}, {$set: {congratsSent: true}}, {multi: true},
+                function (err) {
+
+                    if (err) {
+                        res.status(500).json({
+                            message: "Couldn't send congratulations to winners. Please try again."
+                        }).end();
+                    }
+                    else {
+
+                        for (var i = 0; i < users.length; i++) {
+                            var user = users[i];
+                            var bet = {
+                                points: numberOfPoints,
+                                weekNumber: weekNumber
+                            };
+                            mailServices.sendCongratulationsToWeekWinners(bet, user.username, user.email,
+                                function (info) {
+                                    // on success
+                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME,
+                                    new Date() +'delivered: ' + JSON.stringify(info) + '\r\n\r\n' +
+                                    '--------------------------------------------------------------------------'
+                                    + '--------------------------------------------------------------------------' +
+                                    '\r\n\r\n');
+                                }, function (err) {
+                                    // on error
+                                    fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME, new Date() + err + '\r\n');
+                                });
+                        }
+
+                        next();
+
+                    }
+
+                });
+        }
+
+    });
+}
+
 var resetUsersPointsBeforeAggregating = function (req, res, next) {
 
-    User.update({}, {$set: {points: 0, noOfBets: 0, avgPoints: 0}}, function (err) {
+    User.update({}, {$set: {points: 0, avgPoints: 0}}, function (err) {
         if (err) {
             res.status(500).json({
                 message: "An error occurred while trying to update users' points."
@@ -242,7 +417,7 @@ var updateUsersPlace = function (req, res, next) {
 
             if (users.length == 0) {
                 res.status(200).json({
-                    message: "Points and places were update for every user."
+                    message: "Points and places were updated for every user."
                 }).end();
             }
 
@@ -253,6 +428,8 @@ var updateUsersPlace = function (req, res, next) {
 
 module.exports = {
     updatePointsForBetsOfThisWeek: updatePointsForBetsOfThisWeek,
+    sendCongratsToWinners: sendCongratsToWinners,
+    calculateWinners: calculateWinners,
     resetUsersPointsBeforeAggregating: resetUsersPointsBeforeAggregating,
     updatePointsForUsers: updatePointsForUsers,
     updateUsersPlace: updateUsersPlace

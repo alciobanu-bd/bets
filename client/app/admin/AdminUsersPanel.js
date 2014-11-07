@@ -108,6 +108,10 @@ function ($scope, $modalInstance, user, InitUrls, CallUrlService, RolesFactory, 
         $modalInstance.dismiss(initialUser);
     }
 
+    $scope.toDate = function (date) {
+        return new Date(date);
+    }
+
 }
 ]);
 

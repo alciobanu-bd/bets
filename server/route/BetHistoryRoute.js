@@ -1,6 +1,7 @@
 
 var express = require('express');
 var Bet = require('./../model/Bet.js');
+var Roles = require('./../model/Roles.js');
 var Week = require('./../model/Week.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
@@ -8,6 +9,9 @@ var tokenChecks = require('./../middlewares/tokenChecks.js');
 var _ = require('underscore');
 
 var router = express.Router();
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
 
 router.get('/history/:id([0-9a-fA-F]{24})?',
 jwtauth([tokenChecks.hasRole('ROLE_USER')]),
@@ -32,7 +36,12 @@ function (req, res, next) {
         }
         else {
 
-            Week.find({}, {},
+            var queryDateObject = {};
+            if (userId.toString() != res.data.local.user._id.toString() && Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+                queryDateObject = {endDate: {$lt: new Date()}};
+            }
+
+            Week.find(queryDateObject, {},
             {sort: {number: -1}},
             function (err, weeks) {
                 if (err) {

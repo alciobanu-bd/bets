@@ -25,7 +25,7 @@ function ($scope, UserInformation, InitUrls, Settings) {
         $scope.carouselSlides = shuffle($scope.carouselSlides);
     }
 
-    prepareSlides(3);
+    prepareSlides(TOTAL_CAROUSEL_IMAGES);
 
 }
 ]

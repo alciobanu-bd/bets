@@ -10,8 +10,12 @@ var weekChecks = require('./../middlewares/weekChecksForBets.js');
 
 var mongoose = require('mongoose');
 
+var fs = require('fs');
+var LOG_BET_PLACEMENT_FILE_NAME = 'logs/bet_placement.txt';
+
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
+
 
 var setUserId = function(req, res, next, user, onError, onSuccess) {
     // set userId
@@ -89,6 +93,7 @@ function (req, res, next) {
 
     bet.points = 0;
     bet.ended = false;
+    bet.congratsSent = false;
 
     for (var i in req.body) {
         bet[i] = req.body[i];
@@ -102,6 +107,14 @@ function (req, res, next) {
         }
         else {
             res.status(201).json(bet).end();
+            var wk = res.data.local.week;
+            fs.appendFile(LOG_BET_PLACEMENT_FILE_NAME,
+                'PLACEMENT -- ' +
+                'user: ' + bet.username +
+                ', week: ' + wk.number +
+                ', bets: ' + JSON.stringify(bet.scores) +
+                ', date: ' + new Date() +
+                '\r\n');
         }
     });
 
@@ -139,6 +152,14 @@ function (req, res, next) {
                     }
                     else {
                         res.status(200).json(bet).end();
+                        var wk = res.data.local.week;
+                        fs.appendFile(LOG_BET_PLACEMENT_FILE_NAME,
+                            'CHANGE -- ' +
+                            'user: ' + bet.username +
+                            ', week: ' + wk.number +
+                            ', bets: ' + JSON.stringify(bet.scores) +
+                            ', date: ' + new Date() +
+                            '\r\n');
                     }
                 });
 

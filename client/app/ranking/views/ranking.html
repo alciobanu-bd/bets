@@ -4,7 +4,7 @@
 
         <h2>Ranking</h2>
         <span>
-            <span style="cursor: pointer; color: #73d1ff; text-decoration: underline;" ng-click="downloadAsPdf()">
+            <span class="blue-link" ng-click="downloadAsPdf()">
                 Download as pdf
             </span>
         </span>
@@ -22,8 +22,9 @@
                 <div class="list-group-item-text row">
                     <span class="col-xs-1">Place</span>
                     <span class="col-xs-3">Username</span>
-                    <span class="col-xs-2">Points</span>
+                    <span class="col-xs-1">Points</span>
                     <span class="col-xs-2">Average</span>
+                    <span class="col-xs-1">Wins</span>
                     <span class="col-xs-4">Register date</span>
                 </div>
             </span>
@@ -38,13 +39,14 @@
                 <div class="row" style="cursor: pointer" ng-click="openModal(user)">
                     <span class="col-xs-1"><span class="badge" style="background-color: #60a2ff !important;">{{user.place}}</span></span>
                     <span class="col-xs-3">{{user.username}}</span>
-                    <span class="col-xs-2">{{user.points}}</span>
+                    <span class="col-xs-1">{{user.points}}</span>
                     <span class="col-xs-2">{{user.avgPoints.toFixed(2)}}%</span>
+                    <span class="col-xs-1">{{user.wonWeeks}}</span>
                     <span class="col-xs-4">{{user.registerDate | date: 'fullDate'}}</span>
                 </div>
             </li>
             <div class="top-buffer-1-em centered" ng-show="limitUsersTo < RankingFactory.ranking.length">
-                <span ng-click="loadMore()" style="cursor: pointer; color: #73d1ff; text-decoration: underline;">
+                <span ng-click="loadMore()" class="blue-link">
                     Load more
                 </span>
             </div>
