@@ -2,10 +2,11 @@
 rulesModule
 
 .controller('RulesController', [
-'$scope', 'RolesFactory',
-function ($scope, RolesFactory) {
+'$scope', 'RolesFactory', 'Settings',
+function ($scope, RolesFactory, Settings) {
 
     $scope.RolesFactory = RolesFactory;
+    $scope.Settings = Settings;
 
     RolesFactory.load().then(function () {
         if (!RolesFactory.loaded) {

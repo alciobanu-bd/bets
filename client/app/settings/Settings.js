@@ -21,6 +21,9 @@ function () {
         },
         ranking: {
             limitUsers: 10
+        },
+        domain: {
+            beautifulName: 'CanIHazBets'
         }
 
     };
