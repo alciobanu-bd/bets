@@ -24,6 +24,10 @@
     color: #43cfff !important;
 }
 
+.navbar-nav li a:hover {
+    color: #eafdff !important;
+}
+
 .nav-tabs li a {
     color: #1998ff !important;
 }
