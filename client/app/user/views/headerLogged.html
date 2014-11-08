@@ -60,7 +60,7 @@
                                 Change Password
                             </a>
                         </li>
-                        <li>
+                        <li ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
                             <a href="#/admin">
                                 Admin panel
                             </a>
