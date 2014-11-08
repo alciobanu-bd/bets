@@ -15,20 +15,15 @@
 <body style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode';">
 
     <span ng-app="bets">
+        <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
+        <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
+
         <span ng-controller="MainController" ng-cloak>
-
-            <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
-            <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
-
-            <ng-include src="RoutesFactory.currentBodyView.html"></ng-include>
             <ng-view></ng-view>
-
         </span>
     </span>
 
-
     <script src="dist/built.min.js"></script>
-
 
 </body>
 </html>

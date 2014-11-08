@@ -13,26 +13,26 @@
 
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-right">
-                <li ng-click="RoutesFactory.resetPath(); RoutesFactory.goHome()">
-                    <a class="menu-link-border centered" href="">
+                <li>
+                    <a class="menu-link-border centered" href="#/">
                         <span class="glyphicon glyphicon-home"></span>
                         Home
                     </a>
                 </li>
-                <li ng-click="RoutesFactory.resetPath(); RoutesFactory.goToWeek()">
-                    <a class="menu-link-border centered" href="">
+                <li>
+                    <a class="menu-link-border centered" href="#/week">
                         <span class="glyphicon glyphicon-fire"></span>
                         Play
                     </a>
                 </li>
-                <li ng-click="RoutesFactory.resetPath(); RoutesFactory.goToRanking()">
-                    <a class="menu-link-border centered" href="">
+                <li>
+                    <a class="menu-link-border centered" href="#/ranking">
                         <span class="glyphicon glyphicon-th-list"></span>
                         Ranking
                     </a>
                 </li>
-                <li ng-click="RoutesFactory.resetPath(); RoutesFactory.goToRules()">
-                    <a class="menu-link-border centered" href="">
+                <li>
+                    <a class="menu-link-border centered" href="#/rules">
                         <span class="glyphicon glyphicon-book"></span>
                         Rules
                     </a>
@@ -51,22 +51,22 @@
                             <a href="">Points: {{userInfo.user.points}}</a>
                         </li>
                         <li>
-                            <a href="" ng-click="RoutesFactory.resetPath(); RoutesFactory.goToProfile()">
+                            <a href="#/profile">
                                 My profile
                             </a>
                         </li>
                         <li>
-                            <a href="" ng-click="RoutesFactory.resetPath(); RoutesFactory.goToChangePassword()">
+                            <a href="#/change-password">
                                 Change Password
                             </a>
                         </li>
-                        <li ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
-                            <a href="" ng-click="RoutesFactory.resetPath(); RoutesFactory.goToAdminPanel()">
+                        <li>
+                            <a href="#/admin">
                                 Admin panel
                             </a>
                         </li>
                         <li>
-                            <a href="" ng-click="RoutesFactory.resetPath(); RoutesFactory.goToHistory()">
+                            <a href="#/history">
                                 History
                             </a>
                         </li>

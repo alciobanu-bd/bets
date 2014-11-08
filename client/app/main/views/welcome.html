@@ -1,0 +1,8 @@
+
+<span ng-if="userInfo.isLogged">
+    <ng-include src="Templates.welcome.logged.html"></ng-include>
+</span>
+
+<span ng-if="!userInfo.isLogged">
+    <ng-include src="Templates.welcome.notLogged.html"></ng-include>
+</span>

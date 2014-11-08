@@ -2,8 +2,8 @@
 userModule
 
 .controller('AccountActivationController', [
-'$scope', 'ActivationFactory', 'RoutesFactory', 'UserInformation', 'ActivationFactory',
-function ($scope, ActivationFactory, RoutesFactory, UserInformation, ActivationFactory) {
+'$scope', 'ActivationFactory', 'UserInformation', '$location',
+function ($scope, ActivationFactory, UserInformation, $location) {
 
     $scope.inputs = {
         registrationCode: ''
@@ -17,8 +17,7 @@ function ($scope, ActivationFactory, RoutesFactory, UserInformation, ActivationF
             function (user) {
                 // on success
                 UserInformation.setUserDetails(user);
-                RoutesFactory.resetPath();
-                RoutesFactory.goHome();
+                $location.path('');
             },
             function () {
                 // on error

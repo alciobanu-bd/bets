@@ -1,8 +1,8 @@
 betsModule
 .controller('MainController',[
-'$scope', 'Templates', 'UserInformation', 'RoutesFactory', 'UserInformationCalls', 'UserInformation', '$interval',
+'$scope', 'Templates', 'UserInformation', 'UserInformationCalls', 'UserInformation', '$interval',
 'Settings', '$location',
-function ($scope, Templates, UserInfo, RoutesFactory, UserInformationCalls, UserInformation, $interval,
+function ($scope, Templates, UserInfo, UserInformationCalls, UserInformation, $interval,
 Settings, $location) {
     /**
      * UserInformationCalls is injected because it sets the user information.
@@ -10,15 +10,6 @@ Settings, $location) {
 
     $scope.Templates = Templates;
     $scope.userInfo = UserInformation;
-    $scope.RoutesFactory = RoutesFactory;
-
-    $scope.$on("$locationChangeStart",
-        function(newValue, oldValue) {
-            if (newValue != oldValue) {
-                RoutesFactory.loadDefault();
-            }
-        }
-    );
 
     var refreshUserDetails = function () {
         if (!UserInformation.isLogged) {
