@@ -5,40 +5,50 @@
         <div class="row">
             <h2 class="panel-title">
             Week {{week.number}}
+            <span ng-if="week.ended">(ended)</span>
+            <span ng-if="!week.ended">(in progress)</span>
             &nbsp;
-            <span ng-click="openEditWeekModal()" class="blue-link">
+            <span ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)"
+                  ng-click="openEditWeekModal()" class="blue-link">
                 Edit
+            </span>
+            &nbsp;
+            <span ng-if="week.ended || RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)"
+                class="blue-link" ng-click="openWeekHistoryModal()">
+                View all bets
             </span>
             </h2>
         </div>
-        <div class="row" ng-show="week.available">
-            {{week.events.length}} total matches.
-            You are required to play {{week.required}} of them.
-        </div>
-        <div class="row" ng-show="!week.available">
-            {{week.events.length}} total matches on that week.
-            You were required to play {{week.required}} of them.
-        </div>
-        <div class="row" ng-show="errorObject.active && week.available">
-            <span style="color: #ff0026">
-                {{errorObject.message}}
-            </span>
-        </div>
-        <div class="row" style="color: #03b2ff" ng-show="week.available">
-            <span ng-if="isToday()">
-                Deadline: Today, {{week.endDate | date: 'h:mm a'}}
-            </span>
-            <span ng-if="isTomorrow()">
-                Deadline: Tomorrow, {{week.endDate | date: 'h:mm a'}}
-            </span>
-            <span ng-if="!isToday() && !isTomorrow()">
-                Deadline: {{week.endDate | date:'MMM d, y h:mm a'}}
-            </span>
-        </div>
-        <div class="row" ng-show="!week.available">
-            <span style="color: #ff0026">
-                Bet placement isn't available anymore for this week.
-            </span>
+        <div class="top-buffer-1-em">
+            <div class="row" ng-show="week.available">
+                {{week.events.length}} total matches.
+                You are required to play {{week.required}} of them.
+            </div>
+            <div class="row" ng-show="!week.available">
+                {{week.events.length}} total matches on that week.
+                You were required to play {{week.required}} of them.
+            </div>
+            <div class="row" ng-show="errorObject.active && week.available">
+                <span style="color: #ff0026">
+                    {{errorObject.message}}
+                </span>
+            </div>
+            <div class="row" style="color: #03b2ff" ng-show="week.available">
+                <span ng-if="isToday()">
+                    Deadline: Today, {{week.endDate | date: 'h:mm a'}}
+                </span>
+                <span ng-if="isTomorrow()">
+                    Deadline: Tomorrow, {{week.endDate | date: 'h:mm a'}}
+                </span>
+                <span ng-if="!isToday() && !isTomorrow()">
+                    Deadline: {{week.endDate | date:'MMM d, y h:mm a'}}
+                </span>
+            </div>
+            <div class="row" ng-show="!week.available">
+                <span style="color: #ff0026">
+                    Bet placement isn't available anymore for this week.
+                </span>
+            </div>
         </div>
 
         <div class="panel-body">
@@ -106,7 +116,7 @@
             </div>
         </span>
 
-        <div class="white" ng-if="week.ended" style="margin: 2em">
+        <div class="white" ng-if="week.ended" style="margin: 0.5em">
             <span ng-if="bets.points > 1">
                 You won {{bets.points}} points this week.
             </span>
@@ -116,9 +126,9 @@
             <span ng-if="bets.points == 0">
                 You won no points this week.
             </span>
-            <ng-if ng-if="!bets">
+            <span ng-if="!bets">
                 You didn't place a bet this week. Therefore you won no points.
-            </ng-if>
+            </span>
         </div>
 
         <span ng-if="!week.available && RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">

@@ -2,8 +2,8 @@
 historyModule
 
 .factory('HistoryFactory', [
-'InitUrls', 'CallUrlService',
-function (InitUrls, CallUrlService) {
+'InitUrls', 'CallUrlService', '$q',
+function (InitUrls, CallUrlService, $q) {
 
     var thisFactory = {};
     thisFactory.betHistory = null;
@@ -27,6 +27,20 @@ function (InitUrls, CallUrlService) {
                 }
             });
         })
+    }
+
+    thisFactory.loadHistoryForAWeek = function (weekId, page) {
+        var deferred = $q.defer();
+        InitUrls.then(function (data) {
+            CallUrlService.get({uri: data.bet.historyByWeek, id: weekId, page: page},
+            function (data) {
+                deferred.resolve(data);
+            },
+            function (response) {
+                deferred.reject(response);
+            });
+        });
+        return deferred.promise;
     }
 
     return thisFactory;

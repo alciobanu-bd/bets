@@ -31,7 +31,8 @@ var initFeed = {
     bet: {
         address: "/api/bet",
         byWeek: "/api/bets/getBetByWeek",
-        history: "/api/bet/history"
+        history: "/api/bet/history",
+        historyByWeek: "/api/bet/history/getByWeek"
     },
     admin: {
         rankingRecalculate: "/api/ranking/recalculate"

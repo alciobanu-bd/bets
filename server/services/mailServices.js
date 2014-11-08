@@ -1,6 +1,4 @@
 
-var humanize = require('humanize');
-
 var sendMail = function (mailOptions, onSuccess, onError) {
     mailTransporter.sendMail(mailOptions, function(error, info){
         if(error){
@@ -29,7 +27,7 @@ var sendConfirmationLinkOnRegistration = function (username, emailAddress, code,
             '\r\n' +
             'We are pleased that you registered at our site. We hope you will have a pleasant staying.' +
             '\r\n\r\n' +
-            'In order to activate your account, use the next code after you login ' +
+            'In order to activate your account, use the next code after you login: ' +
             '\r\n' +
             code
     };
@@ -89,6 +87,8 @@ var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuc
         eventsText += events[i].homeTeam + ' vs ' + events[i].awayTeam + '\r\n';
     }
 
+    var endDate = (new Date(week.endDate)).toISOString();
+
     var mailOptions = {
         from: 'CanIHazBets <contact@canihazbets.me>',
         to: emailAddress,
@@ -103,7 +103,8 @@ var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuc
             '\r\n\r\n' + eventsText +
             '\r\n\r\n' +
             'The deadline since you can guess the scores is ' +
-            humanize.date('d.m.Y h:i A', week.endDate) + '.\r\n' +
+            endDate.split("T")[0] + ' ' + endDate.split("T")[1].split(":")[0] + ':' + endDate.split("T")[1].split(":")[1] +
+            ' (UTC). ' +
             'Don\'t miss it!' + '\r\n\r\n' +
             'If you want to unsubscribe from these e-mails, login to your account and change your preference from ' +
             'your profile page.'
