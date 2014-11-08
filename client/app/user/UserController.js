@@ -3,14 +3,13 @@ userModule
 
 .controller(
 'UserController', [
-'$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'RoutesFactory', 'CheckActivationStatus',
-'Settings', 'KeepMeLoggedInStorage',
-function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory, CheckActivationStatus,
-Settings, KeepMeLoggedInStorage) {
+'$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'CheckActivationStatus',
+'Settings', 'KeepMeLoggedInStorage', '$location',
+function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, CheckActivationStatus,
+Settings, KeepMeLoggedInStorage, $location) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
-    $scope.RoutesFactory = RoutesFactory;
 
     $scope.inputs = {
         username: {
@@ -70,8 +69,7 @@ Settings, KeepMeLoggedInStorage) {
             loginPromise.then(
             function (data) {
                 $scope.encounteredError = false;
-                RoutesFactory.resetPath();
-                RoutesFactory.goHome();
+                $location.path('');
                 CheckActivationStatus.check();
                 $scope.loginInProgress = false;
             },
@@ -88,8 +86,7 @@ Settings, KeepMeLoggedInStorage) {
 
     $scope.logout = function () {
         UserInformationCalls.logout();
-        RoutesFactory.resetPath();
-        RoutesFactory.goHome();
+        $location.path('');
     }
 
 }

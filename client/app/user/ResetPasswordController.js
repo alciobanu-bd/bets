@@ -2,8 +2,8 @@
 userModule
 .controller(
 'ResetPasswordController', [
-'$scope', 'InitUrls', 'CallUrlService', 'SHA-2', 'RoutesFactory',
-function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
+'$scope', 'InitUrls', 'CallUrlService', 'SHA-2', '$routeParams',
+function ($scope, InitUrls, CallUrlService, SHA2, $routeParams) {
 
     $scope.inputs = {
         code: '',
@@ -18,9 +18,8 @@ function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
         message: ''
     };
 
-    var params = RoutesFactory.getParams();
-    if (params[1]) {
-        $scope.inputs.code = params[1];
+    if ($routeParams.code) {
+        $scope.inputs.code = $routeParams.code;
     }
 
     $scope.resetPassword = function () {

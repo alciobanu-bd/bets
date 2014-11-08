@@ -80,11 +80,10 @@ function ($scope, RankingFactory, $modal, Settings) {
 
 rankingModule
 .controller('ProfileRankingView', [
-    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation', 'RoutesFactory',
-    function ($scope, $modalInstance, user, RolesFactory, UserInformation, RoutesFactory) {
+    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation',
+    function ($scope, $modalInstance, user, RolesFactory, UserInformation) {
 
         $scope.RolesFactory = RolesFactory;
-        $scope.RoutesFactory = RoutesFactory;
         $scope.userInfo = UserInformation;
         $scope.user = user;
 
@@ -94,8 +93,6 @@ rankingModule
 
         $scope.viewUserHistory = function () {
             $scope.cancel();
-            RoutesFactory.resetPath();
-            RoutesFactory.goToHistoryUserId(user._id);
         }
 
     }

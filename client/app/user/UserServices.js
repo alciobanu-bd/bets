@@ -25,14 +25,13 @@ function () {
 ])
 
 .factory('CheckActivationStatus' , [
-'UserInformation', 'RoutesFactory',
-function (UserInformation, RoutesFactory) {
+'UserInformation', '$location',
+function (UserInformation, $location) {
 
     return {
         check: function () {
             if (UserInformation.isLogged && !UserInformation.user.active) {
-                RoutesFactory.resetPath();
-                RoutesFactory.goToActivation();
+                $location.path('activation');
             }
         }
     };

@@ -2,8 +2,8 @@
 adminModule
 
 .controller('AdminPanelController', [
-'$scope', 'RolesFactory', 'UserInformation', 'RoutesFactory',
-function ($scope, RolesFactory, UserInformation, RoutesFactory) {
+'$scope', 'RolesFactory',
+function ($scope, RolesFactory) {
 
     $scope.RolesFactory = RolesFactory;
 

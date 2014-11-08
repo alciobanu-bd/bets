@@ -1,11 +1,12 @@
 betsModule
 
 .controller('WelcomeController', [
-'$scope', 'UserInformation', 'InitUrls', 'Settings',
-function ($scope, UserInformation, InitUrls, Settings) {
+'$scope', 'UserInformation', 'InitUrls', 'Settings', 'Templates',
+function ($scope, UserInformation, InitUrls, Settings, Templates) {
 
     $scope.userInfo = UserInformation;
     $scope.Settings = Settings;
+    $scope.Templates = Templates;
 
     $scope.carouselSlides = [];
 

@@ -4,8 +4,8 @@ configModule
     .config(['$provide', '$httpProvider', function ($provide, $httpProvider) {
 
         $provide.factory('401Interceptor', [
-            '$q', 'UserInformation', 'LoginTokenFactory', 'RoutesFactory',
-            function ($q, UserInformation, LoginTokenFactory, RoutesFactory) {
+            '$q', 'UserInformation', 'LoginTokenFactory', '$location',
+            function ($q, UserInformation, LoginTokenFactory, $location) {
 
                 return {
                     responseError: function (config) {
@@ -17,9 +17,7 @@ configModule
                             }
 
                             LoginTokenFactory.deleteToken();
-                            RoutesFactory.resetPath();
-                            RoutesFactory.goToLogin();
-
+                            $location.path('');
                         }
                         return $q.reject(config);
                     }

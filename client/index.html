@@ -15,14 +15,11 @@
 <body style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode';">
 
     <span ng-app="bets">
+        <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
+        <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
+
         <span ng-controller="MainController" ng-cloak>
-
-            <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
-            <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
-
-            <ng-include src="RoutesFactory.currentBodyView.html"></ng-include>
             <ng-view></ng-view>
-
         </span>
     </span>
 
@@ -53,6 +50,12 @@
     <script src="app/resources/resourceModule.js"></script>
     <script src="app/resources/ResourceServices.js"></script>
 
+    <script src="app/config/configModule.js"></script>
+    <script src="app/config/booting-config.js"></script>
+    <script src="app/config/routeProvider.js"></script>
+    <script src="app/config/TokenInterceptor.js"></script>
+    <script src="app/config/401-Interceptor.js"></script>
+
     <script src="app/user/userModule.js"></script>
     <script src="app/user/UserServices.js"></script>
     <script src="app/user/UserController.js"></script>
@@ -61,11 +64,6 @@
     <script src="app/user/ChangePasswordController.js"></script>
     <script src="app/user/ForgotPasswordController.js"></script>
     <script src="app/user/ResetPasswordController.js"></script>
-
-    <script src="app/config/configModule.js"></script>
-    <script src="app/config/RoutesFactory.js"></script>
-    <script src="app/config/TokenInterceptor.js"></script>
-    <script src="app/config/401-Interceptor.js"></script>
 
     <script src="app/ranking/rankingModule.js"></script>
     <script src="app/ranking/RankingController.js"></script>
