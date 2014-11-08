@@ -2,7 +2,7 @@
 module.exports = {
     dev: {
         domainName: {
-            address: "http://localhost:1111",
+            address: "http://localhost",
             beautifulName: "CanIHazBets",
             dns: "canihazbets.me"
         },
