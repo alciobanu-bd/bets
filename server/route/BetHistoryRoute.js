@@ -95,4 +95,68 @@ function (req, res, next) {
     });
 });
 
+router.get('/history/getByWeek/:id([0-9a-fA-F]{24})',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
+function (req, res, next) {
+    // page is indexed from 0 -- zero is the first page
+
+    var pageSize = 4;
+
+    var weekNumber = req.params.id;
+    var page = req.query.page;
+
+    Week.findOne({_id: weekNumber},
+    function (err, week) {
+
+        if (err || !week) {
+            res.status(500).json({
+                message: "Couldn't find week information."
+            }).end();
+        }
+
+        else {
+
+            if (!week.ended && Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+                res.status(500).json({
+                    message: "Week hasn't ended yet. You cannot see the history."
+                }).end();
+            }
+            else {
+
+                Bet.count({weekNumber: week.number},
+                function (err, count) {
+                    if (err) {
+                        res.status(500).json({
+                            message: "History couldn't be fetched."
+                        }).end();
+                    }
+                    else {
+                        Bet.find({weekNumber: week.number},
+                            {congratsSent: 0, __v: 0},
+                            {sort: {points: -1, username: 1}, skip: pageSize * page, limit: pageSize},
+                            function (err, bets) {
+                                if (err) {
+                                    res.status(500).json({
+                                        message: "History couldn't be fetched."
+                                    }).end();
+                                }
+                                else {
+                                    res.status(200).json({
+                                        bets: bets,
+                                        count: count,
+                                        numberOfPages: Math.ceil(count / pageSize),
+                                        itemsPerPage: pageSize
+                                    }).end();
+                                }
+                            });
+                    }
+                });
+            }
+
+        }
+
+    });
+
+});
+
 app.use('/api/bet', router);

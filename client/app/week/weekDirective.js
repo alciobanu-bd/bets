@@ -227,6 +227,19 @@ weekModule
                 });
             }
 
+            scope.openWeekHistoryModal = function () {
+                var modalInstance = $modal.open({
+                    templateUrl: 'app/history/views/weekHistory.html',
+                    controller: 'WeekHistoryController',
+                    size: 'lg',
+                    resolve: {
+                        week: function () {
+                            return prepareWeekBeforeOpeningEditModal(scope.week);
+                        }
+                    }
+                });
+            }
+
             scope.$on('$destroy', function () {
                 scope.BetService = null;
             });
@@ -235,6 +248,69 @@ weekModule
     }
 }]);
 
+weekModule.controller('WeekHistoryController', [
+'$scope', '$modalInstance', 'week', 'HistoryFactory',
+function ($scope, $modalInstance, week, HistoryFactory) {
+
+    $scope.week = week;
+
+    $scope.status = {
+        inProgress: true,
+        error: false,
+        success: false,
+        message: ''
+    };
+
+    $scope.history = [];
+
+    $scope.paging = {
+        page: 1,
+        totalPages: 1, // will be overwritten by response from server
+        itemsPerPage: 4, // will be overwritten by response from server
+        totalItems: 0 // will be overwritten by response from server
+    };
+
+    $scope.getBetByIndex = function (bet, index) {
+        return _.find(bet.scores, function (item) {
+            return item.index == index;
+        });
+    }
+
+    var loadPage = function (page) {
+        HistoryFactory.loadHistoryForAWeek(week._id, page).then(
+            function (data) {
+                $scope.status.inProgress = false;
+                $scope.status.error = false;
+                $scope.status.success = true;
+                $scope.history = data.bets;
+                $scope.paging.totalPages = data.numberOfPages;
+                $scope.paging.totalItems = data.count;
+                $scope.paging.itemsPerPage = data.itemsPerPage;
+            },
+            function (response) {
+                $scope.status.inProgress = false;
+                $scope.status.error = true;
+                $scope.status.success = false;
+                if (response.data.message) {
+                    $scope.status.message = response.data.message;
+                }
+                else {
+                    $scope.status.message = 'History couldn\'t be fetched.';
+                }
+            }
+        );
+    }
+
+    $scope.$watch('paging.page', function () {
+        loadPage($scope.paging.page - 1);
+    });
+
+    $scope.close = function () {
+        $modalInstance.close();
+    }
+
+}
+]);
 
 weekModule
 .controller('WeekEditController', [
