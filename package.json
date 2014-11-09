@@ -23,7 +23,9 @@
         "load-grunt-tasks": "*",
         "time-grunt": "*",
         "humanize": "*",
-        "nodemailer-dkim": "*"
+        "nodemailer-dkim": "*",
+        "cron": "*",
+        "time": "*"
     },
     "devDependencies": {
         "bower": "*",
