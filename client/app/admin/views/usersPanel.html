@@ -5,26 +5,43 @@
         placeholder="Search user" ng-model="searchedUser" typeahead="user.username for user in users | filter:$viewValue"
         ng-keydown="openUserModalOnEnter($event)">
 
-    <div class="row top-buffer-1-em" style="margin-bottom: 2em; font-size: 1.2em;">
+    <div class="row top-buffer-1-em" style="margin-bottom: 2em; font-size: 1.2em; cursor: default;">
         <span class="col-xs-1">&nbsp;</span>
-        <span class="col-xs-2">Username</span>
+        <span class="col-xs-2" ng-click="toggleSorting('username', 1)">
+            Username
+            <span ng-if="sorts.username == 0" class="glyphicon glyphicon-sort"></span>
+            <span ng-if="sorts.username < 0" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-if="sorts.username > 0" class="glyphicon glyphicon-arrow-down"></span>
+        </span>
         <span class="col-xs-3">E-mail</span>
-        <span class="col-xs-2">Register date</span>
-        <span class="col-xs-2">Place/Points</span>
+        <span class="col-xs-2" ng-click="toggleSorting('lastLogin', -1)">
+            Last login
+            <span ng-if="sorts.lastLogin == 0" class="glyphicon glyphicon-sort"></span>
+            <span ng-if="sorts.lastLogin < 0" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-if="sorts.lastLogin > 0" class="glyphicon glyphicon-arrow-down"></span>
+        </span>
+        <span class="col-xs-1" ng-click="toggleSorting('points', -1)">
+            Pts
+            <span ng-if="sorts.points  == 0" class="glyphicon glyphicon-sort"></span>
+            <span ng-if="sorts.points < 0" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-if="sorts.points > 0" class="glyphicon glyphicon-arrow-down"></span>
+        </span>
         <span class="col-xs-1">Rank</span>
-        <span class="col-xs-1">Disabled</span>
+        <span class="col-xs-2">Registration IP</span>
     </div>
 
-    <div ng-repeat="user in users" class="row top-buffer-0-5-em">
+    <div ng-repeat="user in users | dateSort:'lastLogin':sorts.lastLogin | stringSort:'username':sorts.username |
+        numberSort:'points':sorts.points track by user._id" class="row top-buffer-0-5-em">
+
         <span class="col-xs-1">
             <span class="glyphicon glyphicon-cog" ng-click="openModal(user)" style="cursor: pointer;"></span>
         </span>
         <span class="col-xs-2">{{user.username}}</span>
         <span class="col-xs-3">{{user.email}}</span>
-        <span class="col-xs-2">{{user.registerDate | date:'MMM d, y'}}</span>
-        <span class="col-xs-2">{{user.place}}/{{user.points}}</span>
+        <span class="col-xs-2">{{user.lastLogin | date:'MMM d, y, hh:mm a'}}</span>
+        <span class="col-xs-1">{{user.points}} (#{{user.place}})</span>
         <span class="col-xs-1">{{RolesFactory.findRoleByName(user.role).beautifulName}}</span>
-        <span class="col-xs-1">{{!!user.disabled ? 'Yes' : 'No'}}</span>
+        <span class="col-xs-2">{{user.registrationIp}}</span>
     </div>
 
 </div>
