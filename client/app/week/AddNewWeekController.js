@@ -18,6 +18,10 @@ function ($scope, Settings, CallUrlService, InitUrls) {
         required: ''
     };
 
+    $scope.weekOptions = {
+        hidden: false
+    };
+
     $scope.setMatchesArray = function () {
         $scope.matches = [];
         for (var i in $scope.range($scope.matchesNumber.total)) {
@@ -128,7 +132,8 @@ function ($scope, Settings, CallUrlService, InitUrls) {
         var newWeek = {
             events: getMatches(),
             number: $scope.WeekFactory.currentWeek.number + 1,
-            required: parseInt($scope.matchesNumber.required)
+            required: parseInt($scope.matchesNumber.required),
+            hidden: $scope.weekOptions.hidden
         };
 
         InitUrls.then(function (data) {

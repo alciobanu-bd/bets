@@ -4,6 +4,7 @@
     <div class="panel-heading">
         <div class="row">
             <h2 class="panel-title">
+            <span ng-if="week.hidden" style="color: #ff002b">HIDDEN</span>
             Week {{week.number}}
             <span ng-if="week.ended">(ended)</span>
             <span ng-if="!week.ended">(in progress)</span>

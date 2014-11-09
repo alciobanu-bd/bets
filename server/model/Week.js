@@ -9,7 +9,8 @@ var WeekSchema = mongoose.Schema({
     endDate: {type: Date, required: false},
     required: {type: 'number', required: true},
     ended: {type: Boolean, required: false},
-    mailNotificationSent: {type: Boolean, required: false}
+    mailNotificationSent: {type: Boolean, required: false},
+    hidden: {type: Boolean, required: true}
 });
 
 module.exports = restful.model('week', WeekSchema);

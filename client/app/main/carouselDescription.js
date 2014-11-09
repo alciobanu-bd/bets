@@ -1,5 +1,5 @@
 
-var TOTAL_CAROUSEL_IMAGES = 11;
+var TOTAL_CAROUSEL_IMAGES = 12;
 
 var carouselImagesDescription = {};
 

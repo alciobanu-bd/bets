@@ -2,8 +2,8 @@
 weekModule
 
 .controller('WeekController', [
-'$scope', 'WeekFactory', 'RolesFactory', 'UserInformation', 'InitUrls', 'CallUrlService', '$timeout',
-function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlService, $timeout) {
+'$scope', 'WeekFactory', 'RolesFactory', 'UserInformation', 'InitUrls', 'CallUrlService',
+function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlService) {
 
     $scope.WeekFactory = WeekFactory;
     $scope.parseInt = parseInt;

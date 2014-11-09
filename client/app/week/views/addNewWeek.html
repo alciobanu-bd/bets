@@ -38,6 +38,13 @@
                     </span>
             </div>
 
+            <div class="row" ng-if="matches.length > 0">
+                <input type="checkbox" id="hiddenWeek" ng-model="weekOptions.hidden" />
+                <label for="hiddenWeek" style="font-style: normal; font-weight: normal">
+                    Hidden
+                </label>
+            </div>
+
             <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in matches track by $index">
                     <span style="width: 25%" class="input-group">
                         <input type="text" ng-model="match.homeTeam" class="form-control cornered-input" placeholder="Home team" />

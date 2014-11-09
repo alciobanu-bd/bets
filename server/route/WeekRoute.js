@@ -4,6 +4,7 @@
 var express = require('express');
 var Week = require('./../model/Week.js');
 var User = require('./../model/User.js');
+var Roles = require('./../model/Roles.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 var pointsManagementFunctions = require('./../middlewares/pointsManagement.js');
@@ -33,9 +34,17 @@ function (req, res, next) {
 });
 
 router.get('/week',
+jwtauth([tokenChecks.hasRole("ROLE_USER")]),
 function (req, res, next) {
 
-    Week.find({},
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject,
     function (err, weeks) {
         if (err) {
             res.status(500).json({
@@ -50,9 +59,17 @@ function (req, res, next) {
 });
 
 router.get('/week/last',
+jwtauth([tokenChecks.hasRole("ROLE_USER")]),
 function (req, res, next) {
 
-    Week.find({}, {},
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject, {},
         {sort: {number: -1}, limit: 1},
         function (err, weeks) {
 
@@ -86,7 +103,7 @@ router.get('/week/mail-notification',
 jwtauth([tokenChecks.hasRole("ROLE_ADMIN")]),
 function (req, res) {
 
-    Week.find({}, {},
+    Week.find({hidden: false}, {},
     {sort: {number: -1}, limit: 1},
     function (err, weeks) {
 
@@ -248,9 +265,17 @@ function (req, res, next) {
 });
 
 router.get('/week/beforeLast',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
-    Week.find({}, {},
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject, {},
         {sort: {number: -1}, limit: 2},
         function (err, weeks) {
 
@@ -284,10 +309,18 @@ function (req, res, next) {
  * Weeknumber given as url query param (@number)
  */
 router.get('/week/getByNumber',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
+    var queryObject = {number: req.query.number};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
     Week.findOne(
-        {number: req.query.number},
+        queryObject,
         function (err, week) {
 
             if (err) {
