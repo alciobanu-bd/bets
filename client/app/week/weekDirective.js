@@ -335,6 +335,7 @@ weekModule
         }
 
         $scope.resetScoreCheckbox = false;
+        $scope.hiddenCheckbox = week.hidden;
 
         $scope.openDate = function (match, $event) {
             $event.preventDefault();
@@ -405,6 +406,7 @@ weekModule
 
             var updatedWeek = JSON.parse(JSON.stringify($scope.week));
             updatedWeek.events = getMatches();
+            updatedWeek.hidden = $scope.hiddenCheckbox;
 
             setIndexesForEvents(updatedWeek);
             $scope.errorSaving = false;

@@ -48,7 +48,6 @@ function (InitUrls, CallUrlService) {
 
         thisFactory.weeksByNumber = {};
         thisFactory.betsByWeekNumber = {};
-
     }
 
     thisFactory.fetchWeekByNumber = function (callWhenDone, weekNo) {
@@ -70,7 +69,7 @@ function (InitUrls, CallUrlService) {
                         if (!angular.isDefined(thisFactory.error.weeksByNumberError[weekNo])) {
                             thisFactory.error.weeksByNumberError[weekNo] = {};
                         }
-                        thisFactory.error.weeksByNumberError[data.number].active = false;
+                        thisFactory.error.weeksByNumberError[weekNo].active = false;
                         thisFactory.weeksByNumber[weekNo] = data;
                         if (typeof callWhenDone === 'function') {
                             callWhenDone();

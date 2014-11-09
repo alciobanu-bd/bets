@@ -36,7 +36,7 @@ function (req, res, next) {
         }
         else {
 
-            var queryDateObject = {};
+            var queryDateObject = {hidden: false};
             if (userId.toString() != res.data.local.user._id.toString() && Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
                 queryDateObject = {endDate: {$lt: new Date()}};
             }
