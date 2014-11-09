@@ -97,6 +97,8 @@ require('./route/BetRoute.js');
 require('./route/BetsPerWeek.js');
 require('./route/BetHistoryRoute.js');
 
+require('./services/CronJobs.js');
+
 // resolve statics
 // use client folder as root path /
 app.use('/', express.static(path.resolve('client/')));

@@ -81,6 +81,6 @@
 
     </div>
 
-    <ng-include src="'app/week/views/addNewWeek.html'"></ng-include>
+    <ng-include ng-if="WeekFactory.currentWeek" src="'app/week/views/addNewWeek.html'"></ng-include>
 
 </div>
