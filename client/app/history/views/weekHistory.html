@@ -11,8 +11,12 @@
         <div class="panel-heading">
             <div>
                 <h2 class="panel-title">
-                    {{bet.username}} won {{bet.points + " " + (bet.points == 1 ? 'point' : 'points')}} this week.
-                    <span ng-if="!week.ended">(Week is not ended.)</span>
+                    <span ng-if="week.ended">
+                        {{bet.username}} won {{bet.points + " " + (bet.points == 1 ? 'point' : 'points')}} this week.
+                    </span>
+                    <span ng-if="!week.ended">
+                        {{bet.username}}'s bets
+                    </span>
                 </h2>
             </div>
         </div>

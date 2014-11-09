@@ -116,7 +116,7 @@ function (req, res, next) {
 
         else {
 
-            if (!week.ended && Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+            if (new Date() < new Date(week.endDate) && Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
                 res.status(500).json({
                     message: "Week hasn't ended yet. You cannot see the history."
                 }).end();

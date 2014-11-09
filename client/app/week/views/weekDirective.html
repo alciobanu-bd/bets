@@ -6,15 +6,18 @@
             <h2 class="panel-title">
             <span ng-if="week.hidden" style="color: #ff002b">HIDDEN</span>
             Week {{week.number}}
-            <span ng-if="week.ended">(ended)</span>
-            <span ng-if="!week.ended">(in progress)</span>
+            <span ng-if="week.available">(in progress)</span>
+            <span ng-if="!week.available">
+                <span ng-if="week.ended">(ended)</span>
+                <span ng-if="!week.ended">(ended - waiting for results)</span>
+            </span>
             &nbsp;
             <span ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)"
                   ng-click="openEditWeekModal()" class="blue-link">
                 Edit
             </span>
             &nbsp;
-            <span ng-if="week.ended || RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)"
+            <span ng-if="!week.available || RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)"
                 class="blue-link" ng-click="openWeekHistoryModal()">
                 View all bets
             </span>
