@@ -144,6 +144,8 @@ function (req, res, next) {
                 bet.points = 0; // you cannot save the bet after points are calculated, so there is no risk to overwrite results
                 bet.ended = false; // the same, no risk that bet ended and you save as not ended
 
+                bet.scores = req.body.scores;
+
                 bet.save(function (err) {
                     if (err) {
                         res.status(500).json({
