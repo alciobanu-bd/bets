@@ -25,7 +25,8 @@
         "humanize": "*",
         "nodemailer-dkim": "*",
         "cron": "*",
-        "time": "*"
+        "time": "*",
+        "loggly": "*"
     },
     "devDependencies": {
         "bower": "*",
