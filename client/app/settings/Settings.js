@@ -7,7 +7,10 @@ function () {
     return {
 
         week: {
-            maxNumberOfMatches: 10
+            maxNumberOfMatches: 10,
+            events: {
+                maxScoreDifference: 5
+            }
         },
         user: {
             detailsRefreshInterval: 10000, // milliseconds
@@ -32,4 +35,4 @@ function () {
     };
 
 }
-])
+]);
