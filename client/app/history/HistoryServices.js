@@ -7,16 +7,22 @@ function (InitUrls, CallUrlService, $q) {
 
     var thisFactory = {};
     thisFactory.betHistory = null;
+    thisFactory.betHistoryUser = null;
 
     thisFactory.loadHistory = function (userId, onSuccess, onError) {
+
+        thisFactory.betHistory = null;
+        thisFactory.betHistoryUser = null;
+
         InitUrls.then(function (data) {
             var reqObject = {uri: data.bet.history};
             if (userId) {
                 reqObject.id = userId
             }
-            CallUrlService.getArray(reqObject,
+            CallUrlService.get(reqObject,
             function (data) {
-                thisFactory.betHistory = data;
+                thisFactory.betHistory = data.history;
+                thisFactory.betHistoryUser = data.user;
                 if (typeof onSuccess === 'function') {
                     onSuccess();
                 }
