@@ -1,21 +1,25 @@
 {
-    "name": "bets",
-    "dependencies": {
-        "bootstrap": "*",
-        "jquery": "*",
-        "jquery-ui": "*",
-        "angular": "*",
-        "angular-route": "*",
-        "angular-resource": "*",
-        "angular-cookies": "*",
-        "angular-sanitize": "*",
-        "underscore": "*",
-        "angular-ui-date": "*",
-        "angular-bootstrap": "*",
-        "jsPDF": "https://raw.githubusercontent.com/MrRio/jsPDF/master/dist/jspdf.min.js"
-    },
-    "devDependencies": {
-        "angular-mocks": "*",
-        "angular-scenario": "*"
-    }
+  "name": "bets",
+  "dependencies": {
+    "bootstrap": "*",
+    "jquery": "*",
+    "jquery-ui": "*",
+    "angular": "*",
+    "angular-route": "*",
+    "angular-resource": "*",
+    "angular-cookies": "*",
+    "angular-sanitize": "*",
+    "underscore": "*",
+    "angular-ui-date": "*",
+    "angular-bootstrap": "*",
+    "angular-loggly-logger": "*",
+    "jsPDF": "https://raw.githubusercontent.com/MrRio/jsPDF/master/dist/jspdf.min.js"
+  },
+  "devDependencies": {
+    "angular-mocks": "*",
+    "angular-scenario": "*"
+  },
+  "resolutions": {
+    "angular": "~1.3.2"
+  }
 }

@@ -7,7 +7,10 @@ function () {
     return {
 
         week: {
-            maxNumberOfMatches: 10
+            maxNumberOfMatches: 10,
+            events: {
+                maxScoreDifference: 5
+            }
         },
         user: {
             detailsRefreshInterval: 10000, // milliseconds
@@ -24,9 +27,12 @@ function () {
         },
         domain: {
             beautifulName: 'CanIHazBets'
+        },
+        loggly: {
+            token: "5b79fefe-0852-450e-abbf-59c707dac80a"
         }
 
     };
 
 }
-])
+]);

@@ -63,7 +63,8 @@
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.homeScore"
-                           ng-change="match.homeScore = validateScore(match.homeScore)"
+                           ng-class="{'border-input-too-big-score-difference': match.diffTooHigh}"
+                           ng-change="match.homeScore = validateScore(match.homeScore); checkScoreDifferenceTooHigh(match)"
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
                 <span style="width: 25%;" class="input-group">
@@ -79,10 +80,11 @@
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.awayScore"
-                           ng-change="match.awayScore = validateScore(match.awayScore)"
+                           ng-class="{'border-input-too-big-score-difference': match.diffTooHigh}"
+                           ng-change="match.awayScore = validateScore(match.awayScore); checkScoreDifferenceTooHigh(match)"
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
-                <span style="width: 30%" class="input-group">
+                <span style="width: 30%;" class="input-group">
                     {{match.awayTeam}}
                 </span>
             </div>
@@ -91,18 +93,29 @@
 
         <span ng-if="week.available">
             <div style="margin-top: 1em" ng-hide="weekOptions.showConfirm">
-                <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm()">
+                <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm();">
                     Bet
                 </button>
             </div>
 
             <div style="margin-top: 1em" ng-show="weekOptions.showConfirm">
-                <button type="button" class="btn btn-info" style="width: 20%" ng-click="place(); hideConfirm();">
+                <button type="button" class="btn btn-info" style="width: 20%"
+                        ng-click="resetMatchesWithDifferenceTooHigh(); place(); hideConfirm();">
                     Yes
                 </button>
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="hideConfirm();">
                     No
                 </button>
+            </div>
+
+            <div style="margin-top: 1em; color: #ff0429" ng-if="anyMatchWithDifferenceTooHigh() && !weekOptions.showConfirm &&
+                 !(BetService.afterPlacement.error || BetService.afterPlacement.success)">
+                <div>
+                    Warning! Score difference is quite big for the highlighted bets.
+                </div>
+                <div>
+                    Are you sure you didn't type the wrong score?
+                </div>
             </div>
 
             <div ng-show="BetService.afterPlacement.error" class="top-buffer-0-5-em centered cornered-input error-div"

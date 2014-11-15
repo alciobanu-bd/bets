@@ -2,8 +2,8 @@
 weekModule
 
 .directive('week', [
-    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation', '$modal',
-    function(BetService, WeekFactory, RolesFactory, UserInformation, $modal) {
+    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation', '$modal', 'Settings',
+    function(BetService, WeekFactory, RolesFactory, UserInformation, $modal, Settings) {
     return {
         restrict: 'E',
         replace: true,
@@ -92,6 +92,11 @@ weekModule
                     delete newEvent.awayTeam;
                     delete newEvent.startDate;
                     delete newEvent.competition;
+
+                    if (angular.isDefined(newEvent.diffTooHigh)) {
+                        delete newEvent.diffTooHigh;
+                    }
+
                     return newEvent;
                 });
 
@@ -100,6 +105,27 @@ weekModule
                         parseInt(event.awayScore) != NaN && parseInt(event.homeScore) != NaN;
                 });
 
+            }
+
+            scope.checkScoreDifferenceTooHigh = function (match) {
+                var maxDifference = Settings.week.events.maxScoreDifference;
+                var ret = Math.abs(parseInt(match.homeScore) - parseInt(match.awayScore)) > maxDifference;
+                match.diffTooHigh = ret;
+            }
+
+            scope.anyMatchWithDifferenceTooHigh = function () {
+                for (var i = 0; i < scope.week.events.length; i++) {
+                    if (scope.week.events[i].diffTooHigh) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            scope.resetMatchesWithDifferenceTooHigh = function () {
+                for (var i = 0; i < scope.week.events.length; i++) {
+                    scope.week.events[i].diffTooHigh = false;
+                }
             }
 
             scope.validateScore = function (n) {
