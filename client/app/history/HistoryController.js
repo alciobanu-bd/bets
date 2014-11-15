@@ -5,6 +5,8 @@ historyModule
 '$scope', 'HistoryFactory', '$routeParams',
 function ($scope, HistoryFactory, $routeParams) {
 
+    $scope.HistoryFactory = HistoryFactory;
+
     var userId = $routeParams.userId;
 
     HistoryFactory.loadHistory(userId, function () {

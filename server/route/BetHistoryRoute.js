@@ -1,6 +1,7 @@
 
 var express = require('express');
 var Bet = require('./../model/Bet.js');
+var User = require('./../model/User.js');
 var Roles = require('./../model/Roles.js');
 var Week = require('./../model/Week.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
@@ -63,7 +64,8 @@ function (req, res, next) {
                             bet = {
                                 placed: false,
                                 scores: [],
-                                points: 0
+                                points: 0,
+                                weekNumber: week.number
                             };
                         }
                         else {
@@ -86,7 +88,21 @@ function (req, res, next) {
                         history.push(historyItem);
                     }
 
-                    res.status(200).json(history).end();
+                    User.findOne({_id: userId},
+                        {password: 0, salt: 0, serverSalt: 0, registrationIp: 0, isMailNotificationOn: 0},
+                        function (err, user) {
+                        if (err) {
+                            res.status(500).json({
+                                message: "Cannot fetch bet history from database."
+                            }).end();
+                        }
+                        else {
+                            res.status(200).json({
+                                history: history,
+                                user: user
+                            }).end();
+                        }
+                    });
 
                 }
             });

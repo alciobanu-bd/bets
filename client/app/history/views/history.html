@@ -2,7 +2,9 @@
 <div class="container">
     <div class="jumbotron centered half-bg-opacity">
 
-        <h2 class="white" style="margin-bottom: 1em">Bet history</h2>
+        <h2 class="white" style="margin-bottom: 1em" ng-show="HistoryFactory.betHistoryUser">
+            {{HistoryFactory.betHistoryUser.username}}'s history
+        </h2>
 
         <h3 class="white" style="margin-bottom: 1em" ng-if="historyObject.length == 0">
             No history is available at the moment.
