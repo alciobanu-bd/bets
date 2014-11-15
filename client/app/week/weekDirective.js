@@ -122,6 +122,12 @@ weekModule
                 return false;
             }
 
+            scope.resetMatchesWithDifferenceTooHigh = function () {
+                for (var i = 0; i < scope.week.events.length; i++) {
+                    scope.week.events[i].diffTooHigh = false;
+                }
+            }
+
             scope.validateScore = function (n) {
                 n = parseInt(n);
                 if (isNaN(n)) {

@@ -9,7 +9,7 @@
 
     <div class="panel panel-primary" ng-repeat="bet in history track by bet._id">
         <div class="panel-heading">
-            <div>
+            <div class="row">
                 <h2 class="panel-title">
                     <span ng-if="week.ended">
                         {{bet.username}} won {{bet.points + " " + (bet.points == 1 ? 'point' : 'points')}} this week.
@@ -22,7 +22,7 @@
         </div>
 
         <div class="panel-body">
-            <div ng-repeat="event in week.events track by event.index" ng-init="betScores = getBetByIndex(bet, event.index)">
+            <div class="row" ng-repeat="event in week.events track by event.index" ng-init="betScores = getBetByIndex(bet, event.index)">
                 <span class="col-xs-3">
                     {{event.startDate | date: 'MMM d, y h:mm a'}}
                 </span>

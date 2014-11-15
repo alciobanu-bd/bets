@@ -93,13 +93,14 @@
 
         <span ng-if="week.available">
             <div style="margin-top: 1em" ng-hide="weekOptions.showConfirm">
-                <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm()">
+                <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm();">
                     Bet
                 </button>
             </div>
 
             <div style="margin-top: 1em" ng-show="weekOptions.showConfirm">
-                <button type="button" class="btn btn-info" style="width: 20%" ng-click="place(); hideConfirm();">
+                <button type="button" class="btn btn-info" style="width: 20%"
+                        ng-click="resetMatchesWithDifferenceTooHigh(); place(); hideConfirm();">
                     Yes
                 </button>
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="hideConfirm();">
@@ -107,10 +108,14 @@
                 </button>
             </div>
 
-            {{week.events}}
-            <div style="margin-top: 1em" ng-if="anyMatchWithDifferenceTooHigh() && !weekOptions.showConfirm &&
+            <div style="margin-top: 1em; color: #ff0429" ng-if="anyMatchWithDifferenceTooHigh() && !weekOptions.showConfirm &&
                  !(BetService.afterPlacement.error || BetService.afterPlacement.success)">
-                ERROR
+                <div>
+                    Warning! Score difference is quite big for the highlighted bets.
+                </div>
+                <div>
+                    Are you sure you didn't type the wrong score?
+                </div>
             </div>
 
             <div ng-show="BetService.afterPlacement.error" class="top-buffer-0-5-em centered cornered-input error-div"
