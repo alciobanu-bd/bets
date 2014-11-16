@@ -9,7 +9,7 @@
 
     <div class="panel panel-primary" ng-repeat="bet in history track by bet._id">
         <div class="panel-heading">
-            <div class="row">
+            <div>
                 <h2 class="panel-title">
                     <span ng-if="week.ended">
                         {{bet.username}} won {{bet.points + " " + (bet.points == 1 ? 'point' : 'points')}} this week.
