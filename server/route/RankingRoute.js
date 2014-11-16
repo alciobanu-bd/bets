@@ -34,6 +34,7 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
 router.get('/ranking/recalculate',
     jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
     pointsManagementFunctions.calculateWinners,
+    pointsManagementFunctions.setWinnersOnBets,
     pointsManagementFunctions.resetUsersPointsBeforeAggregating,
     pointsManagementFunctions.updatePointsForUsers,
     pointsManagementFunctions.updateUsersPlace

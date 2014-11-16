@@ -402,6 +402,7 @@ function(req, res, next) {
 
 pointsManagementFunctions.updatePointsForBetsOfThisWeek,
 pointsManagementFunctions.calculateWinners,
+pointsManagementFunctions.setWinnersOnBets,
 pointsManagementFunctions.sendCongratsToWinners,
 pointsManagementFunctions.resetUsersPointsBeforeAggregating,
 pointsManagementFunctions.updatePointsForUsers,
