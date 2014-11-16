@@ -33,7 +33,7 @@
                     {{betScores.homeScore}} - {{betScores.awayScore}}
                 </span>
                 <span class="col-xs-2">
-                    <span ng-if="week.ended && betScores.points">
+                    <span ng-if="week.ended && (betScores.points || betScores.points == 0)">
                         {{betScores.points + " " + (betScores.points == 1 ? 'point' : 'points')}}
                     </span>
                     <span ng-if="!week.ended">
