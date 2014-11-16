@@ -157,6 +157,10 @@ var calculateWinners = function (req, res, next) {
                 };
             });
 
+            if (bestPointsPerWeek.length == 0) {
+                return next();
+            }
+
             Bet.find({$or: bestPointsPerWeek}, function (err, winningBets) {
 
                 if (err) {
@@ -165,6 +169,8 @@ var calculateWinners = function (req, res, next) {
                     }).end();
                 }
                 else {
+
+                    req.winningBets = winningBets;
 
                     var groupedUsers = _.countBy(winningBets, function (bet) {
                         return bet.userId;
@@ -210,6 +216,36 @@ var calculateWinners = function (req, res, next) {
         }
 
     });
+
+}
+
+var setWinnersOnBets = function (req, res, next) {
+
+    var winningBets = req.winningBets;
+
+    if (!winningBets) {
+        return next();
+    }
+
+    if (winningBets) {
+
+        var winnersQuery = _.map(winningBets, function (bet) {
+            return {_id: bet._id};
+        });
+
+        Bet.update({$or: winnersQuery}, {$set: {isWinner: true}}, {upsert: true, multi: true},
+        function (err) {
+            if (err) {
+                res.status(500).json({
+                    message: "Couldn't set winners on bets."
+                }).end();
+            }
+            else {
+                next();
+            }
+        });
+
+    }
 
 }
 
@@ -429,6 +465,7 @@ module.exports = {
     updatePointsForBetsOfThisWeek: updatePointsForBetsOfThisWeek,
     sendCongratsToWinners: sendCongratsToWinners,
     calculateWinners: calculateWinners,
+    setWinnersOnBets: setWinnersOnBets,
     resetUsersPointsBeforeAggregating: resetUsersPointsBeforeAggregating,
     updatePointsForUsers: updatePointsForUsers,
     updateUsersPlace: updateUsersPlace

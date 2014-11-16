@@ -5,6 +5,9 @@
         <div class="row">
             <h2 class="panel-title">
             <span ng-if="week.hidden" style="color: #ff002b">HIDDEN</span>
+            <span ng-if="bets.isWinner" style="color: #ff002b; cursor: default;" title="You won this week.">
+                WINNER
+            </span>
             Week {{week.number}}
             <span ng-if="week.available">(in progress)</span>
             <span ng-if="!week.available">
@@ -29,7 +32,7 @@
                 You are required to play {{week.required}} of them.
             </div>
             <div class="row" ng-show="!week.available">
-                {{week.events.length}} total matches on that week.
+                {{week.events.length}} total matches on this week.
                 You were required to play {{week.required}} of them.
             </div>
             <div class="row" ng-show="errorObject.active && week.available">
@@ -48,7 +51,15 @@
                     Deadline: {{week.endDate | date:'MMM d, y h:mm a'}}
                 </span>
             </div>
-            <div class="row" ng-show="!week.available">
+            <div class="row" style="color: #03b2ff" ng-if="bets.isWinner">
+                <span>
+                    You're the winner of the week!
+                </span>
+                &nbsp;
+                <span class="fb-share-button" data-href="http://canihazbets.me" data-layout="button">
+                </span>
+            </div>
+            <div class="row" ng-show="!week.available && !bets.isWinner">
                 <span style="color: #ff0026">
                     Bet placement isn't available anymore for this week.
                 </span>
