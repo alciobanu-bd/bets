@@ -4,6 +4,30 @@ function($routeProvider, TemplatesProvider) {
 
     var Templates = TemplatesProvider.$get();
 
+    var redirectHomeIfLogged = [
+    'UserInformation', '$location',
+    function (UserInformation, $location) {
+        if (UserInformation.isLogged) {
+            $location.path('/');
+        }
+    }];
+
+    var redirectHomeIfNotLogged = [
+    'UserInformation', '$location',
+    function (UserInformation, $location) {
+        if (!UserInformation.isLogged) {
+            $location.path('/');
+        }
+    }];
+
+    var redirectHomeIfNotAdmin = [
+    'UserInformation', '$location', 'RolesFactory',
+    function (UserInformation, $location, RolesFactory) {
+        if (!UserInformation.isLogged || !RolesFactory.userHasRole(UserInformation.user.role, RolesFactory.roles.admin)) {
+            $location.path('/');
+        }
+    }];
+
     $routeProvider.
         when('/', {
             templateUrl: 'app/main/views/welcome.html',
@@ -11,40 +35,66 @@ function($routeProvider, TemplatesProvider) {
         }).
         when('/register', {
             templateUrl: Templates.user.register.html,
-            controller: 'RegisterController'
+            controller: 'RegisterController',
+            resolve: {
+                redirect: redirectHomeIfLogged
+            }
         }).
         when('/login', {
             templateUrl: Templates.user.login.html,
-            controller: 'UserController'
+            controller: 'UserController',
+            resolve: {
+                redirect: redirectHomeIfLogged
+            }
         }).
         when('/week', {
             templateUrl: Templates.week.html,
-            controller: 'WeekController'
+            controller: 'WeekController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
         }).
         when('/ranking', {
             templateUrl: Templates.ranking.html,
-            controller: 'RankingController'
+            controller: 'RankingController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
         }).
         when('/rules', {
             templateUrl: Templates.rules.html,
-            controller: 'RulesController'
+            controller: 'RulesController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
         }).
         when('/profile', {
             templateUrl: Templates.account.profile.html,
-            controller: 'ProfileController'
+            controller: 'ProfileController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
         }).
         when('/history/:userId?', {
             templateUrl: Templates.history.html,
-            controller: 'HistoryController'
+            controller: 'HistoryController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
         }).
         when('/admin', {
             templateUrl: Templates.admin.html,
-            controller: 'AdminPanelController'
+            controller: 'AdminPanelController',
+            resolve: {
+                redirect: redirectHomeIfNotAdmin
+            }
         }).
         when('/change-password', {
             templateUrl: Templates.user.changePassword.html,
-            controller: 'ChangePasswordController'
-        }).
+            controller: 'ChangePasswordController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }        }).
         when('/forgot-password', {
             templateUrl: Templates.user.forgotPassword.html,
             controller: 'ForgotPasswordController'
@@ -55,7 +105,10 @@ function($routeProvider, TemplatesProvider) {
         }).
         when('/activation', {
             templateUrl: Templates.account.activation.html,
-            controller: 'AccountActivationController'
+            controller: 'AccountActivationController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
         }).
         otherwise({
             redirectTo: '/'
