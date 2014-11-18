@@ -1,32 +1,34 @@
 <div class="container">
 
     <div class="jumbotron centered white half-bg-opacity">
-        <h2>Login</h2>
+        <h2>{{'loginPage.name' | translate}}</h2>
         <div>
-            <a class="blue-link" href="#/forgot-password">Forgot password</a>
+            <a class="blue-link" href="#/forgot-password">{{'loginPage.forgotPassword' | translate}}</a>
         </div>
         <div class="input-group centered top-buffer-1-em" style="min-width: 40%;">
             <div class="form-group">
-                <input type="text" class="form-control cornered-input" ng-keydown="loginOnEnterKey($event)" ng-model="inputs.username.model" placeholder="Username">
+                <input type="text" class="form-control cornered-input" ng-keydown="loginOnEnterKey($event)"
+                       ng-model="inputs.username.model" placeholder="{{'loginPage.username' | translate}}">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control cornered-input" ng-keydown="loginOnEnterKey($event)" ng-model="inputs.password.model" placeholder="Password">
+                <input type="password" class="form-control cornered-input" ng-keydown="loginOnEnterKey($event)"
+                       ng-model="inputs.password.model" placeholder="{{'loginPage.password' | translate}}">
             </div>
         </div>
         <div style="margin-top: 1em">
             <div style="margin: 0.5em">
                 <input type="checkbox" id="keepMeLoggedInCheckbox" ng-model="inputs.keepMeLoggedIn.active" />
                 <label for="keepMeLoggedInCheckbox" style="font-style: normal; font-weight: normal">
-                    Keep me logged in for
+                    {{'loginPage.keepMeLoggedInFor' | translate}}
                     <span class="form-inline">
                         <input type="number" class="form-control cornered-input" ng-model="inputs.keepMeLoggedIn.days"
                                 style="width: 23%" ng-change="validateNumberOfKeepMeLoggedDays()" />
                     </span>
-                    days.
+                    {{'loginPage.days' | translate}}.
                 </label>
             </div>
             <button type="button" class="btn btn-info" style="width: 40%" ng-click="login()" ng-disabled="loginInProgress">
-                Come on in
+                {{'loginPage.loginButton' | translate}}
             </button>
         </div>
 

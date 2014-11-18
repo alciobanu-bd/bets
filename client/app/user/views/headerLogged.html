@@ -16,25 +16,25 @@
                 <li>
                     <a class="menu-link-border centered" href="#/">
                         <span class="glyphicon glyphicon-home"></span>
-                        Home
+                        {{'header.logged.home' | translate}}
                     </a>
                 </li>
                 <li>
                     <a class="menu-link-border centered" href="#/week">
                         <span class="glyphicon glyphicon-fire"></span>
-                        Play
+                        {{'header.logged.play' | translate}}
                     </a>
                 </li>
                 <li>
                     <a class="menu-link-border centered" href="#/ranking">
                         <span class="glyphicon glyphicon-th-list"></span>
-                        Ranking
+                        {{'header.logged.ranking' | translate}}
                     </a>
                 </li>
                 <li>
                     <a class="menu-link-border centered" href="#/rules">
                         <span class="glyphicon glyphicon-book"></span>
-                        Rules
+                        {{'header.logged.rules' | translate}}
                     </a>
                 </li>
                 <li class="dropdown">
@@ -45,29 +45,29 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="">Place: {{userInfo.user.place}}</a>
+                            <a href="">{{'header.logged.place' | translate}}: {{userInfo.user.place}}</a>
                         </li>
                         <li>
-                            <a href="">Points: {{userInfo.user.points}}</a>
+                            <a href="">{{'header.logged.points' | translate}}: {{userInfo.user.points}}</a>
                         </li>
                         <li>
                             <a href="#/profile">
-                                My profile
+                                {{'header.logged.myProfile' | translate}}
                             </a>
                         </li>
                         <li>
                             <a href="#/change-password">
-                                Change Password
+                                {{'header.logged.changePassword' | translate}}
                             </a>
                         </li>
                         <li ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
                             <a href="#/admin">
-                                Admin panel
+                                {{'header.logged.adminPanel' | translate}}
                             </a>
                         </li>
                         <li>
                             <a href="#/history">
-                                History
+                                {{'header.logged.history' | translate}}
                             </a>
                         </li>
                     </ul>
@@ -75,8 +75,29 @@
                 <li ng-click="logout()">
                     <a class="menu-link-border centered" href="">
                         <span class="glyphicon glyphicon-log-out"></span>
-                        Logout
+                        {{'header.logged.logout' | translate}}
                     </a>
+                </li>
+
+                <li class="dropdown">
+                    <a class="menu-link-border centered" href="" class="dropdown-toggle" data-toggle="dropdown">
+                        <span>LANG</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="">
+                                <img src="/images/flags16/EN.png" />
+                                English
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <img src="/images/flags16/RO.png" />
+                                Română
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
             </ul>
