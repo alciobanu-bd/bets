@@ -28,6 +28,12 @@ function () {
         var copiedArray = inputDateArray.slice(0);
 
         return copiedArray.sort(function (object1, object2) {
+            if (!object1[field]) {
+                return 99999999;
+            }
+            if (!object2[field]) {
+                return -99999999;
+            }
             return ascendingOrDescending * (new Date(object1[field]) - new Date(object2[field]));
         });
 
