@@ -66,8 +66,58 @@ function ($translateProvider) {
             changePassword: 'Change password',
             yes: 'Yes',
             no: 'No'
+        },
+        weekPage: {
+            name: 'Weeks and bets',
+            noWeeksMessage: 'Fun hasn\'t start yet. Please come back soon.',
+            searchByNumber: 'Search week by number',
+            show: 'Show',
+            reset: 'Reset',
+            sendEmailsAfterNewWeek: 'Send e-mails to all users of the site to notify them there\'s a new week that ' +
+                'they can play. They\'ll receive a list of all matches of the latest non-hidden week.',
+            sendMailNotificationButton: 'Send mail notifications',
+            yes: 'Yes',
+            no: 'No',
+            weekDirective: {
+                hidden: 'HIDDEN',
+                winner: 'WINNER',
+                week: 'Week',
+                inProgress: 'in progress',
+                ended: 'ended',
+                waitingForResults: 'waiting for results',
+                edit: 'Edit',
+                viewAllBets: 'View all bets',
+                totalMatches: 'total matches',
+                youAreRequiredToPlay: 'You are required to play',
+                ofThem: 'of them',
+                totalMatchesThisWeek: 'total matches this week',
+                youWereRequiredToPlay: 'You were required to play',
+                deadline: 'Deadline',
+                today: 'Today',
+                tomorrow: 'Tomorrow',
+                youReTheWinnerOfTheWeek: 'You\'re the winner of the week!',
+                betPlacementIsntAvailable: 'Bet placement isn\'t available anymore for this week.',
+                betButton: 'Bet',
+                yes: 'Yes',
+                no: 'No',
+                warningScoreDifferenceTooHigh: 'Warning! Score difference is quite big for the highlighted bets.',
+                areYouSureYouDidntTypeWrongScore: 'Are you sure you didn\'t type the wrong score?',
+                youWon: 'You won',
+                pointsThisWeek: 'points this week.',
+                youWonOnePointThisWeek: 'You won 1 point this week.',
+                youWonNoPointsThisWeek: 'You won no points this week.',
+                youDidntPlaceYouWonNoPoints: 'You didn\'t place a bet this week. Therefore you won no points.',
+                updateResults: 'Update results',
+                youAreInUpdateModeEditResults: 'You are in update mode. Enter the correct results for each event ' +
+                    'like when you normally play them.',
+                theyWillBeSavedAsResults: 'They will be saved as results and not as a bet.',
+                toggleBackToNormalMode: 'Toggle back to normal mode',
+                saveResults: 'Save results'
+            }
         }
     });
+
+
     $translateProvider.translations('ro', {
         header: {
             logged: {
@@ -132,6 +182,54 @@ function ($translateProvider) {
             changePassword: 'Schimbă parola',
             yes: 'Da',
             no: 'Nu'
+        },
+        weekPage: {
+            name: 'Etape și pariuri',
+            noWeeksMessage: 'Distracția n-a început încă. Te rugăm să revii în curând.',
+            searchByNumber: 'Caută după numărul etapei',
+            show: 'Arată',
+            reset: 'Resetează',
+            sendEmailsAfterNewWeek: 'Trimite e-mail-uri către toți userii site-ului pentru a-i notifica despre ' +
+                'existența unei noi etape. Aceștia vor primi lista meciurilor ultimei etape publicate (neascunse).',
+            sendMailNotificationButton: 'Trimite notificări',
+            yes: 'Da',
+            no: 'Nu',
+            weekDirective: {
+                hidden: 'ASCUNS',
+                winner: 'CÂȘTIGĂTOR',
+                week: 'Etapa',
+                inProgress: 'în curs',
+                ended: 'terminată',
+                waitingForResults: 'se așteaptă rezultatele',
+                edit: 'Editează',
+                viewAllBets: 'Vezi toate pariurile',
+                totalMatches: 'meciuri în total',
+                youAreRequiredToPlay: 'Ești obligat să joci',
+                ofThem: 'din ele',
+                totalMatchesThisWeek: 'meciuri în total în această etapă',
+                youWereRequiredToPlay: 'Era obligatoriu să joci',
+                deadline: 'Termen limită',
+                today: 'Astăzi',
+                tomorrow: 'Mâine',
+                youReTheWinnerOfTheWeek: 'Ești câștigătorul acestei etape!',
+                betPlacementIsntAvailable: 'Parierea nu mai este posibilă pentru această etapă.',
+                betButton: 'Pariază',
+                yes: 'Da',
+                no: 'Nu',
+                warningScoreDifferenceTooHigh: 'Atenție! Diferența de scor este destul de mare pentru evenimentele evidențiate.',
+                areYouSureYouDidntTypeWrongScore: 'Sigur nu ai greșit când ai scris scorurile?',
+                youWon: 'Ai câștigat',
+                pointsThisWeek: 'puncte etapa aceasta.',
+                youWonOnePointThisWeek: 'Ai câștigat un punct etapa aceasta.',
+                youWonNoPointsThisWeek: 'Nu ai câștigat niciun punct etapa aceasta.',
+                youDidntPlaceYouWonNoPoints: 'Nu ai plasat pariul tău etapa aceasta. Nu ai câștigat niciun punct.',
+                updateResults: 'Actualizează rezultatele',
+                youAreInUpdateModeEditResults: 'Ești în modul actualizare rezultate. Introdu rezultatele corecte pentru ' +
+                    'meciuri ca și cum ai paria pe ele.',
+                theyWillBeSavedAsResults: 'Acestea se vor salva ca rezultate oficiale și nu ca pariu.',
+                toggleBackToNormalMode: 'Revino la modul normal',
+                saveResults: 'Salvează rezultatele'
+            }
         }
     });
     $translateProvider.preferredLanguage('ro');
