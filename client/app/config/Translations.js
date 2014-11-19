@@ -113,6 +113,74 @@ function ($translateProvider) {
                 theyWillBeSavedAsResults: 'They will be saved as results and not as a bet.',
                 toggleBackToNormalMode: 'Toggle back to normal mode',
                 saveResults: 'Save results'
+            },
+            addNewWeekPage: {
+                addNewWeek: 'Add new week',
+                week: 'Week',
+                newWeekDescription: 'Write how many total matches you want to add and how many of them should be ' +
+                'required for users to be played. ' +
+                'Recommended numbers are 3-5 for total and 3 for required. ' +
+                'Imediately after you publish the events, other users will see the matches and ' +
+                'will be able to place their bets. ' +
+                'After saving a new week, you can press refresh to see that it really saved successfully.',
+                totalMatches: 'Total matches',
+                required: 'Required',
+                hidden: 'Hidden',
+                homeTeam: 'Home team',
+                awayTeam: 'Away team',
+                startDate: 'Start date',
+                competition: 'Competition',
+                publish: 'Publish',
+                yes: 'Yes',
+                no: 'No',
+                refresh: 'Refresh'
+            },
+            weekEdit: {
+                week: 'Week',
+                warning1: 'Use the editing functionality with care. ' +
+                    'Note that if player already placed the bets, their bets can be corrupted if week changes.',
+                warning2: 'Therefore this functionality should be used only in clear situations when it is needed, ' +
+                    'like solving a typo or a match starting time.',
+                warning3: 'Do NOT add/remove an event or change the deadline drastically if a long time ' +
+                'has passed since the week has been published.',
+                requiredMatches: 'Required matches',
+                required: 'Required',
+                event: 'Event',
+                date: 'Date',
+                time: 'Time',
+                competition: 'Competition',
+                homeTeam: 'Home team',
+                awayTeam: 'Away team',
+                closeButton: 'Close',
+                addNewEvent: 'Add new event',
+                resetScores: 'Reset scores',
+                hidden: 'Hidden',
+                cancel: 'Cancel'
+            }
+        },
+        rankingPage: {
+            name: 'Ranking',
+            downloadAsPdf: 'Download as pdf',
+            searchUser: 'Search user',
+            place: 'Place',
+            username: 'Username',
+            points: 'Points',
+            average: 'Average',
+            wins: 'Wins',
+            registerDate: 'Register date',
+            loadMore: 'Load more',
+            userRanking: {
+                username: 'Username',
+                place: 'Place',
+                points: 'Points',
+                average: 'Average',
+                wonWeeks: 'Won weeks',
+                awards: 'Awards',
+                userRank: 'User rank',
+                gainedForWinningAWeek: 'Gained for winning a week',
+                registerDate: 'Register date',
+                viewHistory: 'View history',
+                closeButton: 'Close'
             }
         }
     });
@@ -229,6 +297,75 @@ function ($translateProvider) {
                 theyWillBeSavedAsResults: 'Acestea se vor salva ca rezultate oficiale și nu ca pariu.',
                 toggleBackToNormalMode: 'Revino la modul normal',
                 saveResults: 'Salvează rezultatele'
+            },
+            addNewWeekPage: {
+                addNewWeek: 'Adaugă o etapă nouă',
+                week: 'Etapa',
+                newWeekDescription: 'Scrie câte meciuri vrei să adaugi și câte meciuri vor fi obligatorii ' +
+                'să fie jucate. ' +
+                'Este recomandat ca numărul total de meciuri să fie 3-5, dintre care 3 obligatorii. ' +
+                'Imediat după ce evenimentele sunt publicate, ceilalți utilizatori le vor putea vedea și ' +
+                'vor putea să plaseze pariuri pe ele. ' +
+                'După ce o etapă este salvată, poți apăsa reîncarcă pentru a vedea noua etapă salvată.',
+                totalMatches: 'Meciuri totale',
+                required: 'Obligatorii',
+                hidden: 'Ascuns',
+                homeTeam: 'Echipa gazdă',
+                awayTeam: 'Echipa oaspete',
+                startDate: 'Data de start',
+                competition: 'Competiția',
+                publish: 'Publică',
+                yes: 'Da',
+                no: 'Nu',
+                refresh: 'Reîncarcă'
+            },
+            weekEdit: {
+                week: 'Etapa',
+                warning1: 'Folosiți funcționalitatea de editare cu precauție. ' +
+                    'Aveți în vedere că dacă un jucător și-a plasat pariurile deja, acestea se pot corupe dacă ' +
+                    'etapa se schimbă.',
+                warning2: 'Așadar această funcționalitate trebuie folosită doar în situații clare, doar atunci ' +
+                    'când este necesar, ca în rezolvarea unei greșeli în numele meciului sau în data de începere.',
+                warning3: 'Nu adăugați/ștergeți un eveniment și nu schimbați drastic termenul limită dacă etapa ' +
+                    'a fost publicată de mult timp.',
+                requiredMatches: 'Meciuri obligatorii',
+                required: 'Obligatorii',
+                event: 'Eveniment',
+                date: 'Data',
+                time: 'Ora',
+                competition: 'Competiția',
+                homeTeam: 'Echipa gazdă',
+                awayTeam: 'Echipa oaspete',
+                closeButton: 'Închide',
+                addNewEvent: 'Adaugă un eveniment nou',
+                resetScores: 'Resetează scorurile',
+                hidden: 'Ascuns',
+                cancel: 'Anulează'
+            }
+        },
+        rankingPage: {
+            name: 'Clasament',
+            downloadAsPdf: 'Descarcă pdf',
+            searchUser: 'Caută un utilizator',
+            place: 'Loc',
+            username: 'Nume de utilizator',
+            points: 'Puncte',
+            average: 'Medie',
+            wins: 'Victorii',
+            registerDate: 'Data înregistrării',
+            loadMore: 'Mai multe',
+            userRanking: {
+                username: 'Nume de utilizator',
+                place: 'Loc',
+                points: 'Puncte',
+                average: 'Media',
+                wonWeeks: 'Etape câștigate',
+                awards: 'Premii',
+                userRank: 'Rangul de utilizator',
+                gainedForWinningAWeek: 'Obținut în urma câștigării unei etape',
+                registerDate: 'Data înregistrării',
+                viewHistory: 'Vezi istoricul',
+                closeButton: 'Închide'
             }
         }
     });
