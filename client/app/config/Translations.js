@@ -156,6 +156,25 @@ function ($translateProvider) {
                 resetScores: 'Reset scores',
                 hidden: 'Hidden',
                 cancel: 'Cancel'
+            },
+            weekHistory: {
+                week: 'Week',
+                history: 'History',
+                nextText: 'Next',
+                prevText: 'Previous',
+                firstText: 'First',
+                lastText: 'Last',
+                won: 'won',
+                thisWeek: 'this week',
+                point: 'point',
+                points: 'points',
+                whosBets_prefix: '',
+                whosBets_suffix: '\'s bets',
+                notEnded: 'Not ended',
+                error: 'Error',
+                noBets: 'No bets',
+                seemsThatArentBets: 'It seems that there aren\'t any bets to show.',
+                closeButton: 'Close'
             }
         },
         rankingPage: {
@@ -182,6 +201,22 @@ function ($translateProvider) {
                 viewHistory: 'View history',
                 closeButton: 'Close'
             }
+        },
+        historyPage: {
+            name_prefix: '',
+            name_suffix: '\'s history',
+            noHistoryItems: 'No history items available at them moment.',
+            week: 'Week',
+            endedOn: 'ended on',
+            inProgress: 'in progress',
+            noBetPlacedThisWeek: 'No bets were placed this week.',
+            startTime: 'Start time',
+            event: 'Event',
+            competition: 'Competition',
+            bet: 'Bet',
+            result: 'Result',
+            points: 'Points',
+            totalPoints: 'Total points'
         }
     });
 
@@ -341,6 +376,25 @@ function ($translateProvider) {
                 resetScores: 'Resetează scorurile',
                 hidden: 'Ascuns',
                 cancel: 'Anulează'
+            },
+            weekHistory: {
+                week: 'Etapa',
+                history: 'Istoric',
+                nextText: 'Următorul',
+                prevText: 'Precedentul',
+                firstText: 'Primul',
+                lastText: 'Ultimul',
+                won: 'a câștigat',
+                thisWeek: 'în această etapă',
+                point: 'punct',
+                points: 'puncte',
+                whosBets_prefix: 'Pariurile lui ',
+                whosBets_suffix: '',
+                notEnded: 'Neîncheiat',
+                error: 'Eroare',
+                noBets: 'Niciun pariu',
+                seemsThatArentBets: 'Se pare că nu există niciun pariu la acest moment.',
+                closeButton: 'Închide'
             }
         },
         rankingPage: {
@@ -367,6 +421,22 @@ function ($translateProvider) {
                 viewHistory: 'Vezi istoricul',
                 closeButton: 'Închide'
             }
+        },
+        historyPage: {
+            name_prefix: 'Istoricul lui ',
+            name_suffix: '',
+            noHistoryItems: 'Nu există nicio etapă în istoric..',
+            week: 'Etapa',
+            endedOn: 's-a terminat la',
+            inProgress: 'în curs',
+            noBetPlacedThisWeek: 'Nu ai plasat pariul tău etapa aceasta.',
+            startTime: 'Data de start',
+            event: 'Evenimentul',
+            competition: 'Competiția',
+            bet: 'Pariu',
+            result: 'Rezultat',
+            points: 'Puncte',
+            totalPoints: 'Total puncte'
         }
     });
     $translateProvider.preferredLanguage('ro');

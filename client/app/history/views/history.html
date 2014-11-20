@@ -3,23 +3,23 @@
     <div class="jumbotron centered half-bg-opacity">
 
         <h2 class="white" style="margin-bottom: 1em" ng-show="HistoryFactory.betHistoryUser">
-            {{HistoryFactory.betHistoryUser.username}}'s history
+            {{'historyPage.name_prefix' | translate}} {{HistoryFactory.betHistoryUser.username}}{{'historyPage.name_suffix' | translate}}
         </h2>
 
         <h3 class="white" style="margin-bottom: 1em" ng-if="historyObject.length == 0">
-            No history is available at the moment.
+            {{'historyPage.noHistoryItems' | translate}}
         </h3>
 
         <div class="panel panel-primary" ng-repeat="week in historyObject track by $index">
             <div class="panel-heading">
                 <div class="row">
                     <h2 class="panel-title">
-                        Week {{week.weekNumber}}
+                        {{'historyPage.week' | translate}} {{week.weekNumber}}
                         <span ng-if="!week.available">
-                            &nbsp;(ended on: {{week.weekEndDate | date: 'MMM d, y h:mm a'}})
+                            &nbsp;({{'historyPage.endedOn' | translate}}: {{week.weekEndDate | date: 'MMM d, y h:mm a'}})
                         </span>
                         <span ng-if="week.available">
-                            &nbsp;(in progress)
+                            &nbsp;({{'historyPage.inProgress' | translate}})
                         </span>
                     </h2>
                 </div>
@@ -29,27 +29,27 @@
             <div class="panel-body">
 
                 <div ng-if="!week.available && !week.placed" class="row" style="margin-top: 1em; margin-bottom: 1em;">
-                    No bet placed this week.
+                    {{'historyPage.noBetPlacedThisWeek' | translate}}
                 </div>
 
                 <div class="row" style="margin-top: 1em; margin-bottom: 1em; font-size: 1.3em">
                     <span class="col-xs-2">
-                        <b>Starting time</b>
+                        <b>{{'historyPage.startTime' | translate}}</b>
                     </span>
                     <span class="col-xs-4">
-                        <b>Match</b>
+                        <b>{{'historyPage.event' | translate}}</b>
                     </span>
                     <span class="col-xs-3">
-                        <b>Competiton</b>
+                        <b>{{'historyPage.competition' | translate}}</b>
                     </span>
                     <span class="col-xs-1">
-                        <b>Bet</b>
+                        <b>{{'historyPage.bet' | translate}}</b>
                     </span>
                     <span class="col-xs-1">
-                        <b>Result</b>
+                        <b>{{'historyPage.result' | translate}}</b>
                     </span>
                     <span class="col-xs-1">
-                        <b>Points</b>
+                        <b>{{'historyPage.points' | translate}}</b>
                     </span>
                 </div>
 
@@ -76,7 +76,7 @@
 
                 <div class="row top-buffer-1-em">
                     <span class="col-xs-2 pull-right">
-                        Total points: {{week.points}}
+                        {{'historyPage.totalPoints' | translate}}: {{week.points}}
                     </span>
                 </div>
 
