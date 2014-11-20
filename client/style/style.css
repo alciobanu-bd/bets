@@ -98,6 +98,13 @@
     min-width: 7em;
 }
 
+.lang-link-border {
+    background-color: rgb(0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    margin-top: 0.3em;
+    margin-bottom: 0.2em;
+}
+
 body {
     background: url(./../images/bg/ball_00.jpg) no-repeat center center fixed;
     background-size: cover;

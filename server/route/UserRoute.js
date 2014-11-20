@@ -271,7 +271,7 @@ function (req, res, next) {
                     }
                     else {
 
-                        mailServices.sendConfirmationLinkOnRegistration(res.data.local.user.username, res.data.local.user.email, regCode.registrationCode,
+                        mailServices.resendConfirmationLink(res.data.local.user.username, res.data.local.user.email, regCode.registrationCode,
                             function (info) {
                                 // success
                             },

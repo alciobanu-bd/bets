@@ -22,14 +22,35 @@ var sendConfirmationLinkOnRegistration = function (username, emailAddress, code,
         replyTo: 'contact@canihazbets.me',
         subject: 'Registration at ' + domainName.beautifulName,
         text: 'Welcome to ' + domainName.beautifulName + ', ' +
-            '\r\n\r\n' +
-            'Dear ' + username + ',' +
-            '\r\n' +
-            'We are pleased that you registered at our site. We hope you will have a pleasant staying.' +
-            '\r\n\r\n' +
-            'In order to activate your account, use the next code after you login: ' +
-            '\r\n' +
-            code
+        '\r\n\r\n' +
+        'Dear ' + username + ',' +
+        '\r\n' +
+        'We are pleased that you registered at our site. We hope you will have a pleasant staying.' +
+        '\r\n\r\n' +
+        'In order to activate your account, use the next code after you login: ' +
+        '\r\n' +
+        code
+    };
+
+    sendMail(mailOptions, onSuccess, onError);
+
+}
+
+var resendConfirmationLink = function (username, emailAddress, code, onSuccess, onError) {
+    var mailOptions = {
+        from: 'CanIHazBets <contact@canihazbets.me>',
+        to: emailAddress,
+        replyTo: 'contact@canihazbets.me',
+        subject: 'Activation at ' + domainName.beautifulName,
+        text: 'Activation code at ' + domainName.beautifulName + ', ' +
+        '\r\n\r\n' +
+        'Dear ' + username + ',' +
+        '\r\n' +
+        'You recently requested a new activation code for your account.' +
+        '\r\n\r\n' +
+        'You can use this one right after you login to your account: ' +
+        '\r\n' +
+        code
     };
 
     sendMail(mailOptions, onSuccess, onError);
@@ -143,6 +164,7 @@ var sendCongratulationsToWeekWinners = function (bet, username, emailAddress, on
 
 module.exports = {
     sendConfirmationLinkOnRegistration: sendConfirmationLinkOnRegistration,
+    resendConfirmationLink: resendConfirmationLink,
     sendConfirmationLinkOnPasswordChange: sendConfirmationLinkOnPasswordChange,
     sendConfirmationLinkOnForgotPassword: sendConfirmationLinkOnForgotPassword,
     sendNotificationAboutNewWeek: sendNotificationAboutNewWeek,

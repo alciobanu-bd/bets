@@ -217,6 +217,43 @@ function ($translateProvider) {
             result: 'Result',
             points: 'Points',
             totalPoints: 'Total points'
+        },
+        profilePage: {
+            name: 'Account details',
+            username: 'Username',
+            email: 'E-mail',
+            birthDate: 'Birth date',
+            registerDate: 'Register date',
+            place: 'Place',
+            points: 'Points',
+            average: 'Average',
+            awards: 'Awards',
+            userRank: 'User rank',
+            notifyViaEmail: 'Notify me via e-mail about site news.',
+            gainedForWinningAWeek: 'Gained for winning a week',
+            saveChanges: 'Save changes',
+            yes: 'Yes',
+            no: 'No'
+        },
+        activationPage: {
+            name: 'Activation',
+            explanations_prefix: 'If you don\'t have an activation code, you can',
+            explanations_resendLink: 'resend',
+            explanations_suffix: 'one to your e-mail.',
+            ifYouDontReceiveMail: 'If you don\'t receive your activation code via e-mail, ' +
+                'please contact us to contact@canihazbets.me.',
+            activationCode: 'Activation code',
+            activateButton: 'Activate'
+        },
+        changePasswordPage: {
+            name: 'Change password',
+            explanations1: 'After you change password, you will receive a confirmation code on your e-mail.',
+            oldPassword: 'Old password',
+            newPassword: 'New password',
+            confirmPassword: 'Confirm password',
+            changeBtn: 'Change',
+            yes: 'Yes',
+            no: 'No'
         }
     });
 
@@ -437,7 +474,46 @@ function ($translateProvider) {
             result: 'Rezultat',
             points: 'Puncte',
             totalPoints: 'Total puncte'
+        },
+        profilePage: {
+            name: 'Detaliile profilului',
+            username: 'Nume de utilizator',
+            email: 'E-mail',
+            birthDate: 'Data de naștere',
+            registerDate: 'Data înregistrării',
+            place: 'Loc',
+            points: 'Puncte',
+            average: 'Media',
+            awards: 'Premii',
+            userRank: 'Rangul de utilizator',
+            notifyViaEmail: 'Trimite-mi știri despre site prin e-mail.',
+            saveChanges: 'Salvează schimbările',
+            gainedForWinningAWeek: 'Obținut în urma câștigării unei etape',
+            yes: 'Da',
+            no: 'Nu'
+        },
+        activationPage: {
+            name: 'Activare',
+            explanations_prefix: 'Dacă nu ai un cod de activare, poți',
+            explanations_resendLink: 'retrimite',
+            explanations_suffix: 'unul prin e-mail la adresa ta.',
+            ifYouDontReceiveMail: 'Dacă nu primești codul de activare prin e-mail, ' +
+                'te rugăm să ne contactezi la contact@canihazbets.me.',
+            activationCode: 'Cod de activare',
+            activateButton: 'Activează'
+        },
+        changePasswordPage: {
+            name: 'Schimbare parolă',
+            explanations1: 'După ce vei schimba parola, un cod de confirmare îți va fi trimis prin e-mail.',
+            oldPassword: 'Parola veche',
+            newPassword: 'Parola nouă',
+            confirmPassword: 'Confirmă parola',
+            changeBtn: 'Schimbă',
+            yes: 'Da',
+            no: 'Nu'
         }
     });
+
     $translateProvider.preferredLanguage('ro');
+
 }]);
