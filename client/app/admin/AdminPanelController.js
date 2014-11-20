@@ -9,12 +9,12 @@ function ($scope, RolesFactory) {
 
     $scope.tabs = [
         {
-            name: "Users",
+            name: "adminPanelPage.users",
             active: true,
             templateUrl: 'app/admin/views/usersPanel.html'
         },
         {
-            name: "Ranking",
+            name: "adminPanelPage.ranking",
             active: false,
             templateUrl: 'app/admin/views/rankingPanel.html'
         }

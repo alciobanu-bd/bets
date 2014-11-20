@@ -254,6 +254,17 @@ function ($translateProvider) {
             changeBtn: 'Change',
             yes: 'Yes',
             no: 'No'
+        },
+        adminPanelPage: {
+            name: 'Admin panel',
+            users: 'Users',
+            ranking: 'Ranking',
+            rankingPage: {
+                descriptionRecalculation: 'Use the above button to recalculate points and places for all users. ' +
+                    'DO NOT abuse this button!',
+                recalculateButton: 'Recalculate'
+
+            }
         }
     });
 
@@ -511,6 +522,17 @@ function ($translateProvider) {
             changeBtn: 'Schimbă',
             yes: 'Da',
             no: 'Nu'
+        },
+        adminPanelPage: {
+            name: 'Panou administrator',
+            users: 'Utilizatori',
+            ranking: 'Clasament',
+            rankingPage: {
+                descriptionRecalculation: 'Folosește butonul de mai jos pentru a recalcula punctele și locurile ' +
+                'tuturor jucătorilor. NU abuzați de acest buton!',
+                recalculateButton: 'Recalculează'
+
+            }
         }
     });
 

@@ -23,9 +23,13 @@ function($routeProvider, TemplatesProvider) {
     var redirectHomeIfNotAdmin = [
     'UserInformation', '$location', 'RolesFactory',
     function (UserInformation, $location, RolesFactory) {
-        if (!UserInformation.isLogged || !RolesFactory.userHasRole(UserInformation.user.role, RolesFactory.roles.admin)) {
-            $location.path('/');
-        }
+        RolesFactory.load().then(
+            function () {
+                if (!UserInformation.isLogged || !RolesFactory.userHasRole(UserInformation.user.role, RolesFactory.roles.admin)) {
+                    $location.path('/');
+                }
+            }
+        );
     }];
 
     $routeProvider.
