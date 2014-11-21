@@ -1,8 +1,12 @@
 
 configModule.config([
-'$translateProvider',
-function ($translateProvider) {
-    $translateProvider.translations('en', {
+'$translateProvider', 'LanguagesProvider', 'CurrentLanguageFactoryProvider',
+function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider) {
+
+    var Languages = LanguagesProvider.$get();
+    var CurrentLanguageFactory = CurrentLanguageFactoryProvider.$get();
+
+    $translateProvider.translations(Languages.list.english.code, {
         header: {
             logged: {
                 home: 'Home',
@@ -262,14 +266,94 @@ function ($translateProvider) {
             rankingPage: {
                 descriptionRecalculation: 'Use the above button to recalculate points and places for all users. ' +
                     'DO NOT abuse this button!',
-                recalculateButton: 'Recalculate'
+                recalculateButton: 'Recalculate',
+                pointsCalculatedSuccessfully: 'Points and places were recalculated successfully.',
+                pointsWerentCalculated: 'The recalculation wasn\'t completed successfully. ' +
+                'Please try again and, if problem persists, contact a developer.'
 
+            },
+            usersPage: {
+                searchUser: 'Search user',
+                username: 'Username',
+                lastLogin: 'Last login',
+                email: 'E-mail',
+                pts: 'Pts',
+                rank: 'Rank',
+                registrationIP: 'Registration IP',
+                place: 'Place',
+                points: 'Points',
+                average: 'Average',
+                userRank: 'User rank',
+                birthDate: 'Birth date',
+                registerDate: 'Register date',
+                active: 'Active',
+                yes: 'Yes',
+                no: 'No',
+                disabled: 'Disabled',
+                anErrorHasOcurred: 'An error has occurred. Your options weren\'t saved.',
+                cancelButton: 'Cancel'
+            }
+        },
+        rulesPage: {
+            howToPlay: {
+                name: 'How to play',
+                div1: 'Each week, an admin chooses a bunch of football matches which are scheduled to be played that week. ' +
+                    'After the matches are chosen, the betting starts.',
+                div2: 'In order to win as many points as possible, ' +
+                    'you have to guess what the score will be for a number of events. ' +
+                    'This number is predefined and shown on each week. ' +
+                    'If you play less or more matches, you will get an error.',
+                div3: 'Here\'s how the points are gained. ' +
+                    'If you guess the exact score for an event, you get 3 points. ' +
+                    'If you don\'t guess the exact score, but you guess the difference ' +
+                    'between teams, as well as the winner team, ' +
+                    'you get 2 points. ' +
+                    'For example, let\'s say A plays against B. So we have A vs. B event. ' +
+                    'If your score is 3-1 and the result is 2-0, ' +
+                    'you get the 2 points. If you say 0-2, you don\'t get any points. ' +
+                    'The same rule applies for draws. ' +
+                    'If you say 1-1 and the result is 2-2, 3-3 or any other draw (except 1-1), ' +
+                    'you get 2 points for guessing the score difference.',
+                div4: 'If you don\'t guess the exact score and you don\'t guess the difference either, ' +
+                    ' your chance is that the team you bet on wins the match by any score. ' +
+                    'In this case, you get 1 point. For the same event, A vs. B, ' +
+                    'a guess of 3-1 gets you 1 point if the result is 1-0, 2-1, 3-2, 4-1, 3-0 etc. You get the point.',
+                div5: 'If you really have bad luck and bet on a losing team, you win no points.',
+                div6: 'Every week will have a deadline. ' +
+                    'After that moment, betting is closed and you cannot play anymore. ' +
+                    'This deadline is one hour before the first match of the week starts.',
+                div7: 'Ranking is calculated for all users after an admin inserts the results ' +
+                    'for the matches of the current week. ' +
+                    'If you notice any miscalculation, please contact an administrator. ' +
+                    'You can use contact@canihazbets.me any time you need.'
+            },
+            userRanks: {
+                name: 'User ranks',
+                listOfRanks: 'List of user ranks and their description:',
+                q1: 'Q: I\'ve seen here and there the word root associated to a user rank. What does this rank mean?',
+                a1: 'A: Root is the rank of the superuser. ' +
+                    'It is inspired from the Linux community where root is the username ' +
+                    'of the user with the greatest privileges.',
+                q2: 'Q: Can I become root?',
+                a2: 'A: Short answer, no! You cannot become root. The highest rank you can achieve is admin.'
+            },
+            money: {
+                name: 'Money and winnings',
+                q1: 'Q: Can I play with real money on CanIHazBets?',
+                a1: 'A: No, you cannot. CanIHazBets is designed to be fun. There aren\'t any money involved.'
+            },
+            awards: {
+                name: 'Awards',
+                theAwardsYouCanWin: 'The awards you can win on',
+                are: 'are',
+                gainedForWinningAWeek: 'Gained for winning a week',
+                forWinningAWeek: 'for winning a week'
             }
         }
     });
 
 
-    $translateProvider.translations('ro', {
+    $translateProvider.translations(Languages.list.romanian.code, {
         header: {
             logged: {
                 home: 'Acasă',
@@ -473,7 +557,7 @@ function ($translateProvider) {
         historyPage: {
             name_prefix: 'Istoricul lui ',
             name_suffix: '',
-            noHistoryItems: 'Nu există nicio etapă în istoric..',
+            noHistoryItems: 'Nu există nicio etapă în istoric.',
             week: 'Etapa',
             endedOn: 's-a terminat la',
             inProgress: 'în curs',
@@ -530,12 +614,89 @@ function ($translateProvider) {
             rankingPage: {
                 descriptionRecalculation: 'Folosește butonul de mai jos pentru a recalcula punctele și locurile ' +
                 'tuturor jucătorilor. NU abuzați de acest buton!',
-                recalculateButton: 'Recalculează'
-
+                recalculateButton: 'Recalculează',
+                pointsCalculatedSuccessfully: 'Punctele au fost recalculate cu succes.',
+                pointsWerentCalculated: 'Recalcularea nu s-a efectuat cu succes. ' +
+                    'Te rugăm să reîncerci și, dacă problema persistă, contactează un dezvoltator al aplicației.'
+            },
+            usersPage: {
+                searchUser: 'Caută utilizator',
+                username: 'Nume utilizator',
+                lastLogin: 'Ultima logare',
+                email: 'E-mail',
+                pts: 'Pct',
+                rank: 'Rang',
+                registrationIP: 'IP-ul la înregistrare',
+                place: 'Loc',
+                points: 'Puncte',
+                average: 'Medie',
+                userRank: 'Rang de utilizator',
+                birthDate: 'Data de naștere',
+                registerDate: 'Data înregistrării',
+                active: 'Activ',
+                yes: 'Da',
+                no: 'Nu',
+                disabled: 'Dezactivat',
+                anErrorHasOcurred: 'A apărut o eroare. Opțiunile alese nu au putut fi salvate.',
+                cancelButton: 'Anulează'
+            }
+        },
+        rulesPage: {
+            howToPlay: {
+                name: 'Cum se joacă',
+                div1: 'În fiecare etapă, un admin alege niște meciuri de fotbal care vor fi jucate în acea etapă. ' +
+                    'După ce meciurile sunt alese, începe parierea în acea etapă. ',
+                div2: 'Pentru a câștiga cât mai multe puncte, ' +
+                    'va trebui ca tu să ghicești scorul corect pentru un număr de evenimente dintre cele alese. ' +
+                    'Acest număr este predefinit și este afișat pentru fiecare etapă ' +
+                    'Dacă vei încerca să joci mai multe meciuri sau mai puține, vei primi o eroare.',
+                div3: 'Să vedem cum sunt acordate punctele. ' +
+                    'Dacă ghicești scorul exact al unui eveniment, vei primi 3 puncte. ' +
+                    'Dacă nu ghicești scorul exact, dar ghicești diferența de scor dintre echipe, ' +
+                    'ca și echipa câștigătoare, vei primi 2 puncte. ' +
+                    'De exemplu, să presupunem că A joacă împotriva lui b. Vom spune că avem evenimentul A vs. B. ' +
+                    'Dacă scorul ghicit de tine este 3-1 și rezultatul este 2-0, ' +
+                    'primești 2 puncte. Dacă pariezi 0-2, nu câștigi niciun punct. ' +
+                    'Aceeași regulă se aplică pentru meciurile terminate la egalitate. ' +
+                    'Dacă tu pariezi 1-1 și rezultatul este 2-2, 3-3 sau alt rezultat egal (exceptând 1-1), ' +
+                    'câștigi 2 puncte pentru ghicirea diferenței de scor.',
+                div4: 'Dacă nu ghicești nici scorul exact, nici diferența de scor, ' +
+                    'ultima ta șansă este ca echipa pe care ai pariat să câștige meciul cu orice scor. ' +
+                    'În acest caz, câștigi un punct. Folosind același exemplu, A vs. B, ' +
+                    'un pariu de 3-1 ia un punct dacă rezultatul este 1-0, 2-1, 3-2, 4-1, 3-0 etc. Te-ai prins.',
+                div5: 'Dacă ai ghinion cu adevărat și pariezi pe o echipă care pierde, nu câștigi niciun punct.',
+                div6: 'Fiecare etapă are un termen limită. ' +
+                    'După acest termen, parierea se închide și nu mai poți juca. ',
+                div7: 'Clasamentul este calculat după ce un admin introduce rezultatele ' +
+                    'pentru meciurile etapei curente. ' +
+                    'Dacă observi o greșeală de calcul, te rugăm să contactezi un administrator. ' +
+                    'Poți folosi contact@canihazbets.me oricând ai nevoie.'
+            },
+            userRanks: {
+                name: 'Ranguri de utilizator',
+                listOfRanks: 'Lista rangurilor de utilizator și descrierea lor:',
+                q1: 'Î: Am văzut cuvântul root asociat cu un rang de utilizator. Ce înseamnă asta?',
+                a1: 'R: Root este rangul de superutilizator. ' +
+                    'Este inspirat din comunitatea Linux, ' +
+                    'unde root este numele utilizatorului cu cele mai elevate privilegii.',
+                q2: 'Î: Pot deveni root?',
+                a2: 'R: Pe scurt, nu! Nu poți deveni root. Cel mai înalt rang pe care îl poți atinge este admin.'
+            },
+            money: {
+                name: 'Bani și câștiguri',
+                q1: 'Î: Pot paria bani reali pe CanIHazBets?',
+                a1: 'R: Nu, nu se poate. CanIHazBets este creat pentru distracție. Nu sunt bani implicați.'
+            },
+            awards: {
+                name: 'Premii',
+                theAwardsYouCanWin: 'Premiile pe care le poți câștiga pe',
+                are: 'sunt',
+                gainedForWinningAWeek: 'Obținut în urma câștigării unei etape',
+                forWinningAWeek: 'pentru câștigarea unei etape'
             }
         }
     });
 
-    $translateProvider.preferredLanguage('ro');
+    $translateProvider.preferredLanguage(CurrentLanguageFactory.language.code);
 
 }]);

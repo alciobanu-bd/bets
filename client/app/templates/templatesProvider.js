@@ -15,7 +15,8 @@ var templates =
         notLogged: {
             html: 'app/user/views/headerNotLogged.html',
             route: ''
-        }
+        },
+        languageDropdown: '/app/user/views/languageDropdown.html'
     },
     user: {
         login: {

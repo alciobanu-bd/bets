@@ -10,6 +10,7 @@
     "angular-translate": "*",
     "angular-cookies": "*",
     "angular-sanitize": "*",
+    "angular-i18n": "*",
     "underscore": "*",
     "angular-ui-date": "*",
     "angular-bootstrap": "*",

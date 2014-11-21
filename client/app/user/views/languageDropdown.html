@@ -1,0 +1,20 @@
+
+<li class="dropdown">
+    <a class="lang-link-border centered" href="" class="dropdown-toggle" data-toggle="dropdown">
+        <span>
+            <img ng-src="{{CurrentLanguageFactory.language.imgPath}}" />
+        </span>
+        <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <li ng-repeat="lang in Languages.list"
+            ng-click="CurrentLanguageFactory.setLanguage(lang.code)">
+
+            <a href="">
+                <img ng-src="{{lang.imgPath}}" />
+                {{lang.name}}
+            </a>
+
+        </li>
+    </ul>
+</li>
