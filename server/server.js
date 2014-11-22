@@ -48,8 +48,13 @@ mongoose.connect(Settings.dbPath);
 
 db = mongoose.connection;
 db
-    .on('error', function () {console.error('DB connection error.')})
-    .once('open', function() {console.log('DB Connection established.')});
+    .on('error', function (err) {
+        console.error('DB connection error.');
+        throw err;
+    })
+    .once('open', function() {
+        console.log('DB Connection established.');
+    });
 
 var mkdirp = require('mkdirp');
 mkdirp('logs');

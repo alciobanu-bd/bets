@@ -2,8 +2,8 @@
 userModule
 .controller(
 'ForgotPasswordController', [
-'$scope', 'InitUrls', 'CallUrlService',
-function ($scope, InitUrls, CallUrlService) {
+'$scope', 'InitUrls', 'CallUrlService', '$translate',
+function ($scope, InitUrls, CallUrlService, $translate) {
 
     $scope.inputs = {
         usernameOrEmail: ''
@@ -37,7 +37,7 @@ function ($scope, InitUrls, CallUrlService) {
                         $scope.status.message = response.data.message;
                     }
                     else {
-                        $scope.status.message = "An error occurred and a reset code couldn't be sent.";
+                        $scope.status.message = $translate.instant('forgotPasswordPage.errorResponseMessage');
                     }
                     $scope.status.inProgress = false;
                 }

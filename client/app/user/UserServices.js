@@ -72,9 +72,9 @@ function () {
 
 .factory('UserInformationCalls', [
 'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls', 'CheckActivationStatus',
-'KeepMeLoggedInStorage',
+'KeepMeLoggedInStorage', '$translate',
 function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls, CheckActivationStatus,
-KeepMeLoggedInStorage) {
+KeepMeLoggedInStorage, $translate) {
 
     var infoService = {};
 
@@ -114,7 +114,7 @@ KeepMeLoggedInStorage) {
                     user: data.user
                 });
                 UserInformation.setUserDetails(data.user);
-                defered.resolve({message: "Logged in successfully."});
+                defered.resolve({message: $translate.instant('loginPage.loggedInSuccessfully')});
             },
             function (response) {
                 UserInformation.isLogged = false;
@@ -329,7 +329,7 @@ function (InitUrls, CallUrlService) {
                     thisFactory.status.message = response.data.message;
                 }
                 else {
-                    thisFactory.status.message = "Account couldn't be activated";
+                    thisFactory.status.message = $translate.instant('activationPage.couldntActivate');
                 }
                 if (typeof onError === 'function') {
                     onError();

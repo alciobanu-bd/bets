@@ -42,7 +42,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             password: 'Password',
             keepMeLoggedInFor: 'Keep me logged in for',
             days: 'days',
-            loginButton: 'Come on in'
+            loginButton: 'Come on in',
+            loggedInSuccessfully: 'Logged in successfully!'
         },
         registerPage: {
             name: 'Create a new account',
@@ -51,7 +52,10 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             confirmPassword: 'Confirm password',
             email: 'E-mail',
             birthDate: 'Birth date',
-            registerButton: 'Register'
+            registerButton: 'Register',
+            successfullyCreated: 'Your account was successfully created.' +
+                'An activation code will be e-mailed to you shortly.',
+            failureCreating: 'Account wasn\'t created. Highlighted fields are required.'
         },
         forgotPasswordPage: {
             name: 'Forgot password',
@@ -59,7 +63,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             usernameOrEmail: 'Username or e-mail',
             recover: 'Recover',
             yes: 'Yes',
-            no: 'No'
+            no: 'No',
+            errorResponseMessage: 'An error occurred and a reset code couldn\'t be sent to you.'
         },
         resetPasswordPage: {
             name: 'Reset password',
@@ -69,7 +74,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             confirmPassword: 'Confirm password',
             changePassword: 'Change password',
             yes: 'Yes',
-            no: 'No'
+            no: 'No',
+            resetSuccessful: 'Your password was reset successfully. Now you can use it to log into your account.',
+            couldntReset: 'We couldn\'t reset your password. Please try again.'
         },
         weekPage: {
             name: 'Weeks and bets',
@@ -82,6 +89,15 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             sendMailNotificationButton: 'Send mail notifications',
             yes: 'Yes',
             no: 'No',
+            mailNotificationsNotSent: 'Notification e-mails couldn\'t be sent. Please try again.' +
+                'If problem persists, talk to a developer.',
+            anErrorTryingToFetchWeekNo: 'An error occurred while trying to fetch week #',
+            anErrorTryingToFetchAWeek: 'An error occurred while trying to fetch week.',
+            anErrorTryingToFetchBets: 'An error occurred while trying to fetch your bets.',
+            betPlacementSuccess: 'Your bet was successfully placed.',
+            betPlacementError: 'Your bet wasn\'t placed. Please try again.',
+            betChangeSuccess: 'Your bet was successfully changed.',
+            anErrorOccurred: 'An error occurred.',
             weekDirective: {
                 hidden: 'HIDDEN',
                 winner: 'WINNER',
@@ -116,7 +132,10 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                     'like when you normally play them.',
                 theyWillBeSavedAsResults: 'They will be saved as results and not as a bet.',
                 toggleBackToNormalMode: 'Toggle back to normal mode',
-                saveResults: 'Save results'
+                saveResults: 'Save results',
+                afterUpdateSuccess: 'The results were saved successfully.',
+                afterUpdateError: 'The results saved with errors. Please try to save them again urgently. ' +
+                'If the problem persists, contact the developers as soon as you can.'
             },
             addNewWeekPage: {
                 addNewWeek: 'Add new week',
@@ -137,7 +156,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 publish: 'Publish',
                 yes: 'Yes',
                 no: 'No',
-                refresh: 'Refresh'
+                refresh: 'Refresh',
+                weekSavedSuccessfully: 'Week saved successfully.',
+                weekDidntSave: 'Week didn\'t save. Please try again.'
             },
             weekEdit: {
                 week: 'Week',
@@ -178,7 +199,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 error: 'Error',
                 noBets: 'No bets',
                 seemsThatArentBets: 'It seems that there aren\'t any bets to show.',
-                closeButton: 'Close'
+                closeButton: 'Close',
+                couldntBeFetched: 'History couldn\'t be fetched.'
             }
         },
         rankingPage: {
@@ -237,7 +259,10 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             gainedForWinningAWeek: 'Gained for winning a week',
             saveChanges: 'Save changes',
             yes: 'Yes',
-            no: 'No'
+            no: 'No',
+            yourPreferencesSaved: 'Your preferences were saved.',
+            yourPreferencesDidntSaved: 'We couldn\'t save your preferences. Sorry \'bout that.',
+            errorFetching: 'An error occurred while fetching profile information.'
         },
         activationPage: {
             name: 'Activation',
@@ -247,7 +272,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             ifYouDontReceiveMail: 'If you don\'t receive your activation code via e-mail, ' +
                 'please contact us to contact@canihazbets.me.',
             activationCode: 'Activation code',
-            activateButton: 'Activate'
+            activateButton: 'Activate',
+            couldntActivate: 'Account couldn\'t be activated'
         },
         changePasswordPage: {
             name: 'Change password',
@@ -257,7 +283,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             confirmPassword: 'Confirm password',
             changeBtn: 'Change',
             yes: 'Yes',
-            no: 'No'
+            no: 'No',
+            successChangeMessage: 'Your password was changed successfully. Please check your e-mail.',
+            errorChangeMessage: 'We couldn\'t change your password. Please try again.'
         },
         adminPanelPage: {
             name: 'Admin panel',
@@ -389,7 +417,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             password: 'Parolă',
             keepMeLoggedInFor: 'Păstrează-mă logat pentru',
             days: 'zile',
-            loginButton: 'Loghează-mă'
+            loginButton: 'Loghează-mă',
+            loggedInSuccessfully: 'Logat cu succes!'
         },
         registerPage: {
             name: 'Creează-ți un cont nou',
@@ -398,7 +427,10 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             confirmPassword: 'Confirmă parola',
             email: 'E-mail',
             birthDate: 'Dată de naștere',
-            registerButton: 'Înregistrare'
+            registerButton: 'Înregistrare',
+            successfullyCreated: 'Contul a fost creat cu succes.' +
+                'Un cod de activare va fi trimis imediat la adresa ta de e-mail.',
+            failureCreating: 'Contul nu a fost creat. Câmpurile marcate sunt necesare.'
         },
         forgotPasswordPage: {
             name: 'Parolă uitată',
@@ -406,7 +438,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             usernameOrEmail: 'Nume de utilizator sau e-mail',
             recover: 'Recuperează',
             yes: 'Da',
-            no: 'Nu'
+            no: 'Nu',
+            errorResponseMessage: 'A apărut o eroare și nu a putut fi trimis un cod de resetare către tine.'
         },
         resetPasswordPage: {
             name: 'Resetare parolă',
@@ -416,7 +449,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             confirmPassword: 'Confirmă parola',
             changePassword: 'Schimbă parola',
             yes: 'Da',
-            no: 'Nu'
+            no: 'Nu',
+            resetSuccessful: 'Noua parolă a fost resetată cu succes. Din acest moment, o poți folosi pentru a te loga în cont.',
+            couldntReset: 'Nu am putut reseta parola. Te rugăm să încerci din nou.'
         },
         weekPage: {
             name: 'Etape și pariuri',
@@ -429,6 +464,15 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             sendMailNotificationButton: 'Trimite notificări',
             yes: 'Da',
             no: 'Nu',
+            mailNotificationsNotSent: 'Notificările prin e-mail nu au putut fi trimise. Te rugăm să reîncerci.' +
+                'Dacă problema persistă, contactează un developer.',
+            anErrorTryingToFetchWeekNo: 'A apărut o eroare la încărcarea etapei #',
+            anErrorTryingToFetchAWeek: 'A apărut o eroare la încărcarea etapei.',
+            anErrorTryingToFetchBets: 'Pariurile nu au putut fi încărcate din cauza unei erori.',
+            betPlacementSuccess: 'Pariul a fost plasat cu succes.',
+            betPlacementError: 'Pariul nu a fost plasat. Te rugăm să încerci din nou.',
+            betChangeSuccess: 'Pariul a fost schimbat cu succes.',
+            anErrorOccurred: 'A apărut o eroare.',
             weekDirective: {
                 hidden: 'ASCUNS',
                 winner: 'CÂȘTIGĂTOR',
@@ -463,7 +507,10 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                     'meciuri ca și cum ai paria pe ele.',
                 theyWillBeSavedAsResults: 'Acestea se vor salva ca rezultate oficiale și nu ca pariu.',
                 toggleBackToNormalMode: 'Revino la modul normal',
-                saveResults: 'Salvează rezultatele'
+                saveResults: 'Salvează rezultatele',
+                afterUpdateSuccess: 'Rezultatele au fost salvate cu succes.',
+                afterUpdateError: 'În salvarea rezultatelor a intervenit o eroare. Te rugăm să încerci din nou să le salvezi. ' +
+                    'Dacă problema persistă, contactează un developer cât mai repede posibil.'
             },
             addNewWeekPage: {
                 addNewWeek: 'Adaugă o etapă nouă',
@@ -484,7 +531,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 publish: 'Publică',
                 yes: 'Da',
                 no: 'Nu',
-                refresh: 'Reîncarcă'
+                refresh: 'Reîncarcă',
+                weekSavedSuccessfully: 'Etapa s-a salvat cu succes.',
+                weekDidntSave: 'Etapa nu s-a salvat. Te rugăm încearcă din nou.'
             },
             weekEdit: {
                 week: 'Etapa',
@@ -526,7 +575,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 error: 'Eroare',
                 noBets: 'Niciun pariu',
                 seemsThatArentBets: 'Se pare că nu există niciun pariu la acest moment.',
-                closeButton: 'Închide'
+                closeButton: 'Închide',
+                couldntBeFetched: 'Istoricul nu a putut fi descărcat.'
             }
         },
         rankingPage: {
@@ -585,7 +635,10 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             saveChanges: 'Salvează schimbările',
             gainedForWinningAWeek: 'Obținut în urma câștigării unei etape',
             yes: 'Da',
-            no: 'Nu'
+            no: 'Nu',
+            yourPreferencesSaved: 'Opțiunile alese de tine au fost salvate.',
+            yourPreferencesDidntSaved: 'Nu am putut salva opțiunile alese. Ne pare rău.',
+            errorFetching: 'A apărut o eroare și nu au putut fi descărcate informațiile despre profil.'
         },
         activationPage: {
             name: 'Activare',
@@ -595,7 +648,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             ifYouDontReceiveMail: 'Dacă nu primești codul de activare prin e-mail, ' +
                 'te rugăm să ne contactezi la contact@canihazbets.me.',
             activationCode: 'Cod de activare',
-            activateButton: 'Activează'
+            activateButton: 'Activează',
+            couldntActivate: 'Contul nu a putut fi activat.'
         },
         changePasswordPage: {
             name: 'Schimbare parolă',
@@ -605,7 +659,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             confirmPassword: 'Confirmă parola',
             changeBtn: 'Schimbă',
             yes: 'Da',
-            no: 'Nu'
+            no: 'Nu',
+            successChangeMessage: 'Parola a fost schimbată cu succes. Te rugăm să îți verifici e-mail-ul.',
+            errorChangeMessage: 'Nu ți-am putut schimba parola. Te rugăm să încerci din nou.'
         },
         adminPanelPage: {
             name: 'Panou administrator',

@@ -2,8 +2,8 @@
 profileModule
 
 .controller('ProfileController', [
-'$scope', 'UserInformation', 'ProfileFactory', 'RolesFactory', 'InitUrls', 'CallUrlService',
-function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallUrlService) {
+'$scope', 'UserInformation', 'ProfileFactory', 'RolesFactory', 'InitUrls', 'CallUrlService', '$translate',
+function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallUrlService, $translate) {
 
     $scope.userInfo = UserInformation;
     $scope.ProfileFactory = ProfileFactory;
@@ -31,7 +31,7 @@ function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallU
             function (data) {
                 $scope.status.success = true;
                 $scope.status.error = false;
-                $scope.status.message = "Your preferences were saved.";
+                $scope.status.message = $translate.instant('profilePage.yourPreferencesSaved');
                 $scope.status.inProgress = false;
 
                 UserInformation.setUserDetails(data);
@@ -40,7 +40,7 @@ function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallU
             function () {
                 $scope.status.success = false;
                 $scope.status.error = true;
-                $scope.status.message = "We couldn't save your preferences. Sorry 'bout that.";
+                $scope.status.message = $translate.instant('profilePage.yourPreferencesDidntSaved');
                 $scope.status.inProgress = false;
             });
         });

@@ -3,8 +3,8 @@ userModule
 
 .controller
 ('ChangePasswordController', [
-'$scope', 'InitUrls', 'CallUrlService', '$timeout', 'SHA-2', 'UserInformation',
-function ($scope, InitUrls, CallUrlService, $timeout, SHA2, UserInformation) {
+'$scope', 'InitUrls', 'CallUrlService', '$timeout', 'SHA-2', 'UserInformation', '$translate',
+function ($scope, InitUrls, CallUrlService, $timeout, SHA2, UserInformation, $translate) {
 
     $scope.clearUserDetailsInterval();
 
@@ -46,7 +46,7 @@ function ($scope, InitUrls, CallUrlService, $timeout, SHA2, UserInformation) {
                         $scope.startUserDetailsInterval();
                         $scope.status.success = true;
                         $scope.status.error = false;
-                        $scope.status.message = "Your password was changed successfully. Please check your e-mail.";
+                        $scope.status.message = $translate.instant('changePasswordPage.successChangeMessage');
                         $scope.status.inProgress = false;
                     },
                     function (response) {
@@ -57,7 +57,7 @@ function ($scope, InitUrls, CallUrlService, $timeout, SHA2, UserInformation) {
                             $scope.status.message = response.data.message;
                         }
                         else {
-                            $scope.status.message = "We couldn't change your password. Please try again.";
+                            $scope.status.message = $translate.instant('changePasswordPage.errorChangeMessage');
                         }
                         $scope.status.inProgress = false;
                     }

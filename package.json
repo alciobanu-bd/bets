@@ -26,7 +26,8 @@
         "nodemailer-dkim": "*",
         "cron": "*",
         "time": "*",
-        "loggly": "*"
+        "loggly": "*",
+        "nodemon": "*"
     },
     "devDependencies": {
         "bower": "*",

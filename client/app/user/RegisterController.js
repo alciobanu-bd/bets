@@ -1,7 +1,7 @@
 userModule
 .controller('RegisterController', [
-'$scope', 'InitUrls', 'CallUrlService', 'SaltGenerator', 'SHA-2',
-function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
+'$scope', 'InitUrls', 'CallUrlService', 'SaltGenerator', 'SHA-2', '$translate',
+function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2, $translate) {
 
     $scope.inputs = {
         username: {
@@ -67,8 +67,7 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
             CallUrlService.post({uri: urls.user.address}, accountData,
             function (data) {
                 $scope.status.success = true;
-                $scope.status.message = "Your account was successfully created. " +
-                    "An activation code will be e-mailed to you shortly.";
+                $scope.status.message = $translate.instant('registerPage.successfullyCreated');
                 $scope.status.inProgress = false;
             },
             function (response) {
@@ -86,7 +85,7 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
                         if (err.type == "required") {
                             requiredErr = true;
                             $scope.inputs[i].error = true;
-                            $scope.status.message = 'Account wasn\'t created. Highlighted fields are required.';
+                            $scope.status.message = $translate.instant('registerPage.failureCreating');
                         }
                     }
 
