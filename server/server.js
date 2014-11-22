@@ -10,7 +10,6 @@ var fs = require('fs');
 var Settings = require('./config/Settings.js').dev;
 
 GLOBAL.app = express();
-
 GLOBAL.domainName = Settings.domainName;
 
 // configure app to use bodyParser()
@@ -18,7 +17,7 @@ GLOBAL.domainName = Settings.domainName;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.query());
-//app.use(methodOverride());
+
 app.use(function (req, res, next) {
     // url decoding middleware
     req.url = req.url
@@ -36,6 +35,16 @@ app.use(function (req, res, next) {
         console.log(req.url);
     }
     req.url = req.url.replace(/[/]+/g, '/');
+    next();
+});
+
+/*
+ * Sees if requests have language. If not, is sets english as default.
+ */
+app.use(function (req, res, next) {
+    if (!req.query.lang && req.url.indexOf('.html') < 0) {
+        req.query.lang = 'en';
+    }
     next();
 });
 

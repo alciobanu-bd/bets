@@ -1,5 +1,5 @@
 
-var Roles = require('./../model/Roles.js');
+var Roles = require('./../model/Roles.js')('en');
 
 var hasRole = function (role) {
     return function (req, res, next, user, onError, onSuccess) {

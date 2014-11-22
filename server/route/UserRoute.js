@@ -2,7 +2,7 @@
 // NOTE that app is defined globally
 
 var User = require('./../model/User.js');
-var Roles = require('./../model/Roles.js');
+var Roles = require('./../model/Roles.js')('en');
 var RegistrationCode = require('./../model/RegistrationCode.js');
 var ForgotPasswordCode = require('./../model/ForgotPasswordCode.js');
 var Random = require('./../services/Random.js');

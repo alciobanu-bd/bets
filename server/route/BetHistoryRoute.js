@@ -2,7 +2,7 @@
 var express = require('express');
 var Bet = require('./../model/Bet.js');
 var User = require('./../model/User.js');
-var Roles = require('./../model/Roles.js');
+var Roles = require('./../model/Roles.js')('en');
 var Week = require('./../model/Week.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
@@ -39,7 +39,10 @@ function (req, res, next) {
 
             var queryDateObject = {hidden: false};
             if (userId.toString() != res.data.local.user._id.toString() && Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
-                queryDateObject = {endDate: {$lt: new Date()}};
+                queryDateObject.endDate = {$lt: new Date()};
+            }
+            else {
+                delete queryDateObject.hidden;
             }
 
             Week.find(queryDateObject, {},
