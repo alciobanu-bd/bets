@@ -24,7 +24,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             notLogged: {
                 home: 'Home',
                 register: 'Register',
-                login: 'Come on in'
+                login: 'Come on in',
+                dontHaveAnAccountRegister: 'Don\'t have an account? Register now!',
+                haveAnAccountSignIn: 'Have an account? Sign in.'
             }
         },
         homePage: {
@@ -55,7 +57,12 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             registerButton: 'Register',
             successfullyCreated: 'Your account was successfully created.' +
                 'An activation code will be e-mailed to you shortly.',
-            failureCreating: 'Account wasn\'t created. Highlighted fields are required.'
+            failureCreating: 'Account wasn\'t created. Highlighted fields are required.',
+            birthDate_too_young: 'You are too young to register.',
+            email_not_valid: "E-mail is not valid.",
+            email_too_long: 'E-mail is too long.',
+            username_too_long: 'Username is too long.',
+            maxSize: 'Maximum allowed length is'
         },
         forgotPasswordPage: {
             name: 'Forgot password',
@@ -399,7 +406,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             notLogged: {
                 home: 'Acasă',
                 register: 'Înregistrare',
-                login: 'Loghează-te'
+                login: 'Loghează-te',
+                dontHaveAnAccountRegister: 'Nu ai un cont? Înregistrează-te!',
+                haveAnAccountSignIn: 'Ai cont? Loghează-te.'
             }
         },
         homePage: {
@@ -428,9 +437,14 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             email: 'E-mail',
             birthDate: 'Dată de naștere',
             registerButton: 'Înregistrare',
-            successfullyCreated: 'Contul a fost creat cu succes.' +
+            successfullyCreated: 'Contul a fost creat cu succes. ' +
                 'Un cod de activare va fi trimis imediat la adresa ta de e-mail.',
-            failureCreating: 'Contul nu a fost creat. Câmpurile marcate sunt necesare.'
+            failureCreating: 'Contul nu a fost creat. Câmpurile marcate sunt necesare.',
+            birthDate_too_young: 'Nu ai vârsta potrivită pentru a te înregistra.',
+            email_not_valid: "E-mail-ul nu este valid.",
+            email_too_long: 'Adresa de e-mail este prea lungă.',
+            username_too_long: 'Numele de utilizator este prea lung.',
+            maxSize: 'Lungimea maximă acceptată este'
         },
         forgotPasswordPage: {
             name: 'Parolă uitată',

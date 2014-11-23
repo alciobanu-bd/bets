@@ -11,6 +11,8 @@ var bcrypt = require('bcrypt-nodejs');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 
+var Translations = require('./../config/Translations.js');
+
 var fs = require('fs');
 var LOG_EXTEND_TOK_FILE_NAME = 'logs/extend_tok_log.txt';
 var LOG_LOGIN_FILE_NAME = 'logs/login_log.txt';
@@ -51,16 +53,16 @@ router.post('/login', function(req, res) {
     {salt: 0}, // exclude salt
     function (err, users) {
         if (err || users.length == 0) {
-            res.status(401).json({message: "Username doesn't exist."}).end();
+            res.status(401).json({message: Translations[req.query.lang].login.usernameDoesntExist}).end();
         }
         else if (users.length > 1) {
             res.status(500).json({
-                    message: "More than one user found with the username " + req.body.username + "."}
+                    message: Translations[req.query.lang].login.moreThanOneUser + req.body.username + "."}
             ).end();
         }
         else if (users[0].disabled) {
             res.status(401).json({
-                message: "Login failed. Your account is disabled."
+                message: Translations[req.query.lang].login.accountDisabled
             }).end();
         }
         else {
@@ -68,7 +70,7 @@ router.post('/login', function(req, res) {
             bcrypt.hash(password, users[0].serverSalt, null, function(err, hash) {
                 if (err) {
                     res.status(500).json({
-                        message: "Login failed. Server encountered some errors."
+                        message: Translations[req.query.lang].login.serverErrors
                     }).end();
                 }
                 else {
@@ -102,7 +104,7 @@ router.post('/login', function(req, res) {
 
                     else {
                         res.status(400).json({
-                            message: 'Login failed. Credentials you provided are invalid.'
+                            message: Translations[req.query.lang].login.invalidCredentials
                         }).end();
                     }
                 }
@@ -149,11 +151,11 @@ function (req, res, next) {
 router.post('/salt', function (req, res) {
     User.find({username: req.body.username}, function (err, users) {
         if (err || users.length == 0) {
-            res.status(404).json({message: "Username doesn't exist."}).end();
+            res.status(404).json({message: Translations[req.query.lang].login.usernameDoesntExist}).end();
         }
         else if (users.length > 1) {
             res.status(500).json({
-                message: "More than one user found with the username " + req.body.username + "."}
+                message: Translations[req.query.lang].login.moreThanOneUser + req.body.username + "."}
             ).end();
         }
         else {
@@ -171,22 +173,24 @@ function (req, res) {
     function (err, code) {
         if (err) {
             res.status(500).json({
-                message: "Error fetching reset code."
+                message: Translations[req.query.lang].login.errorFetchingResetCode
             }).end();
         }
         else {
 
-            User.find({_id: code.userId}, function (err, users) {
-                if (err || users.length == 0) {
-                    res.status(404).json({message: "This reset code doesn't belong to any user."}).end();
-                }
-                else if (users.length > 1) {
-                    res.status(500).json({
-                            message: "This reset code doesn't belong to any user. Please contact an administrator."}
-                    ).end();
+            if (!code) {
+                res.status(404).json({
+                    message: Translations[req.query.lang].login.resetCodeNoUser
+                }).end();
+                return;
+            }
+
+            User.findOne({_id: code.userId}, function (err, user) {
+                if (err || !user) {
+                    res.status(404).json({message: Translations[req.query.lang].login.resetCodeNoUser}).end();
                 }
                 else {
-                    res.status(200).json({salt: users[0].salt}).end();
+                    res.status(200).json({salt: user.salt}).end();
                 }
             });
 

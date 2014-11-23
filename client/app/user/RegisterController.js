@@ -96,7 +96,21 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2, $translate) {
                             var err = response.errors[i];
                             if (err.type != "required") {
                                 $scope.inputs[i].error = true;
-                                $scope.status.message += err.message + '\n';
+
+                                var value = null;
+                                if (err.message.indexOf('|') >= 0) {
+                                    value = err.message.split('|')[1];
+                                    err.message = err.message.split('|')[0];
+                                }
+
+                                var errServ = err.path + "_" + err.message;
+
+                                var msg = $translate.instant('registerPage.' + errServ);
+                                if (value != null) {
+                                    msg += " " + $translate.instant('registerPage.maxSize') + " " + value + ".";
+                                }
+
+                                $scope.status.message += msg + '\n';
                             }
                         }
                     }

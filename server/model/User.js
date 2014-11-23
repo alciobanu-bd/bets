@@ -24,20 +24,20 @@ var UserSchema = mongoose.Schema({
 
 UserSchema.path('username').validate(function (v) {
     return v.length < 21;
-}, 'Username can\'t have more than 20 characters.');
+}, 'too_long|20');
 
 UserSchema.path('email').validate(function (v) {
     return v.length < 41;
-}, 'E-mail can\'t have more than 40 characters.');
+}, 'too_long|40');
 
 UserSchema.path('email').validate(function (v) {
     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     return emailRegex.test(v);
-}, 'E-mail address is not valid. Please provide a correct e-mail address.');
+}, 'not_valid');
 
 
 UserSchema.path('birthDate').validate(function (v) {
     return new Date() - new Date(v) > 16 * 365 * 24 * 60 * 60 * 1000; // 16 years
-}, 'You are too young. Grow up a little and get back.');
+}, 'too_young');
 
 module.exports = restful.model('user', UserSchema);

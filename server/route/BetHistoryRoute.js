@@ -7,6 +7,7 @@ var Week = require('./../model/Week.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 
+var Translations = require('./../config/Translations.js');
 var _ = require('underscore');
 
 var router = express.Router();
@@ -32,7 +33,7 @@ function (req, res, next) {
 
         if (err) {
             res.status(500).json({
-                message: "Cannot fetch bet history from database."
+                message: Translations[req.query.lang].history.cannotFetchFromDb
             }).end();
         }
         else {
@@ -50,7 +51,7 @@ function (req, res, next) {
             function (err, weeks) {
                 if (err) {
                     res.status(500).json({
-                        message: "Cannot fetch bet history from database."
+                        message: Translations[req.query.lang].history.cannotFetchFromDb
                     }).end();
                 }
                 else {
@@ -96,7 +97,7 @@ function (req, res, next) {
                         function (err, user) {
                         if (err) {
                             res.status(500).json({
-                                message: "Cannot fetch bet history from database."
+                                message: Translations[req.query.lang].history.cannotFetchFromDb
                             }).end();
                         }
                         else {
@@ -129,7 +130,7 @@ function (req, res, next) {
 
         if (err || !week) {
             res.status(500).json({
-                message: "Couldn't find week information."
+                message: Translations[req.query.lang].history.cannotFindWeekInfo
             }).end();
         }
 
@@ -137,7 +138,7 @@ function (req, res, next) {
 
             if (new Date() < new Date(week.endDate) && Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
                 res.status(500).json({
-                    message: "Week hasn't ended yet. You cannot see the history."
+                    message: Translations[req.query.lang].history.weekHasntEnded
                 }).end();
             }
             else {
@@ -146,7 +147,7 @@ function (req, res, next) {
                 function (err, count) {
                     if (err) {
                         res.status(500).json({
-                            message: "History couldn't be fetched."
+                            message: Translations[req.query.lang].history.cannotBeFetched
                         }).end();
                     }
                     else {
@@ -156,7 +157,7 @@ function (req, res, next) {
                             function (err, bets) {
                                 if (err) {
                                     res.status(500).json({
-                                        message: "History couldn't be fetched."
+                                        message: Translations[req.query.lang].history.cannotBeFetched
                                     }).end();
                                 }
                                 else {

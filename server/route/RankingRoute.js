@@ -6,8 +6,9 @@ var jwtauth = require('./../middlewares/jwtauth.js');
 var pointsManagementFunctions = require('./../middlewares/pointsManagement.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 
-var express = require('express');
+var Translations = require('./../config/Translations.js');
 
+var express = require('express');
 var router = express.Router();
 
 router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req, res) {
@@ -19,7 +20,7 @@ router.get('/ranking', jwtauth([tokenChecks.hasRole('ROLE_USER')]), function(req
     function (err, users) {
 
         if (err) {
-            res.json({message: "An error has occurred."}).end();
+            res.json({message: Translations[req.query.lang].rankingRoute.anErrorOccurred}).end();
         }
 
         else {
