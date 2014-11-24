@@ -1,7 +1,7 @@
 userModule
 .controller('RegisterController', [
-'$scope', 'InitUrls', 'CallUrlService', 'SaltGenerator', 'SHA-2', '$translate',
-function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2, $translate) {
+'$scope', 'InitUrls', 'CallUrlService', 'SaltGenerator', 'SHA-2', '$translate', 'CurrentLanguageFactory',
+function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2, $translate, CurrentLanguageFactory) {
 
     $scope.inputs = {
         username: {
@@ -63,6 +63,7 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2, $translate) {
             accountData.salt = SaltGenerator.generate();
             accountData.password = SHA2.sha256(accountData.password + accountData.salt);
             accountData.confirmPassword = SHA2.sha256(accountData.confirmPassword + accountData.salt);
+            accountData.language = CurrentLanguageFactory.language.code;
 
             CallUrlService.post({uri: urls.user.address}, accountData,
             function (data) {

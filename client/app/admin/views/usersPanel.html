@@ -70,6 +70,15 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
+                {{'adminPanelPage.usersPage.preferredLanguage' | translate}}
+            </span>
+            <span class="col-xs-9">
+                <img ng-src="{{Languages.findByCode(user.language).imgPath}}" style="margin-bottom: 3px" />
+                {{Languages.findByCode(user.language).name}}
+            </span>
+        </div>
+        <div class="row">
+            <span class="col-xs-3">
                 {{'adminPanelPage.usersPage.place' | translate}}
             </span>
             <span class="col-xs-9">

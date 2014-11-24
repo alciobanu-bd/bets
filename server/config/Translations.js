@@ -76,6 +76,34 @@ module.exports = {
             errorFetchingBeforeCurrentWeek: "Error fetching before current week.",
             errorFetchingWeekWithNumber: "Error fetching week with number ",
             weekInfoNotSavedDbError: "Week information wasn't saved. There was an error with the database."
+        },
+        jwtauth: {
+            tokenExpired: "Your token has expired. Please log in again.",
+            coldntVerifyIdentity: "An error has occurred. We couldn't verify your identity.",
+            accountInactive: "Your account is inactive.",
+            accountDisabled: "Your account is disabled.",
+            tokenInvalid: "Login token is invalid.",
+            didntSendToken: "You didn't send an authorization token."
+        },
+        pointsManagement: {
+            errorUpdatingThisWeeksPoints: "An error occurred when trying to update points for this week's bets.",
+            noResultsForEvents: "You didn't provide any results for the events.",
+            couldntCalculateWinners: "Couldn't calculate winners. Please try again.",
+            couldntSetWinnersOnBets: "Couldn't set winners on bets.",
+            couldntSendCongratulations: "Couldn't send congratulations to winners. Please try again.",
+            errorTryingToUpdateUsersPoints: "An error occurred while trying to update users' points.",
+            errorTryingToUpdateUsersPlace: "An error occurred while trying to update users' place.",
+            pointsAndPlacesUpdated: "Points and places were update for every user."
+        },
+        tokenChecks: {
+            notPermittedToExecuteMethod: "You are not permitted to execute this method."
+        },
+        weekChecksForBets: {
+            betPlacementNotAvailableOnThisWeek: 'Bet placement is not available on this week.',
+            youAreRequiredToPlay: 'You are required to play ',
+            matchesYouPlayed: ' matches. You played ',
+            serverError: 'Server encountered an error. Please try again',
+            weekNumberMalformed: 'The week number you sent is malformed.'
         }
     },
 
@@ -154,6 +182,34 @@ module.exports = {
             errorFetchingBeforeCurrentWeek: "Eroare la aducerea penultimei etape.",
             errorFetchingWeekWithNumber: "Eroare la aducerea etapei cu numărul ",
             weekInfoNotSavedDbError: "A intervenit o eroare în baza de date. Informațiile despre această etapă nu au fost salvate."
+        },
+        jwtauth: {
+            tokenExpired: "Token-ul tău a expirat. Te rugăm să te loghezi din nou.",
+            coldntVerifyIdentity: "A intervenit o eroare și nu am putut verifica identitatea ta.",
+            accountInactive: "Contul tău este inactiv.",
+            accountDisabled: "Contul tău este dezactivat.",
+            tokenInvalid: "Token-ul este invalid.",
+            didntSendToken: "Nu ai trimis un token de autorizare."
+        },
+        pointsManagement: {
+            errorUpdatingThisWeeksPoints: "A apărut o eroare la calcularea punctelor pentru fiecare pariu al etapei curente.",
+            noResultsForEvents: "Nu ai furnizat rezultatele pentru meciuri.",
+            couldntCalculateWinners: "Nu au putut fi calculați câștigătorii. Te rugăm să încerci din nou.",
+            couldntSetWinnersOnBets: "Nu au putut fi salvați câștigătorii pe fiecare pariu.",
+            couldntSendCongratulations:  "Nu au putut fi trimise mesajele de felicitare către câștigătorii de etapă. Te rugăm să reîncerci.",
+            errorTryingToUpdateUsersPoints: "A intervenit o eroare la calculul punctelor utilizatorilor.",
+            errorTryingToUpdateUsersPlace: "A intervenit o eroare la calculul locurilor utilizatorilor.",
+            pointsAndPlacesUpdated: "Punctele și locurile utilizatorilor au fost calculate cu succes."
+        },
+        tokenChecks: {
+            notPermittedToExecuteMethod: "Nu ai permisiunile necesare pentru a executa această metodă."
+        },
+        weekChecksForBets: {
+            betPlacementNotAvailableOnThisWeek: 'Parierea nu mai este disponibilă etapa aceasta.',
+            youAreRequiredToPlay: 'Ești obligat să joci ',
+            matchesYouPlayed: ' meciuri. Ai jucat ',
+            serverError: 'Server-ul a întâmpinat o eroare. Te rugăm să reîncerci.',
+            weekNumberMalformed: 'Numărul de etapă trimis este incorect.'
         }
     }
 

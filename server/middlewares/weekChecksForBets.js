@@ -1,10 +1,11 @@
 
 var Week = require('./../model/Week.js');
+var Translations = require('./../config/Translations.js');
 
 var checkIfWeekEnded = function (req, res, next, week, onError, onSuccess) {
     if (week.locked || week.ended || week.endDate < new Date()) {
         res.status(500).json({
-            message: 'Bet placement on this week is not available.'
+            message: Translations[req.query.lang].weekChecksForBets.betPlacementNotAvailableOnThisWeek
         }).end();
         onError();
     }
@@ -25,7 +26,8 @@ var checkIfCorrectNumberOfMatches = function (req, res, next, week, onError, onS
 
     if (week.required != numberOfBets) {
         res.status(500).json({
-            message: 'You are required to play ' + week.required + ' matches. You placed ' + numberOfBets + '.'
+            message: Translations[req.query.lang].weekChecksForBets.youAreRequiredToPlay + week.required +
+                Translations[req.query.lang].weekChecksForBets.matchesYouPlayed + numberOfBets + '.'
         }).end();
         onError();
     }
@@ -44,7 +46,7 @@ var weekChecks = function (callbacks) {
 
             if (err) {
                 res.status(500).json({
-                    message: 'Server encountered an error. Please try again'
+                    message: Translations[req.query.lang].weekChecksForBets.serverError
                 }).end();
             }
 
@@ -81,7 +83,7 @@ var weekChecks = function (callbacks) {
                 else {
                     // week not found
                     res.status(500).json({
-                        message: 'The week number you sent is malformed.'
+                        message: Translations[req.query.lang].weekChecksForBets.weekNumberMalformed
                     }).end();
                 }
 

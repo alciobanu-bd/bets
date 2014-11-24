@@ -3,16 +3,24 @@ profileModule
 
 .controller('ProfileController', [
 '$scope', 'UserInformation', 'ProfileFactory', 'RolesFactory', 'InitUrls', 'CallUrlService', '$translate',
-function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallUrlService, $translate) {
+'Languages', 'CurrentLanguageFactory',
+function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallUrlService, $translate,
+Languages, CurrentLanguageFactory) {
 
     $scope.userInfo = UserInformation;
     $scope.ProfileFactory = ProfileFactory;
     $scope.RolesFactory = RolesFactory;
+    $scope.Languages = Languages;
 
     ProfileFactory.loadProfile($scope.userInfo.user._id);
 
     $scope.userModel = {
-        isMailNotificationOn: UserInformation.user.isMailNotificationOn
+        isMailNotificationOn: UserInformation.user.isMailNotificationOn,
+        language: UserInformation.user.language
+    };
+
+    $scope.setLanguage = function (lang) {
+        $scope.userModel.language = lang;
     };
 
     $scope.status = {
@@ -35,6 +43,8 @@ function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallU
                 $scope.status.inProgress = false;
 
                 UserInformation.setUserDetails(data);
+
+                CurrentLanguageFactory.setLanguage($scope.userModel.language);
 
             },
             function () {

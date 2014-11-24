@@ -220,7 +220,7 @@ function (req, res, next) {
                 }
                 else {
 
-                    mailServices.sendConfirmationLinkOnRegistration(req.data.user.username, req.data.user.email, regCode.registrationCode,
+                    mailServices.sendConfirmationLinkOnRegistration(req.data.user, regCode.registrationCode,
                         function (info) {
                             // success
                         },
@@ -276,7 +276,7 @@ function (req, res, next) {
                     }
                     else {
 
-                        mailServices.resendConfirmationLink(res.data.local.user.username, res.data.local.user.email, regCode.registrationCode,
+                        mailServices.resendConfirmationLink(res.data.local.user, regCode.registrationCode,
                             function (info) {
                                 // success
                             },
@@ -420,8 +420,7 @@ function (req, res, next) {
                                 }
                                 else {
 
-                                    mailServices.sendConfirmationLinkOnForgotPassword(user.username,
-                                        user.email,
+                                    mailServices.sendConfirmationLinkOnForgotPassword(user,
                                         code.forgotPasswordCode,
                                         function (info) {
                                             // success
@@ -538,8 +537,7 @@ function (req, res, next) {
                     }
                     else {
 
-                        mailServices.sendConfirmationLinkOnPasswordChange(res.data.local.user.username,
-                            res.data.local.user.email,
+                        mailServices.sendConfirmationLinkOnPasswordChange(res.data.local.user,
                             regCode.registrationCode,
 
                             function (info) {

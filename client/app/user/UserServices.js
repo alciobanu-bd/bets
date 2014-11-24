@@ -60,7 +60,8 @@ function () {
             role: user.role,
             username: user.username,
             isMailNotificationOn: user.isMailNotificationOn,
-            wonWeeks: user.wonWeeks
+            wonWeeks: user.wonWeeks,
+            language: user.language
         };
 
     }

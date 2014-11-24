@@ -152,7 +152,7 @@ function (req, res) {
                                 }
 
                                 mailServices.sendNotificationAboutNewWeek (
-                                    weeks[0], user.username, user.email, function () {
+                                    weeks[0], user, function () {
                                     // on success
 
                                     // if a single user receives the message,

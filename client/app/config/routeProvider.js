@@ -20,6 +20,13 @@ function($routeProvider, TemplatesProvider) {
         }
     }];
 
+    var redirectHomeIfActive = ['UserInformation', '$location',
+    function (UserInformation, $location) {
+        if (UserInformation.isLogged && UserInformation.user.active) {
+            $location.path('/');
+        }
+    }];
+
     var redirectHomeIfNotAdmin = [
     'UserInformation', '$location', 'RolesFactory',
     function (UserInformation, $location, RolesFactory) {
@@ -111,7 +118,8 @@ function($routeProvider, TemplatesProvider) {
             templateUrl: Templates.account.activation.html,
             controller: 'AccountActivationController',
             resolve: {
-                redirect: redirectHomeIfNotLogged
+                redirectNotLogged: redirectHomeIfNotLogged,
+                redirect: redirectHomeIfActive
             }
         }).
         otherwise({
