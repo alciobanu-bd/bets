@@ -12,10 +12,12 @@ Settings, $routeParams, $location) {
     $scope.userInfo = UserInformation;
 
     var refreshUserDetails = function () {
-        if (!UserInformation.isLogged) {
-            return;
-        }
-        UserInformationCalls.fetchUserDetails();
+        UserInformation.ready(function () {
+            if (!UserInformation.isLogged) {
+                return;
+            }
+            UserInformationCalls.fetchUserDetails();
+        });
     }
 
     var extendToken = function () {

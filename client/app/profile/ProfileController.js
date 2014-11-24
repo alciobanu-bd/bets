@@ -14,10 +14,12 @@ Languages, CurrentLanguageFactory) {
 
     ProfileFactory.loadProfile($scope.userInfo.user._id);
 
-    $scope.userModel = {
-        isMailNotificationOn: UserInformation.user.isMailNotificationOn,
-        language: UserInformation.user.language
-    };
+    UserInformation.ready(function () {
+        $scope.userModel = {
+            isMailNotificationOn: UserInformation.user.isMailNotificationOn,
+            language: UserInformation.user.language
+        };
+    });
 
     $scope.setLanguage = function (lang) {
         $scope.userModel.language = lang;
@@ -43,7 +45,6 @@ Languages, CurrentLanguageFactory) {
                 $scope.status.inProgress = false;
 
                 UserInformation.setUserDetails(data);
-
                 CurrentLanguageFactory.setLanguage($scope.userModel.language);
 
             },

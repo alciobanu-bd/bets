@@ -22,21 +22,25 @@ function($routeProvider, TemplatesProvider) {
 
     var redirectHomeIfActive = ['UserInformation', '$location',
     function (UserInformation, $location) {
-        if (UserInformation.isLogged && UserInformation.user.active) {
-            $location.path('/');
-        }
+        UserInformation.ready(function () {
+            if (UserInformation.isLogged && UserInformation.user.active) {
+                $location.path('/');
+            }
+        });
     }];
 
     var redirectHomeIfNotAdmin = [
     'UserInformation', '$location', 'RolesFactory',
     function (UserInformation, $location, RolesFactory) {
-        RolesFactory.load().then(
-            function () {
-                if (!UserInformation.isLogged || !RolesFactory.userHasRole(UserInformation.user.role, RolesFactory.roles.admin)) {
-                    $location.path('/');
+        UserInformation.ready(function () {
+            RolesFactory.load().then(
+                function () {
+                    if (!UserInformation.isLogged || !RolesFactory.userHasRole(UserInformation.user.role, RolesFactory.roles.admin)) {
+                        $location.path('/');
+                    }
                 }
-            }
-        );
+            );
+        });
     }];
 
     $routeProvider.
