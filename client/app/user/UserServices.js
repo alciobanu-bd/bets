@@ -3,8 +3,27 @@ userModule
 .factory('LoginTokenFactory', [
 function () {
 
+    var subscriptions = [];
+
+    this.subscribeToTokenChanges = function (callback) {
+        subscriptions.push(callback);
+    }
+
+    this.unsubscribeAllFromTokenChanges = function () {
+        subscriptions = [];
+    }
+
+    var notifySubscribers = function () {
+        for (var i = 0; i < subscriptions.length; i++) {
+            var subscription = subscriptions[i];
+            if (typeof subscription === 'function') {}
+            subscription();
+        }
+    }
+
     this.setToken = function (token) {
         localStorage.setItem('LoginToken', JSON.stringify(token));
+        notifySubscribers();
     }
 
     this.getToken = function () {
@@ -40,11 +59,13 @@ function (UserInformation, $location) {
 ])
 
 .factory('UserInformation', [
-function () {
+'$q', 'LoginTokenFactory',
+function ($q, LoginTokenFactory) {
 
     var thisFactory = {};
 
     thisFactory.isLogged = false;
+    thisFactory.isReady = false;
     thisFactory.user = {};
 
     thisFactory.setUserDetails = function (user) {
@@ -60,8 +81,28 @@ function () {
             role: user.role,
             username: user.username,
             isMailNotificationOn: user.isMailNotificationOn,
-            wonWeeks: user.wonWeeks
+            wonWeeks: user.wonWeeks,
+            language: user.language
         };
+    }
+
+    thisFactory.ready = function (callMeWhenYoureReady) {
+
+        var cb = function () {
+            if (typeof callMeWhenYoureReady == 'function') {
+                callMeWhenYoureReady();
+            }
+        }
+
+        if (thisFactory.ready == true) {
+            cb();
+        }
+        else {
+            LoginTokenFactory.subscribeToTokenChanges(function () {
+                thisFactory.ready = true;
+                cb();
+            });
+        }
 
     }
 
@@ -72,9 +113,9 @@ function () {
 
 .factory('UserInformationCalls', [
 'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls', 'CheckActivationStatus',
-'KeepMeLoggedInStorage',
+'KeepMeLoggedInStorage', '$translate',
 function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls, CheckActivationStatus,
-KeepMeLoggedInStorage) {
+KeepMeLoggedInStorage, $translate) {
 
     var infoService = {};
 
@@ -108,13 +149,13 @@ KeepMeLoggedInStorage) {
             CallUrlService.post({uri: initUrls.auth.login}, credentials,
             function (data) {
                 UserInformation.isLogged = true;
+                UserInformation.setUserDetails(data.user);
                 LoginTokenFactory.setToken({
                     token: data.token,
                     expires: data.expires,
                     user: data.user
                 });
-                UserInformation.setUserDetails(data.user);
-                defered.resolve({message: "Logged in successfully."});
+                defered.resolve({message: $translate.instant('loginPage.loggedInSuccessfully')});
             },
             function (response) {
                 UserInformation.isLogged = false;
@@ -147,6 +188,7 @@ KeepMeLoggedInStorage) {
 
     infoService.logout = function () {
         UserInformation.isLogged = false;
+        UserInformation.isReady = true;
         LoginTokenFactory.deleteToken();
         KeepMeLoggedInStorage.setDays(null);
     }
@@ -157,12 +199,12 @@ KeepMeLoggedInStorage) {
                 {days: KeepMeLoggedInStorage.getDays()},
                 function (data) {
                     UserInformation.isLogged = true;
+                    UserInformation.setUserDetails(data.user);
                     LoginTokenFactory.setToken({
                         token: data.token,
                         expires: data.expires,
                         user: data.user
                     });
-                    UserInformation.setUserDetails(data.user);
                     CheckActivationStatus.check();
                 },
                 function (response) {
@@ -329,7 +371,7 @@ function (InitUrls, CallUrlService) {
                     thisFactory.status.message = response.data.message;
                 }
                 else {
-                    thisFactory.status.message = "Account couldn't be activated";
+                    thisFactory.status.message = $translate.instant('activationPage.couldntActivate');
                 }
                 if (typeof onError === 'function') {
                     onError();

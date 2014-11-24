@@ -2,7 +2,7 @@
 // NOTE that app is defined globally
 
 var User = require('./../model/User.js');
-var Roles = require('./../model/Roles.js');
+var Roles = require('./../model/Roles.js')('en');
 var RegistrationCode = require('./../model/RegistrationCode.js');
 var ForgotPasswordCode = require('./../model/ForgotPasswordCode.js');
 var Random = require('./../services/Random.js');
@@ -11,6 +11,7 @@ var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 var bcrypt = require('bcrypt-nodejs');
 
+var Translations = require('./../config/Translations.js');
 var mailServices = require('./../services/mailServices.js');
 
 var fs = require('fs');
@@ -28,7 +29,7 @@ function (req, res, next) {
         function (err, user) {
             if (err) {
                 res.status(500).json({
-                    message: "Error fetching user from database."
+                    message: Translations[req.query.lang].userRoute.errorFetchingUserFromDb
                 }).end();
             }
             else {
@@ -47,7 +48,7 @@ function (req, res, next) {
         function (err, users) {
             if (err) {
                 res.status(500).json({
-                    message: "Error fetching users from database."
+                    message: Translations[req.query.lang].userRoute.errorFetchingUsersFromDb
                 }).end();
             }
             else {
@@ -66,7 +67,7 @@ function (req, res, next) {
         function (err, user) {
             if (err) {
                 res.status(500).json({
-                    message: "Error fetching details from database."
+                    message: Translations[req.query.lang].userRoute.errorFetchingDetails
                 }).end();
             }
             else {
@@ -82,7 +83,7 @@ function (req, res, next) {
     if (req.body.password != req.body.confirmPassword) {
         var errorFields = {password: true, confirmPassword: true};
         res.status(500).json({
-            message: "Account couldn't be created. Passwords are not matching.",
+            message: Translations[req.query.lang].userRoute.cantCreatePasswordsNotMatching,
             errorFields: errorFields
         }).end();
     }
@@ -96,7 +97,7 @@ function (req, res, next) {
 
             if (err) {
                 res.status(500).json({
-                    message: "Account couldn't be created due to server errors."
+                    message: Translations[req.query.lang].userRoute.cantCreateServerErrors
                 });
                 res.end();
             }
@@ -117,7 +118,7 @@ function (req, res, next) {
                     }
 
                     res.status(409).json({
-                        message: "Account couldn't be created. Some fields are already taken.",
+                        message: Translations[req.query.lang].userRoute.cantCreateFieldsAlreadyTaken,
                         errorFields: errorFields
                     }).end();
                 }
@@ -127,7 +128,7 @@ function (req, res, next) {
                     User.find({}, {place: 1, points: 1}, function (err, userPlaces) {
                         if (err) {
                             res.status(500).json({
-                                message: "Account couldn't be created due to server errors."
+                                message: Translations[req.query.lang].userRoute.cantCreateServerErrors
                             }).end();
                         }
                         else {
@@ -151,7 +152,7 @@ function (req, res, next) {
                             bcrypt.hash(req.body.password, req.body.serverSalt, null, function (err, hash) {
                                 if (err) {
                                     res.status(500).json({
-                                        message: "Account couldn't be created due to server errors."
+                                        message: Translations[req.query.lang].userRoute.cantCreateServerErrors
                                     }).end();
                                 }
                                 else {
@@ -197,8 +198,7 @@ function (req, res, next) {
 
         if (err) {
             res.status(500).json({
-                message: "Account was saved, but a registration code couldn't be provided via e-mail. " +
-                    "Please login and request a new one."
+                message: Translations[req.query.lang].userRoute.accountCreatedButNotARegistrationCode
             });
         }
 
@@ -215,13 +215,12 @@ function (req, res, next) {
             regCode.save(function (err) {
                 if (err) {
                     res.status(500).json({
-                        message: "Account was saved, but a registration code couldn't be provided via e-mail. " +
-                            "Please login and request a new one."
+                        message: Translations[req.query.lang].userRoute.accountCreatedButNotARegistrationCode
                     });
                 }
                 else {
 
-                    mailServices.sendConfirmationLinkOnRegistration(req.data.user.username, req.data.user.email, regCode.registrationCode,
+                    mailServices.sendConfirmationLinkOnRegistration(req.data.user, regCode.registrationCode,
                         function (info) {
                             // success
                         },
@@ -229,6 +228,12 @@ function (req, res, next) {
                             // error
                             fs.appendFile(LOG_USER_MAIL_FILE_NAME, "registration mail couldn't be delivered " + err + '\r\n');
                         });
+
+                    req.data.user = req.data.user.toObject();
+                    delete req.data.user['serverSalt'];
+                    delete req.data.user['salt'];
+                    delete req.data.user['registrationIp'];
+                    delete req.data.user['password'];
 
                     res.status(201).json(req.data.user).end();
 
@@ -249,7 +254,7 @@ function (req, res, next) {
 
             if (err) {
                 res.status(500).json({
-                    message: "A registration code couldn't be provided."
+                    message: Translations[req.query.lang].userRoute.registrationCodeCouldntBeProvided
                 }).end();
             }
 
@@ -266,12 +271,12 @@ function (req, res, next) {
                 regCode.save(function (err) {
                     if (err) {
                         res.status(500).json({
-                            message: "A registration code couldn't be provided."
+                            message: Translations[req.query.lang].userRoute.registrationCodeCouldntBeProvided
                         }).end();
                     }
                     else {
 
-                        mailServices.sendConfirmationLinkOnRegistration(res.data.local.user.username, res.data.local.user.email, regCode.registrationCode,
+                        mailServices.resendConfirmationLink(res.data.local.user, regCode.registrationCode,
                             function (info) {
                                 // success
                             },
@@ -281,7 +286,7 @@ function (req, res, next) {
                             });
 
                         res.status(200).json({
-                            message: "An e-mail containing an activation code will be sent to your e-mail shortly."
+                            message: Translations[req.query.lang].userRoute.emailWithActivationSent
                         }).end();
 
                     }
@@ -334,7 +339,7 @@ function(req, res, next) {
         function (err, user) {
             if (err || !user) {
                 res.status(500).json({
-                    message: "User couldn't be found in the database."
+                    message: Translations[req.query.lang].userRoute.userNotFound
                 }).end();
             }
             else {
@@ -345,7 +350,7 @@ function(req, res, next) {
                 user.save(function (err) {
                     if (err) {
                         res.status(500).json({
-                            message: "User couldn't be saved in the database. Please try again."
+                            message: Translations[req.query.lang].userRoute.userCouldntBeSavedToDb
                         }).end();
                     }
                     else {
@@ -376,13 +381,13 @@ function (req, res, next) {
     ]}, function (err, user) {
         if (err) {
             res.status(500).json({
-                message: "An error occurred while trying to fetch your details."
+                message: Translations[req.query.lang].userRoute.errorFetchingDetails
             }).end();
         }
         else {
             if (!user) {
                 res.status(404).json({
-                    message: "We couldn't find your account. It seems that you entered wrong details."
+                    message: Translations[req.query.lang].userRoute.couldntFindAccountATForgotPw
                 }).end();
             }
             else {
@@ -393,7 +398,7 @@ function (req, res, next) {
 
                         if (err) {
                             res.status(500).json({
-                                message: "A reset code couldn't be provided."
+                                message: Translations[req.query.lang].userRoute.resetCodeCouldntBeProvided
                             }).end();
                         }
 
@@ -410,13 +415,12 @@ function (req, res, next) {
                             code.save(function (err) {
                                 if (err) {
                                     res.status(500).json({
-                                        message: "A reset code couldn't be provided."
+                                        message: Translations[req.query.lang].userRoute.resetCodeCouldntBeProvided
                                     }).end();
                                 }
                                 else {
 
-                                    mailServices.sendConfirmationLinkOnForgotPassword(user.username,
-                                        user.email,
+                                    mailServices.sendConfirmationLinkOnForgotPassword(user,
                                         code.forgotPasswordCode,
                                         function (info) {
                                             // success
@@ -427,8 +431,7 @@ function (req, res, next) {
                                         });
 
                                     res.status(200).json({
-                                        message: "An e-mail containing the code needed to reset your password" +
-                                            " will be sent to your e-mail shortly."
+                                        message: Translations[req.query.lang].userRoute.emailContainingCodeSent
                                     }).end();
 
                                 }
@@ -455,21 +458,21 @@ function (req, res, next) {
 
     if (newPassword != confirmPassword) {
         res.status(500).json({
-            message: "New password and confirm password do not match."
+            message: Translations[req.query.lang].userRoute.newPwAndconfirmPwNotMatching
         }).end();
     }
 
     bcrypt.hash(oldPassword, user.serverSalt, null, function (err, oldPwHash) {
         if (err) {
             res.status(500).json({
-                message: "We couldn't change your password. Please try again."
+                message: Translations[req.query.lang].userRoute.couldntChangePw
             }).end();
         }
         else {
 
             if (oldPwHash != user.password) {
                 res.status(500).json({
-                    message: "Old password you entered is wrong."
+                    message: Translations[req.query.lang].userRoute.oldPwIsWrong
                 }).end();
             }
             else {
@@ -478,7 +481,7 @@ function (req, res, next) {
                 bcrypt.hash(newPassword, user.serverSalt, null, function (err, hash) {
                     if (err) {
                         res.status(500).json({
-                            message: "We couldn't change your password. Please try again."
+                            message: Translations[req.query.lang].userRoute.couldntChangePw
                         }).end();
                     }
                     else {
@@ -488,7 +491,7 @@ function (req, res, next) {
                             function (err) {
                                 if (err) {
                                     res.status(500).json({
-                                        message: "We couldn't change your password. Please try again."
+                                        message: Translations[req.query.lang].userRoute.couldntChangePw
                                     }).end();
                                 }
                                 else {
@@ -512,8 +515,7 @@ function (req, res, next) {
 
             if (err) {
                 res.status(500).json({
-                    message: "New password was saved, but no confirmation e-mail could be sent." +
-                        "Please login and request a new one."
+                    message: Translations[req.query.lang].userRoute.newPwSavedErrorSendingMail
                 });
             }
 
@@ -530,14 +532,12 @@ function (req, res, next) {
                 regCode.save(function (err) {
                     if (err) {
                         res.status(500).json({
-                            message: "New password was saved, but no confirmation e-mail could be sent. " +
-                                "Please login and request a new one."
+                            message: Translations[req.query.lang].userRoute.newPwSavedErrorSendingMail
                         });
                     }
                     else {
 
-                        mailServices.sendConfirmationLinkOnPasswordChange(res.data.local.user.username,
-                            res.data.local.user.email,
+                        mailServices.sendConfirmationLinkOnPasswordChange(res.data.local.user,
                             regCode.registrationCode,
 
                             function (info) {
@@ -568,21 +568,21 @@ function (req, res, next) {
     function (err, code) {
         if (err) {
             res.status(500).json({
-                message: "An error occurred while trying to fetch the reset code."
+                message: Translations[req.query.lang].userRoute.errorFetchingResetCode
             }).end();
         }
         else {
 
             if (!code) {
                 res.status(500).json({
-                    message: "The reset code you entered couldn't be found."
+                    message: Translations[req.query.lang].userRoute.resetCodeCantBeFound
                 }).end();
                 return;
             }
 
             if (new Date(code.expirationDate) < new Date()) {
                 res.status(500).json({
-                    message: "The reset code you entered expired. Please request another one."
+                    message: Translations[req.query.lang].userRoute.resetCodeExpired
                 }).end();
             }
             else {
@@ -604,7 +604,7 @@ function (req, res) {
 
     if (newPassword != confirmPassword) {
         res.status(500).json({
-            message: "New password and confirm password do not match."
+            message: Translations[req.query.lang].userRoute.newPwAndconfirmPwNotMatching
         }).end();
     }
 
@@ -615,7 +615,7 @@ function (req, res) {
 
         if (err || !user) {
             res.status(500).json({
-                message: "We couldn't change your password. Please try again."
+                message: Translations[req.query.lang].userRoute.couldntChangePw
             }).end();
         }
         else {
@@ -623,7 +623,7 @@ function (req, res) {
             bcrypt.hash(newPassword, user.serverSalt, null, function (err, hash) {
                 if (err) {
                     res.status(500).json({
-                        message: "We couldn't change your password. Please try again."
+                        message: Translations[req.query.lang].userRoute.couldntChangePw
                     }).end();
                 }
                 else {
@@ -633,7 +633,7 @@ function (req, res) {
                         function (err) {
                             if (err) {
                                 res.status(500).json({
-                                    message: "We couldn't change your password. Please try again."
+                                    message: Translations[req.query.lang].userRoute.couldntChangePw
                                 }).end();
                             }
                             else {
@@ -659,7 +659,7 @@ jwtauth([function (req, res, next, user, onError, onSuccess) {
     function (err, regCode) {
         if (err) {
             res.status(500).json({
-                message: "An error occurred with the database."
+                message: Translations[req.query.lang].userRoute.userCouldntBeActivated
             }).end();
             onError();
         }
@@ -667,7 +667,7 @@ jwtauth([function (req, res, next, user, onError, onSuccess) {
 
             if (req.body.registrationCode != regCode.registrationCode) {
                 res.status(500).json({
-                    message: "The registration code you entered is not valid."
+                    message: Translations[req.query.lang].userRoute.codeIsNotValid
                 }).end();
                 onError();
             }
@@ -675,7 +675,7 @@ jwtauth([function (req, res, next, user, onError, onSuccess) {
 
                 if (new Date(regCode.expirationDate) < new Date()) {
                     res.status(500).json({
-                        message: "The registration code you entered expired. Please request another one."
+                        message: Translations[req.query.lang].userRoute.activationCodeExpired
                     }).end();
                     onError();
                 }
@@ -697,7 +697,7 @@ function (req, res, next) {
     user.save(function (err) {
         if (err) {
             res.status(500).json({
-                message: "User couldn't be activated due to database errors."
+                message: Translations[req.query.lang].userRoute.userCouldntBeActivated
             }).end();
         }
         else {

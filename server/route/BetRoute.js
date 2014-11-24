@@ -10,6 +10,8 @@ var weekChecks = require('./../middlewares/weekChecksForBets.js');
 
 var mongoose = require('mongoose');
 
+var Translations = require('./../config/Translations.js');
+
 var fs = require('fs');
 var LOG_BET_PLACEMENT_FILE_NAME = 'logs/bet_placement.txt';
 
@@ -34,7 +36,7 @@ function (req, res, next) {
     Bet.find({}, function (err, bets) {
         if (err) {
             res.status(500).json({
-                message: "Oops. Bets couldn't be fetched from the database."
+                message: Translations[req.query.lang].bet.betsCouldntBeFetched
             }).end();
         }
         else {
@@ -51,7 +53,7 @@ function (req, res, next) {
     Bet.findOne({_id: req.params.id}, function (err, bet) {
         if (err) {
             res.status(500).json({
-                message: "Oops. Bet couldn't bet fetched from the database."
+                message: Translations[req.query.lang].bet.betCouldntBeFetched
             }).end();
         }
         else {
@@ -72,12 +74,12 @@ function (req, res, next) {
         function (err, bet) {
             if (err) {
                 res.status(500).json({
-                    message: 'An error has occurred. You cannot place a bet for the moment.'
+                    message: Translations[req.query.lang].bet.cannotPlaceBetFTM
                 }).end();
             }
             else if (bet) {
                 res.status(500).json({
-                    message: 'It seems that you already placed a bet this week and you try to place it again.'
+                    message: Translations[req.query.lang].bet.alreadyPlacedABet
                 }).end();
             }
             else {
@@ -102,7 +104,7 @@ function (req, res, next) {
     bet.save(function (err) {
         if (err) {
             res.status(500).json({
-                message: "An error occurred while trying to save bet."
+                message: Translations[req.query.lang].bet.couldntSaveBet
             }).end();
         }
         else {
@@ -129,7 +131,7 @@ function (req, res, next) {
     Bet.findOne({_id: req.params.id}, function (err, bet) {
         if (err) {
             res.status(500).json({
-                message: "Oops. Couldn't save the bet to database."
+                message: Translations[req.query.lang].bet.couldntSaveBet
             }).end();
         }
         else {
@@ -137,7 +139,7 @@ function (req, res, next) {
             // check if user who's trying to save bet is the one who posted the bet
             if (res.data.local.user._id.toString() != bet.userId.toString()) {
                 res.status(500).json({
-                    message: "You are not permitted to save another user's bet."
+                    message: Translations[req.query.lang].bet.notPermittedToSaveBetForAnotherUser
                 }).end();
             }
             else {
@@ -149,7 +151,7 @@ function (req, res, next) {
                 bet.save(function (err) {
                     if (err) {
                         res.status(500).json({
-                            message: "Oops. The bet couldn't be saved."
+                            message: Translations[req.query.lang].bet.couldntSaveBet
                         }).end();
                     }
                     else {

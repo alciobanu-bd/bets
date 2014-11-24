@@ -6,20 +6,17 @@
     <div style="cursor: pointer">
         <span ng-click="newWeekPanel = !!!newWeekPanel">
             <span class="glyphicon glyphicon-align-justify white"></span>
-            Add new week
+            {{'weekPage.addNewWeekPage.addNewWeek' | translate}}
         </span>
     </div>
 
 
     <div class="panel-heading" ng-show="newWeekPanel">
         <div class="row">
-            <h2 class="panel-title">Week {{WeekFactory.currentWeek.number + 1}}</h2>
+            <h2 class="panel-title">{{'weekPage.addNewWeekPage.week' | translate}} {{WeekFactory.currentWeek.number + 1}}</h2>
         </div>
         <div class="row">
-            Write how many total matches you want to add and how many of them should be required for users to be played.
-            Recommended numbers are 3-5 for total and 3 for required.
-            Imediately after you publish the events, other users will see the matches and will be able to place their bets.
-            After saving a new week, you can press refresh to see that it really saved successfully.
+            {{'weekPage.addNewWeekPage.newWeekDescription' | translate}}
         </div>
 
         <div class="panel-body">
@@ -27,42 +24,46 @@
             <div class="row form-inline top-buffer-0-5-em">
                     <span style="width: 20%" class="input-group">
                         <input type="text" ng-model="matchesNumber.total" ng-change="validateNumberOfMatches(); setMatchesArray()"
-                               class="form-control cornered-input" placeholder="Total matches" />
+                               class="form-control cornered-input" placeholder="{{'weekPage.addNewWeekPage.totalMatches' | translate}}" />
                     </span>
             </div>
 
             <div class="row form-inline top-buffer-0-5-em">
                     <span style="width: 20%" class="input-group">
                         <input type="text" ng-model="matchesNumber.required" class="form-control cornered-input"
-                               ng-change="validateNumberOfMatches()" placeholder="Required" />
+                               ng-change="validateNumberOfMatches()" placeholder="{{'weekPage.addNewWeekPage.required' | translate}}" />
                     </span>
             </div>
 
             <div class="row" ng-if="matches.length > 0">
                 <input type="checkbox" id="hiddenWeek" ng-model="weekOptions.hidden" />
                 <label for="hiddenWeek" style="font-style: normal; font-weight: normal">
-                    Hidden
+                    {{'weekPage.addNewWeekPage.hidden' | translate}}
                 </label>
             </div>
 
             <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in matches track by $index">
                     <span style="width: 25%" class="input-group">
-                        <input type="text" ng-model="match.homeTeam" class="form-control cornered-input" placeholder="Home team" />
+                        <input type="text" ng-model="match.homeTeam" class="form-control cornered-input"
+                               placeholder="{{'weekPage.addNewWeekPage.homeTeam' | translate}}" />
                     </span>
                     <span style="width: 5%">
                         vs
                     </span>
                     <span style="width: 25%" class="input-group">
-                        <input type="text" ng-model="match.awayTeam" class="form-control cornered-input" placeholder="Away team" />
+                        <input type="text" ng-model="match.awayTeam" class="form-control cornered-input"
+                               placeholder="{{'weekPage.addNewWeekPage.awayTeam' | translate}}" />
                     </span>
                     <span style="width: 10%" class="input-group">
-                        <input ui-date="dateOptions" ng-model="match.startDate" class="form-control cornered-input" placeholder="Start date" />
+                        <input ui-date="dateOptions" ng-model="match.startDate" class="form-control cornered-input"
+                               placeholder="{{'weekPage.addNewWeekPage.startDate' | translate}}" />
                     </span>
                     <span style="width: 8%" class="input-group">
                         <input ng-model="match.startTime" class="form-control cornered-input" placeholder="HH:MM" />
                     </span>
                     <span style="width: 25%" class="input-group">
-                        <input type="text" ng-model="match.competition" class="form-control cornered-input" placeholder="Competition" />
+                        <input type="text" ng-model="match.competition" class="form-control cornered-input"
+                               placeholder="{{'weekPage.addNewWeekPage.competition' | translate}}" />
                     </span>
             </div>
 
@@ -71,16 +72,16 @@
         <span ng-show="matchesNumber.total > 0 && matches.total != ''">
             <div style="margin-top: 1em" ng-hide="beforeSave.showConfirm">
                 <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm();" ng-disabled="publishError()">
-                    Publish
+                    {{'weekPage.addNewWeekPage.publish' | translate}}
                 </button>
             </div>
 
             <div style="margin-top: 1em" ng-show="beforeSave.showConfirm">
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="publish(); hideConfirm();">
-                    Yes
+                    {{'weekPage.addNewWeekPage.yes' | translate}}
                 </button>
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="hideConfirm();">
-                    No
+                    {{'weekPage.addNewWeekPage.no' | translate}}
                 </button>
             </div>
         </span>
@@ -101,7 +102,7 @@
 
         <div style="margin-top: 1em" ng-show="afterSave.success">
             <button type="button" class="btn btn-info" style="width: 40%" ng-click="afterSave.refresh();">
-                Refresh
+                {{'weekPage.addNewWeekPage.refresh' | translate}}
             </button>
         </div>
 

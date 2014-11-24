@@ -1,9 +1,9 @@
 betsModule
 .controller('MainController',[
 '$scope', 'Templates', 'UserInformation', 'UserInformationCalls', 'UserInformation', '$interval',
-'Settings', '$rootScope',
+'Settings','$routeParams', '$location',
 function ($scope, Templates, UserInfo, UserInformationCalls, UserInformation, $interval,
-Settings, $rootScope) {
+Settings, $routeParams, $location) {
     /**
      * UserInformationCalls is injected because it sets the user information.
      */
@@ -12,10 +12,12 @@ Settings, $rootScope) {
     $scope.userInfo = UserInformation;
 
     var refreshUserDetails = function () {
-        if (!UserInformation.isLogged) {
-            return;
-        }
-        UserInformationCalls.fetchUserDetails();
+        UserInformation.ready(function () {
+            if (!UserInformation.isLogged) {
+                return;
+            }
+            UserInformationCalls.fetchUserDetails();
+        });
     }
 
     var extendToken = function () {

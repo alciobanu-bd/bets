@@ -2,8 +2,8 @@
 profileModule
 
 .factory('ProfileFactory', [
-'InitUrls', 'CallUrlService',
-function (InitUrls, CallUrlService) {
+'InitUrls', 'CallUrlService', '$translate',
+function (InitUrls, CallUrlService, $translate) {
 
     var thisFactory = {};
     thisFactory.profileInformation = null;
@@ -27,7 +27,7 @@ function (InitUrls, CallUrlService) {
                     thisFactory.fetchingError.message = response.data.message;
                 }
                 else {
-                    thisFactory.fetchingError.message = 'An error occurred while fetching profile information.';
+                    thisFactory.fetchingError.message = $translate.instant(profilePage.errorFetching);
                 }
             }
             );

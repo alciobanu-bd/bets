@@ -1,26 +1,24 @@
 <div class="modal-header">
-    <h3 class="modal-title">Week #{{week.number}}</h3>
+    <h3 class="modal-title">{{'weekPage.weekEdit.week' | translate}} #{{week.number}}</h3>
     <div>
-        Use the editing functionality with care.
-        Note that if player already placed the bets, their bets can be corrupted if week changes.
+        {{'weekPage.weekEdit.warning1' | translate}}
     </div>
     <div>
-        Therefore this functionality should be used only in clear situations when it is needed, like solving a typo or a match starting time.
+        {{'weekPage.weekEdit.warning2' | translate}}
     </div>
     <div>
-        Do NOT add/remove an event or change the deadline drastically if a long time has passed since the week has been published.
-    </div>
+        {{'weekPage.weekEdit.warning3' | translate}}    </div>
 </div>
 <div class="modal-body">
 
     <div class="row">
         <div class="col-xs-12 form-inline">
             <span>
-                Required matches
+                {{'weekPage.weekEdit.requiredMatches' | translate}}
             </span>
             <span style="width: 10%" class="input-group">
                 <input type="text" ng-model="week.required" class="form-control cornered-input"
-                       ng-change="validateNumberOfMatches()" placeholder="Required" />
+                       ng-change="validateNumberOfMatches()" placeholder="{{'weekPage.weekEdit.required' | translate}}" />
             </span>
         </div>
     </div>
@@ -29,16 +27,16 @@
         <div class="col-xs-12">
             <div class="form-inline centered">
                 <span style="width: 50%" class="input-group">
-                    <b>Event</b>
+                    <b>{{'weekPage.weekEdit.event' | translate}}</b>
                 </span>
                 <span style="width: 18%" class="input-group">
-                    <b>Date</b>
+                    <b>{{'weekPage.weekEdit.date' | translate}}</b>
                 </span>
                 <span style="width: 8%" class="input-group">
-                    <b>Time</b>
+                    <b>{{'weekPage.weekEdit.time' | translate}}</b>
                 </span>
                 <span style="width: 22%" class="input-group">
-                    <b>Competition</b>
+                    <b>{{'weekPage.weekEdit.competition' | translate}}</b>
                 </span>
             </div>
         </div>
@@ -51,23 +49,27 @@
                       ng-click="removeMatch($index)">
                 </span>
                 <span style="width: 23%" class="input-group">
-                    <input type="text" ng-model="match.homeTeam" class="form-control cornered-input" placeholder="Home team" />
+                    <input type="text" ng-model="match.homeTeam" class="form-control cornered-input"
+                           placeholder="{{'weekPage.weekEdit.homeTeam' | translate}}" />
                 </span>
                 <span style="width: 4%">
                     vs
                 </span>
                 <span style="width: 23%" class="input-group">
-                    <input type="text" ng-model="match.awayTeam" class="form-control cornered-input" placeholder="Away team" />
+                    <input type="text" ng-model="match.awayTeam" class="form-control cornered-input"
+                           placeholder="{{'weekPage.weekEdit.awayTeam' | translate}}" />
                 </span>
                 <span style="width: 18%" class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{dateFormat}}" ng-model="match.startDate"
-                           is-open="match.dateOpened" min-date="minDate" close-text="Close" ng-click="openDate(match, $event)" />
+                           is-open="match.dateOpened" min-date="minDate"
+                           close-text="{{'weekPage.weekEdit.closeButton' | translate}}" ng-click="openDate(match, $event)" />
                 </span>
                 <span style="width: 8%" class="input-group">
                     <input ng-model="match.startTime" class="form-control cornered-input" placeholder="HH:MM" />
                 </span>
                 <span style="width: 22%" class="input-group">
-                    <input type="text" ng-model="match.competition" class="form-control cornered-input" placeholder="Competition" />
+                    <input type="text" ng-model="match.competition" class="form-control cornered-input"
+                           placeholder="{{'weekPage.weekEdit.competition' | translate}}" />
                 </span>
             </div>
 
@@ -75,19 +77,19 @@
                 <span ng-click="addNewEvent()" style="cursor: pointer;">
                     <span class="glyphicon glyphicon-plus">
                     </span>
-                    Add new event
+                    {{'weekPage.weekEdit.addNewEvent' | translate}}
                 </span>
             </div>
             <div class="top-buffer-0-5-em">
                 <input type="checkbox" id="resetScore" ng-model="resetScoreCheckbox" />
                 <label for="resetScore" style="font-style: normal; font-weight: normal">
-                    Reset scores
+                    {{'weekPage.weekEdit.resetScores' | translate}}
                 </label>
             </div>
             <div class="top-buffer-0-5-em">
                 <input type="checkbox" id="hideWeek" ng-model="hiddenCheckbox" />
                 <label for="hideWeek" style="font-style: normal; font-weight: normal">
-                    Hidden
+                    {{'weekPage.weekEdit.hidden' | translate}}
                 </label>
             </div>
         </div>
@@ -97,5 +99,5 @@
 
 <div class="modal-footer">
     <button class="btn btn-primary" ng-disabled="isSavingDisabled()" ng-click="ok()">OK</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-warning" ng-click="cancel()">{{'weekPage.weekEdit.cancel' | translate}}</button>
 </div>

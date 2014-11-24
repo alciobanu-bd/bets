@@ -4,36 +4,38 @@
     <div class="panel-heading">
         <div class="row">
             <h2 class="panel-title">
-            <span ng-if="week.hidden" style="color: #ff002b">HIDDEN</span>
+            <span ng-if="week.hidden" style="color: #ff002b">{{'weekPage.weekDirective.hidden' | translate}}</span>
             <span ng-if="bets.isWinner" style="color: #ff002b; cursor: default;" title="You won this week.">
-                WINNER
+                {{'weekPage.weekDirective.winner' | translate}}
             </span>
-            Week {{week.number}}
-            <span ng-if="week.available">(in progress)</span>
+                {{'weekPage.weekDirective.week' | translate}} {{week.number}}
+            <span ng-if="week.available">({{'weekPage.weekDirective.inProgress' | translate}})</span>
             <span ng-if="!week.available">
-                <span ng-if="week.ended">(ended)</span>
-                <span ng-if="!week.ended">(ended - waiting for results)</span>
+                <span ng-if="week.ended">({{'weekPage.weekDirective.ended' | translate}})</span>
+                <span ng-if="!week.ended">
+                    ({{'weekPage.weekDirective.end' | translate}} - {{'weekPage.weekDirective.waitingForResults' | translate}})
+                </span>
             </span>
             &nbsp;
             <span ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)"
                   ng-click="openEditWeekModal()" class="blue-link">
-                Edit
+                {{'weekPage.weekDirective.edit' | translate}}
             </span>
             &nbsp;
             <span ng-if="!week.available || RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)"
                 class="blue-link" ng-click="openWeekHistoryModal()">
-                View all bets
+                {{'weekPage.weekDirective.viewAllBets' | translate}}
             </span>
             </h2>
         </div>
         <div class="top-buffer-1-em">
             <div class="row" ng-show="week.available">
-                {{week.events.length}} total matches.
-                You are required to play {{week.required}} of them.
+                {{week.events.length}} {{'weekPage.weekDirective.totalMatches' | translate}}.
+                {{'weekPage.weekDirective.youAreRequiredToPlay' | translate}} {{week.required}} {{'weekPage.weekDirective.ofThem' | translate}}.
             </div>
             <div class="row" ng-show="!week.available">
-                {{week.events.length}} total matches on this week.
-                You were required to play {{week.required}} of them.
+                {{week.events.length}} {{'weekPage.weekDirective.totalMatchesThisWeek' | translate}}.
+                {{'weekPage.weekDirective.youWereRequiredToPlay' | translate}} {{week.required}} {{'weekPage.weekDirective.ofThem' | translate}}.
             </div>
             <div class="row" ng-show="errorObject.active && week.available">
                 <span style="color: #ff0026">
@@ -42,18 +44,18 @@
             </div>
             <div class="row" style="color: #03b2ff" ng-show="week.available">
                 <span ng-if="isToday()">
-                    Deadline: Today, {{week.endDate | date: 'h:mm a'}}
+                    {{'weekPage.weekDirective.deadline' | translate}}: {{'weekPage.weekDirective.today' | translate}}, {{week.endDate | date: 'h:mm a'}}
                 </span>
                 <span ng-if="isTomorrow()">
-                    Deadline: Tomorrow, {{week.endDate | date: 'h:mm a'}}
+                    {{'weekPage.weekDirective.deadline' | translate}}: {{'weekPage.weekDirective.tomorrow' | translate}}, {{week.endDate | date: 'h:mm a'}}
                 </span>
                 <span ng-if="!isToday() && !isTomorrow()">
-                    Deadline: {{week.endDate | date:'MMM d, y h:mm a'}}
+                    {{'weekPage.weekDirective.deadline' | translate}}: {{week.endDate | date:'MMM d, y h:mm a'}}
                 </span>
             </div>
             <div class="row" style="color: #03b2ff" ng-if="bets.isWinner">
                 <span>
-                    You're the winner of the week!
+                    {{'weekPage.weekDirective.youReTheWinnerOfTheWeek' | translate}}
                 </span>
                 &nbsp;
                 <span class="fb-share-button" data-href="http://canihazbets.me" data-layout="button">
@@ -61,7 +63,7 @@
             </div>
             <div class="row" ng-show="!week.available && !bets.isWinner">
                 <span style="color: #ff0026">
-                    Bet placement isn't available anymore for this week.
+                    {{'weekPage.weekDirective.betPlacementIsntAvailable' | translate}}
                 </span>
             </div>
         </div>
@@ -105,27 +107,27 @@
         <span ng-if="week.available">
             <div style="margin-top: 1em" ng-hide="weekOptions.showConfirm">
                 <button type="button" class="btn btn-info" style="width: 40%" ng-click="showConfirm();">
-                    Bet
+                    {{'weekPage.weekDirective.betButton' | translate}}
                 </button>
             </div>
 
             <div style="margin-top: 1em" ng-show="weekOptions.showConfirm">
                 <button type="button" class="btn btn-info" style="width: 20%"
                         ng-click="resetMatchesWithDifferenceTooHigh(); place(); hideConfirm();">
-                    Yes
+                    {{'weekPage.weekDirective.yes' | translate}}
                 </button>
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="hideConfirm();">
-                    No
+                    {{'weekPage.weekDirective.no' | translate}}
                 </button>
             </div>
 
             <div style="margin-top: 1em; color: #ff0429" ng-if="anyMatchWithDifferenceTooHigh() && !weekOptions.showConfirm &&
                  !(BetService.afterPlacement.error || BetService.afterPlacement.success)">
                 <div>
-                    Warning! Score difference is quite big for the highlighted bets.
+                    {{'weekPage.weekDirective.warningScoreDifferenceTooHigh' | translate}}
                 </div>
                 <div>
-                    Are you sure you didn't type the wrong score?
+                    {{'weekPage.weekDirective.areYouSureYouDidntTypeWrongScore' | translate}}
                 </div>
             </div>
 
@@ -146,51 +148,51 @@
 
         <div class="white" ng-if="week.ended" style="margin: 0.5em">
             <span ng-if="bets.points > 1">
-                You won {{bets.points}} points this week.
+                {{'weekPage.weekDirective.youWon' | translate}} {{bets.points}} {{'weekPage.weekDirective.pointsThisWeek' | translate}}
             </span>
             <span ng-if="bets.points == 1">
-                You won 1 point this week.
+                {{'weekPage.weekDirective.youWonOnePointThisWeek' | translate}}
             </span>
             <span ng-if="bets.points == 0">
-                You won no points this week.
+                {{'weekPage.weekDirective.youWonNoPointsThisWeek' | translate}}
             </span>
             <span ng-if="!bets">
-                You didn't place a bet this week. Therefore you won no points.
+                {{'weekPage.weekDirective.youDidntPlaceYouWonNoPoints' | translate}}
             </span>
         </div>
 
         <span ng-if="!week.available && RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
             <div ng-click="updateModeOn(); prepareEventsForResultsSaving()" style="cursor: pointer">
                 <span class="glyphicon glyphicon-align-justify white"></span>
-                Update results
+                {{'weekPage.weekDirective.updateResults' | translate}}
             </div>
             <div ng-show="updateScoreMode" style="color: #00a4ff">
                 <div>
-                    You are in update mode. Enter the correct results for each event like when you normally play them.
+                    {{'weekPage.weekDirective.youAreInUpdateModeEditResults' | translate}}
                 </div>
                 <div>
-                    They will be saved as results and not as a bet.
+                    {{'weekPage.weekDirective.theyWillBeSavedAsResults' | translate}}
                 </div>
             </div>
             <div ng-show="updateScoreMode" ng-click="updateModeOff(); refreshEventsForNonUpdateMode()" style="cursor: pointer">
                 <span class="glyphicon glyphicon-align-justify white"></span>
-                Toggle back to normal mode
+                {{'weekPage.weekDirective.toggleBackToNormalMode' | translate}}
             </div>
 
 
             <div style="margin-top: 1em" ng-show="updateScoreMode && !confirmResults">
                 <button type="button" class="btn btn-info" style="width: 40%" ng-disabled="isResultsSaveDisabled()"
                 ng-click="confirmResults = true">
-                    Save results
+                    {{'weekPage.weekDirective.saveResults' | translate}}
                 </button>
             </div>
 
             <div style="margin-top: 1em" ng-show="updateScoreMode && confirmResults">
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="updateResults(); confirmResults = false">
-                    Yes
+                    {{'weekPage.weekDirective.yes' | translate}}
                 </button>
                 <button type="button" class="btn btn-info" style="width: 20%" ng-click="confirmResults = false">
-                    No
+                    {{'weekPage.weekDirective.no' | translate}}
                 </button>
             </div>
 

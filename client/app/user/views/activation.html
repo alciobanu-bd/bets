@@ -2,26 +2,28 @@
 <div class="container">
 
     <div class="jumbotron centered white half-bg-opacity">
-        <h2>Activation</h2>
+        <h2>{{'activationPage.name' | translate}}</h2>
         <div>
-            If you don't have an activation code, you can
-            <span ng-click="resend()" class="blue-link">resend</span>
-            one to your e-mail.
+            {{'activationPage.explanations_prefix' | translate}}
+            <span ng-click="resend()" class="blue-link">
+                {{'activationPage.explanations_resendLink' | translate}}
+            </span>
+            {{'activationPage.explanations_suffix' | translate}}
         </div>
         <div>
-            If you don't receive your activation code via e-mail, please contact us to contact@canihazbets.me.
+            {{'activationPage.ifYouDontReceiveMail' | translate}}
         </div>
         <div style="color: #ff003f" ng-bind="resendMessage">
         </div>
         <div class="input-group centered top-buffer-0-5-em" style="width: 40%;">
             <div class="form-group">
                 <input type="text" class="form-control cornered-input" ng-model="inputs.registrationCode"
-                       placeholder="Activation code">
+                       placeholder="{{'activationPage.activationCode' | translate}}">
             </div>
         </div>
         <div style="margin-top: 1em">
             <button type="button" class="btn btn-info" style="width: 40%" ng-disabled="status.inProgress" ng-click="activate()">
-                Activate
+                {{'activationPage.activateButton' | translate}}
             </button>
         </div>
 

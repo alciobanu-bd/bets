@@ -2,8 +2,8 @@
 weekModule
 
 .directive('week', [
-    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation', '$modal', 'Settings',
-    function(BetService, WeekFactory, RolesFactory, UserInformation, $modal, Settings) {
+    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation', '$modal', 'Settings', '$translate',
+    function(BetService, WeekFactory, RolesFactory, UserInformation, $modal, Settings, $translate) {
     return {
         restrict: 'E',
         replace: true,
@@ -213,12 +213,10 @@ weekModule
                 scope.afterUpdateResults.error = false;
                 WeekFactory.updateResults(scope.week.events, scope.week._id, function () {
                     scope.afterUpdateResults.success = true;
-                    scope.afterUpdateResults.message = 'The results were saved successfully.';
+                    scope.afterUpdateResults.message = $translate.instant('weekPage.weekDirective.afterUpdateSuccess');
                 }, function () {
                     scope.afterUpdateResults.error = true;
-                    scope.afterUpdateResults.message = 'The results saved with errors.' +
-                        'Please try to save them again urgently.' +
-                        'If the problem persists, contact the developers as soon as you can.';
+                    scope.afterUpdateResults.message = $translate.instant('weekPage.weekDirective.afterUpdateError');
                 });
             }
 
@@ -275,8 +273,8 @@ weekModule
 }]);
 
 weekModule.controller('WeekHistoryController', [
-'$scope', '$modalInstance', 'week', 'HistoryFactory',
-function ($scope, $modalInstance, week, HistoryFactory) {
+'$scope', '$modalInstance', 'week', 'HistoryFactory', '$translate',
+function ($scope, $modalInstance, week, HistoryFactory, $translate) {
 
     $scope.week = week;
 
@@ -321,7 +319,7 @@ function ($scope, $modalInstance, week, HistoryFactory) {
                     $scope.status.message = response.data.message;
                 }
                 else {
-                    $scope.status.message = 'History couldn\'t be fetched.';
+                    $scope.status.message = $translate.instant('weekPage.weekHistory.couldntBeFetched');
                 }
             }
         );

@@ -1,7 +1,7 @@
 userModule
 .controller('RegisterController', [
-'$scope', 'InitUrls', 'CallUrlService', 'SaltGenerator', 'SHA-2',
-function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
+'$scope', 'InitUrls', 'CallUrlService', 'SaltGenerator', 'SHA-2', '$translate', 'CurrentLanguageFactory',
+function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2, $translate, CurrentLanguageFactory) {
 
     $scope.inputs = {
         username: {
@@ -63,12 +63,12 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
             accountData.salt = SaltGenerator.generate();
             accountData.password = SHA2.sha256(accountData.password + accountData.salt);
             accountData.confirmPassword = SHA2.sha256(accountData.confirmPassword + accountData.salt);
+            accountData.language = CurrentLanguageFactory.language.code;
 
             CallUrlService.post({uri: urls.user.address}, accountData,
             function (data) {
                 $scope.status.success = true;
-                $scope.status.message = "Your account was successfully created. " +
-                    "An activation code will be e-mailed to you shortly.";
+                $scope.status.message = $translate.instant('registerPage.successfullyCreated');
                 $scope.status.inProgress = false;
             },
             function (response) {
@@ -86,7 +86,7 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
                         if (err.type == "required") {
                             requiredErr = true;
                             $scope.inputs[i].error = true;
-                            $scope.status.message = 'Account wasn\'t created. Highlighted fields are required.';
+                            $scope.status.message = $translate.instant('registerPage.failureCreating');
                         }
                     }
 
@@ -97,7 +97,21 @@ function ($scope, InitUrls, CallUrlService, SaltGenerator, SHA2) {
                             var err = response.errors[i];
                             if (err.type != "required") {
                                 $scope.inputs[i].error = true;
-                                $scope.status.message += err.message + '\n';
+
+                                var value = null;
+                                if (err.message.indexOf('|') >= 0) {
+                                    value = err.message.split('|')[1];
+                                    err.message = err.message.split('|')[0];
+                                }
+
+                                var errServ = err.path + "_" + err.message;
+
+                                var msg = $translate.instant('registerPage.' + errServ);
+                                if (value != null) {
+                                    msg += " " + $translate.instant('registerPage.maxSize') + " " + value + ".";
+                                }
+
+                                $scope.status.message += msg + '\n';
                             }
                         }
                     }

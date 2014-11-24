@@ -4,9 +4,9 @@ userModule
 .controller(
 'UserController', [
 '$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'CheckActivationStatus',
-'Settings', 'KeepMeLoggedInStorage', '$location',
+'Settings', 'KeepMeLoggedInStorage', '$location', 'CurrentLanguageFactory',
 function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, CheckActivationStatus,
-Settings, KeepMeLoggedInStorage, $location) {
+Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
@@ -72,6 +72,9 @@ Settings, KeepMeLoggedInStorage, $location) {
                 $location.path('');
                 CheckActivationStatus.check();
                 $scope.loginInProgress = false;
+
+                CurrentLanguageFactory.setLanguage($scope.userInfo.user.language);
+
             },
             function (rejection) {
                 $scope.error.encounteredError = true;

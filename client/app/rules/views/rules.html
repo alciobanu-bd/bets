@@ -6,53 +6,39 @@
         <div class="row" style="margin-bottom: 3em">
             <h4 class="centered" style="margin-bottom: 1em">
                 <span class="glyphicon glyphicon-pushpin"></span>
-                How to play
+                {{'rulesPage.howToPlay.name' | translate}}
             </h4>
             <div class="top-buffer-0-5-em">
-                Each week, an admin chooses a bunch of football matches which are scheduled to be played that week.
-                After the matches are chosen, the betting starts.
+                {{'rulesPage.howToPlay.div1' | translate}}
             </div>
             <div class="top-buffer-0-5-em">
-                In order to win as many points as possible, you have to guess what the score will be for a number of events.
-                This number is predefined and shown on each week. If you play less or more matches, you will get an error.
+                {{'rulesPage.howToPlay.div2' | translate}}
             </div>
             <div class="top-buffer-0-5-em">
-                Here's how the points are gained.
-                If you guess the exact score for an event, you get 3 points.
-                If you don't guess the exact score, but you guess the difference
-                between teams, as well as the winner team,
-                you get 2 points.
-                For example, let's say A plays against B. So we have A vs. B event. If your score is 3-1 and the result is 2-0,
-                you get the 2 points. If you say 0-2, you don't get any points.
-                The same rule applies for draws. If you say 1-1 and the result is 2-2, 3-3 or any other draw, you get 2
-                points for guessing the score difference.
+                {{'rulesPage.howToPlay.div3' | translate}}
             </div>
             <div class="top-buffer-0-5-em">
-                If you don't guess the exact score and you don't guess the difference either, your chance is that the team
-                you bet on wins the match by any score. In this case, you get 1 point. For the same event, A vs. B,
-                a guess of 3-1 gets you 1 point if the result is 1-0, 2-1, 3-2, 4-1, 3-0 etc. You get the point.
+                {{'rulesPage.howToPlay.div4' | translate}}
             </div>
             <div class="top-buffer-0-5-em">
-                If you really have a bad luck and bet on a losing team, you win no points.
+                {{'rulesPage.howToPlay.div5' | translate}}
             </div>
             <div class="top-buffer-0-5-em">
-                Every week will have a deadline. After that moment, betting is closed and you cannot play anymore.
-                This deadline is one hour before the first match of the week starts.
+                {{'rulesPage.howToPlay.div6' | translate}}
             </div>
             <div class="top-buffer-0-5-em">
-                Ranking is calculated for all users after an admin inserts the results for the matches of the current week.
-                If you notice any miscalculation, please contact an administrator. You can use contact@canihazbets.me any time you need.
+                {{'rulesPage.howToPlay.div7' | translate}}
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 3em">
             <h4 class="centered" style="margin-bottom: 1em">
                 <span class="glyphicon glyphicon-pushpin"></span>
-                User ranks
+                {{'rulesPage.userRanks.name' | translate}}
             </h4>
             <div class="top-buffer-0-5-em">
                 <div>
-                    List of user ranks and their description:
+                    {{'rulesPage.userRanks.listOfRanks' | translate}}
                 </div>
                 <div ng-repeat="role in rolesSorted track by role.name">
                     <span style="color: #00ff70">
@@ -63,34 +49,18 @@
             </div>
             <div class="top-buffer-0-5-em">
                 <div>
-                    Q: I've seen here and there the word root associated to a user rank. What does this rank mean?
+                    {{'rulesPage.userRanks.q1' | translate}}
                 </div>
                 <div>
-                    A: Root is the rank of the superuser. It is inspired from the Linux community where root is the username
-                    of the user with the greatest privileges.
+                    {{'rulesPage.userRanks.a1' | translate}}
                 </div>
             </div>
             <div class="top-buffer-0-5-em">
                 <div>
-                    Q: Can I become root?
+                    {{'rulesPage.userRanks.q2' | translate}}
                 </div>
                 <div>
-                    A: Short answer, no! You cannot become root. The highest rank you can achieve is admin.
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="margin-bottom: 3em">
-            <h4 class="centered" style="margin-bottom: 1em">
-                <span class="glyphicon glyphicon-pushpin"></span>
-                Money and winnings
-            </h4>
-            <div class="top-buffer-0-5-em">
-                <div>
-                    Q: Can I play with real money on CanIHazBets?
-                </div>
-                <div>
-                    A: No, you cannot. CanIHazBets is designed to be fun. There aren't any money involved.
+                    {{'rulesPage.userRanks.a2' | translate}}
                 </div>
             </div>
         </div>
@@ -98,15 +68,33 @@
         <div class="row" style="margin-bottom: 3em">
             <h4 class="centered" style="margin-bottom: 1em">
                 <span class="glyphicon glyphicon-pushpin"></span>
-                Awards
+                {{'rulesPage.money.name' | translate}}
             </h4>
             <div class="top-buffer-0-5-em">
                 <div>
-                    The awards you can win on {{Settings.domain.beautifulName}} are:
+                    {{'rulesPage.money.q1' | translate}}
                 </div>
                 <div>
-                    <span class="glyphicon glyphicon-certificate week-win-certificate" title="Gained for winning a week."></span>
-                    for winning a week
+                    {{'rulesPage.money.a1' | translate}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 3em">
+            <h4 class="centered" style="margin-bottom: 1em">
+                <span class="glyphicon glyphicon-pushpin"></span>
+                {{'rulesPage.awards.name' | translate}}
+            </h4>
+            <div class="top-buffer-0-5-em">
+                <div>
+                    {{'rulesPage.awards.theAwardsYouCanWin' | translate}}
+                    {{Settings.domain.beautifulName}}
+                    {{'rulesPage.awards.are' | translate}}:
+                </div>
+                <div>
+                    <span class="glyphicon glyphicon-certificate week-win-certificate"
+                          title="{{'rulesPage.awards.gainedForWinningAWeek' | translate}}."></span>
+                    {{'rulesPage.awards.forWinningAWeek' | translate}}
                 </div>
             </div>
         </div>

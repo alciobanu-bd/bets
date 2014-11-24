@@ -1,21 +1,31 @@
 <div class="modal-header">
-    <h3 class="modal-title">Week #{{week.number}} - History</h3>
+    <h3 class="modal-title">
+        {{'weekPage.weekHistory.week' | translate}} #{{week.number}} - {{'weekPage.weekHistory.history' | translate}}
+    </h3>
 </div>
 
 <div class="modal-body">
 
     <pagination total-items="paging.totalItems" ng-model="paging.page" items-per-page="paging.itemsPerPage"
-                class="pagination-sm" boundary-links="true"></pagination>
+                class="pagination-sm" boundary-links="true"
+                next-text="{{'weekPage.weekHistory.nextText' | translate}}"
+                previous-text="{{'weekPage.weekHistory.prevText' | translate}}"
+                first-text="{{'weekPage.weekHistory.firstText' | translate}}"
+                last-text="{{'weekPage.weekHistory.lastText' | translate}}"></pagination>
 
     <div class="panel panel-primary" ng-repeat="bet in history track by bet._id">
         <div class="panel-heading">
             <div>
                 <h2 class="panel-title">
                     <span ng-if="week.ended">
-                        {{bet.username}} won {{bet.points + " " + (bet.points == 1 ? 'point' : 'points')}} this week.
+                        {{bet.username}}
+                        {{'weekPage.weekHistory.won' | translate}}
+                        {{bet.points + " " + (bet.points == 1 ?
+                        ('weekPage.weekHistory.point' | translate) : ('weekPage.weekHistory.points' | translate))}}
+                        {{'weekPage.weekHistory.thisWeek' | translate}}.
                     </span>
                     <span ng-if="!week.ended">
-                        {{bet.username}}'s bets
+                        {{'weekPage.weekHistory.whosBets_prefix' | translate}}{{bet.username}}{{'weekPage.weekHistory.whosBets_suffix' | translate}}
                     </span>
                 </h2>
             </div>
@@ -34,10 +44,11 @@
                 </span>
                 <span class="col-xs-2">
                     <span ng-if="week.ended && (betScores.points || betScores.points == 0)">
-                        {{betScores.points + " " + (betScores.points == 1 ? 'point' : 'points')}}
+                        {{betScores.points + " " + (betScores.points == 1 ?
+                        ('weekPage.weekHistory.point' | translate) : ('weekPage.weekHistory.points' | translate))}}
                     </span>
                     <span ng-if="!week.ended">
-                        Not ended
+                        {{'weekPage.weekHistory.notEnded' | translate}}
                     </span>
                 </span>
             </div>
@@ -48,7 +59,7 @@
         <div class="panel-heading">
             <div>
                 <h2 class="panel-title">
-                    Error
+                    {{'weekPage.weekHistory.error' | translate}}
                 </h2>
             </div>
         </div>
@@ -62,18 +73,20 @@
         <div class="panel-heading">
             <div>
                 <h2 class="panel-title">
-                    No bets.
+                    {{'weekPage.weekHistory.noBets' | translate}}.
                 </h2>
             </div>
         </div>
 
         <div class="panel-body">
-            It seems that there aren't any bets to show.
+            {{'weekPage.weekHistory.seemsThatArentBets' | translate}}
         </div>
     </div>
 
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-warning" ng-click="close()">Close</button>
+    <button class="btn btn-warning" ng-click="close()">
+        {{'weekPage.weekHistory.closeButton' | translate}}
+    </button>
 </div>

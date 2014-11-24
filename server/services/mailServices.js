@@ -1,5 +1,22 @@
 
-var sendMail = function (mailOptions, onSuccess, onError) {
+var Templates = require('./mailTemplates.js');
+
+
+var options = {
+    fromAddress: 'CanIHazBets <contact@canihazbets.me>',
+    replyToAddress: 'contact@canihazbets.me'
+};
+
+var sendMail = function (emailAddress, subject, body, onSuccess, onError) {
+
+    var mailOptions = {
+        from: options.fromAddress,
+        to: emailAddress,
+        replyTo: options.replyToAddress,
+        subject: subject,
+        text: body
+    };
+
     mailTransporter.sendMail(mailOptions, function(error, info){
         if(error){
             if (typeof onError === 'function') {
@@ -15,70 +32,36 @@ var sendMail = function (mailOptions, onSuccess, onError) {
     });
 }
 
-var sendConfirmationLinkOnRegistration = function (username, emailAddress, code, onSuccess, onError) {
-    var mailOptions = {
-        from: 'CanIHazBets <contact@canihazbets.me>',
-        to: emailAddress,
-        replyTo: 'contact@canihazbets.me',
-        subject: 'Registration at ' + domainName.beautifulName,
-        text: 'Welcome to ' + domainName.beautifulName + ', ' +
-            '\r\n\r\n' +
-            'Dear ' + username + ',' +
-            '\r\n' +
-            'We are pleased that you registered at our site. We hope you will have a pleasant staying.' +
-            '\r\n\r\n' +
-            'In order to activate your account, use the next code after you login: ' +
-            '\r\n' +
-            code
-    };
 
-    sendMail(mailOptions, onSuccess, onError);
+var sendConfirmationLinkOnRegistration = function (user, code, onSuccess, onError) {
+
+    var template = Templates[user.language].confirmationLinkOnRegistration(user.username, code);
+    sendMail(user.email, template.subject, template.body, onSuccess, onError);
 
 }
 
-var sendConfirmationLinkOnPasswordChange = function (username, emailAddress, code, onSuccess, onError) {
-    var mailOptions = {
-        from: 'CanIHazBets <contact@canihazbets.me>',
-        to: emailAddress,
-        replyTo: 'contact@canihazbets.me',
-        subject: 'Changed password at ' + domainName.beautifulName,
-        text: 'Dear ' + username + ',' +
-            '\r\n' +
-            'We detected that you changed your password.' +
-            '\r\n\r\n' +
-            'In order to re-activate your account after change, use the next code:' +
-            '\r\n' +
-            code
-    };
+var resendConfirmationLink = function (user, code, onSuccess, onError) {
 
-    sendMail(mailOptions, onSuccess, onError);
+    var template = Templates[user.language].resendConfirmationLink(user.username, code);
+    sendMail(user.email, template.subject, template.body, onSuccess, onError);
 
 }
 
-var sendConfirmationLinkOnForgotPassword = function (username, emailAddress, code, onSuccess, onError) {
-    var mailOptions = {
-        from: 'CanIHazBets <contact@canihazbets.me>',
-        to: emailAddress,
-        replyTo: 'contact@canihazbets.me',
-        subject: 'Password reset at ' + domainName.beautifulName,
-        text: 'Dear ' + username + ',' +
-            '\r\n' +
-            'You recently required a code to reset your password.' +
-            '\r\n\r\n' +
-            'In order to change your password, use the next link:' +
-            '\r\n' +
-            domainName.address + "/#/reset-password/" + code +
-            '\r\n\r\n' +
-            'If the link doesn\'t work, please go to ' + domainName.address + "/#/reset-password" +
-            ' and use the following code:' +
-            '\r\n' + code
-    };
+var sendConfirmationLinkOnPasswordChange = function (user, code, onSuccess, onError) {
 
-    sendMail(mailOptions, onSuccess, onError);
+    var template = Templates[user.language].confirmationLinkOnPasswordChange(user.username, code);
+    sendMail(user.email, template.subject, template.body, onSuccess, onError);
 
 }
 
-var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuccess, onError) {
+var sendConfirmationLinkOnForgotPassword = function (user, code, onSuccess, onError) {
+
+    var template = Templates[user.language].confirmationLinkOnForgotPassword(user.username, code);
+    sendMail(user.email, template.subject, template.body, onSuccess, onError);
+
+}
+
+var sendNotificationAboutNewWeek = function (week, user, onSuccess, onError) {
 
     var events = week.events;
     var eventsText = '';
@@ -89,62 +72,24 @@ var sendNotificationAboutNewWeek = function (week, username, emailAddress, onSuc
 
     var endDate = (new Date(week.endDate)).toISOString();
 
-    var mailOptions = {
-        from: 'CanIHazBets <contact@canihazbets.me>',
-        to: emailAddress,
-        replyTo: 'contact@canihazbets.me',
-        subject: 'New week at ' + domainName.beautifulName,
-        text: 'Dear ' + username + ',' +
-            '\r\n' +
-            'We are happy to announce you that a new week (#' + week.number + ') is available on ' +
-            domainName.beautifulName + '.' +
-            '\r\n\r\n' +
-            'The matches we selected for this week are: ' +
-            '\r\n\r\n' + eventsText +
-            '\r\n\r\n' +
-            'The deadline since you can guess the scores is ' +
-            endDate.split("T")[0] + ' ' + endDate.split("T")[1].split(":")[0] + ':' + endDate.split("T")[1].split(":")[1] +
-            ' (UTC). ' +
-            'Don\'t miss it!' + '\r\n\r\n' +
-            'If you want to unsubscribe from these e-mails, login to your account and change your preference from ' +
-            'your profile page.'
-
-    };
-
-    sendMail(mailOptions, onSuccess, onError);
+    var template = Templates[user.language].notificationAboutANewWeek(user.username, week, endDate, eventsText);
+    sendMail(user.email, template.subject, template.body, onSuccess, onError);
 
 }
 
-var sendCongratulationsToWeekWinners = function (bet, username, emailAddress, onSuccess, onError) {
+var sendCongratulationsToWeekWinners = function (bet, user, onSuccess, onError) {
 
-    var mailOptions = {
-        from: 'CanIHazBets <contact@canihazbets.me>',
-        to: emailAddress,
-        replyTo: 'contact@canihazbets.me',
-        subject: 'Winner at ' + domainName.beautifulName,
-        text: 'Dear ' + username + ',' +
-            '\r\n\r\n' +
-            'We would like to congratulate you for winning week #' +
-            bet.weekNumber +
-            ' at ' + domainName.beautifulName + ',' +
-            ' scoring ' + bet.points + ' points.' +
-            '\r\n' +
-            'Keep it up and don\'t miss the next week!' +
-            '\r\n\r\n' +
-            'If you want to unsubscribe from these e-mails, login to your account and change your preference from ' +
-            'your profile page.' +
-            '\r\n'
-
-    };
-
-    sendMail(mailOptions, onSuccess, onError);
+    var template = Templates[user.language].congratulationsToWeekWinners(user.username, bet);
+    sendMail(user.email, template.subject, template.body, onSuccess, onError);
 
 }
+
 
 module.exports = {
     sendConfirmationLinkOnRegistration: sendConfirmationLinkOnRegistration,
+    resendConfirmationLink: resendConfirmationLink,
     sendConfirmationLinkOnPasswordChange: sendConfirmationLinkOnPasswordChange,
     sendConfirmationLinkOnForgotPassword: sendConfirmationLinkOnForgotPassword,
     sendNotificationAboutNewWeek: sendNotificationAboutNewWeek,
     sendCongratulationsToWeekWinners: sendCongratulationsToWeekWinners
-}
+};

@@ -1,11 +1,12 @@
 
-var Roles = require('./../model/Roles.js');
+var Roles = require('./../model/Roles.js')('en');
+var Translations = require('./../config/Translations.js');
 
 var hasRole = function (role) {
     return function (req, res, next, user, onError, onSuccess) {
         if (role && Roles.roleValue(user.role) < Roles.roleValue(role)) {
             res.status(401).json({
-                message: "You are not permitted to execute this method."
+                message: Translations[req.query.lang].tokenChecks.notPermittedToExecuteMethod
             });
             onError();
         }
@@ -20,7 +21,7 @@ var hasSameId = function () {
 
         if (user._id != req.params.id) {
             res.status(401).json({
-                message: "You are not permitted to execute this method."
+                message: Translations[req.query.lang].tokenChecks.notPermittedToExecuteMethod
             }).end();
             onError();
         }
@@ -38,7 +39,7 @@ var hasSameIdOrHasRole = function (role) {
             // if role isn't enough, check if same id
             if (user._id != req.params.id) {
                 res.status(401).json({
-                    message: "You are not permitted to execute this method."
+                    message: Translations[req.query.lang].tokenChecks.notPermittedToExecuteMethod
                 }).end();
                 onError();
             }

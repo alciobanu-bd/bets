@@ -46,5 +46,24 @@
 
     <script src="dist/built.min.js"></script>
 
+    <script>
+        var langStorage = localStorage.getItem('Lang');
+        var lang;
+
+        if (langStorage) {
+            lang = JSON.parse(langStorage).code;
+        }
+        else {
+            lang = languagesListGLOBAL.english.code;
+        }
+
+        for (var i in languagesListGLOBAL) {
+            var l = languagesListGLOBAL[i];
+            if (l.code == lang) {
+                document.write('<script src="' + l.localePath + '"><\/script>');
+            }
+        }
+    </script>
+
 </body>
 </html>
