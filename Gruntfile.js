@@ -14,6 +14,7 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     'client/app/main/carouselDescription.js',
+                    'client/app/utils/md5.js',
 
                     'client/lib/jquery/dist/jquery.js',
                     'client/lib/jquery-ui/jquery-ui.min.js',
@@ -35,6 +36,7 @@ module.exports = function (grunt) {
                     'client/app/utils/dateSort.js',
                     'client/app/utils/stringSort.js',
                     'client/app/utils/numberSort.js',
+                    'client/app/utils/Gravatar.js',
 
                     'client/app/settings/settingsModule.js',
                     'client/app/settings/Settings.js',
