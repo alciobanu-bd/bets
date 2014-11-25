@@ -94,7 +94,7 @@ function ($q, LoginTokenFactory) {
             }
         }
 
-        if (thisFactory.ready == true) {
+        if (thisFactory.isReady == true) {
             cb();
         }
         else {
