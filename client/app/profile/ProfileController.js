@@ -3,16 +3,20 @@ profileModule
 
 .controller('ProfileController', [
 '$scope', 'UserInformation', 'ProfileFactory', 'RolesFactory', 'InitUrls', 'CallUrlService', '$translate',
-'Languages', 'CurrentLanguageFactory',
+'Languages', 'CurrentLanguageFactory', 'Gravatar',
 function ($scope, UserInformation, ProfileFactory, RolesFactory, InitUrls, CallUrlService, $translate,
-Languages, CurrentLanguageFactory) {
+Languages, CurrentLanguageFactory, Gravatar) {
 
     $scope.userInfo = UserInformation;
     $scope.ProfileFactory = ProfileFactory;
     $scope.RolesFactory = RolesFactory;
     $scope.Languages = Languages;
 
-    ProfileFactory.loadProfile($scope.userInfo.user._id);
+    ProfileFactory.loadProfile($scope.userInfo.user._id,
+    function () {
+        // on success
+        $scope.gravatarUrl = Gravatar.getImageUrl(ProfileFactory.profileInformation.email, 150);
+    });
 
     UserInformation.ready(function () {
         $scope.userModel = {
