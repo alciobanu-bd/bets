@@ -99,7 +99,7 @@ function ($q, LoginTokenFactory) {
         }
         else {
             LoginTokenFactory.subscribeToTokenChanges(function () {
-                thisFactory.ready = true;
+                thisFactory.isReady = true;
                 cb();
             });
         }
