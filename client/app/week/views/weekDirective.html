@@ -58,8 +58,10 @@
                     {{'weekPage.weekDirective.youReTheWinnerOfTheWeek' | translate}}
                 </span>
                 &nbsp;
-                <span class="fb-share-button" data-href="http://canihazbets.me" data-layout="button">
-                </span>
+                <span class="fb-share-button" data-href="http://canihazbets.me" data-layout="button"></span>
+                <script>
+                    FB.XFBML.parse();
+                </script>
             </div>
             <div class="row" ng-show="!week.available && !bets.isWinner">
                 <span style="color: #ff0026">
