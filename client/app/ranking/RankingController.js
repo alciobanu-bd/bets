@@ -80,13 +80,14 @@ function ($scope, RankingFactory, $modal, Settings) {
 
 rankingModule
 .controller('ProfileRankingView', [
-    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation', 'Languages',
-    function ($scope, $modalInstance, user, RolesFactory, UserInformation, Languages) {
+    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation', 'Languages', 'Gravatar',
+    function ($scope, $modalInstance, user, RolesFactory, UserInformation, Languages, Gravatar) {
 
         $scope.RolesFactory = RolesFactory;
         $scope.userInfo = UserInformation;
         $scope.Languages = Languages;
         $scope.user = user;
+        $scope.Gravatar = Gravatar;
 
         $scope.cancel = function () {
             $modalInstance.close("closed");
