@@ -10,7 +10,7 @@ var fs = require('fs');
 var CRON_DELETE_INACTIVE_USERS_LOG_FILE = 'logs/cron_delete_inactive_users.txt';
 
 
-new CronJob('* 0 4 * * 3', // weekly, 3rd day of the week (Wednesday) at 4 am
+new CronJob('0 0 4 * * 3', // weekly, 3rd day of the week (Wednesday) at 4 am
 function() {
     // job to be executed
 
