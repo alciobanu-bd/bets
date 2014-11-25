@@ -10,6 +10,35 @@ function ($scope, InitUrls, CallUrlService, RolesFactory, $modal) {
     $scope.users = [];
     $scope.searchedUser = "";
 
+    var resetSorts = function (exceptingField, value) {
+        $scope.sorts = {
+            lastLogin: 0,
+            username: 0,
+            points: 0
+        };
+        if (exceptingField && value) {
+            $scope.sorts[exceptingField] = value;
+        }
+    }
+
+    resetSorts();
+
+    $scope.toggleSorting = function (field, defaultSort) {
+
+        if (!defaultSort) {
+            defaultSort = 1;
+        }
+        if ($scope.sorts[field] == 0) {
+            $scope.sorts[field] = defaultSort;
+        }
+        else {
+            $scope.sorts[field] *= -1;
+        }
+
+        resetSorts(field, $scope.sorts[field]);
+
+    }
+
     $scope.retrieveUsers = function () {
         InitUrls.then(function (url) {
             CallUrlService.getArray({uri: url.user.address},
@@ -78,11 +107,15 @@ function ($scope, InitUrls, CallUrlService, RolesFactory, $modal) {
 adminModule
 .controller('ProfileViewAdminController', [
 '$scope', '$modalInstance', 'user', 'InitUrls', 'CallUrlService', 'RolesFactory', 'UserInformation',
-function ($scope, $modalInstance, user, InitUrls, CallUrlService, RolesFactory, UserInformation) {
+'Languages',
+function ($scope, $modalInstance, user, InitUrls, CallUrlService, RolesFactory, UserInformation,
+Languages) {
 
     $scope.RolesFactory = RolesFactory;
     $scope.userInfo = UserInformation;
     $scope.user = user;
+    $scope.Languages = Languages;
+
     var initialUser = {};
     angular.extend(initialUser, user);
 

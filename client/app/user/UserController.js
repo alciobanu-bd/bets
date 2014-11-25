@@ -3,14 +3,13 @@ userModule
 
 .controller(
 'UserController', [
-'$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'RoutesFactory', 'CheckActivationStatus',
-'Settings', 'KeepMeLoggedInStorage',
-function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, RoutesFactory, CheckActivationStatus,
-Settings, KeepMeLoggedInStorage) {
+'$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'CheckActivationStatus',
+'Settings', 'KeepMeLoggedInStorage', '$location', 'CurrentLanguageFactory',
+function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, CheckActivationStatus,
+Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
-    $scope.RoutesFactory = RoutesFactory;
 
     $scope.inputs = {
         username: {
@@ -70,10 +69,12 @@ Settings, KeepMeLoggedInStorage) {
             loginPromise.then(
             function (data) {
                 $scope.encounteredError = false;
-                RoutesFactory.resetPath();
-                RoutesFactory.goHome();
+                $location.path('');
                 CheckActivationStatus.check();
                 $scope.loginInProgress = false;
+
+                CurrentLanguageFactory.setLanguage($scope.userInfo.user.language);
+
             },
             function (rejection) {
                 $scope.error.encounteredError = true;
@@ -88,8 +89,7 @@ Settings, KeepMeLoggedInStorage) {
 
     $scope.logout = function () {
         UserInformationCalls.logout();
-        RoutesFactory.resetPath();
-        RoutesFactory.goHome();
+        $location.path('');
     }
 
 }

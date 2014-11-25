@@ -1,30 +1,23 @@
 betsModule
 .controller('MainController',[
-'$scope', 'Templates', 'UserInformation', 'RoutesFactory', 'UserInformationCalls', 'UserInformation', '$interval',
-'Settings', '$location',
-function ($scope, Templates, UserInfo, RoutesFactory, UserInformationCalls, UserInformation, $interval,
-Settings, $location) {
+'$scope', 'Templates', 'UserInformation', 'UserInformationCalls', 'UserInformation', '$interval',
+'Settings','$routeParams', '$location',
+function ($scope, Templates, UserInfo, UserInformationCalls, UserInformation, $interval,
+Settings, $routeParams, $location) {
     /**
      * UserInformationCalls is injected because it sets the user information.
      */
 
     $scope.Templates = Templates;
     $scope.userInfo = UserInformation;
-    $scope.RoutesFactory = RoutesFactory;
-
-    $scope.$on("$locationChangeStart",
-        function(newValue, oldValue) {
-            if (newValue != oldValue) {
-                RoutesFactory.loadDefault();
-            }
-        }
-    );
 
     var refreshUserDetails = function () {
-        if (!UserInformation.isLogged) {
-            return;
-        }
-        UserInformationCalls.fetchUserDetails();
+        UserInformation.ready(function () {
+            if (!UserInformation.isLogged) {
+                return;
+            }
+            UserInformationCalls.fetchUserDetails();
+        });
     }
 
     var extendToken = function () {
@@ -50,6 +43,30 @@ Settings, $location) {
     }
 
     $scope.startUserDetailsInterval();
+
+
+    var countWatchers = function () {
+        var root = $(document.getElementsByTagName('body'));
+        var watchers = [];
+
+        var f = function (element) {
+            if (element.data().hasOwnProperty('$scope')) {
+                angular.forEach(element.data().$scope.$$watchers, function (watcher) {
+                    watchers.push(watcher);
+                });
+            }
+
+            angular.forEach(element.children(), function (childElement) {
+                f($(childElement));
+            });
+        };
+
+        f(root);
+
+        console.log("Watchers: " + watchers.length);
+    }
+
+    window.onload = countWatchers;
 
 }
 ]);

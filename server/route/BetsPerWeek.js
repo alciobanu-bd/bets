@@ -6,8 +6,9 @@ var Bet = require('./../model/Bet.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 
-var express = require('express');
+var Translations = require('./../config/Translations.js');
 
+var express = require('express');
 var router = express.Router();
 
 router.get('/getBetByWeek',
@@ -15,7 +16,7 @@ jwtauth([
     function (req, res, next, user, onError, onSuccess) {
         if (!req.query.weekNumber) {
             res.status(500).json({
-                message: 'No week number to look for.'
+                message: Translations[req.query.lang].betsPerWeek.noWeekNumber
             }).end();
             onError();
         }
@@ -33,13 +34,13 @@ function(req, res) {
 
         if (err) {
             res.status(500).json({
-                message: 'An error occurred while fetching your last bets.'
+                message: Translations[req.query.lang].betsPerWeek.errorFetchingLastBets
             }).end();
         }
 
         else if (!bet) {
             res.status(500).json({
-                message: 'You didn\'t place a bet this week.'
+                message: Translations[req.query.lang].betsPerWeek.didntPlaceABet
             }).end();
         }
 

@@ -25,7 +25,11 @@
 }
 
 .navbar-nav li a:hover {
-    color: #defdff !important;
+    color: #eafdff !important;
+}
+
+.dropdown ul li a:hover {
+    color: #43cfff !important;
 }
 
 .nav-tabs li a {
@@ -75,7 +79,7 @@
     margin-right: 0.2em;
     margin-top: 0.2em;
     margin-bottom: 0.2em;
-    min-width: 7em;
+    min-width: 7.3em;
     border: 0.2em solid rgba(255,255,255, 0);
     border-radius: 0.6em !important;
 }
@@ -91,11 +95,18 @@
     margin-right: 0.2em;
     margin-top: 0.2em;
     margin-bottom: 0.2em;
-    min-width: 7em;
+    min-width: 7.3em;
+}
+
+.lang-link-border {
+    background-color: rgb(0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    margin-top: 0.3em;
+    margin-bottom: 0.2em;
 }
 
 body {
-    background: url(./../images/ball_00.jpg) no-repeat center center fixed;
+    background: url(./../images/bg/ball_00.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -157,4 +168,9 @@ body    {overflow-y:scroll;}
     cursor: pointer;
     color: #cffffa;
     text-decoration: none;
+}
+
+.border-input-too-big-score-difference {
+    border-width: 0.2em !important;
+    border-color: #ff0429 !important;
 }

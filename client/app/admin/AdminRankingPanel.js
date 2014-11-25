@@ -2,8 +2,8 @@
 adminModule
 
 .controller('AdminRankingPanel', [
-'$scope', 'CallUrlService', 'InitUrls',
-function ($scope, CallUrlService, InitUrls) {
+'$scope', 'CallUrlService', 'InitUrls', '$translate',
+function ($scope, CallUrlService, InitUrls, $translate) {
 
     $scope.status = {
         error: false,
@@ -17,7 +17,7 @@ function ($scope, CallUrlService, InitUrls) {
         InitUrls.then(function (urls) {
             CallUrlService.get({uri: urls.admin.rankingRecalculate},
             function (data) {
-                $scope.status.message = "Points and places were recalculated successfully.";
+                $scope.status.message = $translate.instant('adminPanelPage.rankingPage.pointsCalculatedSuccessfully');
                 $scope.status.error = false;
                 $scope.status.success = true;
                 $scope.status.inProgress = false;
@@ -27,8 +27,7 @@ function ($scope, CallUrlService, InitUrls) {
                     $scope.status.message = response.data.message;
                 }
                 else {
-                    $scope.status.message = "The recalculation wasn't completed successfully. " +
-                        "Please try again and, if problem persists, contact a developer.";
+                    $scope.status.message = $translate.instant('adminPanelPage.rankingPage.pointsWerentCalculated');
                 }
                 $scope.status.error = true;
                 $scope.status.success = false;

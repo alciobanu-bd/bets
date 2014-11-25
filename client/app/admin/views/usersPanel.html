@@ -2,29 +2,46 @@
 <div ng-controller="AdminUsersPanel">
 
     <input type="text" class="form-control cornered-input" style="width: 30%; margin-bottom: 1.5em;"
-        placeholder="Search user" ng-model="searchedUser" typeahead="user.username for user in users | filter:$viewValue"
+        placeholder="{{'adminPanelPage.usersPage.searchUser' | translate}}" ng-model="searchedUser" typeahead="user.username for user in users | filter:$viewValue"
         ng-keydown="openUserModalOnEnter($event)">
 
-    <div class="row top-buffer-1-em" style="margin-bottom: 2em; font-size: 1.2em;">
+    <div class="row top-buffer-1-em" style="margin-bottom: 2em; font-size: 1.2em; cursor: default;">
         <span class="col-xs-1">&nbsp;</span>
-        <span class="col-xs-2">Username</span>
-        <span class="col-xs-3">E-mail</span>
-        <span class="col-xs-2">Register date</span>
-        <span class="col-xs-2">Place/Points</span>
-        <span class="col-xs-1">Rank</span>
-        <span class="col-xs-1">Disabled</span>
+        <span class="col-xs-2" ng-click="toggleSorting('username', 1)">
+            {{'adminPanelPage.usersPage.username' | translate}}
+            <span ng-if="sorts.username == 0" class="glyphicon glyphicon-sort"></span>
+            <span ng-if="sorts.username < 0" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-if="sorts.username > 0" class="glyphicon glyphicon-arrow-down"></span>
+        </span>
+        <span class="col-xs-3">{{'adminPanelPage.usersPage.email' | translate}}</span>
+        <span class="col-xs-2" ng-click="toggleSorting('lastLogin', -1)">
+            {{'adminPanelPage.usersPage.lastLogin' | translate}}
+            <span ng-if="sorts.lastLogin == 0" class="glyphicon glyphicon-sort"></span>
+            <span ng-if="sorts.lastLogin < 0" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-if="sorts.lastLogin > 0" class="glyphicon glyphicon-arrow-down"></span>
+        </span>
+        <span class="col-xs-1" ng-click="toggleSorting('points', -1)">
+            {{'adminPanelPage.usersPage.pts' | translate}}
+            <span ng-if="sorts.points  == 0" class="glyphicon glyphicon-sort"></span>
+            <span ng-if="sorts.points < 0" class="glyphicon glyphicon-arrow-up"></span>
+            <span ng-if="sorts.points > 0" class="glyphicon glyphicon-arrow-down"></span>
+        </span>
+        <span class="col-xs-1">{{'adminPanelPage.usersPage.rank' | translate}}</span>
+        <span class="col-xs-2">{{'adminPanelPage.usersPage.registrationIP' | translate}}</span>
     </div>
 
-    <div ng-repeat="user in users" class="row top-buffer-0-5-em">
+    <div ng-repeat="user in users | dateSort:'lastLogin':sorts.lastLogin | stringSort:'username':sorts.username |
+        numberSort:'points':sorts.points track by user._id" class="row top-buffer-0-5-em">
+
         <span class="col-xs-1">
             <span class="glyphicon glyphicon-cog" ng-click="openModal(user)" style="cursor: pointer;"></span>
         </span>
         <span class="col-xs-2">{{user.username}}</span>
         <span class="col-xs-3">{{user.email}}</span>
-        <span class="col-xs-2">{{user.registerDate | date:'MMM d, y'}}</span>
-        <span class="col-xs-2">{{user.place}}/{{user.points}}</span>
+        <span class="col-xs-2">{{user.lastLogin | date:'MMM d, y, hh:mm a'}}</span>
+        <span class="col-xs-1">{{user.points}} (#{{user.place}})</span>
         <span class="col-xs-1">{{RolesFactory.findRoleByName(user.role).beautifulName}}</span>
-        <span class="col-xs-1">{{!!user.disabled ? 'Yes' : 'No'}}</span>
+        <span class="col-xs-2">{{user.registrationIp}}</span>
     </div>
 
 </div>
@@ -37,7 +54,7 @@
     <div class="modal-body">
         <div class="row">
             <span class="col-xs-3">
-                Username
+                {{'adminPanelPage.usersPage.username' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.username}}
@@ -45,7 +62,7 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
-                E-mail
+                {{'adminPanelPage.usersPage.email' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.email}}
@@ -53,7 +70,16 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
-                Place
+                {{'adminPanelPage.usersPage.preferredLanguage' | translate}}
+            </span>
+            <span class="col-xs-9">
+                <img ng-src="{{Languages.findByCode(user.language).imgPath}}" style="margin-bottom: 3px" />
+                {{Languages.findByCode(user.language).name}}
+            </span>
+        </div>
+        <div class="row">
+            <span class="col-xs-3">
+                {{'adminPanelPage.usersPage.place' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.place}}
@@ -61,7 +87,7 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
-                Points
+                {{'adminPanelPage.usersPage.points' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.points}}
@@ -69,7 +95,7 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
-                Average
+                {{'adminPanelPage.usersPage.average' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.avgPoints.toFixed(2)}}%
@@ -79,7 +105,7 @@
              ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.root) &&
              RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
             <span class="col-xs-3">
-                User Rank
+                {{'adminPanelPage.usersPage.userRank' | translate}}
             </span>
             <span class="col-xs-9">
                 <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuRole"
@@ -99,7 +125,7 @@
         <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.root) ||
             RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
             <span class="col-xs-3">
-                User rank
+                {{'adminPanelPage.usersPage.userRank' | translate}}
             </span>
             <span class="col-xs-9">
                 {{RolesFactory.findRoleByName(user.role).beautifulName}}
@@ -107,7 +133,7 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
-                Birth date
+                {{'adminPanelPage.usersPage.birthDate' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.birthDate | date:'MMM d, y'}}
@@ -115,7 +141,7 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
-                Register date
+                {{'adminPanelPage.usersPage.registerDate' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.registerDate | date:'MMM d, y'}}
@@ -123,7 +149,7 @@
         </div>
         <div class="row">
             <span class="col-xs-3">
-                Registration IP
+                {{'adminPanelPage.usersPage.registrationIP' | translate}}
             </span>
             <span class="col-xs-9">
                 {{user.registrationIp}}
@@ -131,7 +157,7 @@
         </div>
         <div class="row" ng-if="user.lastLogin">
             <span class="col-xs-3">
-                Last login
+                {{'adminPanelPage.usersPage.lastLogin' | translate}}
             </span>
             <span class="col-xs-9">
                 {{toDate(user.lastLogin) | date: 'EEEE, MMM d, y, h:mm a'}}
@@ -140,63 +166,73 @@
         <div class="row dropdown"  ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) &&
             RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
             <span class="col-xs-3">
-                Active
+                {{'adminPanelPage.usersPage.active' | translate}}
             </span>
             <span class="col-xs-9">
                 <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuActive"
                 data-toggle="dropdown" style="cursor: pointer">
-                    {{!!user.active ? 'Yes' : 'No'}}
+                    {{!!user.active ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
                     <span class="caret"></span>
                 </span>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuActive" style="cursor: pointer">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = true">Yes</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = false">No</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = true">
+                        {{'adminPanelPage.usersPage.yes' | translate}}
+                    </a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.active = false">
+                        {{'adminPanelPage.usersPage.no' | translate}}
+                    </a></li>
                 </ul>
             </span>
         </div>
         <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) ||
         RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
             <span class="col-xs-3">
-                Active
+                {{'adminPanelPage.usersPage.active' | translate}}
             </span>
             <span class="col-xs-9">
-                {{!!user.active ? 'Yes' : 'No'}}
+                {{!!user.active ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
             </span>
         </div>
         <div class="row dropdown" ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) &&
         RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
             <span class="col-xs-3">
-                Disabled
+                {{'adminPanelPage.usersPage.disabled' | translate}}
             </span>
             <span class="col-xs-9">
                 <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuDisabled"
                 data-toggle="dropdown" style="cursor: pointer">
-                    {{!!user.disabled ? 'Yes' : 'No'}}
+                    {{!!user.disabled ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
                     <span class="caret"></span>
                 </span>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDisabled" style="cursor: pointer">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = true">Yes</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = false">No</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = true">
+                        {{'adminPanelPage.usersPage.yes' | translate}}
+                    </a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="user.disabled = false">
+                        {{'adminPanelPage.usersPage.no' | translate}}
+                    </a></li>
                 </ul>
             </span>
         </div>
         <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) ||
         RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
             <span class="col-xs-3">
-                Disabled
+                {{'adminPanelPage.usersPage.disabled' | translate}}
             </span>
             <span class="col-xs-9">
-                {{!!user.disabled ? 'Yes' : 'No'}}
+                {{!!user.disabled ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
             </span>
         </div>
         <div class="row" ng-if="errorSaving">
             <span class="col-xs-12" style="color: red;">
-                An error has occurred. Your options weren't saved.
+                {{'adminPanelPage.usersPage.anErrorHasOcurred' | translate}}
             </span>
         </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-warning" ng-click="cancel()">
+            {{'adminPanelPage.usersPage.cancelButton' | translate}}
+        </button>
     </div>
 </script>

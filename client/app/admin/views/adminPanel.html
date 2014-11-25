@@ -1,14 +1,14 @@
 
-<div class="container" ng-controller="AdminPanelController">
+<div class="container">
 
     <div class="jumbotron centered white half-bg-opacity">
 
-        <h2>Admin panel</h2>
+        <h2>{{'adminPanelPage.name' | translate}}</h2>
 
         <span>
             <ul class="nav nav-tabs" role="tablist">
                 <li ng-repeat="tab in tabs track by $index" ng-class="tab.active ? 'active' : ''">
-                    <a href="" ng-click="activateTab(tab)">{{tab.name}}</a>
+                    <a href="" ng-click="activateTab(tab)">{{tab.name | translate}}</a>
                 </li>
             </ul>
 

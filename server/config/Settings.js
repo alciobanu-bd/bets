@@ -2,11 +2,11 @@
 module.exports = {
     dev: {
         domainName: {
-            address: "http://localhost:1111",
+            address: "http://localhost",
             beautifulName: "CanIHazBets",
             dns: "canihazbets.me"
         },
-        port: 80,
+        port: 9066,
         dbPath: "mongodb://localhost/bets",
         mail: {
             smtp: {

@@ -1,132 +1,160 @@
 
-<div class="jumbotron centered white half-bg-opacity" ng-controller="ProfileController">
+<div class="jumbotron centered white half-bg-opacity">
 
     <div class="panel-heading">
         <div class="row">
-            <h2 class="panel-title">Profile details</h2>
+            <h2 class="panel-title">{{'profilePage.name' | translate}}</h2>
         </div>
     </div>
 
     <div class="panel-body">
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    Username
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{ProfileFactory.profileInformation.username}}
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.username' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{ProfileFactory.profileInformation.username}}
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    E-mail
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{ProfileFactory.profileInformation.email}}
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.email' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{ProfileFactory.profileInformation.email}}
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    Birth date
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{ProfileFactory.profileInformation.birthDate | date: 'MMM d, y'}}
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.birthDate' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{ProfileFactory.profileInformation.birthDate | date: 'MMM d, y'}}
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    Register date
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{ProfileFactory.profileInformation.registerDate | date: 'MMM d, y'}}
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.registerDate' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{ProfileFactory.profileInformation.registerDate | date: 'MMM d, y'}}
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    Place
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{ProfileFactory.profileInformation.place}}
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.preferredLanguage' | translate}}
+            </span>
+
+            <li class="dropdown input-group" style="width: 20%;">
+                <a href="" class="dropdown-toggle" style="color: #ffffff !important;">
+                        <span>
+                            <img ng-src="{{Languages.findByCode(userModel.language).imgPath}}"
+                                    style="margin-bottom: 1px"/>
+                            {{Languages.findByCode(userModel.language).name}}
+                        </span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="lang in Languages.list"
+                        ng-click="setLanguage(lang.code)">
+                        <a href="">
+                            <img ng-src="{{lang.imgPath}}" style="margin-bottom: 1px" />
+                            {{lang.name}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    Points
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{ProfileFactory.profileInformation.points}}
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.place' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{ProfileFactory.profileInformation.place}}
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    Average
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{ProfileFactory.profileInformation.avgPoints.toFixed(2)}}%
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.points' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{ProfileFactory.profileInformation.points}}
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    Awards
-                </span>
-                <span style="width: 20%" class="input-group">
-                    <span ng-if="ProfileFactory.profileInformation.wonWeeks > 0"
-                          class="glyphicon glyphicon-certificate week-win-certificate" title="Gained for winning a week."></span>
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.average' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{ProfileFactory.profileInformation.avgPoints.toFixed(2)}}%
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 10%" class="input-group">
-                    User rank
-                </span>
-                <span style="width: 20%" class="input-group">
-                    {{RolesFactory.findRoleByName(ProfileFactory.profileInformation.role).beautifulName}}
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.awards' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                <span ng-if="ProfileFactory.profileInformation.wonWeeks > 0"
+                      class="glyphicon glyphicon-certificate week-win-certificate"
+                      title="{{'profilePage.gainedForWinningAWeek' | translate}}."></span>
+            </span>
         </div>
 
         <div class="row form-inline top-buffer-0-5-em">
-                <span style="width: 30%" class="input-group">
-                    <input type="checkbox" ng-model="userModel.isMailNotificationOn" id="notificationOption" />
-                    &nbsp;
-                    <label for="notificationOption" style="font-style: normal; font-weight: normal">
-                        Notify me via e-mail about site news.
-                    </label>
-                </span>
+            <span style="width: 10%" class="input-group">
+                {{'profilePage.userRank' | translate}}
+            </span>
+            <span style="width: 20%" class="input-group">
+                {{RolesFactory.findRoleByName(ProfileFactory.profileInformation.role).beautifulName}}
+            </span>
+        </div>
+
+        <div class="row form-inline top-buffer-0-5-em">
+            <span style="width: 30%" class="input-group">
+                <input type="checkbox" ng-model="userModel.isMailNotificationOn" id="notificationOption" />
+                &nbsp;
+                <label for="notificationOption" style="font-style: normal; font-weight: normal">
+                    {{'profilePage.notifyViaEmail' | translate}}
+                </label>
+            </span>
         </div>
 
 
         <div style="margin-top: 1em">
             <button type="button" class="btn btn-info" style="width: 30%" ng-show="!showConfirm"
                     ng-disabled="status.inProgress" ng-click="showConfirm = true">
-                Save changes
+                {{'profilePage.saveChanges' | translate}}
             </button>
 
             <button type="button" class="btn btn-info" style="width: 15%" ng-show="showConfirm"
                     ng-click="updateProfile(); showConfirm = false">
-                Yes
+                {{'profilePage.yes' | translate}}
             </button>
             <button type="button" class="btn btn-info" style="width: 15%" ng-show="showConfirm"
                     ng-click="showConfirm = false">
-                No
+                {{'profilePage.no' | translate}}
             </button>
         </div>
 
         <div ng-show="status.success" class="top-buffer-0-5-em centered cornered-input success-div"
-             style= "width: 40%;">
+             style= "width: 30%;">
             <span class="error-success-inner">
                 {{status.message}}
             </span>
         </div>
 
         <div ng-show="status.error" class="top-buffer-0-5-em centered cornered-input error-div"
-             style= "width: 40%;">
+             style= "width: 30%;">
             <span class="error-success-inner">
                 {{status.message}}
             </span>

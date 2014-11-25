@@ -2,8 +2,8 @@
 userModule
 .controller(
 'ResetPasswordController', [
-'$scope', 'InitUrls', 'CallUrlService', 'SHA-2', 'RoutesFactory',
-function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
+'$scope', 'InitUrls', 'CallUrlService', 'SHA-2', '$routeParams', '$translate',
+function ($scope, InitUrls, CallUrlService, SHA2, $routeParams, $translate) {
 
     $scope.inputs = {
         code: '',
@@ -18,9 +18,8 @@ function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
         message: ''
     };
 
-    var params = RoutesFactory.getParams();
-    if (params[1]) {
-        $scope.inputs.code = params[1];
+    if ($routeParams.code) {
+        $scope.inputs.code = $routeParams.code;
     }
 
     $scope.resetPassword = function () {
@@ -45,8 +44,7 @@ function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
                         function (data) {
                             $scope.status.success = true;
                             $scope.status.error = false;
-                            $scope.status.message = "Your password was reset successfully. " +
-                                "Now you can use it to log into your account.";
+                            $scope.status.message = $translate.instant('resetPasswordPage.resetSuccessful');
                             $scope.status.inProgress = false;
                         },
                         function (response) {
@@ -57,7 +55,7 @@ function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
                                 $scope.status.message = response.data.message;
                             }
                             else {
-                                $scope.status.message = "We couldn't reset your password. Please try again.";
+                                $scope.status.message = $translate.instant('resetPasswordPage.couldntReset');
                             }
                             $scope.status.inProgress = false;
                         }
@@ -67,7 +65,7 @@ function ($scope, InitUrls, CallUrlService, SHA2, RoutesFactory) {
                 function (response) {
                     $scope.status.success = false;
                     $scope.status.error = true;
-                    $scope.status.message = "We couldn't reset your password. Please try again.";
+                    $scope.status.message = $translate.instant('resetPasswordPage.couldntReset');
                     $scope.status.inProgress = false;
                 });
         });

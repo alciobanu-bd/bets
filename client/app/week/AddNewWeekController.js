@@ -2,8 +2,8 @@
 weekModule
 
 .controller('NewWeekController', [
-'$scope', 'Settings', 'CallUrlService', 'InitUrls',
-function ($scope, Settings, CallUrlService, InitUrls) {
+'$scope', 'Settings', 'CallUrlService', 'InitUrls', '$translate',
+function ($scope, Settings, CallUrlService, InitUrls, $translate) {
 
     $scope.range = function (n) {
         var intN = parseInt(n);
@@ -16,6 +16,10 @@ function ($scope, Settings, CallUrlService, InitUrls) {
     $scope.matchesNumber = {
         total: '',
         required: ''
+    };
+
+    $scope.weekOptions = {
+        hidden: false
     };
 
     $scope.setMatchesArray = function () {
@@ -128,7 +132,8 @@ function ($scope, Settings, CallUrlService, InitUrls) {
         var newWeek = {
             events: getMatches(),
             number: $scope.WeekFactory.currentWeek.number + 1,
-            required: parseInt($scope.matchesNumber.required)
+            required: parseInt($scope.matchesNumber.required),
+            hidden: $scope.weekOptions.hidden
         };
 
         InitUrls.then(function (data) {
@@ -137,7 +142,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
                     $scope.afterSave.error = false;
                     $scope.afterSave.success = true;
                     $scope.save.inProgress = false;
-                    $scope.afterSave.message = "Week saved successfully.";
+                    $scope.afterSave.message = $translate.instant('weekPage.addNewWeekPage.weekSavedSuccessfully');
                 },
                 function (response) {
                     $scope.afterSave.error = true;
@@ -147,7 +152,7 @@ function ($scope, Settings, CallUrlService, InitUrls) {
                         $scope.afterSave.message = response.data.message;
                     }
                     else {
-                        $scope.afterSave.message = "Week didn't save. Please try again.";
+                        $scope.afterSave.message = $translate.instant('weekPage.addNewWeekPage.weekDidntSave');
                     }
                 }
             );

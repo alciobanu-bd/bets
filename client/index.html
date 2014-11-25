@@ -10,19 +10,37 @@
 
     <link rel="shortcut icon" href="images/favicon.png">
 
-    <title>CanIHazBets</title>
+    <title>CanIHazBets - online betting for fun</title>
 </head>
 <body style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode';">
 
+    <!--    Facebook integration    -->
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '563467493785036',
+                xfbml      : true,
+                version    : 'v2.2'
+            });
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+
     <span ng-app="bets">
+        <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
+        <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
+
         <span ng-controller="MainController" ng-cloak>
-
-            <ng-include ng-if="userInfo.isLogged" src="Templates.header.logged.html"></ng-include>
-            <ng-include ng-if="!userInfo.isLogged" src="Templates.header.notLogged.html"></ng-include>
-
-            <ng-include src="RoutesFactory.currentBodyView.html"></ng-include>
             <ng-view></ng-view>
-
         </span>
     </span>
 
@@ -36,13 +54,19 @@
     <script src="lib/angular-ui-date/src/date.js"></script>
     <script src="lib/angular-resource/angular-resource.js"></script>
     <script src="lib/angular-route/angular-route.js"></script>
+    <script src="lib/angular-translate/angular-translate.js"></script>
     <script src="lib/angular-cookies/angular-cookies.js"></script>
+    <script src="lib/angular-loggly-logger/angular-loggly-logger.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="lib/underscore/underscore-min.js"></script>
     <script src="lib/jsPDF/index.js"></script>
 
     <script src="app/utils/utilsModule.js"></script>
+    <script src="app/utils/includeReplace.js"></script>
     <script src="app/utils/utilServices.js"></script>
+    <script src="app/utils/dateSort.js"></script>
+    <script src="app/utils/stringSort.js"></script>
+    <script src="app/utils/numberSort.js"></script>
 
     <script src="app/settings/settingsModule.js"></script>
     <script src="app/settings/Settings.js"></script>
@@ -53,6 +77,17 @@
     <script src="app/resources/resourceModule.js"></script>
     <script src="app/resources/ResourceServices.js"></script>
 
+    <script src="app/config/configModule.js"></script>
+    <script src="app/config/LanguageServices.js"></script>
+    <script src="app/config/UrlLanguageAdderInterceptor.js"></script>
+    <script src="app/config/LogglySetup.js"></script>
+    <script src="app/config/booting-config.js"></script>
+    <script src="app/config/routeProvider.js"></script>
+    <script src="app/config/Translations.js"></script>
+    <script src="app/config/TokenInterceptor.js"></script>
+    <script src="app/config/401-Interceptor.js"></script>
+    <script src="app/config/LogglyInterceptor.js"></script>
+
     <script src="app/user/userModule.js"></script>
     <script src="app/user/UserServices.js"></script>
     <script src="app/user/UserController.js"></script>
@@ -61,11 +96,6 @@
     <script src="app/user/ChangePasswordController.js"></script>
     <script src="app/user/ForgotPasswordController.js"></script>
     <script src="app/user/ResetPasswordController.js"></script>
-
-    <script src="app/config/configModule.js"></script>
-    <script src="app/config/RoutesFactory.js"></script>
-    <script src="app/config/TokenInterceptor.js"></script>
-    <script src="app/config/401-Interceptor.js"></script>
 
     <script src="app/ranking/rankingModule.js"></script>
     <script src="app/ranking/RankingController.js"></script>
@@ -97,6 +127,25 @@
 
     <script src="app/main/WelcomePageController.js"></script>
     <script src="app/main/mainController.js"></script>
+
+    <script>
+        var langStorage = localStorage.getItem('Lang');
+        var lang;
+
+        if (langStorage) {
+            lang = JSON.parse(langStorage).code;
+        }
+        else {
+            lang = languagesListGLOBAL.english.code;
+        }
+
+        for (var i in languagesListGLOBAL) {
+            var l = languagesListGLOBAL[i];
+            if (l.code == lang) {
+                document.write('<script src="' + l.localePath + '"><\/script>');
+            }
+        }
+    </script>
 
 </body>
 </html>

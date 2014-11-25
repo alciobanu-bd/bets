@@ -1,2 +1,2 @@
 
-var configModule = angular.module('config', ['ngRoute']);
+var configModule = angular.module('config', ['settings', 'ngRoute', 'ngLoggly', 'pascalprecht.translate']);

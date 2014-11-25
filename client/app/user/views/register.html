@@ -1,27 +1,33 @@
-<div class="container" ng-controller="RegisterController">
+<div class="container">
 
     <div class="jumbotron centered white half-bg-opacity" style="min-height: 40em">
-        <h2>Create a new account</h2>
+        <h2>{{'registerPage.name' | translate}}</h2>
         <div class="input-group centered" style="min-width: 40%;">
             <div class="form-group">
-                <input type="text" ng-model="inputs.username.model" class="form-control cornered-input" ng-class="inputs.username.error ? 'red-border' : ''" placeholder="Username">
+                <input type="text" ng-model="inputs.username.model" class="form-control cornered-input"
+                       ng-class="inputs.username.error ? 'red-border' : ''" placeholder="{{'registerPage.username' | translate}}">
             </div>
             <div class="form-group">
-                <input type="password" ng-model="inputs.password.model" class="form-control cornered-input" ng-class="inputs.password.error ? 'red-border' : ''" placeholder="Password">
+                <input type="password" ng-model="inputs.password.model" class="form-control cornered-input"
+                       ng-class="inputs.password.error ? 'red-border' : ''" placeholder="{{'registerPage.password' | translate}}">
             </div>
             <div class="form-group">
-                <input type="password" ng-model="inputs.confirmPassword.model" class="form-control cornered-input" ng-class="inputs.confirmPassword.error ? 'red-border' : ''" placeholder="Confirm password">
+                <input type="password" ng-model="inputs.confirmPassword.model" class="form-control cornered-input"
+                       ng-class="inputs.confirmPassword.error ? 'red-border' : ''" placeholder="{{'registerPage.confirmPassword' | translate}}">
             </div>
             <div class="form-group">
-                <input type="text" ng-model="inputs.email.model" class="form-control cornered-input" ng-class="inputs.email.error ? 'red-border' : ''" placeholder="E-mail">
+                <input type="text" ng-model="inputs.email.model" class="form-control cornered-input"
+                       ng-class="inputs.email.error ? 'red-border' : ''" placeholder="{{'registerPage.email' | translate}}">
             </div>
             <div class="form-group">
-                <input ui-date="dateOptions" ng-model="inputs.birthDate.model" class="form-control cornered-input" ng-class="inputs.birthDate.error ? 'red-border' : ''" placeholder="Birth date">
+                <input ui-date="dateOptions" ng-model="inputs.birthDate.model" class="form-control cornered-input"
+                       ng-class="inputs.birthDate.error ? 'red-border' : ''" placeholder="{{'registerPage.birthDate' | translate}}">
             </div>
         </div>
         <div style="margin-top: 1em;">
-            <button type="button" style="min-width: 40%;" class="btn btn-info" ng-click="register()" ng-disabled="inputs.password.model.length == 0 || status.inProgress">
-                Register
+            <button type="button" style="min-width: 40%;" class="btn btn-info" ng-click="register()"
+                    ng-disabled="inputs.password.model.length == 0 || status.inProgress">
+                {{'registerPage.registerButton' | translate}}
             </button>
         </div>
 

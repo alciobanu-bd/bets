@@ -4,11 +4,14 @@
 var express = require('express');
 var Week = require('./../model/Week.js');
 var User = require('./../model/User.js');
+var Roles = require('./../model/Roles.js')('en');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 var pointsManagementFunctions = require('./../middlewares/pointsManagement.js');
 var mailServices = require('./../services/mailServices.js');
 var _ = require('underscore');
+
+var Translations = require('./../config/Translations.js');
 
 var fs = require('fs');
 var LOG_WEEK_MAIL_FILE_NAME = 'logs/user_mail_log.txt';
@@ -22,7 +25,7 @@ function (req, res, next) {
     function (err, week) {
         if (err) {
             res.status(500).json({
-                message: "Error fetching week from database."
+                message: Translations[req.query.lang].weekRoute.errorFetchingWeekFromDb
             }).end();
         }
         else {
@@ -33,13 +36,21 @@ function (req, res, next) {
 });
 
 router.get('/week',
+jwtauth([tokenChecks.hasRole("ROLE_USER")]),
 function (req, res, next) {
 
-    Week.find({},
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject,
     function (err, weeks) {
         if (err) {
             res.status(500).json({
-                message: "Error fetching weeks from database."
+                message: Translations[req.query.lang].weekRoute.errorFetchingWeeksFromDb
             }).end();
         }
         else {
@@ -50,15 +61,23 @@ function (req, res, next) {
 });
 
 router.get('/week/last',
+jwtauth([tokenChecks.hasRole("ROLE_USER")]),
 function (req, res, next) {
 
-    Week.find({}, {},
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject, {},
         {sort: {number: -1}, limit: 1},
         function (err, weeks) {
 
             if (err) {
                 res.status(500).json({
-                    message: "Error fetching current week."
+                    message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
                 }).end();
             }
 
@@ -86,13 +105,13 @@ router.get('/week/mail-notification',
 jwtauth([tokenChecks.hasRole("ROLE_ADMIN")]),
 function (req, res) {
 
-    Week.find({}, {},
+    Week.find({hidden: false}, {},
     {sort: {number: -1}, limit: 1},
     function (err, weeks) {
 
         if (err) {
             res.status(500).json({
-                message: "Error fetching current week."
+                message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
             }).end();
         }
 
@@ -117,7 +136,7 @@ function (req, res) {
                             if (weeks[0].mailNotificationSent) {
                                 // an e-mail was already sent on this week
                                 res.status(500).json({
-                                    message: "An e-mail notification was already sent for this week."
+                                    message: Translations[req.query.lang].weekRoute.emailNotificationAlreadySent
                                 }).end();
                                 return;
                             }
@@ -133,7 +152,7 @@ function (req, res) {
                                 }
 
                                 mailServices.sendNotificationAboutNewWeek (
-                                    weeks[0], user.username, user.email, function () {
+                                    weeks[0], user, function () {
                                     // on success
 
                                     // if a single user receives the message,
@@ -156,7 +175,7 @@ function (req, res) {
                             }
 
                             res.status(200).json({
-                                message: "Mails were queued and are about to be sent."
+                                message: Translations[req.query.lang].weekRoute.mailsQueuedAboutToBeSent
                             }).end();
 
                         }
@@ -196,7 +215,7 @@ function (req, res, next) {
     week.save(function (err) {
         if (err) {
             res.status(500).json({
-                message: "Week wasn't saved to database."
+                message: Translations[req.query.lang].weekRoute.weekWasntSavedToDb
             }).end();
         }
         else {
@@ -212,7 +231,7 @@ function (req, res, next) {
 
     if (req.body.events.length < 1) {
         res.status(500).json({
-            message: "There are no events in this week."
+            message: Translations[req.query.lang].weekRoute.weekHasNoEventsAddThem
         }).end();
         return;
     }
@@ -237,7 +256,7 @@ function (req, res, next) {
     Week.update({_id: req.params.id}, {$set: week}, function (err) {
         if (err) {
             res.status(500).json({
-                message: "Week wasn't saved to database."
+                message: Translations[req.query.lang].weekRoute.weekWasntSavedToDb
             }).end();
         }
         else {
@@ -248,15 +267,23 @@ function (req, res, next) {
 });
 
 router.get('/week/beforeLast',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
-    Week.find({}, {},
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject, {},
         {sort: {number: -1}, limit: 2},
         function (err, weeks) {
 
             if (err) {
                 res.status(500).json({
-                    message: "Error fetching current week."
+                    message: Translations[req.query.lang].weekRoute.errorFetchingBeforeCurrentWeek
                 }).end();
             }
 
@@ -284,15 +311,23 @@ function (req, res, next) {
  * Weeknumber given as url query param (@number)
  */
 router.get('/week/getByNumber',
+jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
+    var queryObject = {number: req.query.number};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
     Week.findOne(
-        {number: req.query.number},
+        queryObject,
         function (err, week) {
 
             if (err) {
                 res.status(500).json({
-                    message: "Error fetching week with number +"
+                    message: Translations[req.query.lang].weekRoute.errorFetchingWeekWithNumber
                         + req.query.number +
                         "."
                 }).end();
@@ -321,6 +356,11 @@ function (req, res, next) {
 
 })
 
+
+/**
+ * Used to update official result for matches.
+ * To update a week, use the update route.
+ */
 router.put('/week/:id([0-9a-fA-F]{24})',
 jwtauth([tokenChecks.hasRole('ROLE_ADMIN')]),
 
@@ -330,7 +370,7 @@ function(req, res, next) {
     function (err, week) {
         if (err || !week) {
             res.status(500).json({
-                message: "Week information wasn't saved. There was an error with the database."
+                message: Translations[req.query.lang].weekRoute.weekInfoNotSavedDbError
             }).end();
         }
         else {
@@ -345,7 +385,7 @@ function(req, res, next) {
             week.save(function (err) {
                 if (err) {
                     res.status(500).json({
-                        message: "Week information wasn't saved. There was an error with the database."
+                        message: Translations[req.query.lang].weekRoute.weekInfoNotSavedDbError
                     }).end();
                 }
                 else {
@@ -369,6 +409,7 @@ function(req, res, next) {
 
 pointsManagementFunctions.updatePointsForBetsOfThisWeek,
 pointsManagementFunctions.calculateWinners,
+pointsManagementFunctions.setWinnersOnBets,
 pointsManagementFunctions.sendCongratsToWinners,
 pointsManagementFunctions.resetUsersPointsBeforeAggregating,
 pointsManagementFunctions.updatePointsForUsers,

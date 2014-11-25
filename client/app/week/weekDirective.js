@@ -2,8 +2,8 @@
 weekModule
 
 .directive('week', [
-    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation', '$modal',
-    function(BetService, WeekFactory, RolesFactory, UserInformation, $modal) {
+    'BetService', 'WeekFactory', 'RolesFactory', 'UserInformation', '$modal', 'Settings', '$translate',
+    function(BetService, WeekFactory, RolesFactory, UserInformation, $modal, Settings, $translate) {
     return {
         restrict: 'E',
         replace: true,
@@ -92,6 +92,11 @@ weekModule
                     delete newEvent.awayTeam;
                     delete newEvent.startDate;
                     delete newEvent.competition;
+
+                    if (angular.isDefined(newEvent.diffTooHigh)) {
+                        delete newEvent.diffTooHigh;
+                    }
+
                     return newEvent;
                 });
 
@@ -100,6 +105,27 @@ weekModule
                         parseInt(event.awayScore) != NaN && parseInt(event.homeScore) != NaN;
                 });
 
+            }
+
+            scope.checkScoreDifferenceTooHigh = function (match) {
+                var maxDifference = Settings.week.events.maxScoreDifference;
+                var ret = Math.abs(parseInt(match.homeScore) - parseInt(match.awayScore)) > maxDifference;
+                match.diffTooHigh = ret;
+            }
+
+            scope.anyMatchWithDifferenceTooHigh = function () {
+                for (var i = 0; i < scope.week.events.length; i++) {
+                    if (scope.week.events[i].diffTooHigh) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            scope.resetMatchesWithDifferenceTooHigh = function () {
+                for (var i = 0; i < scope.week.events.length; i++) {
+                    scope.week.events[i].diffTooHigh = false;
+                }
             }
 
             scope.validateScore = function (n) {
@@ -187,12 +213,10 @@ weekModule
                 scope.afterUpdateResults.error = false;
                 WeekFactory.updateResults(scope.week.events, scope.week._id, function () {
                     scope.afterUpdateResults.success = true;
-                    scope.afterUpdateResults.message = 'The results were saved successfully.';
+                    scope.afterUpdateResults.message = $translate.instant('weekPage.weekDirective.afterUpdateSuccess');
                 }, function () {
                     scope.afterUpdateResults.error = true;
-                    scope.afterUpdateResults.message = 'The results saved with errors.' +
-                        'Please try to save them again urgently.' +
-                        'If the problem persists, contact the developers as soon as you can.';
+                    scope.afterUpdateResults.message = $translate.instant('weekPage.weekDirective.afterUpdateError');
                 });
             }
 
@@ -227,6 +251,19 @@ weekModule
                 });
             }
 
+            scope.openWeekHistoryModal = function () {
+                var modalInstance = $modal.open({
+                    templateUrl: 'app/history/views/weekHistory.html',
+                    controller: 'WeekHistoryController',
+                    size: 'lg',
+                    resolve: {
+                        week: function () {
+                            return prepareWeekBeforeOpeningEditModal(scope.week);
+                        }
+                    }
+                });
+            }
+
             scope.$on('$destroy', function () {
                 scope.BetService = null;
             });
@@ -235,6 +272,69 @@ weekModule
     }
 }]);
 
+weekModule.controller('WeekHistoryController', [
+'$scope', '$modalInstance', 'week', 'HistoryFactory', '$translate',
+function ($scope, $modalInstance, week, HistoryFactory, $translate) {
+
+    $scope.week = week;
+
+    $scope.status = {
+        inProgress: true,
+        error: false,
+        success: false,
+        message: ''
+    };
+
+    $scope.history = [];
+
+    $scope.paging = {
+        page: 1,
+        totalPages: 1, // will be overwritten by response from server
+        itemsPerPage: 4, // will be overwritten by response from server
+        totalItems: 0 // will be overwritten by response from server
+    };
+
+    $scope.getBetByIndex = function (bet, index) {
+        return _.find(bet.scores, function (item) {
+            return item.index == index;
+        });
+    }
+
+    var loadPage = function (page) {
+        HistoryFactory.loadHistoryForAWeek(week._id, page).then(
+            function (data) {
+                $scope.status.inProgress = false;
+                $scope.status.error = false;
+                $scope.status.success = true;
+                $scope.history = data.bets;
+                $scope.paging.totalPages = data.numberOfPages;
+                $scope.paging.totalItems = data.count;
+                $scope.paging.itemsPerPage = data.itemsPerPage;
+            },
+            function (response) {
+                $scope.status.inProgress = false;
+                $scope.status.error = true;
+                $scope.status.success = false;
+                if (response.data.message) {
+                    $scope.status.message = response.data.message;
+                }
+                else {
+                    $scope.status.message = $translate.instant('weekPage.weekHistory.couldntBeFetched');
+                }
+            }
+        );
+    }
+
+    $scope.$watch('paging.page', function () {
+        loadPage($scope.paging.page - 1);
+    });
+
+    $scope.close = function () {
+        $modalInstance.close();
+    }
+
+}
+]);
 
 weekModule
 .controller('WeekEditController', [
@@ -259,6 +359,7 @@ weekModule
         }
 
         $scope.resetScoreCheckbox = false;
+        $scope.hiddenCheckbox = week.hidden;
 
         $scope.openDate = function (match, $event) {
             $event.preventDefault();
@@ -329,6 +430,7 @@ weekModule
 
             var updatedWeek = JSON.parse(JSON.stringify($scope.week));
             updatedWeek.events = getMatches();
+            updatedWeek.hidden = $scope.hiddenCheckbox;
 
             setIndexesForEvents(updatedWeek);
             $scope.errorSaving = false;

@@ -8,7 +8,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/roles', function(req, res) {
-    res.status(200).json(Roles).end();
+    res.status(200).json(Roles(req.query.lang)).end();
 });
 
 app.use('/api', router);

@@ -2,6 +2,8 @@
 var User = require('./../model/User.js');
 var jwt = require('jwt-simple');
 
+var Translations = require('./../config/Translations.js');
+
 module.exports = function (callbacks, activationCheck) {
 
     return function(req, res, next) {
@@ -14,7 +16,7 @@ module.exports = function (callbacks, activationCheck) {
 
                 if (decoded.exp <= new Date()) {
                     res.status(401).json({
-                        message: "Your token has expired. Please log in again."
+                        message: Translations[req.query.lang].jwtauth.tokenExpired
                     }).end();
                 }
                 else {
@@ -23,7 +25,7 @@ module.exports = function (callbacks, activationCheck) {
 
                         if (err) {
                             res.status(401).json({
-                                message: "An error has occurred. We couldn't verify your identity."
+                                message: Translations[req.query.lang].jwtauth.coldntVerifyIdentity
                             }).end();
                         }
                         else {
@@ -33,14 +35,14 @@ module.exports = function (callbacks, activationCheck) {
                                 if ((!user.active && activationCheck && !activationCheck.skipActivationCheck) ||
                                     (!user.active && !activationCheck)) {
                                     res.status(401).json({
-                                        message: "Your account is inactive."
+                                        message: Translations[req.query.lang].jwtauth.accountInactive
                                     }).end();
                                 }
                                 else {
 
                                     if (user.disabled) {
                                         res.status(401).json({
-                                            message: "Login failed. Your account is disabled."
+                                            message: Translations[req.query.lang].jwtauth.accountDisabled
                                         }).end();
                                         return;
                                     }
@@ -75,7 +77,7 @@ module.exports = function (callbacks, activationCheck) {
                             }
                             else {
                                 res.status(401).json({
-                                    message: "Login token is invalid."
+                                    message: Translations[req.query.lang].jwtauth.tokenInvalid
                                 }).end();
                             }
 
@@ -85,12 +87,12 @@ module.exports = function (callbacks, activationCheck) {
 
             } catch (err) {
                 res.status(401).json({
-                    message: "Your token has expired. Please log in again."
+                    message: Translations[req.query.lang].jwtauth.tokenExpired
                 }).end();
             }
         } else {
             res.status(401).json({
-                message: "You didn't send an authorization token."
+                message: Translations[req.query.lang].jwtauth.didntSendToken
             }).end();
         }
 

@@ -1,6 +1,6 @@
 {
     "name": "bets",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Bets app based on MEAN stack",
     "dependencies": {
         "express": "~4.0.0",
@@ -23,7 +23,11 @@
         "load-grunt-tasks": "*",
         "time-grunt": "*",
         "humanize": "*",
-        "nodemailer-dkim": "*"
+        "nodemailer-dkim": "*",
+        "cron": "*",
+        "time": "*",
+        "loggly": "*",
+        "nodemon": "*"
     },
     "devDependencies": {
         "bower": "*",

@@ -2,8 +2,8 @@
 weekModule
 
 .factory('WeekFactory',[
-'InitUrls', 'CallUrlService',
-function (InitUrls, CallUrlService) {
+'InitUrls', 'CallUrlService', '$translate',
+function (InitUrls, CallUrlService, $translate) {
 
     var thisFactory = {};
 
@@ -48,7 +48,6 @@ function (InitUrls, CallUrlService) {
 
         thisFactory.weeksByNumber = {};
         thisFactory.betsByWeekNumber = {};
-
     }
 
     thisFactory.fetchWeekByNumber = function (callWhenDone, weekNo) {
@@ -70,7 +69,7 @@ function (InitUrls, CallUrlService) {
                         if (!angular.isDefined(thisFactory.error.weeksByNumberError[weekNo])) {
                             thisFactory.error.weeksByNumberError[weekNo] = {};
                         }
-                        thisFactory.error.weeksByNumberError[data.number].active = false;
+                        thisFactory.error.weeksByNumberError[weekNo].active = false;
                         thisFactory.weeksByNumber[weekNo] = data;
                         if (typeof callWhenDone === 'function') {
                             callWhenDone();
@@ -81,7 +80,7 @@ function (InitUrls, CallUrlService) {
                             thisFactory.error.weeksByNumberError[weekNo] = {};
                         }
                         thisFactory.error.weeksByNumberError[weekNo].active = true;
-                        thisFactory.error.weeksByNumberError[weekNo].message = "An error occurred while trying to fetch week #" + weekNo;
+                        thisFactory.error.weeksByNumberError[weekNo].message = $translate.instant('weekPage.anErrorTryingToFetchWeekNo') + " " + weekNo;
                     }
                 );
             }
@@ -113,7 +112,7 @@ function (InitUrls, CallUrlService) {
                     },
                     function (response) {
                         thisFactory.error.current.active = true;
-                        thisFactory.error.current.message = "An error occurred while trying to fetch a week.";
+                        thisFactory.error.current.message = $translate.instant('weekPage.anErrorTryingToFetchAWeek');
                     }
                 );
             }
@@ -148,7 +147,7 @@ function (InitUrls, CallUrlService) {
                             thisFactory.error.betsByWeekNumberError[weekObject.number].message = response.data.message;
                         }
                         else {
-                            thisFactory.error.betsByWeekNumberError[weekObject.number].message = "An error occurred while trying to fetch your bets.";
+                            thisFactory.error.betsByWeekNumberError[weekObject.number].message = $translate.instant('weekPage.anErrorTryingToFetchBets');
                         }
 
                         if (typeof onError === 'function') {
@@ -178,7 +177,7 @@ function (InitUrls, CallUrlService) {
                             thisFactory.error.currentBet.message = response.data.message;
                         }
                         else {
-                            thisFactory.error.currentBet.message = "An error occurred while trying to fetch your bets.";
+                            thisFactory.error.currentBet.message = $translate.instant('weekPage.anErrorTryingToFetchBets');
                         }
                     }
                 );
@@ -237,7 +236,7 @@ function (InitUrls, CallUrlService) {
                     },
                     function (response) {
                         thisFactory.error.beforeCurrent.active = true;
-                        thisFactory.error.beforeCurrent.message = "An error occurred while trying to fetch a week.";
+                        thisFactory.error.beforeCurrent.message = $translate.instant('weekPage.anErrorTryingToFetchAWeek');
                     }
                 );
             }
@@ -286,7 +285,7 @@ function (InitUrls, CallUrlService) {
             },
             function (response) {
                 thisFactory.error.all.active = true;
-                thisFactory.error.all.message = "An error occurred.";
+                thisFactory.error.all.message = $translate.instant('weekPage.anErrorOccurred');
             }
             );
 
@@ -326,7 +325,7 @@ function (InitUrls, CallUrlService) {
 
             CallUrlService.post({uri: data.bet.address}, bets,
                 function (data) {
-                    self.afterPlacement.message = 'Your bet was successfully placed.';
+                    self.afterPlacement.message = $translate.instant('weekPage.betPlacementSuccess');
                     self.afterPlacement.success = true;
                     self.inProgress = false;
                     if (typeof onSuccess === 'function') {
@@ -341,7 +340,7 @@ function (InitUrls, CallUrlService) {
                         }
                     }
                     else {
-                        self.afterPlacement.message = 'Your bet wasn\'t placed. Please try again.';
+                        self.afterPlacement.message = $translate.instant('weekPage.betPlacementError');
                     }
                     self.afterPlacement.error = true;
                     self.inProgress = false;
@@ -357,7 +356,7 @@ function (InitUrls, CallUrlService) {
 
             CallUrlService.put({uri: data.bet.address, id: currentBet._id}, bets,
                 function (data) {
-                    self.afterPlacement.message = 'Your bet was successfully changed.';
+                    self.afterPlacement.message = $translate.instant('weekPage.betChangeSuccess');
                     self.afterPlacement.success = true;
                     self.inProgress = false;
                     if (typeof onSuccess === 'function') {
@@ -372,7 +371,7 @@ function (InitUrls, CallUrlService) {
                         }
                     }
                     else {
-                        self.afterPlacement.message = 'Your bet wasn\'t placed. Please try again.';
+                        self.afterPlacement.message = $translate.instant('weekPage.betPlacementError');
                     }
                     self.afterPlacement.error = true;
                     self.inProgress = false;

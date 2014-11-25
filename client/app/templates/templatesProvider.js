@@ -15,7 +15,8 @@ var templates =
         notLogged: {
             html: 'app/user/views/headerNotLogged.html',
             route: ''
-        }
+        },
+        languageDropdown: '/app/user/views/languageDropdown.html'
     },
     user: {
         login: {
@@ -57,7 +58,15 @@ var templates =
         html: 'app/week/views/week.html',
         route: 'week'
     },
+    history: {
+        html: 'app/history/views/history.html',
+        route: 'history'
+    },
     account: {
+        activation: {
+            html: 'app/user/views/activation.html',
+            route: 'activation'
+        },
         profile: {
             html: 'app/profile/views/profile.html',
             route: 'profile'
@@ -68,10 +77,6 @@ var templates =
             html: 'app/history/views/history.html',
             route: 'history'
         }
-    },
-    activation: {
-        html: 'app/user/views/activation.html',
-        route: 'activation'
     },
     admin: {
         html: 'app/admin/views/adminPanel.html',

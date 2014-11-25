@@ -2,8 +2,8 @@
 weekModule
 
 .controller('WeekController', [
-'$scope', 'WeekFactory', 'RolesFactory', 'UserInformation', 'InitUrls', 'CallUrlService', '$timeout',
-function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlService, $timeout) {
+'$scope', 'WeekFactory', 'RolesFactory', 'UserInformation', 'InitUrls', 'CallUrlService', '$translate',
+function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlService, $translate) {
 
     $scope.WeekFactory = WeekFactory;
     $scope.parseInt = parseInt;
@@ -98,8 +98,7 @@ function ($scope, WeekFactory, RolesFactory, UserInformation, InitUrls, CallUrlS
                     $scope.mailNotificationStatus.message = response.data.message;
                 }
                 else {
-                    $scope.mailNotificationStatus.message = "Notification e-mails couldn't be sent. Please try again." +
-                        "If problem persists, talk to a developer.";
+                    $scope.mailNotificationStatus.message = $translate.instant('weekPage.mailNotificationsNotSent');
                 }
 
             });

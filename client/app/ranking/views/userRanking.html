@@ -4,75 +4,89 @@
 </div>
 <div class="modal-body">
     <div class="row">
-            <span class="col-xs-3">
-                Username
-            </span>
-            <span class="col-xs-9">
-                {{user.username}}
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.username' | translate}}
+        </span>
+        <span class="col-xs-9">
+            {{user.username}}
+        </span>
     </div>
     <div class="row">
-            <span class="col-xs-3">
-                Place
-            </span>
-            <span class="col-xs-9">
-                {{user.place}}
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.place' | translate}}
+        </span>
+        <span class="col-xs-9">
+            {{user.place}}
+        </span>
     </div>
     <div class="row">
-            <span class="col-xs-3">
-                Points
-            </span>
-            <span class="col-xs-9">
-                {{user.points}}
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.points' | translate}}
+        </span>
+        <span class="col-xs-9">
+            {{user.points}}
+        </span>
     </div>
     <div class="row">
-            <span class="col-xs-3">
-                Average
-            </span>
-            <span class="col-xs-9">
-                {{user.avgPoints.toFixed(2)}}%
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.average' | translate}}
+        </span>
+        <span class="col-xs-9">
+            {{user.avgPoints.toFixed(2)}}%
+        </span>
     </div>
     <div class="row">
-            <span class="col-xs-3">
-                Won weeks
-            </span>
-            <span class="col-xs-9">
-                {{user.wonWeeks}}
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.wonWeeks' | translate}}
+        </span>
+        <span class="col-xs-9">
+            {{user.wonWeeks}}
+        </span>
     </div>
     <div class="row">
-            <span class="col-xs-3">
-                Awards
-            </span>
-            <span class="col-xs-9">
-                <span ng-if="user.wonWeeks > 0" class="glyphicon glyphicon-certificate week-win-certificate" title="Gained for winning a week."></span>
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.awards' | translate}}
+        </span>
+        <span class="col-xs-9">
+            <span ng-if="user.wonWeeks > 0" class="glyphicon glyphicon-certificate week-win-certificate"
+                  title="{{'rankingPage.userRanking.gainedForWinningAWeek' | translate}}."></span>
+        </span>
     </div>
     <div class="row">
-            <span class="col-xs-3">
-                User rank
-            </span>
-            <span class="col-xs-9">
-                {{RolesFactory.findRoleByName(user.role).beautifulName}}
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.preferredLanguage' | translate}}
+        </span>
+        <span class="col-xs-9">
+            <img ng-src="{{Languages.findByCode(user.language).imgPath}}" style="margin-bottom: 3px" />
+            {{Languages.findByCode(user.language).name}}
+        </span>
     </div>
     <div class="row">
-            <span class="col-xs-3">
-                Register date
-            </span>
-            <span class="col-xs-9">
-                {{user.registerDate | date:'MMM d, y'}}
-            </span>
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.userRank' | translate}}
+        </span>
+        <span class="col-xs-9">
+            {{RolesFactory.findRoleByName(user.role).beautifulName}}
+        </span>
+    </div>
+    <div class="row">
+        <span class="col-xs-3">
+            {{'rankingPage.userRanking.registerDate' | translate}}
+        </span>
+        <span class="col-xs-9">
+            {{user.registerDate | date:'MMM d, y'}}
+        </span>
     </div>
     <div class="row top-buffer-0-5-em">
-            <span class="col-xs-3">
-                <a href="" ng-click="viewUserHistory()">View history</a>
-            </span>
+        <span class="col-xs-3">
+            <a ng-href="#/history/{{user._id}}" ng-click="viewUserHistory()">
+                {{'rankingPage.userRanking.viewHistory' | translate}}
+            </a>
+        </span>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-warning" ng-click="cancel()">Close</button>
+    <button class="btn btn-warning" ng-click="cancel()">
+        {{'rankingPage.userRanking.closeButton' | translate}}
+    </button>
 </div>

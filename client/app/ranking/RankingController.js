@@ -80,12 +80,12 @@ function ($scope, RankingFactory, $modal, Settings) {
 
 rankingModule
 .controller('ProfileRankingView', [
-    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation', 'RoutesFactory',
-    function ($scope, $modalInstance, user, RolesFactory, UserInformation, RoutesFactory) {
+    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation', 'Languages',
+    function ($scope, $modalInstance, user, RolesFactory, UserInformation, Languages) {
 
         $scope.RolesFactory = RolesFactory;
-        $scope.RoutesFactory = RoutesFactory;
         $scope.userInfo = UserInformation;
+        $scope.Languages = Languages;
         $scope.user = user;
 
         $scope.cancel = function () {
@@ -94,8 +94,6 @@ rankingModule
 
         $scope.viewUserHistory = function () {
             $scope.cancel();
-            RoutesFactory.resetPath();
-            RoutesFactory.goToHistoryUserId(user._id);
         }
 
     }

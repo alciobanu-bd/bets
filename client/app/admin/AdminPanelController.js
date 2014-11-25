@@ -2,19 +2,19 @@
 adminModule
 
 .controller('AdminPanelController', [
-'$scope', 'RolesFactory', 'UserInformation', 'RoutesFactory',
-function ($scope, RolesFactory, UserInformation, RoutesFactory) {
+'$scope', 'RolesFactory',
+function ($scope, RolesFactory) {
 
     $scope.RolesFactory = RolesFactory;
 
     $scope.tabs = [
         {
-            name: "Users",
+            name: "adminPanelPage.users",
             active: true,
             templateUrl: 'app/admin/views/usersPanel.html'
         },
         {
-            name: "Ranking",
+            name: "adminPanelPage.ranking",
             active: false,
             templateUrl: 'app/admin/views/rankingPanel.html'
         }

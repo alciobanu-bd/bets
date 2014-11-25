@@ -1,17 +1,17 @@
-<div class="container" ng-controller="RankingController">
+<div class="container">
 
     <div class="jumbotron centered white half-bg-opacity">
 
-        <h2>Ranking</h2>
+        <h2>{{'rankingPage.name' | translate}}</h2>
         <span>
             <span class="blue-link" ng-click="downloadAsPdf()">
-                Download as pdf
+                {{'rankingPage.downloadAsPdf' | translate}}
             </span>
         </span>
 
         <div class="row top-buffer-1-em">
             <input type="text" class="form-control cornered-input" style="width: 30%"
-                   placeholder="Search user" ng-model="searchedUser"
+                   placeholder="{{'rankingPage.searchUser' | translate}}" ng-model="searchedUser"
                    typeahead="user.username for user in RankingFactory.ranking | filter:$viewValue"
                    ng-keydown="openUserModalOnEnter($event)">
         </div>
@@ -20,12 +20,12 @@
 
             <span class="list-group-item half-bg-opacity">
                 <div class="list-group-item-text row">
-                    <span class="col-xs-1">Place</span>
-                    <span class="col-xs-3">Username</span>
-                    <span class="col-xs-1">Points</span>
-                    <span class="col-xs-2">Average</span>
-                    <span class="col-xs-1">Wins</span>
-                    <span class="col-xs-4">Register date</span>
+                    <span class="col-xs-1">{{'rankingPage.place' | translate}}</span>
+                    <span class="col-xs-3">{{'rankingPage.username' | translate}}</span>
+                    <span class="col-xs-1">{{'rankingPage.points' | translate}}</span>
+                    <span class="col-xs-2">{{'rankingPage.average' | translate}}</span>
+                    <span class="col-xs-1">{{'rankingPage.wins' | translate}}</span>
+                    <span class="col-xs-4">{{'rankingPage.registerDate' | translate}}</span>
                 </div>
             </span>
 
@@ -47,7 +47,7 @@
             </li>
             <div class="top-buffer-1-em centered" ng-show="limitUsersTo < RankingFactory.ranking.length">
                 <span ng-click="loadMore()" class="blue-link">
-                    Load more
+                    {{'rankingPage.loadMore' | translate}}
                 </span>
             </div>
 

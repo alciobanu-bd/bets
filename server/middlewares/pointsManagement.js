@@ -4,6 +4,8 @@ var User = require('./../model/User.js');
 var mailServices = require('./../services/mailServices.js');
 var _ = require('underscore');
 
+var Translations = require('./../config/Translations.js');
+
 var fs = require('fs');
 var LOG_CONGRATS_MAIL_FILE_NAME = 'logs/congrats_log.txt';
 
@@ -21,7 +23,7 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
 
                 if (err) {
                     res.status(500).json({
-                        message: "An error occurred when trying to update points for this week's bets."
+                        message: Translations[req.query.lang].pointsManagement.errorUpdatingThisWeeksPoints
                     }).end();
                 }
 
@@ -109,7 +111,7 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
                             else if (savedBets + errorBets == bets.length) {
                                 // some bets didn't save
                                 res.status(500).json({
-                                    message: "An error occurred when trying to update points for this week's bets."
+                                    message: Translations[req.query.lang].pointsManagement.errorUpdatingThisWeeksPoints
                                 }).end();
                             }
 
@@ -126,7 +128,7 @@ var updatePointsForBetsOfThisWeek = function (req, res, next) {
 
     else {
         res.status(500).json({
-            message: "You didn't provide any results for the events."
+            message: Translations[req.query.lang].pointsManagement.noResultsForEvents
         }).end();
     }
 }
@@ -142,7 +144,7 @@ var calculateWinners = function (req, res, next) {
 
         if (err) {
             res.status(500).json({
-                message: "Couldn't calculate winners. Please try again."
+                message: Translations[req.query.lang].pointsManagement.couldntCalculateWinners
             }).end();
         }
         else {
@@ -157,14 +159,20 @@ var calculateWinners = function (req, res, next) {
                 };
             });
 
+            if (bestPointsPerWeek.length == 0) {
+                return next();
+            }
+
             Bet.find({$or: bestPointsPerWeek}, function (err, winningBets) {
 
                 if (err) {
                     res.status(500).json({
-                        message: "Couldn't calculate winners. Please try again."
+                        message: Translations[req.query.lang].pointsManagement.couldntCalculateWinners
                     }).end();
                 }
                 else {
+
+                    req.winningBets = winningBets;
 
                     var groupedUsers = _.countBy(winningBets, function (bet) {
                         return bet.userId;
@@ -194,7 +202,7 @@ var calculateWinners = function (req, res, next) {
                             if (errs + succs == winningUsers.length) {
                                 if (errs > 0) {
                                     res.status(500).json({
-                                        message: "Couldn't calculate winners. Please try again."
+                                        message: Translations[req.query.lang].pointsManagement.couldntCalculateWinners
                                     }).end();
                                 }
                                 else {
@@ -210,6 +218,36 @@ var calculateWinners = function (req, res, next) {
         }
 
     });
+
+}
+
+var setWinnersOnBets = function (req, res, next) {
+
+    var winningBets = req.winningBets;
+
+    if (!winningBets) {
+        return next();
+    }
+
+    if (winningBets) {
+
+        var winnersQuery = _.map(winningBets, function (bet) {
+            return {_id: bet._id};
+        });
+
+        Bet.update({$or: winnersQuery}, {$set: {isWinner: true}}, {upsert: true, multi: true},
+        function (err) {
+            if (err) {
+                res.status(500).json({
+                    message: Translations[req.query.lang].pointsManagement.couldntSetWinnersOnBets
+                }).end();
+            }
+            else {
+                next();
+            }
+        });
+
+    }
 
 }
 
@@ -244,7 +282,7 @@ var sendCongratsToWinners = function (req, res, next) {
 
         if (err) {
             res.status(500).json({
-                message: "Couldn't send congratulations to winners. Please try again."
+                message: Translations[req.query.lang].pointsManagement.couldntSendCongratulations
             }).end();
         }
         else {
@@ -254,7 +292,7 @@ var sendCongratsToWinners = function (req, res, next) {
 
                     if (err) {
                         res.status(500).json({
-                            message: "Couldn't send congratulations to winners. Please try again."
+                            message: Translations[req.query.lang].pointsManagement.couldntSendCongratulations
                         }).end();
                     }
                     else {
@@ -265,7 +303,7 @@ var sendCongratsToWinners = function (req, res, next) {
                                 points: numberOfPoints,
                                 weekNumber: weekNumber
                             };
-                            mailServices.sendCongratulationsToWeekWinners(bet, user.username, user.email,
+                            mailServices.sendCongratulationsToWeekWinners(bet, user,
                                 function (info) {
                                     // on success
                                     fs.appendFile(LOG_CONGRATS_MAIL_FILE_NAME,
@@ -294,7 +332,7 @@ var resetUsersPointsBeforeAggregating = function (req, res, next) {
     User.update({}, {$set: {points: 0, avgPoints: 0}}, function (err) {
         if (err) {
             res.status(500).json({
-                message: "An error occurred while trying to update users' points."
+                message: Translations[req.query.lang].pointsManagement.errorTryingToUpdateUsersPoints
             }).end();
         }
         else {
@@ -317,7 +355,7 @@ var updatePointsForUsers = function (req, res, next) {
 
             if (err) {
                 res.status(500).json({
-                    message: "An error occurred while trying to update users' points."
+                    message: Translations[req.query.lang].pointsManagement.errorTryingToUpdateUsersPoints
                 }).end();
             }
             else {
@@ -352,7 +390,7 @@ var updatePointsForUsers = function (req, res, next) {
                         }
                         else if (savedUsers + errorUsers == aggregatedBets.length) {
                             res.status(500).json({
-                                message: "An error occurred while trying to update users' points."
+                                message: Translations[req.query.lang].pointsManagement.errorTryingToUpdateUsersPoints
                             }).end();
                         }
 
@@ -377,7 +415,7 @@ var updateUsersPlace = function (req, res, next) {
 
         if (err) {
             res.status(500).json({
-                message: "An error occurred while trying to update users' place."
+                message: Translations[req.query.lang].pointsManagement.errorTryingToUpdateUsersPlace
             }).end();
         }
 
@@ -395,7 +433,6 @@ var updateUsersPlace = function (req, res, next) {
 
                 user.save(function (err) {
                     if (err) {
-                        console.log(err)
                         errorUsers++;
                     }
                     else {
@@ -403,12 +440,12 @@ var updateUsersPlace = function (req, res, next) {
                     }
                     if (savedUsers == users.length) {
                         res.status(200).json({
-                            message: "Points and places were update for every user."
+                            message: Translations[req.query.lang].pointsManagement.pointsAndPlacesUpdated
                         }).end();
                     }
                     else if (savedUsers + errorUsers == users.length) {
                         res.status(500).json({
-                            message: "An error occurred while trying to update users' place."
+                            message: Translations[req.query.lang].pointsManagement.errorTryingToUpdateUsersPlace
                         }).end();
                     }
                 });
@@ -417,7 +454,7 @@ var updateUsersPlace = function (req, res, next) {
 
             if (users.length == 0) {
                 res.status(200).json({
-                    message: "Points and places were updated for every user."
+                    message: Translations[req.query.lang].pointsManagement.pointsAndPlacesUpdated
                 }).end();
             }
 
@@ -430,6 +467,7 @@ module.exports = {
     updatePointsForBetsOfThisWeek: updatePointsForBetsOfThisWeek,
     sendCongratsToWinners: sendCongratsToWinners,
     calculateWinners: calculateWinners,
+    setWinnersOnBets: setWinnersOnBets,
     resetUsersPointsBeforeAggregating: resetUsersPointsBeforeAggregating,
     updatePointsForUsers: updatePointsForUsers,
     updateUsersPlace: updateUsersPlace
