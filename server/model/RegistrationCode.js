@@ -1,5 +1,4 @@
 
-var restful = require('node-restful');
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema,
@@ -11,4 +10,4 @@ var RegistrationCode = mongoose.Schema({
     expirationDate: {type: 'date', required: true}
 });
 
-module.exports = restful.model('registrationcode', RegistrationCode);
+module.exports = mongoose.model('registrationcode', RegistrationCode);

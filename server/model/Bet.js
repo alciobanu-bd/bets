@@ -1,5 +1,4 @@
 
-var restful = require('node-restful');
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema,
@@ -17,4 +16,4 @@ var BetSchema = mongoose.Schema({
     isWinner: {type: Boolean, required: false}
 });
 
-module.exports = restful.model('bet', BetSchema);
+module.exports = mongoose.model('bet', BetSchema);

@@ -298,9 +298,9 @@ function (InitUrls, CallUrlService, $translate) {
 }
 ])
 
-.service('BetService',[
-'InitUrls', 'CallUrlService',
-function (InitUrls, CallUrlService) {
+.service('BetService', [
+'InitUrls', 'CallUrlService', '$translate',
+function (InitUrls, CallUrlService, $translate) {
 
     var BetService = function () {
         this.inProgress = false;

@@ -18,7 +18,8 @@ var initFeed = {
         login: "/api/auth/login",
         salt: "/api/auth/salt",
         resetSalt: "/api/auth/reset-salt",
-        extendToken: "/api/auth/extend_expiration_token"
+        extendToken: "/api/auth/extend_expiration_token",
+        updateGeolocation: "/api/auth/update_geolocation"
     },
     week: {
         address: "/api/week",
