@@ -34,7 +34,7 @@
         <div class="panel-body">
             <div class="row" ng-repeat="event in week.events track by event.index" ng-init="betScores = getBetByIndex(bet, event.index)">
                 <span class="col-xs-3">
-                    {{event.startDate | date: 'MMM d, y h:mm a'}}
+                    {{event.startDate | date: 'd MMM yy, h:mm a'}}
                 </span>
                 <span class="col-xs-6">
                     {{event.homeTeam}} - {{event.awayTeam}} ({{event.competition}})

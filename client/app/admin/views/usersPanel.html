@@ -38,7 +38,7 @@
         </span>
         <span class="col-xs-2">{{user.username}}</span>
         <span class="col-xs-3">{{user.email}}</span>
-        <span class="col-xs-2">{{user.lastLogin | date:'MMM d, y, hh:mm a'}}</span>
+        <span class="col-xs-2">{{user.lastLogin | date:'d MMM y, HH:mm'}}</span>
         <span class="col-xs-1">{{user.points}} (#{{user.place}})</span>
         <span class="col-xs-1">{{RolesFactory.findRoleByName(user.role).beautifulName}}</span>
         <span class="col-xs-2">{{user.registrationIp}}</span>
@@ -57,61 +57,61 @@
                  ng-src="{{Gravatar.getImageUrl(user.email, 150)}}" />
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.username' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.username}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.email' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.email}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.preferredLanguage' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 <img ng-src="{{Languages.findByCode(user.language).imgPath}}" style="margin-bottom: 3px" />
                 {{Languages.findByCode(user.language).name}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.place' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.place}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.points' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.points}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.average' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.avgPoints.toFixed(2)}}%
             </span>
         </div>
         <div class="row dropdown"
              ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.root) &&
              RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.userRank' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuRole"
                   data-toggle="dropdown" style="cursor: pointer">
                     {{RolesFactory.findRoleByName(user.role).beautifulName}}
@@ -128,51 +128,51 @@
         </div>
         <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.root) ||
             RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.userRank' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{RolesFactory.findRoleByName(user.role).beautifulName}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.birthDate' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.birthDate | date:'MMM d, y'}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.registerDate' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.registerDate | date:'MMM d, y'}}
             </span>
         </div>
         <div class="row">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.registrationIP' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{user.registrationIp}}
             </span>
         </div>
         <div class="row" ng-if="user.lastLogin">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.lastLogin' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{toDate(user.lastLogin) | date: 'EEEE, MMM d, y, h:mm a'}}
             </span>
         </div>
         <div class="row dropdown"  ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) &&
             RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.active' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuActive"
                 data-toggle="dropdown" style="cursor: pointer">
                     {{!!user.active ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
@@ -190,19 +190,19 @@
         </div>
         <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) ||
         RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.active' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{!!user.active ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
             </span>
         </div>
         <div class="row dropdown" ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) &&
         RolesFactory.roleCompare(userInfo.user.role, user.role) > 0">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.disabled' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuDisabled"
                 data-toggle="dropdown" style="cursor: pointer">
                     {{!!user.disabled ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
@@ -220,10 +220,10 @@
         </div>
         <div class="row" ng-if="!RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin) ||
         RolesFactory.roleCompare(userInfo.user.role, user.role) <= 0">
-            <span class="col-xs-3">
+            <span class="col-xs-4">
                 {{'adminPanelPage.usersPage.disabled' | translate}}
             </span>
-            <span class="col-xs-9">
+            <span class="col-xs-8">
                 {{!!user.disabled ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
             </span>
         </div>
