@@ -10,10 +10,14 @@ configModule
 
             return {
                 request: function (config) {
-                    var token = LoginTokenFactory.getToken();
-                    if (token) {
-                        config.headers['x-access-token'] = token.token;
+
+                    if (config.url.indexOf("ip-api.com") < 0) {
+                        var token = LoginTokenFactory.getToken();
+                        if (token) {
+                            config.headers['x-access-token'] = token.token;
+                        }
                     }
+
                     return config|| $q.when(config);
                 }
             }

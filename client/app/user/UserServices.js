@@ -113,9 +113,9 @@ function ($q, LoginTokenFactory) {
 
 .factory('UserInformationCalls', [
 'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls', 'CheckActivationStatus',
-'KeepMeLoggedInStorage', '$translate',
+'KeepMeLoggedInStorage', '$translate', '$rootScope', '$timeout',
 function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls, CheckActivationStatus,
-KeepMeLoggedInStorage, $translate) {
+KeepMeLoggedInStorage, $translate, $rootScope, $timeout) {
 
     var infoService = {};
 
@@ -145,6 +145,9 @@ KeepMeLoggedInStorage, $translate) {
         saltPromise.then(function (data) {
 
             credentials.password = SHA2.sha256(credentials.password + data.salt);
+            if ($rootScope.geolocation.available) {
+                credentials.loginInfo = $rootScope.geolocation.data;
+            }
 
             CallUrlService.post({uri: initUrls.auth.login}, credentials,
             function (data) {
@@ -210,7 +213,20 @@ KeepMeLoggedInStorage, $translate) {
                 function (response) {
                     console.log("Couldn't extend token.");
                     infoService.logout();
-                });
+            });
+        });
+    }
+
+    infoService.updateGeolocation = function () {
+
+        var req = {};
+
+        if ($rootScope.geolocation.available) {
+            req.loginInfo = $rootScope.geolocation.data;
+        }
+
+        InitUrls.then(function (urls) {
+            CallUrlService.post({uri: urls.auth.updateGeolocation}, req);
         });
     }
 
@@ -222,6 +238,7 @@ KeepMeLoggedInStorage, $translate) {
             UserInformation.setUserDetails(token.user);
 
             infoService.extendTokenExpiration();
+            $timeout(infoService.updateGeolocation, 3000);
 
         }
         else {

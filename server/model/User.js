@@ -1,5 +1,4 @@
 
-var restful = require('node-restful');
 var mongoose = require('mongoose');
 
 var UserSchema = mongoose.Schema({
@@ -41,4 +40,4 @@ UserSchema.path('birthDate').validate(function (v) {
     return new Date() - new Date(v) > 16 * 365 * 24 * 60 * 60 * 1000; // 16 years
 }, 'too_young');
 
-module.exports = restful.model('user', UserSchema);
+module.exports = mongoose.model('user', UserSchema);

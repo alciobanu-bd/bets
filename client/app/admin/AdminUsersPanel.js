@@ -107,14 +107,15 @@ function ($scope, InitUrls, CallUrlService, RolesFactory, $modal) {
 adminModule
 .controller('ProfileViewAdminController', [
 '$scope', '$modalInstance', 'user', 'InitUrls', 'CallUrlService', 'RolesFactory', 'UserInformation',
-'Languages',
+'Languages', 'Gravatar',
 function ($scope, $modalInstance, user, InitUrls, CallUrlService, RolesFactory, UserInformation,
-Languages) {
+Languages, Gravatar) {
 
     $scope.RolesFactory = RolesFactory;
     $scope.userInfo = UserInformation;
     $scope.user = user;
     $scope.Languages = Languages;
+    $scope.Gravatar = Gravatar;
 
     var initialUser = {};
     angular.extend(initialUser, user);

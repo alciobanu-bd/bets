@@ -10,7 +10,7 @@ configModule
                 return {
                     request: function (config) {
 
-                        if (config.url.indexOf(".html") < 0) {
+                        if (config.url.indexOf(".html") < 0 && config.url.indexOf("ip-api.com") < 0) {
                             if (!config.params) {
                                 config.params = {};
                             }

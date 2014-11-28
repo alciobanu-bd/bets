@@ -30,6 +30,9 @@ function () {
         },
         loggly: {
             token: "5b79fefe-0852-450e-abbf-59c707dac80a"
+        },
+        geolocationAddresses: {
+            ipApiCom: "http://ip-api.com/json"
         }
 
     };
