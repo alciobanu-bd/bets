@@ -19,7 +19,6 @@ function (InitUrls, CallUrlService) {
         function (data) {
             CallUrlService.getArray({uri: data.user.ranking},
             function (data) {
-                console.log(data)
                 thisFactory.ranking = _.map(data, function (item) {return {
                     _id: item._id,
                     place: item.place,

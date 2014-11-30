@@ -1,10 +1,7 @@
 
 var express = require('express');
-var jwt = require('jwt-simple');
 var bodyParser = require('body-parser');
-var restful = require('node-restful');
-var mongoose = restful.mongoose;
-var methodOverride = require('method-override');
+var mongoose = require('mongoose');
 var path = require('path');
 var fs = require('fs');
 var Settings = require('./config/Settings.js').dev;
@@ -99,6 +96,16 @@ verifyKeys({
     }
 });
 
+// resolve statics
+// use client folder as root path /
+app.use('/', express.static(path.resolve('client/')));
+
+// START THE SERVER
+GLOBAL.LISTENER = app.listen(Settings.port);
+console.log('Server started on port ' + Settings.port);
+
+require('./sockets/SocketConnection.js');
+
 require('./route/TestRoute.js');
 require('./route/InitRoute.js');
 require('./model/User.js');
@@ -112,11 +119,3 @@ require('./route/BetsPerWeek.js');
 require('./route/BetHistoryRoute.js');
 
 require('./services/CronJobs.js');
-
-// resolve statics
-// use client folder as root path /
-app.use('/', express.static(path.resolve('client/')));
-
-// START THE SERVER
-app.listen(Settings.port);
-console.log('Server started on port ' + Settings.port);

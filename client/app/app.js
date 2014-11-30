@@ -12,7 +12,8 @@ var betsModule = angular.module(
         'profile',
         'history',
         'admin',
-        'rules'
+        'rules',
+        'sockets'
     ]
 );
 

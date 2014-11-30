@@ -9,6 +9,7 @@
         "jwt-simple": "*",
         "node-restful": "*",
         "method-override": "*",
+        "socket.io": "*",
         "path": "*",
         "moment": "*",
         "underscore": "*",
