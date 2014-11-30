@@ -31,6 +31,14 @@
 
         <span ng-controller="MainController" ng-cloak>
             <ng-view></ng-view>
+
+            <span ng-controller="ChatboxesController">
+                <span ng-repeat="conversation in ChattingService.activeBoxes">
+                    <chat-box conversation="conversation" ng-style="{'margin-right': getMarginRight($index)};">
+                    </chat-box>
+                </span>
+            </span>
+
         </span>
     </span>
 
@@ -94,6 +102,11 @@
     <script src="app/sockets/socketsModule.js"></script>
     <script src="app/sockets/Socket.js"></script>
     <script src="app/sockets/ChatMessage.js"></script>
+
+    <script src="app/chat/chatModule.js"></script>
+    <script src="app/chat/ChattingService.js"></script>
+    <script src="app/chat/ChatboxesController.js"></script>
+    <script src="app/chat/chatBoxDirective.js"></script>
 
     <script src="app/ranking/rankingModule.js"></script>
     <script src="app/ranking/RankingController.js"></script>

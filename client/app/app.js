@@ -13,7 +13,8 @@ var betsModule = angular.module(
         'history',
         'admin',
         'rules',
-        'sockets'
+        'sockets',
+        'chat'
     ]
 );
 

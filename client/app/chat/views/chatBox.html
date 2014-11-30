@@ -1,0 +1,20 @@
+
+<div class="chat-box">
+    <input type="checkbox" class="togg" ng-model="conversation.checked" />
+    <input type="button" ng-click="closeThisBox()" />
+    <label data-expanded="{{conversation.with.username}}" data-collapsed="{{conversation.with.username}}">
+        <span class="pull-right">X</span>
+    </label>
+    <div class="chat-box-content" style="height: 250px; overflow-x: scroll">
+        <div ng-repeat="msg in conversation.messages">
+            <span style="color: #e80926">
+                {{msg.from.username}}
+            </span>
+            <span>
+                {{msg.message}}
+            </span>
+        </div>
+        <input type="text" class="input-box" ng-model="currentMessage" placeholder="Type your message"
+               ng-keydown="sendMessageOnEnterKey($event)" />
+    </div>
+</div>

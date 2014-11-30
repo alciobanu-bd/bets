@@ -7,9 +7,6 @@ var LOG_TOKEN_DECRYPT_ERRS_FILE_NAME = 'logs/bet_placement.txt';
 var connectedSockets = {}; // all connected users will be kept here
 var connectedNo = 0;
 
-setInterval(function () {
-    console.log(Object.keys(connectedSockets));
-}, 2000);
 
 var handleUserToken = function (token, callback) {
     TokenDecrypter.decrypt(token, function (err, user) {

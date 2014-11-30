@@ -233,7 +233,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 gainedForWinningAWeek: 'Gained for winning a week',
                 registerDate: 'Register date',
                 viewHistory: 'View history',
-                closeButton: 'Close'
+                closeButton: 'Close',
+                sendMessage: 'Send message'
             }
         },
         historyPage: {
@@ -619,7 +620,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 gainedForWinningAWeek: 'Obținut în urma câștigării unei etape',
                 registerDate: 'Data înregistrării',
                 viewHistory: 'Vezi istoricul',
-                closeButton: 'Închide'
+                closeButton: 'Închide',
+                sendMessage: 'Trimite-i un mesaj'
             }
         },
         historyPage: {

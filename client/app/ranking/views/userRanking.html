@@ -1,6 +1,11 @@
 
 <div class="modal-header">
-    <h3 class="modal-title">{{user.username}}</h3>
+    <h3 class="modal-title" style="display: inline">
+        {{user.username}}
+    </h3>
+    <a style="cursor: pointer; display: inline; margin-left: 1em" ng-click="openChatbox()">
+        {{'rankingPage.userRanking.sendMessage' | translate}}
+    </a>
 </div>
 <div class="modal-body">
     <div class="row">
