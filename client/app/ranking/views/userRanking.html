@@ -3,7 +3,7 @@
     <h3 class="modal-title" style="display: inline">
         {{user.username}}
     </h3>
-    <a style="cursor: pointer; display: inline; margin-left: 1em" ng-click="openChatbox()">
+    <a style="cursor: pointer; display: inline; margin-left: 1em" ng-click="openChatbox()" ng-if="userInfo.user._id != user._id">
         {{'rankingPage.userRanking.sendMessage' | translate}}
     </a>
 </div>

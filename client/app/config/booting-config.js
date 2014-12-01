@@ -1,7 +1,9 @@
 
 configModule.run([
 '$rootScope', 'Templates', 'UserInformation', 'CurrentLanguageFactory', 'Languages', 'Settings', 'Geolocation',
-function ($rootScope, Templates, UserInformation, CurrentLanguageFactory, Languages, Settings, Geolocation) {
+'Socket',
+function ($rootScope, Templates, UserInformation, CurrentLanguageFactory, Languages, Settings, Geolocation,
+Socket) {
 
     $rootScope.Templates = Templates;
     $rootScope.userInfo = UserInformation;
@@ -9,6 +11,11 @@ function ($rootScope, Templates, UserInformation, CurrentLanguageFactory, Langua
     $rootScope.Languages = Languages;
     $rootScope.Settings = Settings;
 
+    Socket.getSocket().then(function (socket) {
+        socket.on('require-registration', function () {
+            Socket.registerMe();
+        });
+    });
 
     $rootScope.geolocation = {
         available: false

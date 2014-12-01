@@ -22,9 +22,14 @@ var handleUserToken = function (token, callback) {
 }
 
 
-var bindUserToSocket = function (token, socket) {
+var bindUserToSocket = function (token, socket, callback) {
     handleUserToken(token, function (user) {
         connectedSockets[user._id] = socket;
+
+        if (typeof callback === 'function') {
+            callback(user);
+        }
+
     });
 }
 

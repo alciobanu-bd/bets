@@ -2,8 +2,8 @@
 chatModule
 
 .directive('chatBox', [
-'ChatMessage', 'ChattingService',
-function(ChatMessage, ChattingService) {
+'ChatMessage', 'ChattingService', 'UserInformation',
+function(ChatMessage, ChattingService, UserInformation) {
 return {
     restrict: 'E',
     replace: true,
@@ -16,7 +16,15 @@ return {
         scope.currentMessage = "";
 
         var sendMessage = function () {
-            ChatMessage.sendPrivateMessage(scope.conversation.with._id, scope.currentMessage);
+            ChatMessage.sendPrivateMessage({
+                _id: scope.conversation.with._id,
+                username: scope.conversation.with.username
+            }, scope.currentMessage);
+            ChattingService.addOwnSentMessage(scope.conversation,
+            {
+                _id: UserInformation.user._id,
+                username: UserInformation.user.username
+            }, scope.currentMessage);
             scope.currentMessage = "";
         }
 

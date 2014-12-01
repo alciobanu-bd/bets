@@ -13,7 +13,8 @@ function (Socket, LoginTokenFactory) {
             socket.emit('pm', {
                 token: accessToken,
                 to: to,
-                message: message
+                message: message,
+                date: new Date()
             });
         });
     }
@@ -21,6 +22,14 @@ function (Socket, LoginTokenFactory) {
     thisFactory.onPrivateMessage = function (callback) {
         socketPromise.then(function (socket) {
             socket.on('pm', function (data) {
+                callback(data);
+            });
+        });
+    }
+
+    thisFactory.onInboxUpdate = function (callback) {
+        socketPromise.then(function (socket) {
+            socket.on('pm-inbox-update', function (data) {
                 callback(data);
             });
         });

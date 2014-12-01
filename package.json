@@ -17,6 +17,7 @@
         "mkdirp": "*",
         "nodemailer": "*",
         "nodemailer-smtp-transport": "*",
+        "ursa": "*",
         "grunt": "*",
         "grunt-contrib-clean": "*",
         "grunt-contrib-uglify": "*",

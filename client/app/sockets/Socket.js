@@ -5,14 +5,7 @@ socketsModule
 'UserInformation', '$q', 'LoginTokenFactory',
 function (UserInformation, $q, LoginTokenFactory) {
 
-    var ioParams = {transports: ['websocket', 'polling']};
-
-    var tokStorage = LoginTokenFactory.getToken();
-    if (tokStorage) {
-        ioParams.query = "token=" + tokStorage.token;
-    }
-
-    var Socket = io(ioParams);
+    var Socket = io({transports: ['websocket', 'polling']});
 
     return {
         getSocket: function () {
@@ -28,7 +21,10 @@ function (UserInformation, $q, LoginTokenFactory) {
         },
 
         registerMe: function () {
-            Socket.emit('register-me', LoginTokenFactory.getToken().token);
+            var tokStorage = LoginTokenFactory.getToken();
+            if (tokStorage) {
+                Socket.emit('register-me', tokStorage.token);
+            }
         },
 
         unregisterMe: function () {

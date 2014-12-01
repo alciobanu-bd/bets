@@ -6,7 +6,9 @@ var SocketDatabase = require('./SocketDatabase.js');
 
 
 var registerUser = function (token, socket) {
-    SocketDatabase.bindUserToSocket(token, socket);
+    SocketDatabase.bindUserToSocket(token, socket, function (user) {
+        Chatting.emitInboxForUser(socket, user);
+    });
 }
 
 var unregisterUser = function (token) {
@@ -16,12 +18,9 @@ var unregisterUser = function (token) {
 
 socketIo.on('connection', function (socket) {
 
-    var token = socket.handshake.query.token;
-    if (token) {
-        registerUser(token, socket);
-    }
-
     SocketDatabase.incrementConnectedUsersNumber();
+
+    socket.emit('require-registration');
 
     socket.on('register-me', function (token) {
         registerUser(token, socket);

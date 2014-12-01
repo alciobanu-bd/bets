@@ -33,7 +33,7 @@
             <ng-view></ng-view>
 
             <span ng-controller="ChatboxesController">
-                <span ng-repeat="conversation in ChattingService.activeBoxes">
+                <span ng-repeat="conversation in ChattingService.activeBoxes track by conversation.id">
                     <chat-box conversation="conversation" ng-style="{'margin-right': getMarginRight($index)};">
                     </chat-box>
                 </span>

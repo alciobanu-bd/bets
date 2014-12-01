@@ -6,13 +6,14 @@
         <span class="pull-right">X</span>
     </label>
     <div class="chat-box-content" style="height: 250px; overflow-x: scroll">
-        <div ng-repeat="msg in conversation.messages">
-            <span style="color: #e80926">
+        <div ng-repeat="msg in conversation.messages track by msg.date" style="margin-bottom: 2px">
+            <div style="color: #e80926">
                 {{msg.from.username}}
-            </span>
-            <span>
+                ({{msg.date | date: 'd MMM yy, HH:mm'}})
+            </div>
+            <div>
                 {{msg.message}}
-            </span>
+            </div>
         </div>
         <input type="text" class="input-box" ng-model="currentMessage" placeholder="Type your message"
                ng-keydown="sendMessageOnEnterKey($event)" />
