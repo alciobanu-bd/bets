@@ -330,7 +330,17 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'No',
                 disabled: 'Disabled',
                 anErrorHasOcurred: 'An error has occurred. Your options weren\'t saved.',
-                cancelButton: 'Cancel'
+                cancelButton: 'Cancel',
+                locationsNoItemsMessage: 'No location details about this user.',
+                loginLocations: 'Login locations',
+                date: 'Date',
+                organization: 'Organization',
+                city: 'City',
+                region: 'Region',
+                country: 'Country',
+                timezone: 'Timezone',
+                coordinates: 'Coordinates',
+                errorLocations: 'Error loading location details.'
             }
         },
         rulesPage: {
@@ -716,7 +726,17 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'Nu',
                 disabled: 'Dezactivat',
                 anErrorHasOcurred: 'A apărut o eroare. Opțiunile alese nu au putut fi salvate.',
-                cancelButton: 'Anulează'
+                cancelButton: 'Anulează',
+                locationsNoItemsMessage: 'Nu există detalii în legătură cu locațiile acestui utilizator.',
+                loginLocations: 'Locații la logare',
+                date: 'Data',
+                organization: 'Organizație',
+                city: 'Oraș',
+                region: 'Regiune',
+                country: 'Țară',
+                timezone: 'Fus orar',
+                coordinates: 'Coordonate',
+                errorLocations: 'Eroare la încărcarea locațiilor.'
             }
         },
         rulesPage: {

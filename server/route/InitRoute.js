@@ -12,7 +12,8 @@ var initFeed = {
         activateAsAdmin: "/api/user/activateAsAdmin",
         changePassword: "/api/user/changePassword",
         forgotPassword: "/api/user/forgotPassword",
-        resetPassword: "/api/user/resetPassword"
+        resetPassword: "/api/user/resetPassword",
+        locations: "/api/userLocations/get"
     },
     auth: {
         login: "/api/auth/login",

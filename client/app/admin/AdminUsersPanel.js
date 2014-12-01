@@ -120,6 +120,35 @@ Languages, Gravatar) {
     var initialUser = {};
     angular.extend(initialUser, user);
 
+    $scope.pagingLocations = {
+        currentPage: 1,
+        itemsPerPage: 5,
+        totalItems: 0,
+        totalPages: 0
+    };
+
+    var loadLocations = function () {
+        $scope.errorLocations = false;
+        InitUrls.then(function (urls) {
+            CallUrlService.get(
+            {uri: urls.user.locations, id: user._id, page: $scope.pagingLocations.currentPage - 1,
+            pageSize: $scope.pagingLocations.itemsPerPage},
+                function (data) {
+                    $scope.locations = data.locations;
+                    $scope.pagingLocations.totalPages = data.numberOfPages;
+                    $scope.pagingLocations.totalItems = data.count;
+                    $scope.pagingLocations.itemsPerPage = data.itemsPerPage;
+                },
+                function (response) {
+                    $scope.errorLocations = true;
+                });
+        });
+    }
+
+    $scope.$watch('pagingLocations.currentPage', function () {
+        loadLocations();
+    });
+
     $scope.ok = function () {
         $scope.errorSaving = false;
         InitUrls.then(function (urls) {

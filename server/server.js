@@ -117,5 +117,6 @@ require('./route/WeekRoute.js');
 require('./route/BetRoute.js');
 require('./route/BetsPerWeek.js');
 require('./route/BetHistoryRoute.js');
+require('./route/UserLocationRoute.js');
 
 require('./services/CronJobs.js');
