@@ -8,6 +8,37 @@ var AsymmetricEncryption = require('./../../services/AsymmetricEncryption.js');
 var mongoose = require ('mongoose');
 var _ = require('underscore');
 
+
+var savePrivateMessageToDatabase = function (user, recipient, message) {
+    var pm = new PrivateMessage();
+    pm.from = {
+        _id: user._id,
+        username: user.username
+    };
+    pm.to = {
+        _id: mongoose.Types.ObjectId(recipient._id),
+        username: recipient.username
+    };
+    pm.date = new Date();
+    pm.message = message;
+    pm.read = false;
+    pm.save(function (err) {
+        // handle error
+    });
+}
+
+var markMessagesUntilDateAsRead = function (data, currentUser) {
+
+    var date = new Date(data.date); // a conversion is always ensuring you that the type will be correct :))
+    var from = data.from;
+    PrivateMessage.update(
+        {"to._id": currentUser._id, "from._id": from._id, date: {$lte: date}, read: false},
+        {$set: {read: true}},
+        {multi: true}
+    );
+
+}
+
 var handleChatters = function (socket) {
 
     socket.on('pm', function (data) {
@@ -34,20 +65,7 @@ var handleChatters = function (socket) {
 
                 if (data.to.length == 1) {
                     AsymmetricEncryption.encrypt(data.message, function (err, message) {
-                        var pm = new PrivateMessage();
-                        pm.from = {
-                            _id: user._id,
-                            username: user.username
-                        };
-                        pm.to = {
-                            _id: mongoose.Types.ObjectId(recipient._id),
-                            username: recipient.username
-                        };
-                        pm.date = new Date(data.date);
-                        pm.message = message;
-                        pm.save(function (err) {
-                            // handle error
-                        });
+                        savePrivateMessageToDatabase(user, recipient, message);
                     });
                 }
                 else {
@@ -57,6 +75,15 @@ var handleChatters = function (socket) {
             }
         });
     });
+
+    socket.on('i-ve-read-my-messages', function (data) {
+        TokenDecrypter.decrypt(data.token, function (err, user) {
+
+            markMessagesUntilDateAsRead(data, user);
+
+        });
+    });
+
 }
 
 var emitInboxForUser = function (socket, user) {

@@ -257,3 +257,42 @@ body    {overflow-y:scroll;}
 .chat-box > input[type="checkbox"]:checked + label {background-color: #212A35}
 .chat-box > input[type="checkbox"]:checked + label:before {content: attr(data-expanded)}
 .chat-box > input[type="checkbox"]:checked ~ .chat-box-content {display: block}
+
+.ellipsis-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.messages-preview {
+    z-index: 99999;
+    -webkit-box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
+    -moz-box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
+    box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
+    color: #009aff;
+}
+
+.msg-box {
+    position: absolute;
+    width: 350px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgba(8, 3, 24, 0.21);
+    box-shadow: 1px 1px rgba(5, 0, 25, 0.39);
+    background-color: #f5f5f9;
+}
+
+.row-msg {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.row-msg:hover {
+    background-color: white;
+    cursor: pointer;
+    -webkit-box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
+    -moz-box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
+    box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
+}

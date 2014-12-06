@@ -21,10 +21,15 @@ return {
                 username: scope.conversation.with.username
             }, scope.currentMessage);
             ChattingService.addOwnSentMessage(scope.conversation,
-            {
+            { // from
                 _id: UserInformation.user._id,
                 username: UserInformation.user.username
-            }, scope.currentMessage);
+            },
+            { // to
+                _id: scope.conversation.with._id,
+                username: scope.conversation.with.username
+            },
+            scope.currentMessage);
             scope.currentMessage = "";
         }
 

@@ -6,9 +6,16 @@ function (UserInformation) {
 
     var thisFactory = {};
 
-    thisFactory.activeBoxes = [];
-    thisFactory.passiveBoxes = [];
-    thisFactory.id = 0;
+    thisFactory.reset = function () {
+        thisFactory.activeBoxes = [];
+        thisFactory.passiveBoxes = [];
+        thisFactory.lastMessages = [];
+        thisFactory.numberOfUnreadMessages = 0;
+        thisFactory.id = 0;
+        thisFactory.loadedInbox = false;
+    }
+
+    thisFactory.reset();
 
     thisFactory.createConversationBox = function (user) {
 
@@ -53,7 +60,7 @@ function (UserInformation) {
     }
 
     thisFactory.addReceivedMessage = function (data) {
-        var box = thisFactory.createConversationBox(from);
+        var box = thisFactory.createConversationBox(data.from);
         box.messages.push({
             from: data.from,
             message: data.message,
@@ -61,17 +68,38 @@ function (UserInformation) {
         });
     }
 
-    thisFactory.addOwnSentMessage = function (conversationBox, from, message) {
+    thisFactory.addOwnSentMessage = function (conversationBox, from, to, message) {
+
+        var insertIntoLastMessages = function (from, message) {
+
+            for (var i = 0; i < thisFactory.lastMessages.length; i++) {
+                var currentMsg = thisFactory.lastMessages[i];
+                if (currentMsg.from._id == to._id || currentMsg.to._id == to._id) {
+                    thisFactory.lastMessages.splice(i, 1);
+                    break;
+                }
+            }
+
+            thisFactory.lastMessages.unshift({
+                from: from,
+                to: to,
+                date: new Date(),
+                message: message
+            });
+        }
+
         conversationBox.messages.push({
             from: from,
             message: message,
             date: new Date()
         });
+        insertIntoLastMessages(from, message);
     }
 
     thisFactory.deleteConversationBox = function (conversation) {
         for (var i = 0; i < thisFactory.activeBoxes.length; i++) {
             var currentBox = thisFactory.activeBoxes[i];
+            thisFactory.passiveBoxes.push(currentBox);
             if (conversation.id == currentBox.id) {
                 thisFactory.activeBoxes.splice(i, 1);
                 break;
@@ -79,9 +107,30 @@ function (UserInformation) {
         }
     }
 
+    var setUnreadMessages = function (conversation) {
+        var lastMessageOfConversation = _.max(conversation, function (messageItem) {
+            return new Date(messageItem.date).getTime();
+        });
+
+        if (lastMessageOfConversation.to._id == UserInformation.user._id && !lastMessageOfConversation.read) {
+            // if the last message of conversation was sent to current user and it wasn't read
+            thisFactory.numberOfUnreadMessages++;
+        }
+
+        thisFactory.lastMessages.push(lastMessageOfConversation);
+
+    }
+
     thisFactory.updatePassiveBoxes = function (inboxGroupedByUser) {
+
+        if (thisFactory.loadedInbox) {
+            return;
+        }
+
         for (var i in inboxGroupedByUser) {
+
             var conversationWithUser = inboxGroupedByUser[i];
+            setUnreadMessages(conversationWithUser);
 
             var conversationPartner;
             if (conversationWithUser[0].from._id != UserInformation.user._id) {
@@ -108,6 +157,15 @@ function (UserInformation) {
                 };
             });
         }
+
+        thisFactory.lastMessages.sort(function (msg1, msg2) {
+            return new Date(msg2.date).getTime() - new Date(msg1.date).getTime();
+        });
+
+        console.log(thisFactory.lastMessages);
+
+        thisFactory.loadedInbox = true;
+
     }
 
     return thisFactory;

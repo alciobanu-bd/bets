@@ -14,11 +14,12 @@
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <a href="" class="menu-link-border centered">
+                    <a href="" class="menu-link-border centered" ng-click="showMessagesBrief = !showMessagesBrief;">
                         <span class="glyphicon glyphicon-envelope"></span>
                         Messages
-                        <span class="badge" style="background-color: #ff0429">
-                            4
+                        <span class="badge" style="background-color: #ff0429"
+                              ng-if="ChattingService.numberOfUnreadMessages > 0">
+                            {{ChattingService.numberOfUnreadMessages}}
                         </span>
                     </a>
                 </li>
@@ -94,6 +95,24 @@
                 <ng-include src="Templates.header.languageDropdown" include-replace></ng-include>
 
             </ul>
+        </div>
+
+        <div ng-show="showMessagesBrief" class="messages-preview" style="position: relative;">
+            <div class="msg-box">
+                <div ng-repeat="msg in ChattingService.lastMessages track by msg.date" style="word-wrap: break-word" class="row-msg">
+                    <div>
+                        {{msg.from.username}}
+                        to
+                        {{msg.to.username}}
+                    </div>
+                    <div>
+                        {{msg.message}}
+                    </div>
+                    <div style="font-size: 80%">
+                        {{msg.date | date: 'd MMM yy, HH:mm'}}
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>

@@ -1,15 +1,16 @@
 
 configModule.run([
 '$rootScope', 'Templates', 'UserInformation', 'CurrentLanguageFactory', 'Languages', 'Settings', 'Geolocation',
-'Socket',
+'Socket', 'ChattingService',
 function ($rootScope, Templates, UserInformation, CurrentLanguageFactory, Languages, Settings, Geolocation,
-Socket) {
+Socket, ChattingService) {
 
     $rootScope.Templates = Templates;
     $rootScope.userInfo = UserInformation;
     $rootScope.CurrentLanguageFactory = CurrentLanguageFactory;
     $rootScope.Languages = Languages;
     $rootScope.Settings = Settings;
+    $rootScope.ChattingService = ChattingService;
 
     Socket.getSocket().then(function (socket) {
         socket.on('require-registration', function () {
