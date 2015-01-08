@@ -19,6 +19,17 @@ function (Socket, LoginTokenFactory) {
         });
     }
 
+    thisFactory.iVeReadMyMessagesUntilDate = function (date, from) {
+        var accessToken = LoginTokenFactory.getToken().token;
+        socketPromise.then(function (socket) {
+            socket.emit('i-ve-read-my-messages', {
+                token: accessToken,
+                date: date,
+                from: from
+            });
+        });
+    }
+
     thisFactory.onPrivateMessage = function (callback) {
         socketPromise.then(function (socket) {
             socket.on('pm', function (data) {

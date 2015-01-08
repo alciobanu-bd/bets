@@ -30,6 +30,7 @@ return {
                 username: scope.conversation.with.username
             },
             scope.currentMessage);
+
             scope.currentMessage = "";
         }
 
@@ -37,6 +38,13 @@ return {
             if (event.keyCode == 13) {
                 sendMessage();
             }
+        }
+
+        scope.markConversationAsRead = function () {
+            ChattingService.markBoxAsRead(scope.conversation);
+            var lastMessage = ChattingService.getLastMessageOfConversation(scope.conversation);
+            var from = lastMessage.from._id != UserInformation.user._id ? lastMessage.from : scope.conversation.with;
+            ChatMessage.iVeReadMyMessagesUntilDate(lastMessage.date, from);
         }
 
         scope.closeThisBox = function () {

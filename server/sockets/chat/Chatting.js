@@ -31,11 +31,12 @@ var markMessagesUntilDateAsRead = function (data, currentUser) {
 
     var date = new Date(data.date); // a conversion is always ensuring you that the type will be correct :))
     var from = data.from;
+
     PrivateMessage.update(
-        {"to._id": currentUser._id, "from._id": from._id, date: {$lte: date}, read: false},
+        {"to._id": currentUser._id, "from._id": mongoose.Types.ObjectId(from._id), read: false, date: {$lte: date}},
         {$set: {read: true}},
         {multi: true}
-    );
+    ).exec();
 
 }
 
@@ -43,6 +44,11 @@ var handleChatters = function (socket) {
 
     socket.on('pm', function (data) {
         TokenDecrypter.decrypt(data.token, function (err, user) {
+
+            if (err || !user) {
+                return;
+            }
+
             if (!Array.isArray(data.to)) {
                 data.to = [data.to];
             }
@@ -78,6 +84,10 @@ var handleChatters = function (socket) {
 
     socket.on('i-ve-read-my-messages', function (data) {
         TokenDecrypter.decrypt(data.token, function (err, user) {
+
+            if (err || !user) {
+                return;
+            }
 
             markMessagesUntilDateAsRead(data, user);
 

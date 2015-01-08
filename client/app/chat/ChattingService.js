@@ -17,6 +17,20 @@ function (UserInformation) {
 
     thisFactory.reset();
 
+    thisFactory.isActiveBoxOpened = function (user) {
+        for (var i = 0; i < thisFactory.activeBoxes.length; i++) {
+            var currentBox = thisFactory.activeBoxes[i];
+            if (currentBox.with._id == user._id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    thisFactory.getLastMessageOfConversation = function (conversationBox) {
+        return conversationBox.messages[conversationBox.messages.length - 1];
+    }
+
     thisFactory.createConversationBox = function (user) {
 
         /*
@@ -50,7 +64,8 @@ function (UserInformation) {
             with: user,
             checked: true,
             messages: [],
-            id: thisFactory.id++
+            id: thisFactory.id++,
+            iVeReadIt: true
         };
 
         thisFactory.activeBoxes.push(newConversation);
@@ -59,41 +74,52 @@ function (UserInformation) {
 
     }
 
+    var insertIntoLastMessages = function (from, to, message) {
+
+        for (var i = 0; i < thisFactory.lastMessages.length; i++) {
+            var currentMsg = thisFactory.lastMessages[i];
+            if (currentMsg.from._id == to._id || currentMsg.to._id == to._id) {
+                thisFactory.lastMessages.splice(i, 1);
+                break;
+            }
+        }
+
+        thisFactory.lastMessages.unshift({
+            from: from,
+            to: to,
+            date: new Date(),
+            message: message,
+            read: false
+        });
+
+    }
+
     thisFactory.addReceivedMessage = function (data) {
+
         var box = thisFactory.createConversationBox(data.from);
         box.messages.push({
             from: data.from,
             message: data.message,
             date: data.date
         });
+        box.iVeReadIt = false;
+
+        insertIntoLastMessages(
+            data.from,
+            {_id: UserInformation.user._id, username: UserInformation.user.username},
+            data.message
+        );
+
     }
 
     thisFactory.addOwnSentMessage = function (conversationBox, from, to, message) {
-
-        var insertIntoLastMessages = function (from, message) {
-
-            for (var i = 0; i < thisFactory.lastMessages.length; i++) {
-                var currentMsg = thisFactory.lastMessages[i];
-                if (currentMsg.from._id == to._id || currentMsg.to._id == to._id) {
-                    thisFactory.lastMessages.splice(i, 1);
-                    break;
-                }
-            }
-
-            thisFactory.lastMessages.unshift({
-                from: from,
-                to: to,
-                date: new Date(),
-                message: message
-            });
-        }
-
         conversationBox.messages.push({
             from: from,
             message: message,
             date: new Date()
         });
-        insertIntoLastMessages(from, message);
+        conversationBox.iVeReadIt = true;
+        insertIntoLastMessages(from, to, message);
     }
 
     thisFactory.deleteConversationBox = function (conversation) {
@@ -107,14 +133,36 @@ function (UserInformation) {
         }
     }
 
-    var setUnreadMessages = function (conversation) {
+    thisFactory.markBoxAsRead = function (conversationBox) {
+        conversationBox.iVeReadIt = true;
+    }
+
+    thisFactory.getNumberOfUnreadConversations = function () {
+        var n = 0;
+
+        for (var i = 0; i < thisFactory.activeBoxes.length; i++) {
+            if (!thisFactory.activeBoxes[i].iVeReadIt) {
+                n++;
+            }
+        }
+
+        for (var i = 0; i < thisFactory.passiveBoxes.length; i++) {
+            if (!thisFactory.passiveBoxes[i].iVeReadIt) {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
+    var setUnreadMessages = function (conversation, box) {
         var lastMessageOfConversation = _.max(conversation, function (messageItem) {
             return new Date(messageItem.date).getTime();
         });
 
         if (lastMessageOfConversation.to._id == UserInformation.user._id && !lastMessageOfConversation.read) {
             // if the last message of conversation was sent to current user and it wasn't read
-            thisFactory.numberOfUnreadMessages++;
+            box.iVeReadIt = false
         }
 
         thisFactory.lastMessages.push(lastMessageOfConversation);
@@ -130,7 +178,6 @@ function (UserInformation) {
         for (var i in inboxGroupedByUser) {
 
             var conversationWithUser = inboxGroupedByUser[i];
-            setUnreadMessages(conversationWithUser);
 
             var conversationPartner;
             if (conversationWithUser[0].from._id != UserInformation.user._id) {
@@ -144,8 +191,11 @@ function (UserInformation) {
                 with: conversationPartner,
                 checked: true,
                 messages: [],
-                id: thisFactory.id++
+                id: thisFactory.id++,
+                iVeReadIt: true
             };
+
+            setUnreadMessages(conversationWithUser, newBox);
 
             thisFactory.passiveBoxes.push(newBox);
 

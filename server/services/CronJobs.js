@@ -18,21 +18,22 @@ function() {
     User.remove({$or:
         [{active: false, registerDate: {$lt: oneMonthBack}, lastLogin: {$lt: oneMonthBack}},
         {active: false, registerDate: {$lt: oneMonthBack}, lastLogin: {$exists: false}}]},
-    // delete all users who didn't activate their account in one month and didn't login in one month
-    function (err, users) {
-        if (err) {
-            fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " ERR: " + err + "\r\n");
+        // delete all users who didn't activate their account in one month and didn't login in one month
+        function (err, users) {
+            if (err) {
+                fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " ERR: " + err + "\r\n");
+            }
+            else if (!users || users.length == 0) {
+                fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " SUCC: No users." + "\r\n");
+            }
+            else {
+                fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " SUCC: " + JSON.stringify(users) + "\r\n");
+            }
+        },
+        function () {
+            fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " A cron job was executed." + "\r\n\r\n");
         }
-        else if (!users || users.length == 0) {
-            fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " SUCC: No users." + "\r\n");
-        }
-        else {
-            fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " SUCC: " + JSON.stringify(users) + "\r\n");
-        }
-    },
-    function () {
-        fs.appendFile(CRON_DELETE_INACTIVE_USERS_LOG_FILE, new Date() + " A cron job was executed." + "\r\n\r\n");
-    });
+    );
 
 },
 function () {

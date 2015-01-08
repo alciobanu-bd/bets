@@ -5,7 +5,7 @@
     <label data-expanded="{{conversation.with.username}}" data-collapsed="{{conversation.with.username}}">
         <span class="pull-right">X</span>
     </label>
-    <div class="chat-box-content" style="height: 250px; overflow-x: scroll">
+    <div class="chat-box-content" style="height: 250px; overflow-x: scroll" ng-click="markConversationAsRead()">
         <div ng-repeat="msg in conversation.messages track by msg.date" style="margin-bottom: 2px">
             <div style="color: #e80926">
                 {{msg.from.username}}
