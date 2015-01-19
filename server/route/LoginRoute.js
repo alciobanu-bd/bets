@@ -42,7 +42,7 @@ var markLoginInfo = function (req, res) {
 
         var oneMonthBack = new Date((new Date()).setMonth((new Date()).getMonth() - 1));
 
-        UserLocation.findOne({userId: req.user._id}, {}, {sort: {date: 1}}, function (err, item) {
+        UserLocation.findOne({userId: req.user._id}, {}, {sort: {date: -1}}, function (err, item) {
             if (!err && item && item.query == loginInfo.query) {
                 // query is IP address -- check if IP address is the same as the last saved in logs
                 item.date = new Date();

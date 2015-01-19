@@ -113,9 +113,9 @@ function ($q, LoginTokenFactory) {
 
 .factory('UserInformationCalls', [
 'CallUrlService', '$q', 'LoginTokenFactory', 'SHA-2', 'UserInformation', 'InitUrls', 'CheckActivationStatus',
-'KeepMeLoggedInStorage', '$translate', '$rootScope', '$timeout',
+'KeepMeLoggedInStorage', '$translate', '$rootScope', '$timeout', 'Socket',
 function (CallUrlService, $q, LoginTokenFactory, SHA2, UserInformation, InitUrls, CheckActivationStatus,
-KeepMeLoggedInStorage, $translate, $rootScope, $timeout) {
+KeepMeLoggedInStorage, $translate, $rootScope, $timeout, Socket) {
 
     var infoService = {};
 
@@ -159,6 +159,7 @@ KeepMeLoggedInStorage, $translate, $rootScope, $timeout) {
                     user: data.user
                 });
                 defered.resolve({message: $translate.instant('loginPage.loggedInSuccessfully')});
+                Socket.registerMe();
             },
             function (response) {
                 UserInformation.isLogged = false;
@@ -190,6 +191,7 @@ KeepMeLoggedInStorage, $translate, $rootScope, $timeout) {
     }
 
     infoService.logout = function () {
+        Socket.unregisterMe();
         UserInformation.isLogged = false;
         UserInformation.isReady = true;
         LoginTokenFactory.deleteToken();
@@ -209,6 +211,7 @@ KeepMeLoggedInStorage, $translate, $rootScope, $timeout) {
                         user: data.user
                     });
                     CheckActivationStatus.check();
+                    Socket.registerMe();
                 },
                 function (response) {
                     console.log("Couldn't extend token.");

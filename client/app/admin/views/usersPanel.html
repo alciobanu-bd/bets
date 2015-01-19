@@ -227,6 +227,71 @@
                 {{!!user.disabled ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
             </span>
         </div>
+
+
+        <div class="row top-buffer-2-em" style="color: #00ba5d">
+            <span class="col-xs-12">
+                <h3>
+                    {{'adminPanelPage.usersPage.loginLocations' | translate}}
+                </h3>
+            </span>
+        </div>
+
+        <div class="top-buffer-2-em" ng-repeat="location in locations" style="font-size: 100%">
+            <div class="row">
+                <span class="col-xs-2">IP</span>
+                <span class="col-xs-4">{{location.query}}</span>
+                <span class="col-xs-2">ISP</span>
+                <span class="col-xs-4">{{location.isp}}</span>
+            </div>
+            <div class="row">
+                <span class="col-xs-2">{{'adminPanelPage.usersPage.organization' | translate}}</span>
+                <span class="col-xs-4">{{location.org}}</span>
+                <span class="col-xs-2">{{'adminPanelPage.usersPage.city' | translate}}</span>
+                <span class="col-xs-4">{{location.city}}</span>
+            </div>
+            <div class="row">
+                <span class="col-xs-2">{{'adminPanelPage.usersPage.region' | translate}}</span>
+                <span class="col-xs-4">{{location.regionName + " (" + location.region + ")"}}</span>
+                <span class="col-xs-2">{{'adminPanelPage.usersPage.country' | translate}}</span>
+                <span class="col-xs-4">{{location.country + " (" + location.countryCode + ")"}}</span>
+            </div>
+            <div class="row">
+                <span class="col-xs-2">{{'adminPanelPage.usersPage.timezone' | translate}}</span>
+                <span class="col-xs-4">{{location.timezone}}</span>
+                <span class="col-xs-2">AS</span>
+                <span class="col-xs-4">{{location.as}}</span>
+            </div>
+            <div class="row">
+                <span class="col-xs-2">{{'adminPanelPage.usersPage.coordinates' | translate}}</span>
+                <span class="col-xs-4">{{location.lon + " / " + location.lat}}</span>
+                <span class="col-xs-2">{{'adminPanelPage.usersPage.date' | translate}}</span>
+                <span class="col-xs-4">{{location.date | date: 'd MMM y, HH:mm'}}</span>
+            </div>
+        </div>
+
+        <div class="row" ng-if="locations.length == 0">
+            <span class="col-xs-12">
+                {{'adminPanelPage.usersPage.locationsNoItemsMessage' | translate}}
+            </span>
+        </div>
+
+        <div class="row" ng-if="errorLocations">
+            <span class="col-xs-12" style="color: #ff0047">
+                {{'adminPanelPage.usersPage.errorLocations' | translate}}
+            </span>
+        </div>
+
+        <div class="row" ng-if="locations.length > 0">
+            <pagination total-items="pagingLocations.totalItems" ng-model="pagingLocations.currentPage"
+                        items-per-page="pagingLocations.itemsPerPage"
+                        class="pagination-sm" boundary-links="true"
+                        next-text="{{'weekPage.weekHistory.nextText' | translate}}"
+                        previous-text="{{'weekPage.weekHistory.prevText' | translate}}"
+                        first-text="{{'weekPage.weekHistory.firstText' | translate}}"
+                        last-text="{{'weekPage.weekHistory.lastText' | translate}}"></pagination>
+        </div>
+
         <div class="row" ng-if="errorSaving">
             <span class="col-xs-12" style="color: red;">
                 {{'adminPanelPage.usersPage.anErrorHasOcurred' | translate}}

@@ -19,7 +19,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 changePassword: 'Change Password',
                 adminPanel: 'Admin Panel',
                 history: 'History',
-                logout: 'Logout'
+                logout: 'Logout',
+                messages: 'Messages'
             },
             notLogged: {
                 home: 'Home',
@@ -233,7 +234,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 gainedForWinningAWeek: 'Gained for winning a week',
                 registerDate: 'Register date',
                 viewHistory: 'View history',
-                closeButton: 'Close'
+                closeButton: 'Close',
+                sendMessage: 'Send message'
             }
         },
         historyPage: {
@@ -329,7 +331,17 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'No',
                 disabled: 'Disabled',
                 anErrorHasOcurred: 'An error has occurred. Your options weren\'t saved.',
-                cancelButton: 'Cancel'
+                cancelButton: 'Cancel',
+                locationsNoItemsMessage: 'No location details about this user.',
+                loginLocations: 'Login locations',
+                date: 'Date',
+                organization: 'Organization',
+                city: 'City',
+                region: 'Region',
+                country: 'Country',
+                timezone: 'Timezone',
+                coordinates: 'Coordinates',
+                errorLocations: 'Error loading location details.'
             }
         },
         rulesPage: {
@@ -387,6 +399,11 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 gainedForWinningAWeek: 'Gained for winning a week',
                 forWinningAWeek: 'for winning a week'
             }
+        },
+        messages: {
+            noMessages: "No messages.",
+            from: "",
+            to: "to"
         }
     });
 
@@ -404,7 +421,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 changePassword: 'Schimbă parola',
                 adminPanel: 'Panou admin',
                 history: 'Istoric',
-                logout: 'Delogare'
+                logout: 'Delogare',
+                messages: 'Mesaje'
             },
             notLogged: {
                 home: 'Acasă',
@@ -619,7 +637,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 gainedForWinningAWeek: 'Obținut în urma câștigării unei etape',
                 registerDate: 'Data înregistrării',
                 viewHistory: 'Vezi istoricul',
-                closeButton: 'Închide'
+                closeButton: 'Închide',
+                sendMessage: 'Trimite-i un mesaj'
             }
         },
         historyPage: {
@@ -714,7 +733,17 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'Nu',
                 disabled: 'Dezactivat',
                 anErrorHasOcurred: 'A apărut o eroare. Opțiunile alese nu au putut fi salvate.',
-                cancelButton: 'Anulează'
+                cancelButton: 'Anulează',
+                locationsNoItemsMessage: 'Nu există detalii în legătură cu locațiile acestui utilizator.',
+                loginLocations: 'Locații la logare',
+                date: 'Data',
+                organization: 'Organizație',
+                city: 'Oraș',
+                region: 'Regiune',
+                country: 'Țară',
+                timezone: 'Fus orar',
+                coordinates: 'Coordonate',
+                errorLocations: 'Eroare la încărcarea locațiilor.'
             }
         },
         rulesPage: {
@@ -770,6 +799,11 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 gainedForWinningAWeek: 'Obținut în urma câștigării unei etape',
                 forWinningAWeek: 'pentru câștigarea unei etape'
             }
+        },
+        messages: {
+            noMessages: "Nu există mesaje.",
+            from: "De la",
+            to: "către"
         }
     });
 

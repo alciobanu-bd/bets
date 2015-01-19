@@ -4,8 +4,8 @@ configModule
     .config(['$provide', '$httpProvider', function ($provide, $httpProvider) {
 
         $provide.factory('401Interceptor', [
-            '$q', 'UserInformation', 'LoginTokenFactory', '$location',
-            function ($q, UserInformation, LoginTokenFactory, $location) {
+            '$q', 'UserInformation', 'LoginTokenFactory', '$location', 'Socket',
+            function ($q, UserInformation, LoginTokenFactory, $location, Socket) {
 
                 return {
                     responseError: function (config) {
@@ -16,6 +16,7 @@ configModule
                                 delete UserInformation.user;
                             }
 
+                            Socket.unregisterMe();
                             LoginTokenFactory.deleteToken();
                             $location.path('');
                         }
