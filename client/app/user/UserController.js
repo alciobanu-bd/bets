@@ -100,6 +100,10 @@ Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory) {
         $scope.showMessagesBrief = false;
     }
 
+    $scope.toggleMessageBox = function () {
+        $scope.showMessagesBrief = !$scope.showMessagesBrief;
+    }
+
 }
 ]
 );

@@ -14,9 +14,9 @@
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <a href="" class="menu-link-border centered" ng-click="openMessagesBox();">
+                    <a href="" class="menu-link-border centered" ng-click="toggleMessageBox();">
                         <span class="glyphicon glyphicon-envelope"></span>
-                        Messages
+                        {{'header.logged.messages' | translate}}
                         <span class="badge" style="background-color: #ff0429"
                               ng-if="ChattingService.getNumberOfUnreadConversations() > 0">
                             {{ChattingService.getNumberOfUnreadConversations()}}
@@ -98,25 +98,36 @@
         </div>
 
         <div ng-show="showMessagesBrief" class="messages-preview" style="position: relative;">
-            <div class="msg-box" ng-controller="MessagesController">
+            <div class="msg-box" ng-controller="MessagesController"
+                 ng-class="(ChattingService.lastMessages.length > 5) ? 'msg-box-scroll' : ''">
+
                 <div ng-repeat="msg in ChattingService.lastMessages track by msg.date"
                      ng-click="openChatBox(msg); closeMessagesBox();"
                      style="word-wrap: break-word" class="row-msg">
                     <div>
-                        {{msg.from.username}}
-                        to
-                        {{msg.to.username}}
+                        {{'messages.from' | translate}}
+                        <span style="color: #060032; font-weight: bold;">
+                            {{msg.from.username}}
+                        </span>
+                        {{'messages.to' | translate}}
+                        <span style="color: #060032; font-weight: bold;">
+                            {{msg.to.username}}
+                        </span>
                     </div>
-                    <div>
+                    <div style="color: #060032;">
                         {{msg.message}}
                     </div>
                     <div style="font-size: 80%">
                         {{msg.date | date: 'd MMM yy, HH:mm'}}
                     </div>
-                    <div>
-                        Read: {{msg.read}}
-                    </div>
                 </div>
+                <div class="row-msg" style="padding: 1em" ng-if="ChattingService.loadedInbox && ChattingService.lastMessages.length == 0">
+                    {{'messages.noMessages' | translate}}
+                </div>
+                <div class="row-msg" style="padding: 1em" ng-if="!ChattingService.loadedInbox">
+                    <img src="images/loader.gif" style="width: 15%; height: 15%;" />
+                </div>
+
             </div>
         </div>
 

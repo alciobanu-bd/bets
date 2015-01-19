@@ -110,6 +110,10 @@ function (UserInformation) {
             data.message
         );
 
+        if (typeof box.onMessageReceived === 'function') {
+            box.onMessageReceived();
+        }
+
     }
 
     thisFactory.addOwnSentMessage = function (conversationBox, from, to, message) {
@@ -211,8 +215,6 @@ function (UserInformation) {
         thisFactory.lastMessages.sort(function (msg1, msg2) {
             return new Date(msg2.date).getTime() - new Date(msg1.date).getTime();
         });
-
-        console.log(thisFactory.lastMessages);
 
         thisFactory.loadedInbox = true;
 

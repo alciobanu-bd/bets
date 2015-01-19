@@ -2,8 +2,8 @@
 chatModule
 
 .directive('chatBox', [
-'ChatMessage', 'ChattingService', 'UserInformation',
-function(ChatMessage, ChattingService, UserInformation) {
+'ChatMessage', 'ChattingService', 'UserInformation', '$timeout', 'Settings',
+function(ChatMessage, ChattingService, UserInformation, $timeout, Settings) {
 return {
     restrict: 'E',
     replace: true,
@@ -13,9 +13,55 @@ return {
     templateUrl: "app/chat/views/chatBox.html",
     link: function(scope, element, attrs) {
 
+        scope.userInfo = UserInformation;
+
+        var scrollContentToBottom = function () {
+            $timeout(function () {
+                var chatboxDiv = document.getElementById("chatbox-content-" + scope.conversation.id);
+                chatboxDiv.scrollTop = chatboxDiv.scrollHeight;
+            }, 0);
+        }
+
+        var focusTopDiv = function () {
+            $timeout(function () {
+                var chatboxTopDiv = document.getElementById("chatbox-top-div-" + scope.conversation.id);
+                chatboxTopDiv.focus();
+            }, 0);
+        }
+
+        scope.focusInput = function () {
+            $timeout(function () {
+                var chatboxInput = document.getElementById("chatbox-input-" + scope.conversation.id);
+                chatboxInput.focus();
+            }, 0);
+        }
+
+        scope.focusInput();
+
+        var isContentBoxScrolledToBottom = function () {
+            var chatboxDiv = document.getElementById("chatbox-content-" + scope.conversation.id);
+            if (chatboxDiv.scrollTop + chatboxDiv.offsetHeight >= chatboxDiv.scrollHeight) {
+                return true;
+            }
+            return false;
+        }
+
+        scrollContentToBottom();
+
+        scope.conversation.onMessageReceived = function () {
+            if (isContentBoxScrolledToBottom()) {
+                scrollContentToBottom();
+            }
+        }
+
         scope.currentMessage = "";
 
         var sendMessage = function () {
+
+            if (scope.currentMessage.trim() == "") {
+                return;
+            }
+
             ChatMessage.sendPrivateMessage({
                 _id: scope.conversation.with._id,
                 username: scope.conversation.with.username
@@ -32,6 +78,9 @@ return {
             scope.currentMessage);
 
             scope.currentMessage = "";
+
+            scrollContentToBottom();
+
         }
 
         scope.sendMessageOnEnterKey = function (event) {
@@ -49,6 +98,13 @@ return {
 
         scope.closeThisBox = function () {
             ChattingService.deleteConversationBox(scope.conversation);
+        }
+
+        scope.closeBoxOnEsc = function (event) {
+            if (event.keyCode == 27) {
+                scope.closeThisBox();
+            }
+            scope.markConversationAsRead();
         }
 
     }

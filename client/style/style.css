@@ -192,6 +192,10 @@ body    {overflow-y:scroll;}
     box-shadow: 1px 1px 5px rgba(0,0,0,.2);
 }
 
+.chat-box:focus {
+    outline: none;
+}
+
 .chat-box > input[type="checkbox"] {
     display: block;
     margin: 0 0;
@@ -282,11 +286,19 @@ body    {overflow-y:scroll;}
     background-color: #f5f5f9;
 }
 
+.msg-box-scroll {
+    max-height: 340px;
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
 .row-msg {
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 4px;
     padding-bottom: 4px;
+    border-color: #006597;
+    box-shadow: 1px 1px rgba(5, 0, 25, 0.39);
 }
 
 .row-msg:hover {
@@ -295,4 +307,20 @@ body    {overflow-y:scroll;}
     -webkit-box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
     box-shadow: 2px 1px 4px rgba(0,0,0,0.2);
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.red-text {
+    color: #f90036
+}
+
+.green-text {
+    color: #00ab7d;
 }

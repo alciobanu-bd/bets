@@ -1,14 +1,19 @@
 
-<div class="chat-box">
+<div class="chat-box" ng-click="focusInput(); markConversationAsRead();" ng-keydown="closeBoxOnEsc($event);" tabindex="0"
+     id="{{'chatbox-top-div-' + conversation.id}}">
     <input type="checkbox" class="togg" ng-model="conversation.checked" />
-    <input type="button" ng-click="closeThisBox()" />
+    <input type="button" ng-click="closeThisBox(); markConversationAsRead();" />
     <label data-expanded="{{conversation.with.username}}" data-collapsed="{{conversation.with.username}}">
         <span class="pull-right">X</span>
     </label>
-    <div class="chat-box-content" style="height: 250px; overflow-x: scroll" ng-click="markConversationAsRead()">
-        <div ng-repeat="msg in conversation.messages track by msg.date" style="margin-bottom: 2px">
-            <div style="color: #e80926">
-                {{msg.from.username}}
+    <div class="chat-box-content" style="height: 250px; overflow-x: scroll;"
+         id="{{'chatbox-content-' + conversation.id}}">
+        <div ng-repeat="msg in conversation.messages track by $index" style="margin-bottom: 2px"
+             ng-class="(msg.from._id == userInfo.user._id) ? 'align-right red-text' : 'align-left green-text'">
+            <div>
+                <span style="font-weight: bold;">
+                    {{msg.from.username}}
+                </span>
                 ({{msg.date | date: 'd MMM yy, HH:mm'}})
             </div>
             <div>
@@ -16,6 +21,6 @@
             </div>
         </div>
         <input type="text" class="input-box" ng-model="currentMessage" placeholder="Type your message"
-               ng-keydown="sendMessageOnEnterKey($event)" />
+               ng-keydown="sendMessageOnEnterKey($event);" id="{{'chatbox-input-' + conversation.id}}" />
     </div>
 </div>

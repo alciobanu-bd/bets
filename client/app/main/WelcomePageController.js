@@ -15,7 +15,7 @@ function ($scope, UserInformation, InitUrls, Settings, Templates) {
         return o;
     };
 
-    var prepareSlides = function (n) {
+    var prepareSlides = function (n, keep) {
         for (var i = 0; i < n; i++) {
             $scope.carouselSlides.push({
                 image: '/images/carousel/' + i + '.jpg',
@@ -23,10 +23,10 @@ function ($scope, UserInformation, InitUrls, Settings, Templates) {
                 description: carouselImagesDescription[i].description
             });
         }
-        $scope.carouselSlides = shuffle($scope.carouselSlides);
+        $scope.carouselSlides = shuffle($scope.carouselSlides).slice(0, 3);
     }
 
-    prepareSlides(TOTAL_CAROUSEL_IMAGES);
+    prepareSlides(TOTAL_CAROUSEL_IMAGES, 3);
 
 }
 ]
