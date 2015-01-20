@@ -1,6 +1,20 @@
 
 utilsModule
 
+.factory('SoundPlayer', [
+'Settings',
+function (Settings) {
+
+    return {
+        onNewMessage: function () {
+            var audio = new Audio(Settings.sounds.newMessageSoundUrl);
+            audio.play();
+        }
+    };
+
+}
+])
+
 .factory('SaltGenerator', [
 function () {
     return {

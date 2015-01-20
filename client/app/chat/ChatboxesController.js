@@ -1,8 +1,8 @@
 
 chatModule
 .controller('ChatboxesController', [
-'$scope', 'ChatMessage', 'ChattingService', 'UserInformation',
-function ($scope, ChatMessage, ChattingService, UserInformation) {
+'$scope', 'ChatMessage', 'ChattingService', 'UserInformation', 'SoundPlayer',
+function ($scope, ChatMessage, ChattingService, UserInformation, SoundPlayer) {
 
     $scope.getMarginRight = function (index) {
         return index * 255 + "px";
@@ -14,6 +14,7 @@ function ($scope, ChatMessage, ChattingService, UserInformation) {
     ChatMessage.onPrivateMessage(function (data) {
         $scope.$apply(function () {
             ChattingService.addReceivedMessage(data);
+            SoundPlayer.onNewMessage();
         });
     });
 
