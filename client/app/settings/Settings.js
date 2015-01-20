@@ -33,6 +33,9 @@ function () {
         },
         geolocationAddresses: {
             ipApiCom: "http://ip-api.com/json"
+        },
+        sounds: {
+            newMessageSoundUrl: "sounds/pling.mp3"
         }
 
     };

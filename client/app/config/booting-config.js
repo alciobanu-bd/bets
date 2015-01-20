@@ -42,5 +42,15 @@ Socket, ChattingService) {
         };
     });
 
+    $rootScope.$watch(ChattingService.getNumberOfUnreadConversations, function () {
+        var unreadMessages = $rootScope.ChattingService.getNumberOfUnreadConversations();
+        if (unreadMessages != null && unreadMessages != undefined && unreadMessages > 0) {
+            document.title = "(" + unreadMessages + ") " + "CanIHazBets - online betting for fun";
+        }
+        else {
+            document.title = "CanIHazBets - online betting for fun";
+        }
+    });
+
 }]
 );
