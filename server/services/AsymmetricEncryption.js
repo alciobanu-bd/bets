@@ -1,9 +1,8 @@
 
 var cp = require('child_process');
+var n = cp.fork('./server/services/AsymmetricEncryptionProcess.js');
 
 var encrypt = function (message, callback) {
-    var n = cp.fork('./server/services/AsymmetricEncryptionProcess.js');
-
     n.on('message', function(message) {
         callback(null, message.message);
     });
@@ -12,8 +11,6 @@ var encrypt = function (message, callback) {
 }
 
 var decrypt = function (message, callback) {
-    var n = cp.fork('./server/services/AsymmetricEncryptionProcess.js');
-
     n.on('message', function(message) {
         callback(null, message.message);
     });
@@ -22,8 +19,6 @@ var decrypt = function (message, callback) {
 }
 
 var decryptUserMessages = function (userMessagesArray, callback) {
-    var n = cp.fork('./server/services/AsymmetricEncryptionProcess.js');
-
     n.on('message', function(message) {
         callback(null, message.array);
     });
