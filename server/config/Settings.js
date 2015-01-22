@@ -1,5 +1,5 @@
 
-module.exports = {
+var settingsProfiles = {
     dev: {
         domainName: {
             address: "http://localhost",
@@ -13,7 +13,8 @@ module.exports = {
                 host: "smtp.rdslink.ro",
                 port: 25
             }
-        }
+        },
+        privateMessagesWorkerProcesses: 3
     },
     prod: {
         domainName: {
@@ -28,6 +29,9 @@ module.exports = {
                 host: "localhost",
                 port: 25
             }
-        }
+        },
+        privateMessagesWorkerProcesses: 3
     }
 };
+
+module.exports = settingsProfiles.dev;

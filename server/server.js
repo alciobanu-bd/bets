@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var path = require('path');
 var fs = require('fs');
-var Settings = require('./config/Settings.js').dev;
+var Settings = require('./config/Settings.js');
 
 GLOBAL.app = express();
 GLOBAL.domainName = Settings.domainName;
