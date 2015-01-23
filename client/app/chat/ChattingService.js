@@ -106,7 +106,7 @@ function (UserInformation) {
 
         insertIntoLastMessages(
             data.from,
-            {_id: UserInformation.user._id, username: UserInformation.user.username},
+            {_id: UserInformation.user._id, username: UserInformation.user.username, email: UserInformation.user.email},
             data.message
         );
 

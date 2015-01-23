@@ -324,3 +324,24 @@ body    {overflow-y:scroll;}
 .green-text {
     color: #00ab7d;
 }
+
+.chat-img {
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    height: 30px;
+    width: 30px;
+}
+
+.chat-img:hover {
+    border-radius: 50%;
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+    height: 50px;
+    width: 50px;
+}

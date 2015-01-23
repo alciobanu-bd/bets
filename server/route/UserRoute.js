@@ -25,7 +25,7 @@ jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
 
     User.findOne({_id: req.params.id},
-        {password: 0, salt: 0, serverSalt: 0},
+        {password: 0, salt: 0, serverSalt: 0, isMailNotificationOn: 0},
         function (err, user) {
             if (err) {
                 res.status(500).json({

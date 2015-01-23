@@ -11,12 +11,13 @@
         <div ng-repeat="msg in conversation.messages track by $index" style="margin-bottom: 2px"
              ng-class="(msg.from._id == userInfo.user._id) ? 'align-right red-text' : 'align-left green-text'">
             <div>
+                <img class="chat-img" ng-src="{{gravatarUrl}}" ng-if="msg.from._id != userInfo.user._id" />
                 <span style="font-weight: bold;">
                     {{msg.from.username}}
                 </span>
                 ({{msg.date | date: 'd MMM yy, HH:mm'}})
             </div>
-            <div>
+            <div style="padding-left: 35px;">
                 {{msg.message}}
             </div>
         </div>
