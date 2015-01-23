@@ -2,7 +2,11 @@
 npm install;
 bower install;
 grunt cat-min;
-scp -r ./client/images root@canihazbets.me:/root/bets/client;
+
+if [ -z "$1" -o "$1" != "-i" ]; then
+    scp -r ./client/images root@canihazbets.me:/root/bets/client;
+fi
+
 scp -r ./client/sounds root@canihazbets.me:/root/bets/client;
 scp -r ./client/app root@canihazbets.me:/root/bets/client;
 scp -r ./client/style root@canihazbets.me:/root/bets/client;
