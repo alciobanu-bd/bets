@@ -31,14 +31,18 @@ var decryptUserMessages = function (messagesArray) {
 process.on('message', function(m) {
     if (m.hasOwnProperty('encrypt')) {
         var encrypted = encrypt(m.encrypt);
-        process.send({message: encrypted});
+        process.send({message: encrypted, processId: m.processId, id: m.id});
     }
     else if (m.hasOwnProperty('decrypt')) {
         var decrypted = decrypt(m.decrypt);
-        process.send({message: decrypted});
+        process.send({message: decrypted, processId: m.processId, id: m.id});
     }
     else if (m.hasOwnProperty('decryptUserMessages')) {
         var decryptedUserMessages = decryptUserMessages(m.decryptUserMessages);
-        process.send({array: decryptedUserMessages});
+        process.send({message: decryptedUserMessages, processId: m.processId, id: m.id});
+    }
+    else if (m.hasOwnProperty('hello')) {
+        var workerId = m.hello;
+        console.log("Asymmetric encryption worker with id " + workerId + " started.");
     }
 });
