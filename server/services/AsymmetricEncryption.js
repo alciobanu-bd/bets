@@ -38,6 +38,7 @@ var getCallback = function (processId, id) {
     for (var i = 0; i < process.awaitingMessagesBuffer.length; i++) {
         var currentMessage = process.awaitingMessagesBuffer[i];
         if (currentMessage.id == id) {
+            process.awaitingMessagesBuffer.splice(i, 1);
             return currentMessage.callback;
         }
     }
