@@ -34,4 +34,4 @@ var settingsProfiles = {
     }
 };
 
-module.exports = settingsProfiles.dev;
+module.exports = settingsProfiles.prod;
