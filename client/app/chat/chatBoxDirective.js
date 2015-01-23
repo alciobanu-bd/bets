@@ -2,8 +2,8 @@
 chatModule
 
 .directive('chatBox', [
-'ChatMessage', 'ChattingService', 'UserInformation', '$timeout', 'Settings',
-function(ChatMessage, ChattingService, UserInformation, $timeout, Settings) {
+'ChatMessage', 'ChattingService', 'UserInformation', '$timeout', 'Gravatar', 'InitUrls', 'CallUrlService',
+function(ChatMessage, ChattingService, UserInformation, $timeout, Gravatar, InitUrls, CallUrlService) {
 return {
     restrict: 'E',
     replace: true,
@@ -14,6 +14,18 @@ return {
     link: function(scope, element, attrs) {
 
         scope.userInfo = UserInformation;
+        var partnerUser = null;
+
+        InitUrls.then(function (urls) {
+            CallUrlService.get({uri: urls.user.address, id: scope.conversation.with._id},
+            function (user) {
+                partnerUser = user;
+                scope.gravatarUrl = Gravatar.getImageUrl(user.email, 100);
+            },
+            function () {
+                scope.gravatarUrl = Gravatar.getImageUrl("fake.mail@mail.com", 30);
+            });
+        });
 
         var scrollContentToBottom = function () {
             $timeout(function () {
