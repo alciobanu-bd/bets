@@ -28,7 +28,8 @@ function (InitUrls, CallUrlService) {
                     role: item.role,
                     wonWeeks: item.wonWeeks,
                     username: item.username,
-                    language: item.language
+                    language: item.language,
+                    email: item.email
                 }});
                 thisFactory.errorFetching = false;
             },

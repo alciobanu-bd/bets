@@ -16,7 +16,7 @@
                     <h2 class="panel-title">
                         {{'historyPage.week' | translate}} {{week.weekNumber}}
                         <span ng-if="!week.available">
-                            &nbsp;({{'historyPage.endedOn' | translate}}: {{week.weekEndDate | date: 'MMM d, y h:mm a'}})
+                            &nbsp;({{'historyPage.endedOn' | translate}}: {{week.weekEndDate | date: 'MMM d, yy h:mm a'}})
                         </span>
                         <span ng-if="week.available">
                             &nbsp;({{'historyPage.inProgress' | translate}})
@@ -55,7 +55,7 @@
 
                 <div ng-repeat="event in week.events" class="row">
                     <span class="col-xs-2">
-                        {{event.startDate | date: 'MMM d, y h:mm a'}}
+                        {{event.startDate | date: 'd MMM yy, h:mm a'}}
                     </span>
                     <span class="col-xs-4">
                         {{event.homeTeam}} - {{event.awayTeam}}

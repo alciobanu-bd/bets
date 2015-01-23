@@ -13,13 +13,18 @@ function (InitUrls, CallUrlService, $translate) {
         message: ''
     }
 
-    thisFactory.loadProfile = function (userId) {
+    thisFactory.loadProfile = function (userId, onSuccess, onError) {
 
         InitUrls.then(function (data) {
             CallUrlService.get({uri: data.user.address, id: userId},
             function (data) {
                 thisFactory.profileInformation = data;
                 thisFactory.fetchingError.active = false;
+
+                if (typeof onSuccess === 'function') {
+                    onSuccess();
+                }
+
             },
             function (response) {
                 thisFactory.fetchingError.active = true;
@@ -29,6 +34,11 @@ function (InitUrls, CallUrlService, $translate) {
                 else {
                     thisFactory.fetchingError.message = $translate.instant(profilePage.errorFetching);
                 }
+
+                if (typeof onError === 'function') {
+                    onError();
+                }
+
             }
             );
         });

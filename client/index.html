@@ -10,29 +10,21 @@
 
     <link rel="shortcut icon" href="images/favicon.png">
 
-    <title>CanIHazBets - online betting for fun</title>
+    <title>
+        CanIHazBets - online betting for fun
+    </title>
 </head>
 <body style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode';">
 
     <!--    Facebook integration    -->
     <div id="fb-root"></div>
-    <script>
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId      : '563467493785036',
-                xfbml      : true,
-                version    : 'v2.2'
-            });
-        };
-
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
 
     <span ng-app="bets">
@@ -41,9 +33,18 @@
 
         <span ng-controller="MainController" ng-cloak>
             <ng-view></ng-view>
+
+            <span ng-controller="ChatboxesController">
+                <span ng-repeat="conversation in ChattingService.activeBoxes track by conversation.id">
+                    <chat-box conversation="conversation" ng-style="{'margin-right': getMarginRight($index)};">
+                    </chat-box>
+                </span>
+            </span>
+
         </span>
     </span>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script src="dist/built.min.js"></script>
 
     <script>

@@ -1,5 +1,4 @@
 
-var restful = require('node-restful');
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema,
@@ -11,4 +10,4 @@ var ForgotPasswordCode = mongoose.Schema({
     expirationDate: {type: 'date', required: true}
 });
 
-module.exports = restful.model('forgotpasswordcode', ForgotPasswordCode);
+module.exports = mongoose.model('forgotpasswordcode', ForgotPasswordCode);

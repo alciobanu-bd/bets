@@ -80,13 +80,22 @@ function ($scope, RankingFactory, $modal, Settings) {
 
 rankingModule
 .controller('ProfileRankingView', [
-    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation', 'Languages',
-    function ($scope, $modalInstance, user, RolesFactory, UserInformation, Languages) {
+    '$scope', '$modalInstance', 'user', 'RolesFactory', 'UserInformation', 'Languages', 'Gravatar', 'ChattingService',
+    function ($scope, $modalInstance, user, RolesFactory, UserInformation, Languages, Gravatar, ChattingService) {
 
         $scope.RolesFactory = RolesFactory;
         $scope.userInfo = UserInformation;
         $scope.Languages = Languages;
         $scope.user = user;
+        $scope.Gravatar = Gravatar;
+
+        $scope.openChatbox = function () {
+            ChattingService.createConversationBox({
+                _id: user._id,
+                username: user.username
+            });
+            $scope.cancel();
+        }
 
         $scope.cancel = function () {
             $modalInstance.close("closed");

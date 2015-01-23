@@ -2,6 +2,7 @@
 // NOTE that app is defined globally
 
 var User = require('./../model/User.js');
+var UserLocation = require('./../model/UserLocation.js');
 var ForgotPasswordCode = require('./../model/ForgotPasswordCode.js');
 var jwt = require('jwt-simple');
 var express = require('express');
@@ -27,6 +28,38 @@ var markLastLogin = function (userId) {
             fs.append(LOG_LOGIN_FILE_NAME, 'lastLogin update failed for user ' + userId + ' -- ' + err + '\r\n');
         }
     });
+}
+
+/*
+    req should contain current user object @req.user
+ */
+var markLoginInfo = function (req, res) {
+
+    var loginInfo = req.body.loginInfo;
+
+    if (loginInfo) {
+        loginInfo.date = new Date();
+
+        var oneMonthBack = new Date((new Date()).setMonth((new Date()).getMonth() - 1));
+
+        UserLocation.findOne({userId: req.user._id}, {}, {sort: {date: -1}}, function (err, item) {
+            if (!err && item && item.query == loginInfo.query) {
+                // query is IP address -- check if IP address is the same as the last saved in logs
+                item.date = new Date();
+                item.save();
+            }
+            else {
+                var userInfo = new UserLocation();
+                for (var i in loginInfo) {
+                    userInfo[i] = loginInfo[i];
+                }
+                userInfo.userId = req.user._id;
+                userInfo.username = req.user.username;
+                userInfo.save();
+            }
+        });
+
+    }
 
 }
 
@@ -91,6 +124,9 @@ router.post('/login', function(req, res) {
                         delete users[0]['salt'];
                         delete users[0]['serverSalt'];
                         delete users[0]['registrationIp'];
+
+                        req.user = users[0];
+                        markLoginInfo(req, res);
 
                         res.status(200).json({
                             token : tok.token,
@@ -196,6 +232,16 @@ function (req, res) {
 
         }
     });
+
+});
+
+router.post('/update_geolocation',
+jwtauth([tokenChecks.hasRole('ROLE_USER')], {skipActivationCheck: true}),
+function (req, res) {
+
+    req.user = res.data.local.user;
+    markLoginInfo(req, res);
+    res.status(200).json({message: "OK"}).end();
 
 });
 

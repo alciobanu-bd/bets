@@ -92,6 +92,18 @@ Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory) {
         $location.path('');
     }
 
+    $scope.openMessagesBox = function () {
+        $scope.showMessagesBrief = true;
+    }
+
+    $scope.closeMessagesBox = function () {
+        $scope.showMessagesBrief = false;
+    }
+
+    $scope.toggleMessageBox = function () {
+        $scope.showMessagesBrief = !$scope.showMessagesBrief;
+    }
+
 }
 ]
 );

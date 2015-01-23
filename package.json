@@ -1,6 +1,6 @@
 {
     "name": "bets",
-    "version": "0.1.5",
+    "version": "0.2.0",
     "description": "Bets app based on MEAN stack",
     "dependencies": {
         "express": "~4.0.0",
@@ -9,6 +9,7 @@
         "jwt-simple": "*",
         "node-restful": "*",
         "method-override": "*",
+        "socket.io": "*",
         "path": "*",
         "moment": "*",
         "underscore": "*",
@@ -16,6 +17,7 @@
         "mkdirp": "*",
         "nodemailer": "*",
         "nodemailer-smtp-transport": "*",
+        "ursa": "*",
         "grunt": "*",
         "grunt-contrib-clean": "*",
         "grunt-contrib-uglify": "*",
