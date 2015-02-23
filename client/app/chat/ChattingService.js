@@ -6,6 +6,22 @@ function (UserInformation) {
 
     var thisFactory = {};
 
+
+    var uniqueId = 0;
+    var MAX_ID = Math.pow(2, 51);
+
+    var getNextId = function () {
+        var id = uniqueId++;
+        if (uniqueId == MAX_ID) {
+            uniqueId = -MAX_ID;
+        }
+        if (uniqueId == 0) {
+            location.reload();
+        }
+        return id;
+    }
+
+
     thisFactory.reset = function () {
         thisFactory.activeBoxes = [];
         thisFactory.passiveBoxes = [];
@@ -31,7 +47,7 @@ function (UserInformation) {
         return conversationBox.messages[conversationBox.messages.length - 1];
     }
 
-    thisFactory.createConversationBox = function (user) {
+    thisFactory.createActiveConversationBox = function (user) {
 
         /*
             Search for a passive box. If it exists, make it active and return it.
@@ -74,7 +90,7 @@ function (UserInformation) {
 
     }
 
-    var insertIntoLastMessages = function (from, to, message) {
+    var insertIntoLastMessages = function (from, to, message, _id) {
 
         for (var i = 0; i < thisFactory.lastMessages.length; i++) {
             var currentMsg = thisFactory.lastMessages[i];
@@ -89,18 +105,20 @@ function (UserInformation) {
             to: to,
             date: new Date(),
             message: message,
-            read: false
+            read: false,
+            _id: getNextId()
         });
 
     }
 
     thisFactory.addReceivedMessage = function (data) {
 
-        var box = thisFactory.createConversationBox(data.from);
+        var box = thisFactory.createActiveConversationBox(data.from);
         box.messages.push({
             from: data.from,
             message: data.message,
-            date: data.date
+            date: data.date,
+            _id: getNextId()
         });
         box.iVeReadIt = false;
 
@@ -120,7 +138,8 @@ function (UserInformation) {
         conversationBox.messages.push({
             from: from,
             message: message,
-            date: new Date()
+            date: new Date(),
+            _id: getNextId()
         });
         conversationBox.iVeReadIt = true;
         insertIntoLastMessages(from, to, message);
@@ -129,12 +148,17 @@ function (UserInformation) {
     thisFactory.deleteConversationBox = function (conversation) {
         for (var i = 0; i < thisFactory.activeBoxes.length; i++) {
             var currentBox = thisFactory.activeBoxes[i];
-            thisFactory.passiveBoxes.push(currentBox);
             if (conversation.id == currentBox.id) {
+                thisFactory.passiveBoxes.push(currentBox);
                 thisFactory.activeBoxes.splice(i, 1);
                 break;
             }
         }
+    }
+
+    thisFactory.removeAllBoxes = function () {
+        thisFactory.activeBoxes = thisFactory.activeBoxes.concat(thisFactory.passiveBoxes);
+        thisFactory.passiveBoxes = [];
     }
 
     thisFactory.markBoxAsRead = function (conversationBox) {
@@ -159,36 +183,66 @@ function (UserInformation) {
         return n;
     }
 
+    var existsConversationInInbox = function (userId) {
+
+        for (var i = 0; i < thisFactory.lastMessages.length; i++) {
+            var message = thisFactory.lastMessages[i];
+            if (message.from._id == userId || message.to._id == userId) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
     var setUnreadMessages = function (conversation, box) {
-        var lastMessageOfConversation = _.max(conversation, function (messageItem) {
-            return new Date(messageItem.date).getTime();
-        });
+        var lastMessageOfConversation = conversation[conversation.length - 1];
 
         if (lastMessageOfConversation.to._id == UserInformation.user._id && !lastMessageOfConversation.read) {
             // if the last message of conversation was sent to current user and it wasn't read
-            box.iVeReadIt = false
+            box.iVeReadIt = false;
         }
 
         thisFactory.lastMessages.push(lastMessageOfConversation);
 
     }
 
+    thisFactory.inboxLength = function () {
+        return thisFactory.lastMessages.length;
+    }
+
+    var inboxListSubscriberFunctions = [];
+    thisFactory.iWantToBeNotifiedWhenInboxReachesEndOfList = function (callback) {
+        inboxListSubscriberFunctions.push(callback);
+    }
+
     thisFactory.updatePassiveBoxes = function (inboxGroupedByUser) {
 
-        if (thisFactory.loadedInbox) {
-            return;
+        if (inboxGroupedByUser.length == 0) {
+            for (var i = 0; i < inboxListSubscriberFunctions.length; i++) {
+                var callback = inboxListSubscriberFunctions[i];
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }
         }
 
-        for (var i in inboxGroupedByUser) {
+        for (var i = 0; i < inboxGroupedByUser.length; i++) {
 
             var conversationWithUser = inboxGroupedByUser[i];
 
             var conversationPartner;
-            if (conversationWithUser[0].from._id != UserInformation.user._id) {
-                conversationPartner = conversationWithUser[0].from
+            if (conversationWithUser.data[0].from._id != UserInformation.user._id) {
+                conversationPartner = conversationWithUser.data[0].from;
             }
-            else if (conversationWithUser[0].to._id != UserInformation.user._id) {
-                conversationPartner = conversationWithUser[0].to;
+            else if (conversationWithUser.data[0].to._id != UserInformation.user._id) {
+                conversationPartner = conversationWithUser.data[0].to;
+            }
+
+            if (existsConversationInInbox(conversationPartner._id)) {
+                // if box already exists, don't add a new box for this user
+                continue;
             }
 
             var newBox = {
@@ -199,22 +253,12 @@ function (UserInformation) {
                 iVeReadIt: true
             };
 
-            setUnreadMessages(conversationWithUser, newBox);
+            setUnreadMessages(conversationWithUser.data, newBox);
 
             thisFactory.passiveBoxes.push(newBox);
 
-            newBox.messages = _.map(conversationWithUser, function (messageItem) {
-                return {
-                    from: messageItem.from,
-                    message: messageItem.message,
-                    date: messageItem.date
-                };
-            });
+            newBox.messages = conversationWithUser.data;
         }
-
-        thisFactory.lastMessages.sort(function (msg1, msg2) {
-            return new Date(msg2.date).getTime() - new Date(msg1.date).getTime();
-        });
 
         thisFactory.loadedInbox = true;
 

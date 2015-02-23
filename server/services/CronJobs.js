@@ -39,5 +39,5 @@ function() {
 function () {
     // executed when job is done
 },
-false // whether to start job right now
+true // whether to start job right now
 );

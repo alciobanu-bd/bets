@@ -210,8 +210,8 @@ KeepMeLoggedInStorage, $translate, $rootScope, $timeout, Socket) {
                         expires: data.expires,
                         user: data.user
                     });
-                    CheckActivationStatus.check();
                     Socket.registerMe();
+                    CheckActivationStatus.check();
                 },
                 function (response) {
                     console.log("Couldn't extend token.");

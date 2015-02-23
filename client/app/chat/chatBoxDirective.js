@@ -104,6 +104,9 @@ return {
         scope.markConversationAsRead = function () {
             ChattingService.markBoxAsRead(scope.conversation);
             var lastMessage = ChattingService.getLastMessageOfConversation(scope.conversation);
+            if (!lastMessage) {
+                return;
+            }
             var from = lastMessage.from._id != UserInformation.user._id ? lastMessage.from : scope.conversation.with;
             ChatMessage.iVeReadMyMessagesUntilDate(lastMessage.date, from);
         }

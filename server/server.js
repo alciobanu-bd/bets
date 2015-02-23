@@ -45,6 +45,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+// gc once in a while
+setInterval(function () {
+    global.gc();
+}, 10 * 60 * 5000); // 10 minutes
+
 // use token service
 var filename = "server/config/secretString";
 var secretString = fs.readFileSync(filename, "utf8");

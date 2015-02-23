@@ -41,7 +41,9 @@ function (Socket, LoginTokenFactory) {
     thisFactory.onInboxUpdate = function (callback) {
         socketPromise.then(function (socket) {
             socket.on('pm-inbox-update', function (data) {
-                callback(data);
+                if (typeof callback === 'function') {
+                    callback(data);
+                }
             });
         });
     }

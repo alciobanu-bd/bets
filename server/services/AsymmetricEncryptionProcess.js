@@ -3,12 +3,18 @@
 // openssl rsa -in certs/server/my-server.key.pem -pubout -out certs/client/my-server.pub
 
 var fs = require('fs'),
-    ursa = require('ursa');
+    ursa,
+    Settings = require('./../config/Settings.js');
 
+if (/^win/.test(process.platform) && Settings.isDev()) {
+    ursa = require('./../services/ursaFake.js');
+}
+else {
+    ursa = require('ursa');
+}
 
 var priv = ursa.createPrivateKey(fs.readFileSync('./server/config/msg-key.pem'));
 var pub = ursa.createPublicKey(fs.readFileSync('./server/config/msg-key.pub'));
-
 
 var encrypt = function (message) {
     return pub.encrypt(new Buffer(message), 'utf8', 'base64');
@@ -28,6 +34,19 @@ var decryptUserMessages = function (messagesArray) {
     return messagesArray;
 }
 
+var decryptGroupedByUserMessages = function (groupedMessages) {
+
+    for (var i in groupedMessages) {
+        var messagesArray = groupedMessages[i].data;
+        for (var j = 0; j < messagesArray.length; j++) {
+            var element = messagesArray[j];
+            element.message = decrypt(element.message);
+        }
+    }
+    return groupedMessages;
+
+}
+
 process.on('message', function(m) {
     if (m.hasOwnProperty('encrypt')) {
         var encrypted = encrypt(m.encrypt);
@@ -39,6 +58,10 @@ process.on('message', function(m) {
     }
     else if (m.hasOwnProperty('decryptUserMessages')) {
         var decryptedUserMessages = decryptUserMessages(m.decryptUserMessages);
+        process.send({message: decryptedUserMessages, processId: m.processId, id: m.id});
+    }
+    else if (m.hasOwnProperty('decryptGroupedUserMessages')) {
+        var decryptedUserMessages = decryptGroupedByUserMessages(m.decryptGroupedUserMessages);
         process.send({message: decryptedUserMessages, processId: m.processId, id: m.id});
     }
     else if (m.hasOwnProperty('hello')) {

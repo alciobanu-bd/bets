@@ -4,4 +4,4 @@ npm install;
 bower --allow-root install;
 rm client/dist/built.map;
 kill -9 $(pgrep node);
-nohup node server/server.js;
+nohup node --expose-gc server/server.js;

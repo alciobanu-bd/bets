@@ -20,7 +20,7 @@ function ($scope, ChatMessage, ChattingService, UserInformation, SoundPlayer) {
 
     ChatMessage.onInboxUpdate(function (data) {
         $scope.$apply(function () {
-            ChattingService.updatePassiveBoxes(data.inbox);
+            ChattingService.updatePassiveBoxes(data);
         });
     });
 

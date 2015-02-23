@@ -6,7 +6,7 @@ chatModule
 function ($scope, ChattingService, UserInformation) {
 
     $scope.openChatBox = function (msg) {
-        ChattingService.createConversationBox(msg.from._id != UserInformation.user._id ? msg.from : msg.to);
+        ChattingService.createActiveConversationBox(msg.from._id != UserInformation.user._id ? msg.from : msg.to);
     }
 
 }

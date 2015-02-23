@@ -4,9 +4,11 @@ userModule
 .controller(
 'UserController', [
 '$scope', 'UserInformation', 'UserInformationCalls', 'InitUrls', 'RolesFactory', 'CheckActivationStatus',
-'Settings', 'KeepMeLoggedInStorage', '$location', 'CurrentLanguageFactory',
+'Settings', 'KeepMeLoggedInStorage', '$location', 'CurrentLanguageFactory', 'Socket', 'LoginTokenFactory',
+'ChattingService',
 function ($scope, UserInformation, UserInformationCalls, InitUrls, RolesFactory, CheckActivationStatus,
-Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory) {
+Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory, Socket, LoginTokenFactory,
+ChattingService) {
 
     $scope.userInfo = UserInformation;
     $scope.RolesFactory = RolesFactory;
@@ -102,6 +104,28 @@ Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory) {
 
     $scope.toggleMessageBox = function () {
         $scope.showMessagesBrief = !$scope.showMessagesBrief;
+    }
+
+
+
+
+    var endOfList = false;
+    ChattingService.iWantToBeNotifiedWhenInboxReachesEndOfList(function () {
+        endOfList = true;
+    });
+
+    $scope.loadMore = function () {
+
+        if (endOfList) {
+            return;
+        }
+
+        Socket.getSocket().then(function (socket) {
+            socket.emit('load-more-conversations', {
+                howMuchIHave: ChattingService.inboxLength(),
+                token: LoginTokenFactory.getToken().token
+            });
+        });
     }
 
 }

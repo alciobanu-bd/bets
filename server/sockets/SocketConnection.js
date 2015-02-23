@@ -7,7 +7,9 @@ var SocketDatabase = require('./SocketDatabase.js');
 
 var registerUser = function (token, socket) {
     SocketDatabase.bindUserToSocket(token, socket, function (user) {
-        Chatting.emitInboxForUser(socket, user);
+        Chatting.getConversationsFromDb(user, function (err, messages) {
+            socket.emit('pm-inbox-update', messages);
+        });
     });
 }
 

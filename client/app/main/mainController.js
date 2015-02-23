@@ -67,6 +67,7 @@ Settings, $routeParams, $location) {
     }
 
     window.onload = countWatchers;
+    $interval(countWatchers, 10000);
 
 }
 ]);

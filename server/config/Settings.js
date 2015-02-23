@@ -1,6 +1,7 @@
 
 var settingsProfiles = {
     dev: {
+        profileName: 'dev',
         domainName: {
             address: "http://localhost",
             beautifulName: "CanIHazBets",
@@ -14,9 +15,14 @@ var settingsProfiles = {
                 port: 25
             }
         },
-        privateMessagesWorkerProcesses: 3
+        privateMessagesWorkerProcesses: 3,
+        inbox: {
+            numberOfConversationsOnInboxEmit: 5,
+            numberOfMessagesInConversationOnInboxEmit: 10
+        }
     },
     prod: {
+        profileName: 'prod',
         domainName: {
             address: "http://canihazbets.me",
             beautifulName: "CanIHazBets",
@@ -31,7 +37,21 @@ var settingsProfiles = {
             }
         },
         privateMessagesWorkerProcesses: 3
+    },
+    inbox: {
+        numberOfConversationsOnInboxEmit: 7,
+        numberOfMessagesInConversationOnInboxEmit: 50
     }
 };
 
-module.exports = settingsProfiles.dev;
+var returnVal = settingsProfiles.dev; // change this line to switch between profiles
+
+returnVal.isDev = function () {
+    return returnVal.profileName == 'dev';
+}
+
+returnVal.isProd = function () {
+    return returnVal.profileName == 'prod';
+}
+
+module.exports = returnVal;

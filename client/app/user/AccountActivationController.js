@@ -2,8 +2,13 @@
 userModule
 
 .controller('AccountActivationController', [
-'$scope', 'ActivationFactory', 'UserInformation', '$location',
-function ($scope, ActivationFactory, UserInformation, $location) {
+'$scope', 'ActivationFactory', 'UserInformation', '$location', 'Socket', 'ChattingService',
+function ($scope, ActivationFactory, UserInformation, $location, Socket, ChattingService) {
+
+    Socket.getSocket().then(function () {
+        Socket.unregisterMe();
+        ChattingService.removeAllBoxes();
+    });
 
     $scope.inputs = {
         registrationCode: ''
@@ -17,6 +22,7 @@ function ($scope, ActivationFactory, UserInformation, $location) {
             function (user) {
                 // on success
                 UserInformation.setUserDetails(user);
+                Socket.registerMe();
                 $location.path('');
             },
             function () {
