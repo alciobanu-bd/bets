@@ -32,6 +32,7 @@ module.exports = function (grunt) {
 
                     'client/app/utils/utilsModule.js',
                     'client/app/utils/includeReplace.js',
+                    'client/app/utils/onScrollDirective.js',
                     'client/app/utils/Geolocation.js',
                     'client/app/utils/utilServices.js',
                     'client/app/utils/dateSort.js',

@@ -217,6 +217,11 @@ function (UserInformation) {
         inboxListSubscriberFunctions.push(callback);
     }
 
+    var inboxUpdateEndSubscriberFunctions = [];
+    thisFactory.iWantToBeNotifiedOnInboxUpdateEndOfFunction = function (callback) {
+        inboxUpdateEndSubscriberFunctions.push(callback);
+    }
+
     thisFactory.updatePassiveBoxes = function (inboxGroupedByUser) {
 
         if (inboxGroupedByUser.length == 0) {
@@ -258,6 +263,13 @@ function (UserInformation) {
             thisFactory.passiveBoxes.push(newBox);
 
             newBox.messages = conversationWithUser.data;
+        }
+
+        for (var i = 0; i < inboxUpdateEndSubscriberFunctions.length; i++) {
+            var callback = inboxUpdateEndSubscriberFunctions[i];
+            if (typeof callback === 'function') {
+                callback();
+            }
         }
 
         thisFactory.loadedInbox = true;

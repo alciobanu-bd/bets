@@ -97,9 +97,9 @@
             </ul>
         </div>
 
-        <div ng-show="showMessagesBrief" class="messages-preview" style="position: relative;">
-            <div class="msg-box" ng-controller="MessagesController"
-                 ng-class="(ChattingService.lastMessages.length > 5) ? 'msg-box-scroll' : ''">
+        <div ng-show="showMessagesBrief" class="messages-preview" ng-controller="MessagesController">
+            <div class="msg-box" ng-class="(ChattingService.lastMessages.length > 5) ? 'msg-box-scroll' : ''"
+                 id="messages-preview" on-scroll="tryToLoadMore()">
 
                 <div ng-repeat="msg in ChattingService.lastMessages track by msg.date"
                      ng-click="openChatBox(msg); closeMessagesBox();"
@@ -121,6 +121,10 @@
                         {{msg.date | date: 'd MMM yy, HH:mm'}}
                     </div>
                 </div>
+                <div ng-show="loadingMore" class="centered">
+                    <img src="images/loader.gif" style="width: 5%; height: 5%; padding-top: 10px;" />
+                </div>
+
                 <div class="row-msg" style="padding: 1em" ng-if="ChattingService.loadedInbox && ChattingService.lastMessages.length == 0">
                     {{'messages.noMessages' | translate}}
                 </div>
@@ -128,11 +132,8 @@
                     <img src="images/loader.gif" style="width: 15%; height: 15%;" />
                 </div>
 
-                <div ng-click="loadMore()">
-                    Load more
-                </div>
-
             </div>
+
         </div>
 
     </div>

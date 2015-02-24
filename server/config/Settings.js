@@ -17,7 +17,7 @@ var settingsProfiles = {
         },
         privateMessagesWorkerProcesses: 3,
         inbox: {
-            numberOfConversationsOnInboxEmit: 5,
+            numberOfConversationsOnInboxEmit: 7,
             numberOfMessagesInConversationOnInboxEmit: 10
         }
     },
@@ -43,6 +43,9 @@ var settingsProfiles = {
         numberOfMessagesInConversationOnInboxEmit: 50
     }
 };
+
+
+
 
 var returnVal = settingsProfiles.dev; // change this line to switch between profiles
 
