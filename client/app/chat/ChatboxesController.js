@@ -24,6 +24,12 @@ function ($scope, ChatMessage, ChattingService, UserInformation, SoundPlayer) {
         });
     });
 
+    ChatMessage.onConversationMoreMessages(function (data) {
+        $scope.$apply(function () {
+            ChattingService.updateChatboxWithMoreMessages(data);
+        });
+    });
+
     $scope.$watch('userInfo.isLogged', function () {
         if (!$scope.userInfo.isLogged) {
             ChattingService.reset();

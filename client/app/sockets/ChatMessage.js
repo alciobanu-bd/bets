@@ -48,6 +48,27 @@ function (Socket, LoginTokenFactory) {
         });
     }
 
+    thisFactory.loadMoreConversationMessages = function (conversationBox) {
+        var accessToken = LoginTokenFactory.getToken().token;
+        socketPromise.then(function (socket) {
+            socket.emit('load-more-messages-in-conversation', {
+                token: accessToken,
+                howMuchIHave: conversationBox.messages.length,
+                partnerUser: conversationBox.with
+            });
+        });
+    }
+
+    thisFactory.onConversationMoreMessages = function (callback) {
+        socketPromise.then(function (socket) {
+            socket.on('messages-with-user', function (data) {
+                if (typeof callback === 'function') {
+                    callback(data);
+                }
+            });
+        });
+    }
+
     return thisFactory;
 
 }

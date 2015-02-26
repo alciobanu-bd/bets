@@ -276,6 +276,10 @@ function (UserInformation) {
 
     }
 
+    thisFactory.updateChatboxWithMoreMessages = function (data) {
+        console.log(data);
+    }
+
     return thisFactory;
 
 }

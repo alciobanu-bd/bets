@@ -122,6 +122,13 @@ return {
             scope.markConversationAsRead();
         }
 
+
+        scope.loadMore = function () {
+
+            ChatMessage.loadMoreConversationMessages(scope.conversation);
+
+        }
+
     }
 }
 }]);

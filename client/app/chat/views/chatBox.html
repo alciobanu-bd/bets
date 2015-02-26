@@ -8,6 +8,9 @@
     </label>
     <div class="chat-box-content" style="height: 250px; overflow-x: scroll; overflow-y: visible;"
          id="{{'chatbox-content-' + conversation.id}}">
+        <div ng-click="loadMore()">
+            Load more
+        </div>
         <div ng-repeat="msg in conversation.messages track by msg._id" style="margin-bottom: 2px"
              ng-class="(msg.from._id == userInfo.user._id) ? 'align-right red-text' : 'align-left green-text'">
             <div>

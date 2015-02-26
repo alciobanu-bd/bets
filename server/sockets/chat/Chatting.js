@@ -95,11 +95,11 @@ var getConversationsFromDb = function () {
 
             for (var i = 0; i < pms.length; i++) {
                 var msgLen = pms[i].data.length;
-                var spliceIndex = msgLen - Settings.inbox.numberOfMessagesInConversationOnInboxEmit;
+                var spliceIndex = msgLen - Settings.inbox.numberOfMessagesToLoadPerCoversation;
                 if (spliceIndex < 0) {
                     spliceIndex = 0;
                 }
-                pms[i].data = pms[i].data.splice(spliceIndex, Settings.inbox.numberOfMessagesInConversationOnInboxEmit);
+                pms[i].data = pms[i].data.splice(spliceIndex, Settings.inbox.numberOfMessagesToLoadPerCoversation);
             }
 
             AsymmetricEncryption.decryptGroupedUserMessages(pms, function (err, decryptedMessages) {
@@ -107,6 +107,28 @@ var getConversationsFromDb = function () {
             });
 
         });
+
+}
+
+var getMessagesFromConversation = function (currentUser, partnerUser, skip, callback) {
+
+    PrivateMessage.find(
+        {$or: [{'to._id': currentUser._id, 'from._id': mongoose.Types.ObjectId(partnerUser._id)}, {'to._id': mongoose.Types.ObjectId(partnerUser._id), 'from._id': currentUser._id}]},
+        {},
+        {sort: {date: -1}, limit: Settings.inbox.numberOfMessagesToLoadPerCoversation, skip: skip},
+        function (err, pms) {
+
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+            AsymmetricEncryption.decryptUserMessages(pms, function (err, decryptedMessages) {
+                callback(err, decryptedMessages);
+            });
+
+        }
+    );
 
 }
 
@@ -174,6 +196,20 @@ var handleChatters = function (socket) {
 
             getConversationsFromDb(user, data.howMuchIHave, function (err, pms) {
                 socket.emit('pm-inbox-update', pms);
+            });
+
+        });
+    });
+
+    socket.on('load-more-messages-in-conversation', function (data) {
+        TokenDecrypter.decrypt(data.token, function (err, user) {
+
+            if (err || !user) {
+                return;
+            }
+
+            getMessagesFromConversation(user, data.partnerUser, data.howMuchIHave, function (err, pms) {
+                socket.emit('messages-with-user', {user: data.partnerUser, messages: pms});
             });
 
         });
