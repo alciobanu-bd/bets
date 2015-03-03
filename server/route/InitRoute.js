@@ -38,7 +38,8 @@ var initFeed = {
     },
     admin: {
         rankingRecalculate: "/api/ranking/recalculate"
-    }
+    },
+    serverDate: "/api/serverDate"
 };
 
 var express = require('express');

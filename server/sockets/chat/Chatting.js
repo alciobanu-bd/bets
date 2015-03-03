@@ -11,7 +11,7 @@ var mongoose = require ('mongoose');
 var _ = require('underscore');
 
 
-var savePrivateMessageToDatabase = function (user, recipient, message) {
+var savePrivateMessageToDatabase = function (user, recipient, message, clientGeneratedId) {
     var pm = new PrivateMessage();
     pm.from = {
         _id: user._id,
@@ -24,6 +24,7 @@ var savePrivateMessageToDatabase = function (user, recipient, message) {
     pm.date = new Date();
     pm.message = message;
     pm.read = false;
+    pm.clientGeneratedId = clientGeneratedId;
     pm.save(function (err) {
         // handle error
     });
@@ -75,7 +76,8 @@ var getConversationsFromDb = function () {
             {$sort: {date: 1}},
             {$group: {
                 _id: {$cond: {if: {$eq: ['$to._id', user._id]}, then: '$from._id', else: '$to._id'}},
-                data: {$push: {_id: "$_id", read: "$read", message: "$message", date: "$date", to: "$to", from: "$from"}},
+                data: {$push: {_id: "$_id", read: "$read", message: "$message", date: "$date", to: "$to",
+                                from: "$from", clientGeneratedId: "$clientGeneratedId"}},
                 lastMessageDate: {$max: '$date'}
             }},
             {$sort: {lastMessageDate: -1}},
@@ -158,13 +160,14 @@ var handleChatters = function (socket) {
                         from: {_id: user._id, username: user.username},
                         to: data.to,
                         message: data.message,
-                        date: new Date()
+                        date: new Date(),
+                        clientGeneratedId: data.clientGeneratedId
                     });
                 }
 
                 if (data.to.length == 1) {
                     AsymmetricEncryption.encrypt(data.message, function (err, message) {
-                        savePrivateMessageToDatabase(user, recipient, message);
+                        savePrivateMessageToDatabase(user, recipient, message, data.clientGeneratedId);
                     });
                 }
                 else {

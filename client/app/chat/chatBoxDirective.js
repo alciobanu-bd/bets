@@ -3,7 +3,9 @@ chatModule
 
 .directive('chatBox', [
 'ChatMessage', 'ChattingService', 'UserInformation', '$timeout', 'Gravatar', 'InitUrls', 'CallUrlService',
-function(ChatMessage, ChattingService, UserInformation, $timeout, Gravatar, InitUrls, CallUrlService) {
+'MessageIdGenerator',
+function(ChatMessage, ChattingService, UserInformation, $timeout, Gravatar, InitUrls, CallUrlService,
+MessageIdGenerator) {
 return {
     restrict: 'E',
     replace: true,
@@ -74,10 +76,12 @@ return {
                 return;
             }
 
+            var clientGeneratedId = MessageIdGenerator.generateId(UserInformation.user._id, scope.currentMessage);
+
             ChatMessage.sendPrivateMessage({
                 _id: scope.conversation.with._id,
                 username: scope.conversation.with.username
-            }, scope.currentMessage);
+            }, scope.currentMessage, clientGeneratedId);
             ChattingService.addOwnSentMessage(scope.conversation,
             { // from
                 _id: UserInformation.user._id,
@@ -87,7 +91,7 @@ return {
                 _id: scope.conversation.with._id,
                 username: scope.conversation.with.username
             },
-            scope.currentMessage);
+            scope.currentMessage, clientGeneratedId);
 
             scope.currentMessage = "";
 

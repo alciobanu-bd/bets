@@ -25,6 +25,32 @@ function () {
 }
 ])
 
+.factory('MessageIdGenerator', [
+'SHA-2',
+function (SHA2) {
+
+    var randomString = function() {
+        var s = Math.random().toString(36).slice(2);
+        while (s.length < 16) {
+            s += Math.random().toString(36).slice(2);
+        }
+        if (s.length > 25) {
+            s = s.substring(1, 23);
+        }
+        return s;
+    }
+
+    return {
+        generateId: function (userId, message) {
+            var hash = SHA2.sha256(message);
+            return userId + hash +
+                new Date().toISOString() +
+                randomString();
+        }
+    };
+}
+])
+
 .factory('SHA-2', [
 function () {
     var chrsz = 8; // bits per input character. 8 - ASCII; 16 - Unicode

@@ -7,14 +7,14 @@ function (Socket, LoginTokenFactory) {
 
     var socketPromise = Socket.getSocket();
 
-    thisFactory.sendPrivateMessage = function (to, message) {
+    thisFactory.sendPrivateMessage = function (to, message, clientGeneratedId) {
         var accessToken = LoginTokenFactory.getToken().token;
         socketPromise.then(function (socket) {
             socket.emit('pm', {
                 token: accessToken,
                 to: to,
                 message: message,
-                date: new Date()
+                clientGeneratedId: clientGeneratedId
             });
         });
     }

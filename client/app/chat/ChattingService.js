@@ -1,8 +1,8 @@
 
 chatModule.
 factory('ChattingService', [
-'UserInformation',
-function (UserInformation) {
+'UserInformation', 'ServerDate',
+function (UserInformation, ServerDate) {
 
     var thisFactory = {};
 
@@ -90,6 +90,16 @@ function (UserInformation) {
 
     }
 
+    var getActiveBoxByUser = function (user) {
+        for (var i = 0; i < thisFactory.activeBoxes.length; i++) {
+            var box = thisFactory.activeBoxes[i];
+            if (box.with._id == user._id) {
+                return box;
+            }
+        }
+        return null;
+    }
+
     var insertIntoLastMessages = function (from, to, message, _id) {
 
         for (var i = 0; i < thisFactory.lastMessages.length; i++) {
@@ -118,7 +128,8 @@ function (UserInformation) {
             from: data.from,
             message: data.message,
             date: data.date,
-            _id: getNextId()
+            _id: getNextId(),
+            clientGeneratedId: data.clientGeneratedId
         });
         box.iVeReadIt = false;
 
@@ -134,12 +145,16 @@ function (UserInformation) {
 
     }
 
-    thisFactory.addOwnSentMessage = function (conversationBox, from, to, message) {
-        conversationBox.messages.push({
-            from: from,
-            message: message,
-            date: new Date(),
-            _id: getNextId()
+    thisFactory.addOwnSentMessage = function (conversationBox, from, to, message, clientGeneratedId) {
+
+        ServerDate.getDate().then(function (serverDate) {
+            conversationBox.messages.push({
+                from: from,
+                message: message,
+                date: serverDate,
+                _id: getNextId(),
+                clientGeneratedId: clientGeneratedId
+            });
         });
         conversationBox.iVeReadIt = true;
         insertIntoLastMessages(from, to, message);
@@ -276,8 +291,35 @@ function (UserInformation) {
 
     }
 
+    var existsMessageInConversation = function (searchedMessage, messagesInConversation) {
+
+        var delta = 60 * 1000; // 60 seconds
+
+        for (var j = 0; j < messagesInConversation.length; j++) {
+            var messageConversation = messagesInConversation[j];
+            if (searchedMessage.clientGeneratedId == messageConversation.clientGeneratedId) {
+                return true;
+            }
+            if (new Date(messageConversation.date).getTime() > new Date(searchedMessage.date).getTime() + delta) {
+                break;
+            }
+        }
+        return false;
+    }
+
     thisFactory.updateChatboxWithMoreMessages = function (data) {
-        console.log(data);
+
+        var keptMessages = [];
+        var box = getActiveBoxByUser(data.user);
+        for (var i = data.messages.length - 1; i >= 0; i--) {
+            var currentMessage = data.messages[i];
+            if (!existsMessageInConversation(currentMessage, box.messages)) {
+                keptMessages.push(currentMessage);
+            }
+        }
+
+        box.messages = keptMessages.concat(box.messages);
+        console.log(box.messages);
     }
 
     return thisFactory;

@@ -8,6 +8,7 @@ var MessagingSchema = mongoose.Schema({
     from: {type: Schema.Types.Mixed, required: true},
     message: {type: 'string', required: true},
     date: {type: 'date', required: true},
+    clientGeneratedId: {type: 'string', required: true},
     read: {type: Boolean, required: true} // says whether the message was read by receiver (the "to" field) or not
 });
 

@@ -105,6 +105,12 @@ verifyKeys({
 // use client folder as root path /
 app.use('/', express.static(path.resolve('client/')));
 
+app.get('/api/serverDate', function (req, res) {
+    res.status(200).json({
+        date: new Date()
+    }).end();
+});
+
 // START THE SERVER
 GLOBAL.LISTENER = app.listen(Settings.port);
 console.log('Server started on port ' + Settings.port);
