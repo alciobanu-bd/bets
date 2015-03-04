@@ -26,7 +26,7 @@ function ($http, $q, InitUrls, CallUrlService) {
 
                     defered.resolve(gapBetweenClientAndServer);
                 },function () {
-                    // TODO treat error
+                    defered.reject();
                 });
         });
         return defered.promise;
