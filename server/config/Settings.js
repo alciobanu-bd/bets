@@ -36,11 +36,11 @@ var settingsProfiles = {
                 port: 25
             }
         },
-        privateMessagesWorkerProcesses: 3
-    },
-    inbox: {
-        numberOfConversationsOnInboxEmit: 7,
-        numberOfMessagesInConversationOnInboxEmit: 50
+        privateMessagesWorkerProcesses: 3,
+        inbox: {
+            numberOfConversationsOnInboxEmit: 7,
+            numberOfMessagesInConversationOnInboxEmit: 50
+        }
     }
 };
 
