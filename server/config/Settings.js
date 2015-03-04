@@ -39,7 +39,7 @@ var settingsProfiles = {
         privateMessagesWorkerProcesses: 3,
         inbox: {
             numberOfConversationsOnInboxEmit: 7,
-            numberOfMessagesInConversationOnInboxEmit: 50
+            numberOfMessagesToLoadPerCoversation: 50
         }
     }
 };
