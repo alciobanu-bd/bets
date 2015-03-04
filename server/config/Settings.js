@@ -28,7 +28,7 @@ var settingsProfiles = {
             beautifulName: "CanIHazBets",
             dns: "canihazbets.me"
         },
-        port: 9066,
+        port: 80,
         dbPath: "mongodb://localhost/bets",
         mail: {
             smtp: {
