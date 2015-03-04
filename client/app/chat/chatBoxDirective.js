@@ -18,6 +18,8 @@ return {
         scope.userInfo = UserInformation;
         var partnerUser = null;
 
+        scope.conversation.lastAction = new Date();
+
         InitUrls.then(function (urls) {
             CallUrlService.get({uri: urls.user.address, id: scope.conversation.with._id},
             function (user) {
@@ -77,6 +79,7 @@ return {
         scrollContentToBottom();
 
         scope.conversation.onMessageReceived = function () {
+            scope.conversation.lastAction = new Date();
             if (isContentBoxScrolledToBottom()) {
                 scrollContentToBottom();
             }
@@ -85,6 +88,8 @@ return {
         scope.currentMessage = "";
 
         var sendMessage = function () {
+
+            scope.conversation.lastAction = new Date();
 
             if (scope.currentMessage.trim() == "") {
                 return;
@@ -120,6 +125,7 @@ return {
         }
 
         scope.markConversationAsRead = function () {
+            scope.conversation.lastAction = new Date();
             ChattingService.markBoxAsRead(scope.conversation);
             var lastMessage = ChattingService.getLastMessageOfConversation(scope.conversation);
             if (!lastMessage) {
@@ -142,11 +148,13 @@ return {
 
 
         var endOfList = false;
-        ChattingService.iWantToBeNotifiedWhenConversationMessagesListIsEmpty(function () {
+        ChattingService.iWantToBeNotifiedWhenConversationMessagesListIsEmpty(scope.conversation.with,
+        function () {
             endOfList = true;
         });
 
-        ChattingService.iWantToBeNotifiedWhenConversationUpdateFunctionEnds(function () {
+        ChattingService.iWantToBeNotifiedWhenConversationUpdateFunctionEnds(scope.conversation.with,
+        function () {
             scrollContentAfterNewMessages();
         });
 
@@ -158,12 +166,18 @@ return {
 
         scope.tryToLoadMore = function () {
 
+            scope.conversation.lastAction = new Date();
+
             if (!isContentBoxScrolledToTop() || endOfList) {
                 return;
             }
 
             loadMore();
         }
+
+        scope.$on('$destroy', function () {
+            ChattingService.unsubscribeAllConversationMessagesSubscibersForThisUser(scope.conversation.with);
+        });
 
     }
 }

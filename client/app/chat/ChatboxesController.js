@@ -1,11 +1,11 @@
 
 chatModule
 .controller('ChatboxesController', [
-'$scope', 'ChatMessage', 'ChattingService', 'UserInformation', 'SoundPlayer',
-function ($scope, ChatMessage, ChattingService, UserInformation, SoundPlayer) {
+'$scope', 'ChatMessage', 'ChattingService', 'UserInformation', 'SoundPlayer', 'Settings',
+function ($scope, ChatMessage, ChattingService, UserInformation, SoundPlayer, Settings) {
 
     $scope.getMarginRight = function (index) {
-        return index * 255 + "px";
+        return index * Settings.chat.chatboxWidth + "px";
     }
 
     $scope.userInfo = UserInformation;

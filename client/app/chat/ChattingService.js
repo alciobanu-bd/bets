@@ -1,8 +1,8 @@
 
 chatModule.
 factory('ChattingService', [
-'UserInformation', 'ServerDate',
-function (UserInformation, ServerDate) {
+'UserInformation', 'ServerDate', 'Settings',
+function (UserInformation, ServerDate, Settings) {
 
     var thisFactory = {};
 
@@ -47,6 +47,26 @@ function (UserInformation, ServerDate) {
         return conversationBox.messages[conversationBox.messages.length - 1];
     }
 
+    var closeOneActiveBoxIfNecessary = function () {
+
+        if (thisFactory.activeBoxes.length <= Settings.chat.maxNumberOfOpenChatboxes) {
+            return;
+        }
+
+        var oldestBox = thisFactory.activeBoxes[0];
+        var oldestBoxIndex = 0;
+        for (var i = 1; i < thisFactory.activeBoxes.length; i++) {
+            var box = thisFactory.activeBoxes[i];
+            if (box.lastAction < oldestBox.lastAction) {
+                oldestBox = box;
+                oldestBoxIndex = i;
+            }
+        }
+        var box = thisFactory.activeBoxes[oldestBoxIndex];
+        thisFactory.passiveBoxes.push(box);
+        thisFactory.activeBoxes.splice(oldestBoxIndex, 1);
+    }
+
     thisFactory.createActiveConversationBox = function (user) {
 
         /*
@@ -57,6 +77,8 @@ function (UserInformation, ServerDate) {
             if (currentBox.with._id == user._id) {
                 thisFactory.activeBoxes.push(currentBox);
                 thisFactory.passiveBoxes.splice(i, 1);
+                currentBox.lastAction = new Date();
+                closeOneActiveBoxIfNecessary();
                 return currentBox;
             }
         }
@@ -69,6 +91,8 @@ function (UserInformation, ServerDate) {
             if (currentBox.with._id == user._id) {
                 // if box is already opened
                 currentBox.checked = true;
+                currentBox.lastAction = new Date();
+                closeOneActiveBoxIfNecessary();
                 return currentBox;
             }
         }
@@ -81,11 +105,13 @@ function (UserInformation, ServerDate) {
             checked: true,
             messages: [],
             id: thisFactory.id++,
-            iVeReadIt: true
+            iVeReadIt: true,
+            lastAction: new Date()
         };
 
         thisFactory.activeBoxes.push(newConversation);
 
+        closeOneActiveBoxIfNecessary();
         return newConversation;
 
     }
@@ -132,6 +158,7 @@ function (UserInformation, ServerDate) {
             clientGeneratedId: data.clientGeneratedId
         });
         box.iVeReadIt = false;
+        box.lastAction = new Date();
 
         insertIntoLastMessages(
             data.from,
@@ -142,6 +169,8 @@ function (UserInformation, ServerDate) {
         if (typeof box.onMessageReceived === 'function') {
             box.onMessageReceived();
         }
+
+        closeOneActiveBoxIfNecessary();
 
     }
 
@@ -308,22 +337,43 @@ function (UserInformation, ServerDate) {
     }
 
     var conversationEmptyListSubscriberFunctions = [];
-    thisFactory.iWantToBeNotifiedWhenConversationMessagesListIsEmpty = function (callback) {
-        conversationEmptyListSubscriberFunctions.push(callback);
+    thisFactory.iWantToBeNotifiedWhenConversationMessagesListIsEmpty = function (partnerUser, callback) {
+        conversationEmptyListSubscriberFunctions.push({
+            user: partnerUser,
+            callback: callback
+        });
     }
 
     var conversationEndOfFunctionSubscriberFunctions = [];
-    thisFactory.iWantToBeNotifiedWhenConversationUpdateFunctionEnds = function (callback) {
-        conversationEndOfFunctionSubscriberFunctions.push(callback);
+    thisFactory.iWantToBeNotifiedWhenConversationUpdateFunctionEnds = function (partnerUser, callback) {
+        conversationEndOfFunctionSubscriberFunctions.push({
+            user: partnerUser,
+            callback: callback
+        });
+    }
+
+    thisFactory.unsubscribeAllConversationMessagesSubscibersForThisUser = function (partnerUser) {
+        for (var i = 0; i < conversationEmptyListSubscriberFunctions.length; i++) {
+            if (conversationEmptyListSubscriberFunctions[i].user._id == partnerUser._id) {
+                conversationEmptyListSubscriberFunctions.splice(i, 1);
+                break;
+            }
+        }
+        for (var i = 0; i < conversationEndOfFunctionSubscriberFunctions.length; i++) {
+            if (conversationEndOfFunctionSubscriberFunctions[i].user._id == partnerUser._id) {
+                conversationEndOfFunctionSubscriberFunctions.splice(i, 1);
+                break;
+            }
+        }
     }
 
     thisFactory.updateChatboxWithMoreMessages = function (data) {
 
         if (data.messages.length == 0) {
             for (var i = 0; i < conversationEmptyListSubscriberFunctions.length; i++) {
-                var callback = conversationEmptyListSubscriberFunctions[i];
-                if (typeof callback === 'function') {
-                    callback();
+                var subscribeObject = conversationEmptyListSubscriberFunctions[i];
+                if (data.user._id == subscribeObject.user._id && typeof subscribeObject.callback === 'function') {
+                    subscribeObject.callback();
                 }
             }
             return;
@@ -341,9 +391,9 @@ function (UserInformation, ServerDate) {
         box.messages = keptMessages.concat(box.messages);
 
         for (var i = 0; i < conversationEndOfFunctionSubscriberFunctions.length; i++) {
-            var callback = conversationEndOfFunctionSubscriberFunctions[i];
-            if (typeof callback === 'function') {
-                callback();
+            var subscribeObject = conversationEndOfFunctionSubscriberFunctions[i];
+            if (data.user._id == subscribeObject.user._id && typeof subscribeObject.callback === 'function') {
+                subscribeObject.callback();
             }
         }
 
