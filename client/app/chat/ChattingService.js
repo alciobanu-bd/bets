@@ -307,7 +307,26 @@ function (UserInformation, ServerDate) {
         return false;
     }
 
+    var conversationEmptyListSubscriberFunctions = [];
+    thisFactory.iWantToBeNotifiedWhenConversationMessagesListIsEmpty = function (callback) {
+        conversationEmptyListSubscriberFunctions.push(callback);
+    }
+
+    var conversationEndOfFunctionSubscriberFunctions = [];
+    thisFactory.iWantToBeNotifiedWhenConversationUpdateFunctionEnds = function (callback) {
+        conversationEndOfFunctionSubscriberFunctions.push(callback);
+    }
+
     thisFactory.updateChatboxWithMoreMessages = function (data) {
+
+        if (data.messages.length == 0) {
+            for (var i = 0; i < conversationEmptyListSubscriberFunctions.length; i++) {
+                var callback = conversationEmptyListSubscriberFunctions[i];
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }
+        }
 
         var keptMessages = [];
         var box = getActiveBoxByUser(data.user);
@@ -319,7 +338,14 @@ function (UserInformation, ServerDate) {
         }
 
         box.messages = keptMessages.concat(box.messages);
-        console.log(box.messages);
+
+        for (var i = 0; i < conversationEndOfFunctionSubscriberFunctions.length; i++) {
+            var callback = conversationEndOfFunctionSubscriberFunctions[i];
+            if (typeof callback === 'function') {
+                callback();
+            }
+        }
+
     }
 
     return thisFactory;

@@ -73,7 +73,9 @@ Settings, KeepMeLoggedInStorage, $location, CurrentLanguageFactory) {
                 CheckActivationStatus.check();
                 $scope.loginInProgress = false;
 
-                CurrentLanguageFactory.setLanguage($scope.userInfo.user.language);
+                UserInformation.ready(function () {
+                    CurrentLanguageFactory.setLanguage($scope.userInfo.user.language);
+                });
 
             },
             function (rejection) {

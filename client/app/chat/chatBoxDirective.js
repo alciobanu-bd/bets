@@ -60,6 +60,20 @@ return {
             return false;
         }
 
+        var isContentBoxScrolledToTop = function () {
+            var chatboxDiv = document.getElementById("chatbox-content-" + scope.conversation.id);
+            if (chatboxDiv.scrollTop <= 0) {
+                return true;
+            }
+            return false;
+        }
+
+        var scrollContentToMiddle = function () {
+            $timeout(function () {
+                var chatboxDiv = document.getElementById("chatbox-content-" + scope.conversation.id);
+                chatboxDiv.scrollTop = chatboxDiv.scrollHeight / 2;
+            }, 0);
+        }
         scrollContentToBottom();
 
         scope.conversation.onMessageReceived = function () {
@@ -127,10 +141,28 @@ return {
         }
 
 
-        scope.loadMore = function () {
+        var endOfList = false;
+        ChattingService.iWantToBeNotifiedWhenConversationMessagesListIsEmpty(function () {
+            endOfList = true;
+        });
+
+        ChattingService.iWantToBeNotifiedWhenConversationUpdateFunctionEnds(function () {
+            scrollContentToMiddle();
+        });
+
+        var loadMore = function () {
 
             ChatMessage.loadMoreConversationMessages(scope.conversation);
 
+        }
+
+        scope.tryToLoadMore = function () {
+
+            if (!isContentBoxScrolledToTop() || endOfList) {
+                return;
+            }
+
+            loadMore();
         }
 
     }
