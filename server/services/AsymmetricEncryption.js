@@ -3,8 +3,7 @@ var cp = require('child_process');
 var Settings = require('./../config/Settings.js');
 
 var PROCESSES_NO = Settings.privateMessagesWorkerProcesses;
-var MAX_ID = 10; // to be changed when things are stable
-// var MAX_ID = Math.pow(2, 50) + Math.pow(2, 49); // maximum safe integer is 2^53
+var MAX_ID = Math.pow(2, 50) + Math.pow(2, 49); // maximum safe integer is 2^53
 var nextWorkingProcess = 0;
 var childProcs = [];
 
@@ -62,6 +61,11 @@ var decryptUserMessages = function (userMessagesArray, callback) {
     getNextWorkingChild().send({decryptUserMessages: userMessagesArray, id: messageMetadata.id, processId: messageMetadata.processId});
 }
 
+var decryptGroupedUserMessages = function (groupedMessages, callback) {
+    var messageMetadata = addMessageToBuffer(callback);
+    getNextWorkingChild().send({decryptGroupedUserMessages: groupedMessages, id: messageMetadata.id, processId: messageMetadata.processId});
+}
+
 var onMessageFromChild = function (message) {
     var callback = getCallback(message.processId, message.id);
     callback(null, message.message);
@@ -77,9 +81,9 @@ for (var i = 0; i < PROCESSES_NO; i++) {
     childProcs[i].child.send({hello: i});
 }
 
-
 module.exports = {
     encrypt: encrypt,
     decrypt: decrypt,
-    decryptUserMessages: decryptUserMessages
+    decryptUserMessages: decryptUserMessages,
+    decryptGroupedUserMessages: decryptGroupedUserMessages
 };

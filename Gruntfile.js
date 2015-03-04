@@ -29,9 +29,13 @@ module.exports = function (grunt) {
                     'client/lib/bootstrap/dist/js/bootstrap.js',
                     'client/lib/underscore/underscore-min.js',
                     'client/lib/jsPDF/index.js',
-                
+
+                    'client/app/main/beforeAngularScripts.js',
+
                     'client/app/utils/utilsModule.js',
+                    'client/app/utils/ServerDateFactory.js',
                     'client/app/utils/includeReplace.js',
+                    'client/app/utils/onScrollDirective.js',
                     'client/app/utils/Geolocation.js',
                     'client/app/utils/utilServices.js',
                     'client/app/utils/dateSort.js',
@@ -67,17 +71,17 @@ module.exports = function (grunt) {
                     'client/app/user/ChangePasswordController.js',
                     'client/app/user/ForgotPasswordController.js',
                     'client/app/user/ResetPasswordController.js',
-                
+
                     'client/app/sockets/socketsModule.js',
                     'client/app/sockets/Socket.js',
                     'client/app/sockets/ChatMessage.js',
-                
+
                     'client/app/chat/chatModule.js',
                     'client/app/chat/ChattingService.js',
                     'client/app/chat/ChatboxesController.js',
                     'client/app/chat/MessagesController.js',
                     'client/app/chat/chatBoxDirective.js',
-                
+
                     'client/app/ranking/rankingModule.js',
                     'client/app/ranking/RankingController.js',
                     'client/app/ranking/RankingServices.js',

@@ -45,6 +45,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+// gc once in a while
+setInterval(function () {
+    global.gc();
+}, 10 * 60 * 5000); // 10 minutes
+
 // use token service
 var filename = "server/config/secretString";
 var secretString = fs.readFileSync(filename, "utf8");
@@ -99,6 +104,12 @@ verifyKeys({
 // resolve statics
 // use client folder as root path /
 app.use('/', express.static(path.resolve('client/')));
+
+app.get('/api/serverDate', function (req, res) {
+    res.status(200).json({
+        date: new Date()
+    }).end();
+});
 
 // START THE SERVER
 GLOBAL.LISTENER = app.listen(Settings.port);

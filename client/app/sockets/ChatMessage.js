@@ -7,14 +7,14 @@ function (Socket, LoginTokenFactory) {
 
     var socketPromise = Socket.getSocket();
 
-    thisFactory.sendPrivateMessage = function (to, message) {
+    thisFactory.sendPrivateMessage = function (to, message, clientGeneratedId) {
         var accessToken = LoginTokenFactory.getToken().token;
         socketPromise.then(function (socket) {
             socket.emit('pm', {
                 token: accessToken,
                 to: to,
                 message: message,
-                date: new Date()
+                clientGeneratedId: clientGeneratedId
             });
         });
     }
@@ -41,7 +41,30 @@ function (Socket, LoginTokenFactory) {
     thisFactory.onInboxUpdate = function (callback) {
         socketPromise.then(function (socket) {
             socket.on('pm-inbox-update', function (data) {
-                callback(data);
+                if (typeof callback === 'function') {
+                    callback(data);
+                }
+            });
+        });
+    }
+
+    thisFactory.loadMoreConversationMessages = function (conversationBox) {
+        var accessToken = LoginTokenFactory.getToken().token;
+        socketPromise.then(function (socket) {
+            socket.emit('load-more-messages-in-conversation', {
+                token: accessToken,
+                howMuchIHave: conversationBox.messages.length,
+                partnerUser: conversationBox.with
+            });
+        });
+    }
+
+    thisFactory.onConversationMoreMessages = function (callback) {
+        socketPromise.then(function (socket) {
+            socket.on('messages-with-user', function (data) {
+                if (typeof callback === 'function') {
+                    callback(data);
+                }
             });
         });
     }

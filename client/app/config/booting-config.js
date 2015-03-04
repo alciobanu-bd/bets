@@ -14,7 +14,9 @@ Socket, ChattingService) {
 
     Socket.getSocket().then(function (socket) {
         socket.on('require-registration', function () {
-            Socket.registerMe();
+            if (UserInformation.isLogged) {
+                Socket.registerMe();
+            }
         });
     });
 

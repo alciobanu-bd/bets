@@ -1,9 +1,9 @@
 betsModule
 .controller('MainController',[
 '$scope', 'Templates', 'UserInformation', 'UserInformationCalls', 'UserInformation', '$interval',
-'Settings','$routeParams', '$location',
+'Settings','$routeParams', '$location', 'ServerDate',
 function ($scope, Templates, UserInfo, UserInformationCalls, UserInformation, $interval,
-Settings, $routeParams, $location) {
+Settings, $routeParams, $location, ServerDate) {
     /**
      * UserInformationCalls is injected because it sets the user information.
      */
@@ -67,6 +67,7 @@ Settings, $routeParams, $location) {
     }
 
     window.onload = countWatchers;
+    $interval(countWatchers, 10000);
 
 }
 ]);

@@ -90,7 +90,7 @@ rankingModule
         $scope.Gravatar = Gravatar;
 
         $scope.openChatbox = function () {
-            ChattingService.createConversationBox({
+            ChattingService.createActiveConversationBox({
                 _id: user._id,
                 username: user.username
             });

@@ -7,8 +7,10 @@ function (Settings) {
 
     return {
         onNewMessage: function () {
-            var audio = new Audio(Settings.sounds.newMessageSoundUrl);
-            audio.play();
+            if (!isWindowActive) {
+                var audio = new Audio(Settings.sounds.newMessageSoundUrl);
+                audio.play();
+            }
         }
     };
 
@@ -20,6 +22,32 @@ function () {
     return {
         generate: function () {
             return Math.random().toString(36).substring(7);
+        }
+    };
+}
+])
+
+.factory('MessageIdGenerator', [
+'SHA-2',
+function (SHA2) {
+
+    var randomString = function() {
+        var s = Math.random().toString(36).slice(2);
+        while (s.length < 16) {
+            s += Math.random().toString(36).slice(2);
+        }
+        if (s.length > 25) {
+            s = s.substring(1, 23);
+        }
+        return s;
+    }
+
+    return {
+        generateId: function (userId, message) {
+            var hash = SHA2.sha256(message);
+            return userId + hash +
+                new Date().toISOString() +
+                randomString();
         }
     };
 }

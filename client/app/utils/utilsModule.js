@@ -1,2 +1,2 @@
 
-var utilsModule = angular.module('utils', []);
+var utilsModule = angular.module('utils', ['resources']);

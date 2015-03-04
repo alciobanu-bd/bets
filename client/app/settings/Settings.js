@@ -36,6 +36,10 @@ function () {
         },
         sounds: {
             newMessageSoundUrl: "sounds/pling.mp3"
+        },
+        chat: {
+            chatboxWidth: 255,
+            maxNumberOfOpenChatboxes: Math.floor(window.innerWidth / 255)
         }
 
     };
