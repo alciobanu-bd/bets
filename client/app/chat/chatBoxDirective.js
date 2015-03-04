@@ -68,10 +68,10 @@ return {
             return false;
         }
 
-        var scrollContentToMiddle = function () {
+        var scrollContentAfterNewMessages = function () {
             $timeout(function () {
                 var chatboxDiv = document.getElementById("chatbox-content-" + scope.conversation.id);
-                chatboxDiv.scrollTop = chatboxDiv.scrollHeight / 2;
+                chatboxDiv.scrollTop = chatboxDiv.scrollHeight / 4;
             }, 0);
         }
         scrollContentToBottom();
@@ -147,7 +147,7 @@ return {
         });
 
         ChattingService.iWantToBeNotifiedWhenConversationUpdateFunctionEnds(function () {
-            scrollContentToMiddle();
+            scrollContentAfterNewMessages();
         });
 
         var loadMore = function () {
