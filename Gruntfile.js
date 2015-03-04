@@ -30,6 +30,8 @@ module.exports = function (grunt) {
                     'client/lib/underscore/underscore-min.js',
                     'client/lib/jsPDF/index.js',
 
+                    'client/app/main/beforeAngularScripts.js',
+
                     'client/app/utils/utilsModule.js',
                     'client/app/utils/ServerDateFactory.js',
                     'client/app/utils/includeReplace.js',

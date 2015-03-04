@@ -326,6 +326,7 @@ function (UserInformation, ServerDate) {
                     callback();
                 }
             }
+            return;
         }
 
         var keptMessages = [];

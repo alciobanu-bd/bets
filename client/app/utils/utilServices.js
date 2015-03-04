@@ -7,8 +7,10 @@ function (Settings) {
 
     return {
         onNewMessage: function () {
-            var audio = new Audio(Settings.sounds.newMessageSoundUrl);
-            audio.play();
+            if (!isWindowActive) {
+                var audio = new Audio(Settings.sounds.newMessageSoundUrl);
+                audio.play();
+            }
         }
     };
 
