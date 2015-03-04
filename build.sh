@@ -1,3 +1,4 @@
+#!/bin/sh
 cd ~/bets;
 chmod a+x build.sh;
 npm install;
