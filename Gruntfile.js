@@ -18,6 +18,7 @@ module.exports = function (grunt) {
 
                     'client/lib/jquery/dist/jquery.js',
                     'client/lib/jquery-ui/jquery-ui.min.js',
+                    'client/app/main/beforeAngularScripts.js',
                     'client/lib/angular/angular.js',
                     'client/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
                     'client/lib/angular-ui-date/src/date.js',
@@ -29,8 +30,6 @@ module.exports = function (grunt) {
                     'client/lib/bootstrap/dist/js/bootstrap.js',
                     'client/lib/underscore/underscore-min.js',
                     'client/lib/jsPDF/index.js',
-
-                    'client/app/main/beforeAngularScripts.js',
 
                     'client/app/utils/utilsModule.js',
                     'client/app/utils/ServerDateFactory.js',

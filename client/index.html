@@ -52,6 +52,9 @@
 
     <script src="lib/jquery/dist/jquery.js"></script>
     <script src="lib/jquery-ui/jquery-ui.min.js"></script>
+
+    <script src="app/main/beforeAngularScripts.js"></script>
+
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="lib/angular-ui-date/src/date.js"></script>
@@ -64,7 +67,42 @@
     <script src="lib/underscore/underscore-min.js"></script>
     <script src="lib/jsPDF/index.js"></script>
 
-    <script src="app/main/beforeAngularScripts.js"></script>
+
+    <script type="application/javascript">
+
+        var languagesListGLOBAL = {
+            english: {
+                code: 'en',
+                name: 'English',
+                imgPath: '/images/flags16/EN.png',
+                localePath: 'lib/angular-i18n/angular-locale_en-us.js'
+            },
+            romanian: {
+                code: 'ro',
+                name: 'Română',
+                imgPath: '/images/flags16/RO.png',
+                localePath: 'lib/angular-i18n/angular-locale_ro-ro.js'
+            }
+        };
+
+        var langStorage = localStorage.getItem('Lang');
+        var lang;
+
+        if (langStorage) {
+            lang = JSON.parse(langStorage).code;
+        }
+        else {
+            lang = languagesListGLOBAL.english.code;
+        }
+
+        for (var i in languagesListGLOBAL) {
+            var l = languagesListGLOBAL[i];
+            if (l.code == lang) {
+                document.write('<script src="' + l.localePath + '"><\/script>');
+            }
+        }
+    </script>
+
 
     <script src="app/utils/utilsModule.js"></script>
     <script src="app/utils/ServerDateFactory.js"></script>
@@ -146,25 +184,6 @@
 
     <script src="app/main/WelcomePageController.js"></script>
     <script src="app/main/mainController.js"></script>
-
-    <script>
-        var langStorage = localStorage.getItem('Lang');
-        var lang;
-
-        if (langStorage) {
-            lang = JSON.parse(langStorage).code;
-        }
-        else {
-            lang = languagesListGLOBAL.english.code;
-        }
-
-        for (var i in languagesListGLOBAL) {
-            var l = languagesListGLOBAL[i];
-            if (l.code == lang) {
-                document.write('<script src="' + l.localePath + '"><\/script>');
-            }
-        }
-    </script>
 
 </body>
 </html>
