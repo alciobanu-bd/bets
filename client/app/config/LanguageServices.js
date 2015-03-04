@@ -4,7 +4,7 @@ configModule
 .factory('Languages', [
 function () {
 
-    var list = languagesListGLOBAL; // languagesListGLOBAL is defined in index.html
+    var list = languagesListGLOBAL; // languagesListGLOBAL is defined in includeAngularLocale.js
 
     var findByCode = function (code) {
         return _.find(list, function (lang) {
