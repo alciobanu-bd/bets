@@ -6,7 +6,7 @@ var fs = require('fs'),
     ursa,
     Settings = require('./../config/Settings.js');
 
-if (/^win/.test(process.platform) && Settings.isDev()) {
+if (/^win/.test(process.platform) || Settings.isDev()) {
     ursa = require('./../services/ursaFake.js');
 }
 else {

@@ -39,7 +39,7 @@ var settingsProfiles = {
         privateMessagesWorkerProcesses: 3,
         inbox: {
             numberOfConversationsOnInboxEmit: 7,
-            numberOfMessagesInConversationOnInboxEmit: 50
+            numberOfMessagesToLoadPerCoversation: 50
         }
     }
 };
@@ -47,7 +47,7 @@ var settingsProfiles = {
 
 
 
-var returnVal = settingsProfiles.dev; // change this line to switch between profiles
+var returnVal = settingsProfiles.prod; // change this line to switch between profiles
 
 returnVal.isDev = function () {
     return returnVal.profileName == 'dev';
