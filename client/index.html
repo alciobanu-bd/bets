@@ -47,7 +47,44 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="dist/built.min.js"></script>
 
-    <script>
+    <script src="app/main/carouselDescription.js"></script>
+    <script src="app/utils/md5.js"></script>
+
+    <script src="lib/jquery/dist/jquery.js"></script>
+    <script src="lib/jquery-ui/jquery-ui.min.js"></script>
+
+    <script src="app/main/beforeAngularScripts.js"></script>
+
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/angular-ui-date/src/date.js"></script>
+    <script src="lib/angular-resource/angular-resource.js"></script>
+    <script src="lib/angular-route/angular-route.js"></script>
+    <script src="lib/angular-translate/angular-translate.js"></script>
+    <script src="lib/angular-cookies/angular-cookies.js"></script>
+    <script src="lib/angular-loggly-logger/angular-loggly-logger.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="lib/underscore/underscore-min.js"></script>
+    <script src="lib/jsPDF/index.js"></script>
+
+
+    <script type="application/javascript">
+
+        var languagesListGLOBAL = {
+            english: {
+                code: 'en',
+                name: 'English',
+                imgPath: '/images/flags16/EN.png',
+                localePath: 'lib/angular-i18n/angular-locale_en-us.js'
+            },
+            romanian: {
+                code: 'ro',
+                name: 'Română',
+                imgPath: '/images/flags16/RO.png',
+                localePath: 'lib/angular-i18n/angular-locale_ro-ro.js'
+            }
+        };
+
         var langStorage = localStorage.getItem('Lang');
         var lang;
 
@@ -65,6 +102,88 @@
             }
         }
     </script>
+
+
+    <script src="app/utils/utilsModule.js"></script>
+    <script src="app/utils/ServerDateFactory.js"></script>
+    <script src="app/utils/includeReplace.js"></script>
+    <script src="app/utils/onScrollDirective.js"></script>
+    <script src="app/utils/Geolocation.js"></script>
+    <script src="app/utils/utilServices.js"></script>
+    <script src="app/utils/dateSort.js"></script>
+    <script src="app/utils/stringSort.js"></script>
+    <script src="app/utils/numberSort.js"></script>
+    <script src="app/utils/Gravatar.js"></script>
+
+    <script src="app/settings/settingsModule.js"></script>
+    <script src="app/settings/Settings.js"></script>
+
+    <script src="app/templates/templatesModule.js"></script>
+    <script src="app/templates/templatesProvider.js"></script>
+
+    <script src="app/resources/resourceModule.js"></script>
+    <script src="app/resources/ResourceServices.js"></script>
+
+    <script src="app/config/configModule.js"></script>
+    <script src="app/config/LanguageServices.js"></script>
+    <script src="app/config/UrlLanguageAdderInterceptor.js"></script>
+    <script src="app/config/LogglySetup.js"></script>
+    <script src="app/config/booting-config.js"></script>
+    <script src="app/config/routeProvider.js"></script>
+    <script src="app/config/Translations.js"></script>
+    <script src="app/config/TokenInterceptor.js"></script>
+    <script src="app/config/401-Interceptor.js"></script>
+    <script src="app/config/LogglyInterceptor.js"></script>
+
+    <script src="app/user/userModule.js"></script>
+    <script src="app/user/UserServices.js"></script>
+    <script src="app/user/UserController.js"></script>
+    <script src="app/user/RegisterController.js"></script>
+    <script src="app/user/AccountActivationController.js"></script>
+    <script src="app/user/ChangePasswordController.js"></script>
+    <script src="app/user/ForgotPasswordController.js"></script>
+    <script src="app/user/ResetPasswordController.js"></script>
+
+    <script src="app/sockets/socketsModule.js"></script>
+    <script src="app/sockets/Socket.js"></script>
+    <script src="app/sockets/ChatMessage.js"></script>
+
+    <script src="app/chat/chatModule.js"></script>
+    <script src="app/chat/ChattingService.js"></script>
+    <script src="app/chat/ChatboxesController.js"></script>
+    <script src="app/chat/MessagesController.js"></script>
+    <script src="app/chat/chatBoxDirective.js"></script>
+
+    <script src="app/ranking/rankingModule.js"></script>
+    <script src="app/ranking/RankingController.js"></script>
+    <script src="app/ranking/RankingServices.js"></script>
+
+    <script src="app/week/weekModule.js"></script>
+    <script src="app/week/weekServices.js"></script>
+    <script src="app/week/WeekController.js"></script>
+    <script src="app/week/AddNewWeekController.js"></script>
+    <script src="app/week/weekDirective.js"></script>
+
+    <script src="app/profile/profileModule.js"></script>
+    <script src="app/profile/ProfileController.js"></script>
+    <script src="app/profile/ProfileServices.js"></script>
+
+    <script src="app/history/historyModule.js"></script>
+    <script src="app/history/HistoryServices.js"></script>
+    <script src="app/history/HistoryController.js"></script>
+
+    <script src="app/admin/adminModule.js"></script>
+    <script src="app/admin/AdminPanelController.js"></script>
+    <script src="app/admin/AdminRankingPanel.js"></script>
+    <script src="app/admin/AdminUsersPanel.js"></script>
+
+    <script src="app/rules/rulesModule.js"></script>
+    <script src="app/rules/RulesController.js"></script>
+
+    <script src="app/app.js"></script>
+
+    <script src="app/main/WelcomePageController.js"></script>
+    <script src="app/main/mainController.js"></script>
 
 </body>
 </html>

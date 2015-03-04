@@ -1,25 +1,10 @@
 
-var languagesListGLOBAL = {
-    english: {
-        code: 'en',
-        name: 'English',
-        imgPath: '/images/flags16/EN.png',
-        localePath: 'lib/angular-i18n/angular-locale_en-us.js'
-    },
-    romanian: {
-        code: 'ro',
-        name: 'Română',
-        imgPath: '/images/flags16/RO.png',
-        localePath: 'lib/angular-i18n/angular-locale_ro-ro.js'
-    }
-};
-
 configModule
 
 .factory('Languages', [
 function () {
 
-    var list = languagesListGLOBAL;
+    var list = languagesListGLOBAL; // languagesListGLOBAL is defined in index.html
 
     var findByCode = function (code) {
         return _.find(list, function (lang) {
