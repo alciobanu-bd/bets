@@ -9,7 +9,7 @@
     <div class="chat-box-content" style="height: 250px; overflow-x: scroll; overflow-y: visible;"
          on-scroll="tryToLoadMore()" id="{{'chatbox-content-' + conversation.id}}">
         <div ng-repeat="msg in conversation.messages track by msg._id" style="margin-bottom: 2px"
-             ng-class="(msg.from._id == userInfo.user._id) ? 'align-right red-text' : 'align-left green-text'">
+             ng-class="(msg.from._id == userInfo.user._id) ? 'align-right red-text' : 'align-left purple-text'">
             <div>
                 <img class="chat-img" ng-src="{{gravatarUrl}}" ng-if="msg.from._id != userInfo.user._id" />
                 <span style="font-weight: bold;">
@@ -17,8 +17,8 @@
                 </span>
                 ({{msg.date | date: 'd MMM yy, HH:mm'}})
             </div>
-            <div style="padding-left: 35px;">
-                {{msg.message}}
+            <div style="padding-left: 35px;" ng-init="thisMessage = linkText(msg.message)" class="bubble">
+                <span ng-bind-html="thisMessage"></span>
             </div>
         </div>
         <input type="text" class="input-box" ng-model="currentMessage" placeholder="Type your message"

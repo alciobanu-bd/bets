@@ -3,9 +3,9 @@ chatModule
 
 .directive('chatBox', [
 'ChatMessage', 'ChattingService', 'UserInformation', '$timeout', 'Gravatar', 'InitUrls', 'CallUrlService',
-'MessageIdGenerator',
+'MessageIdGenerator', '$sce',
 function(ChatMessage, ChattingService, UserInformation, $timeout, Gravatar, InitUrls, CallUrlService,
-MessageIdGenerator) {
+MessageIdGenerator, $sce) {
 return {
     restrict: 'E',
     replace: true,
@@ -144,6 +144,10 @@ return {
                 scope.closeThisBox();
             }
             scope.markConversationAsRead();
+        }
+
+        scope.linkText = function (message) {
+            return $sce.trustAsHtml((Autolinker.link(message)));
         }
 
 

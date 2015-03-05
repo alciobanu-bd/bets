@@ -1,8 +1,8 @@
 
 chatModule.
 factory('ChattingService', [
-'UserInformation', 'ServerDate', 'Settings',
-function (UserInformation, ServerDate, Settings) {
+'UserInformation', 'ServerDate', 'Settings', '$timeout', 'Socket',
+function (UserInformation, ServerDate, Settings, $timeout, Socket) {
 
     var thisFactory = {};
 
@@ -319,6 +319,13 @@ function (UserInformation, ServerDate, Settings) {
         thisFactory.loadedInbox = true;
 
     }
+
+    $timeout(function () {
+        if (!thisFactory.loadedInbox) {
+            thisFactory.socketsTimeout = true;
+            Socket.unregisterMe();
+        }
+    }, Settings.chat.maxTimeoutSockets);
 
     var existsMessageInConversation = function (searchedMessage, messagesInConversation) {
 
