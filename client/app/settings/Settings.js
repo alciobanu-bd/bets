@@ -39,7 +39,8 @@ function () {
         },
         chat: {
             chatboxWidth: 255,
-            maxNumberOfOpenChatboxes: Math.floor(window.innerWidth / 255)
+            maxNumberOfOpenChatboxes: Math.floor(window.innerWidth / 255),
+            maxTimeoutSockets: 30000 // 30 seconds
         }
 
     };

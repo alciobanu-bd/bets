@@ -403,7 +403,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
         messages: {
             noMessages: "No messages.",
             from: "",
-            to: "to"
+            to: "to",
+            socketsTimeout: "It seems that your firewall or your internet provider is blocking the communication with the " +
+            "server. Therefore, the chatting functionality is disabled."
         }
     });
 
@@ -803,7 +805,9 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
         messages: {
             noMessages: "Nu există mesaje.",
             from: "De la",
-            to: "către"
+            to: "către",
+            socketsTimeout: "Nu s-a putut stabili conexiunea cu serverul. Cel mai probabil firewall-ul sau furnizorul " +
+            "dumneavoastră de internet vă blochează accesul. Din acest motiv, chat-ul este dezactivat."
         }
     });
 
