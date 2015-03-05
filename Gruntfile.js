@@ -15,6 +15,7 @@ module.exports = function (grunt) {
                 src: [
                     'client/app/main/carouselDescription.js',
                     'client/app/utils/md5.js',
+                    'client/lib/Autolinker.js/dist/Autolinker.js',
 
                     'client/lib/jquery/dist/jquery.js',
                     'client/lib/jquery-ui/jquery-ui.min.js',
