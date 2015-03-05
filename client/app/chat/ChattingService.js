@@ -268,8 +268,6 @@ function (UserInformation, ServerDate, Settings, $timeout, Socket) {
 
     thisFactory.updatePassiveBoxes = function (inboxGroupedByUser) {
 
-        return;
-
         if (inboxGroupedByUser.length == 0) {
             for (var i = 0; i < inboxListSubscriberFunctions.length; i++) {
                 var callback = inboxListSubscriberFunctions[i];
