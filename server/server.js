@@ -29,6 +29,9 @@ app.use(function (req, res, next) {
         req.url = decodeURIComponent(req.url);
     }
     catch (err) {
+        res.status(500).json({
+            message: "Cannot decode address. " + req.url
+        }).end();
         console.log(req.url);
     }
     req.url = req.url.replace(/[/]+/g, '/');
@@ -129,5 +132,6 @@ require('./route/BetRoute.js');
 require('./route/BetsPerWeek.js');
 require('./route/BetHistoryRoute.js');
 require('./route/UserLocationRoute.js');
+require('./route/TeamRoute.js');
 
 require('./services/CronJobs.js');

@@ -2,8 +2,8 @@
 weekModule
 
 .controller('NewWeekController', [
-'$scope', 'Settings', 'CallUrlService', 'InitUrls', '$translate',
-function ($scope, Settings, CallUrlService, InitUrls, $translate) {
+'$scope', 'Settings', 'CallUrlService', 'InitUrls', '$translate', '$timeout', 'WeekFactory',
+function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, WeekFactory) {
 
     $scope.range = function (n) {
         var intN = parseInt(n);
@@ -26,8 +26,12 @@ function ($scope, Settings, CallUrlService, InitUrls, $translate) {
         $scope.matches = [];
         for (var i in $scope.range($scope.matchesNumber.total)) {
             $scope.matches.push({
-                homeTeam: '',
-                awayTeam: '',
+                homeTeam: {
+                    name: ''
+                },
+                awayTeam: {
+                    name: ''
+                },
                 competition: '',
                 startDate: null,
                 startTime: '',
@@ -75,6 +79,41 @@ function ($scope, Settings, CallUrlService, InitUrls, $translate) {
         return !dateAfterToday || !correctTime;
 
     }
+
+
+    var lastTeamNameChange = undefined;
+    var inputThrottleInterval = Settings.utils.throttleInputInterval;
+
+    var callServerForNames = function (teamName) {
+
+        if (new Date() - lastTeamNameChange < inputThrottleInterval) {
+            return;
+        }
+
+        if (teamName.trim().length < 3) {
+            return;
+        }
+
+        WeekFactory.getTeamsByName(teamName.trim(),
+        function (teams) {
+            console.log(teams);
+        },
+        function () {
+
+        });
+
+    }
+
+    $scope.onTeamNameChange = function (teamName) {
+
+        lastTeamNameChange = new Date();
+        $timeout(function () {
+            callServerForNames(teamName);
+        }, inputThrottleInterval);
+
+    }
+
+
 
     var getHour = function (timeString) {
         var splitted = timeString.split(":");

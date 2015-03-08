@@ -44,14 +44,16 @@
 
             <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in matches track by $index">
                     <span style="width: 25%" class="input-group">
-                        <input type="text" ng-model="match.homeTeam" class="form-control cornered-input"
+                        <input type="text" ng-model="match.homeTeam.name" ng-change="onTeamNameChange(match.homeTeam.name)"
+                               class="form-control cornered-input"
                                placeholder="{{'weekPage.addNewWeekPage.homeTeam' | translate}}" />
                     </span>
                     <span style="width: 5%">
                         vs
                     </span>
                     <span style="width: 25%" class="input-group">
-                        <input type="text" ng-model="match.awayTeam" class="form-control cornered-input"
+                        <input type="text" ng-model="match.awayTeam.name" ng-change="onTeamNameChange(match.awayTeam.name)"
+                               class="form-control cornered-input"
                                placeholder="{{'weekPage.addNewWeekPage.awayTeam' | translate}}" />
                     </span>
                     <span style="width: 10%" class="input-group">

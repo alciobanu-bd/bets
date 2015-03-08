@@ -104,6 +104,12 @@ module.exports = {
             matchesYouPlayed: ' matches. You played ',
             serverError: 'Server encountered an error. Please try again',
             weekNumberMalformed: 'The week number you sent is malformed.'
+        },
+        teamRoute: {
+            cannotFetchTeams: 'An error has occurred when trying to fetch teams from database.',
+            cannotFetchTeam: 'An error has occurred when trying to fetch team from database.',
+            savingError: 'An error has occurred when trying to save the team to the database.',
+            noNameSent: 'Invalid request. No team name was sent.'
         }
     },
 
@@ -210,6 +216,12 @@ module.exports = {
             matchesYouPlayed: ' meciuri. Ai jucat ',
             serverError: 'Server-ul a întâmpinat o eroare. Te rugăm să reîncerci.',
             weekNumberMalformed: 'Numărul de etapă trimis este incorect.'
+        },
+        teamRoute: {
+            cannotFetchTeams: 'A apărut o eroare la căutarea echipelor în baza de date.',
+            cannotFetchTeam: 'A apărut o eroare la căutarea echipei în baza de date.',
+            savingError: 'A apărut o eroare la salvarea țării în baza de date.',
+            noNameSent: 'Cerere invalidă. Nu a fost trimis niciun nume de echipă.'
         }
     }
 

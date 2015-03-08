@@ -2,8 +2,8 @@
 weekModule
 
 .factory('WeekFactory',[
-'InitUrls', 'CallUrlService', '$translate',
-function (InitUrls, CallUrlService, $translate) {
+'InitUrls', 'CallUrlService', '$translate', 'CurrentLanguageFactory',
+function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory) {
 
     var thisFactory = {};
 
@@ -280,13 +280,58 @@ function (InitUrls, CallUrlService, $translate) {
         InitUrls.then(function (data) {
 
             CallUrlService.get({uri: data.week.address},
-            function (data) {
-                thisFactory.allWeeks = data;
-            },
-            function (response) {
-                thisFactory.error.all.active = true;
-                thisFactory.error.all.message = $translate.instant('weekPage.anErrorOccurred');
-            }
+                function (data) {
+                    thisFactory.allWeeks = data;
+                },
+                function (response) {
+                    thisFactory.error.all.active = true;
+                    thisFactory.error.all.message = $translate.instant('weekPage.anErrorOccurred');
+                }
+            );
+
+        });
+
+    }
+
+
+    var adjustTeamForCurrentLanguage = function (team) {
+
+        var currentLangFn = function (item) {
+            return item.lang == CurrentLanguageFactory.getCurrentLanguage().code;
+        }
+
+        var getValueOnly = function (item) {
+            return item.value;
+        }
+
+        // TODO continue from here
+
+        team.name = _.find(team.name, currentLangFn);
+        team.city = _.find(team.city, currentLangFn);
+        team.details = _.find(team.details, currentLangFn);
+        team.nicknames = _.map(_.filter(team.nicknames, currentLangFn), getValueOnly);
+    }
+
+    thisFactory.getTeamsByName = function (name, onSuccess, onError) {
+
+        InitUrls.then(function (urls) {
+
+            CallUrlService.getArray({uri: urls.team.getByName, id: name},
+                function (data) {
+                    if (typeof onSuccess === 'function') {
+                        var teams = [];
+                        for (var i = 0; i < data.length; i++) {
+                            adjustTeamForCurrentLanguage(data[i]);
+                            teams.push(data[i]);
+                        }
+                        onSuccess(teams);
+                    }
+                },
+                function (response) {
+                    if (typeof onError === 'function') {
+                        onError(response);
+                    }
+                }
             );
 
         });

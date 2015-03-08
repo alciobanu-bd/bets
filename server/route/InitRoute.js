@@ -36,6 +36,10 @@ var initFeed = {
         history: "/api/bet/history",
         historyByWeek: "/api/bet/history/getByWeek"
     },
+    team: {
+        address: "/api/team",
+        getByName: "/api/team/getByName"
+    },
     admin: {
         rankingRecalculate: "/api/ranking/recalculate"
     },
