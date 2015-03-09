@@ -1,0 +1,88 @@
+<div class="modal-header">
+    <h3 class="modal-title">New team</h3>
+</div>
+<div class="modal-body">
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.name[selectedLangs.name]"
+                        placeholder="Name" />
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.name">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.nicknames[selectedLangs.nicknames]"
+                       placeholder="Nicknames (comma separated)" />
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.nicknames">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <textarea class="form-control cornered-input" style="width: 80%;"
+                       ng-model="team.details[selectedLangs.details]"
+                       placeholder="Details about team"></textarea>
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.details">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.city[selectedLangs.city]"
+                       placeholder="City" />
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.city">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.founded"
+                       placeholder="Year founded" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input type="text" ng-model="team.country.name"
+                       class="form-control cornered-input" style="width: 50%;"
+                       typeahead="country.name for country in CountryCodes.countries | filter:$viewValue"
+                       typeahead-on-select="onTypeaheadCountrySelect($item, $model, $label)"
+                       placeholder="Country" />
+            </div>
+        </div>
+    </div>
+
+    {{team}}
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">{{'weekPage.weekEdit.cancel' | translate}}</button>
+</div>

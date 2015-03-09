@@ -15,6 +15,7 @@
     "angular-ui-date": "*",
     "angular-bootstrap": "*",
     "angular-loggly-logger": "*",
+    "angucomplete-alt": "*",
     "Autolinker.js": "*",
     "jsPDF": "https://raw.githubusercontent.com/MrRio/jsPDF/master/dist/jspdf.min.js"
   },

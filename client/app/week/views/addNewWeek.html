@@ -44,23 +44,22 @@
 
             <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in matches track by $index">
                     <span style="width: 25%" class="input-group">
-                        <input type="text" ng-model="match.homeTeam.name" ng-change="onTeamNameChange(match.homeTeam)"
-                               ng-focus="onTeamNameChange(match.homeTeam)" ng-blur="onTeamNameBlur(match.homeTeam)"
+                        <input type="text" ng-model="match.homeTeam.name"
                                class="form-control cornered-input"
-                               typeahead="team.name for team in match.homeTeam.suggestions | filter:$viewValue"
-                               typeahead-loading="loadingTeams"
-                               typeahead-on-select="onTypeaheadSelect($item, $model, $label)"
+                               typeahead="team.name for team in getTeamsFromServer($viewValue)"
+                               typeahead-on-select="onTypeaheadSelect(match.homeTeam, $item, $model, $label)"
+                               typeahead-wait-ms="{{inputThrottleInterval}}"
                                placeholder="{{'weekPage.addNewWeekPage.homeTeam' | translate}}" />
                     </span>
                     <span style="width: 5%">
                         vs
                     </span>
                     <span style="width: 25%" class="input-group">
-                        <input type="text" ng-model="match.awayTeam.name" ng-change="onTeamNameChange(match.awayTeam)"
-                               ng-focus="onTeamNameChange(match.awayTeam)" ng-blur="onTeamNameBlur(match.awayTeam)"
+                        <input type="text" ng-model="match.awayTeam.name"
                                class="form-control cornered-input"
-                               typeahead="team.name for team in match.awayTeam.suggestions | filter:$viewValue"
-                               typeahead-loading="loadingTeams"
+                               typeahead="team.name for team in getTeamsFromServer($viewValue)"
+                               typeahead-on-select="onTypeaheadSelect(match.awayTeam, $item, $model, $label)"
+                               typeahead-wait-ms="{{inputThrottleInterval}}"
                                placeholder="{{'weekPage.addNewWeekPage.awayTeam' | translate}}" />
                     </span>
                     <span style="width: 10%" class="input-group">

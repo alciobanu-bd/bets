@@ -10,7 +10,8 @@ function () {
             maxNumberOfMatches: 10,
             events: {
                 maxScoreDifference: 5
-            }
+            },
+            findTeamByNameAddress: "/api/team/getByName/"
         },
         user: {
             detailsRefreshInterval: 10000, // milliseconds

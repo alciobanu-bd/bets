@@ -166,7 +166,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'No',
                 refresh: 'Refresh',
                 weekSavedSuccessfully: 'Week saved successfully.',
-                weekDidntSave: 'Week didn\'t save. Please try again.'
+                weekDidntSave: 'Week didn\'t save. Please try again.',
+                addNewTeam: 'Add new team'
             },
             weekEdit: {
                 week: 'Week',
@@ -570,7 +571,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'Nu',
                 refresh: 'Reîncarcă',
                 weekSavedSuccessfully: 'Etapa s-a salvat cu succes.',
-                weekDidntSave: 'Etapa nu s-a salvat. Te rugăm încearcă din nou.'
+                weekDidntSave: 'Etapa nu s-a salvat. Te rugăm încearcă din nou.',
+                addNewTeam: 'Adaugă echipă nouă'
             },
             weekEdit: {
                 week: 'Etapa',

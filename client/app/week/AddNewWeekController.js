@@ -2,8 +2,10 @@
 weekModule
 
 .controller('NewWeekController', [
-'$scope', 'Settings', 'CallUrlService', 'InitUrls', '$translate', '$timeout', 'WeekFactory',
-function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, WeekFactory) {
+'$scope', 'Settings', 'CallUrlService', 'InitUrls', '$translate', '$timeout', 'WeekFactory', '$filter',
+'$modal',
+function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, WeekFactory, $filter,
+$modal) {
 
     $scope.range = function (n) {
         var intN = parseInt(n);
@@ -27,12 +29,10 @@ function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, Week
         for (var i in $scope.range($scope.matchesNumber.total)) {
             $scope.matches.push({
                 homeTeam: {
-                    name: '',
-                    suggestions: []
+                    name: ''
                 },
                 awayTeam: {
-                    name: '',
-                    suggestions: []
+                    name: ''
                 },
                 competition: '',
                 startDate: null,
@@ -83,49 +83,35 @@ function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, Week
     }
 
 
-    var lastTeamNameChange = undefined;
     $scope.inputThrottleInterval = Settings.utils.throttleInputInterval;
 
-    var callServerForNames = function (teamModel) {
+    $scope.getTeamsFromServer = function ($viewValue) {
 
-        if (new Date() - lastTeamNameChange < $scope.inputThrottleInterval) {
-            return;
+        if (!$viewValue || $viewValue.trim().length < 3) {
+            return [];
         }
 
-        if (teamModel.name.trim().length < 3) {
-            return;
-        }
-
-        $scope.loadingTeams = true;
-        WeekFactory.getTeamsByName(teamModel.name.trim(),
-        function (teams) {
-            $timeout(function () {
-                teamModel.suggestions = teams;
-                teamModel.suggestions.push({
-                    name: "Add new team", // TODO translate
-                    isSpecialSelection: true
-                });
-                $scope.loadingTeams = false;
-                console.log(teamModel)
-            }, 360);
-        },
-        function () {
-            // TODO on error
+        return WeekFactory.getTeamsByName($viewValue.trim())
+        .then(function (teams) {
+            var suggestions = teams;
+            suggestions.push({
+                name: $translate.instant('weekPage.addNewWeekPage.addNewTeam'),
+                isSpecialSelection: true
+            });
+            return $filter('teamSelect')(suggestions, $viewValue);
         });
 
     }
 
-    $scope.onTeamNameChange = function (teamModel) {
-
-        lastTeamNameChange = new Date();
-        $timeout(function () {
-            callServerForNames(teamModel);
-        }, $scope.inputThrottleInterval);
-
-    }
-
-    $scope.onTypeaheadSelect = function ($item, $model, $label) {
-        console.log($item);
+    $scope.onTypeaheadSelect = function (teamModel, item, model, label) {
+        if (item.isSpecialSelection) {
+            // add new team
+            var modalInstance = $modal.open({
+                templateUrl: 'app/week/views/addNewTeam.html',
+                controller: 'TeamController'
+            });
+            teamModel.name = "";
+        }
     }
 
 
@@ -227,4 +213,56 @@ function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, Week
 
 }
 ]
-)
+);
+
+
+weekModule
+.controller('TeamController', [
+'$scope', '$modalInstance', 'Languages', 'CurrentLanguageFactory', 'CountryCodes',
+function ($scope, $modalInstance, Languages, CurrentLanguageFactory, CountryCodes) {
+
+    $scope.Languages = Languages;
+    $scope.CountryCodes = CountryCodes;
+
+    $scope.cancel = function () {
+        $modalInstance.close("closed");
+    }
+
+    $scope.viewUserHistory = function () {
+        $scope.cancel();
+    }
+
+    $scope.team = {
+        name: {},
+        city: {},
+        details: {},
+        nicknames: {},
+        country: {
+            code: '',
+            name: ''
+        },
+        founded: '',
+        imageUrl: ''
+    };
+
+    for (var i in Languages.list) {
+        var lang = Languages.list[i];
+        $scope.team.name[lang.code] = "";
+        $scope.team.city[lang.code] = "";
+        $scope.team.details[lang.code] = "";
+        $scope.team.nicknames[lang.code] = "";
+    }
+
+    $scope.selectedLangs = {
+        name: CurrentLanguageFactory.getCurrentLanguage().code,
+        city: CurrentLanguageFactory.getCurrentLanguage().code,
+        details: CurrentLanguageFactory.getCurrentLanguage().code,
+        nicknames: CurrentLanguageFactory.getCurrentLanguage().code
+    };
+
+    $scope.onTypeaheadCountrySelect = function (item) {
+        $scope.team.country = item;
+    }
+
+}
+]);

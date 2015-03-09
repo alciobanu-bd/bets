@@ -2,8 +2,8 @@
 weekModule
 
 .factory('WeekFactory',[
-'InitUrls', 'CallUrlService', '$translate', 'CurrentLanguageFactory',
-function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory) {
+'InitUrls', 'CallUrlService', '$translate', 'CurrentLanguageFactory', '$q',
+function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory, $q) {
 
     var thisFactory = {};
 
@@ -293,7 +293,6 @@ function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory) {
 
     }
 
-
     var adjustTeamForCurrentLanguage = function (team) {
 
         var currentLangFn = function (item) {
@@ -332,29 +331,29 @@ function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory) {
 
     }
 
-    thisFactory.getTeamsByName = function (name, onSuccess, onError) {
+    thisFactory.getTeamsByName = function (name) {
+
+        var defered = $q.defer();
 
         InitUrls.then(function (urls) {
 
             CallUrlService.getArray({uri: urls.team.getByName, id: name},
                 function (data) {
-                    if (typeof onSuccess === 'function') {
-                        var teams = [];
-                        for (var i = 0; i < data.length; i++) {
-                            adjustTeamForCurrentLanguage(data[i]);
-                            teams.push(data[i]);
-                        }
-                        onSuccess(teams);
+                    var teams = [];
+                    for (var i = 0; i < data.length; i++) {
+                        adjustTeamForCurrentLanguage(data[i]);
+                        teams.push(data[i]);
                     }
+                    defered.resolve(teams);
                 },
                 function (response) {
-                    if (typeof onError === 'function') {
-                        onError(response);
-                    }
+                    defered.reject(response);
                 }
             );
 
         });
+
+        return defered.promise;
 
     }
 
