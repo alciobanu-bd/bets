@@ -304,12 +304,32 @@ function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory) {
             return item.value;
         }
 
-        // TODO continue from here
-
         team.name = _.find(team.name, currentLangFn);
+        if(!team.name) {
+            delete team.name;
+        }
+        else {
+            team.name = team.name.value;
+        }
+
         team.city = _.find(team.city, currentLangFn);
+        if(!team.city) {
+            delete team.city;
+        }
+        else {
+            team.city = team.city.value;
+        }
+
         team.details = _.find(team.details, currentLangFn);
+        if(!team.details) {
+            delete team.details;
+        }
+        else {
+            team.details = team.details.value;
+        }
+
         team.nicknames = _.map(_.filter(team.nicknames, currentLangFn), getValueOnly);
+
     }
 
     thisFactory.getTeamsByName = function (name, onSuccess, onError) {

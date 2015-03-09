@@ -27,10 +27,12 @@ function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, Week
         for (var i in $scope.range($scope.matchesNumber.total)) {
             $scope.matches.push({
                 homeTeam: {
-                    name: ''
+                    name: '',
+                    suggestions: []
                 },
                 awayTeam: {
-                    name: ''
+                    name: '',
+                    suggestions: []
                 },
                 competition: '',
                 startDate: null,
@@ -82,35 +84,48 @@ function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, Week
 
 
     var lastTeamNameChange = undefined;
-    var inputThrottleInterval = Settings.utils.throttleInputInterval;
+    $scope.inputThrottleInterval = Settings.utils.throttleInputInterval;
 
-    var callServerForNames = function (teamName) {
+    var callServerForNames = function (teamModel) {
 
-        if (new Date() - lastTeamNameChange < inputThrottleInterval) {
+        if (new Date() - lastTeamNameChange < $scope.inputThrottleInterval) {
             return;
         }
 
-        if (teamName.trim().length < 3) {
+        if (teamModel.name.trim().length < 3) {
             return;
         }
 
-        WeekFactory.getTeamsByName(teamName.trim(),
+        $scope.loadingTeams = true;
+        WeekFactory.getTeamsByName(teamModel.name.trim(),
         function (teams) {
-            console.log(teams);
+            $timeout(function () {
+                teamModel.suggestions = teams;
+                teamModel.suggestions.push({
+                    name: "Add new team", // TODO translate
+                    isSpecialSelection: true
+                });
+                $scope.loadingTeams = false;
+                console.log(teamModel)
+            }, 360);
         },
         function () {
-
+            // TODO on error
         });
 
     }
 
-    $scope.onTeamNameChange = function (teamName) {
+    $scope.onTeamNameChange = function (teamModel) {
 
         lastTeamNameChange = new Date();
         $timeout(function () {
-            callServerForNames(teamName);
-        }, inputThrottleInterval);
+            callServerForNames(teamModel);
+        }, $scope.inputThrottleInterval);
 
+    }
+
+    $scope.onTypeaheadSelect = function ($item, $model, $label) {
+        console.log($item);
     }
 
 

@@ -59,15 +59,6 @@ function (req, res) {
 
     nameParam = nameParam.trim();
 
-/*
-    try {
-        nameParam = decodeURIComponent(nameParam);
-    }
-    catch (err) {
-        console.log(req.url);
-    }
-*/
-
     Team.find({"name.value": new RegExp(nameParam, "i")}, function (err, teams) {
         if (err) {
             res.status(500).json({
