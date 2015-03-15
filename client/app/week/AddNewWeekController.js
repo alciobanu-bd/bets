@@ -3,9 +3,9 @@ weekModule
 
 .controller('NewWeekController', [
 '$scope', 'Settings', 'CallUrlService', 'InitUrls', '$translate', '$timeout', 'WeekFactory', '$filter',
-'$modal',
+'$modal', 'TeamFactory',
 function ($scope, Settings, CallUrlService, InitUrls, $translate, $timeout, WeekFactory, $filter,
-$modal) {
+$modal, TeamFactory) {
 
     $scope.range = function (n) {
         var intN = parseInt(n);
@@ -91,7 +91,7 @@ $modal) {
             return [];
         }
 
-        return WeekFactory.getTeamsByName($viewValue.trim())
+        return TeamFactory.getTeamsByName($viewValue.trim())
         .then(function (teams) {
             var suggestions = teams;
             suggestions.push({
@@ -111,6 +111,10 @@ $modal) {
                 controller: 'TeamController'
             });
             teamModel.name = "";
+
+            modalInstance.result.then(function (resolvedTeam) {
+            });
+
         }
     }
 
@@ -218,18 +222,16 @@ $modal) {
 
 weekModule
 .controller('TeamController', [
-'$scope', '$modalInstance', 'Languages', 'CurrentLanguageFactory', 'CountryCodes',
-function ($scope, $modalInstance, Languages, CurrentLanguageFactory, CountryCodes) {
+'$scope', '$modalInstance', 'Languages', 'CurrentLanguageFactory', 'CountryCodes', 'FileUploader',
+'InitUrls', 'CallUrlService', 'TeamSerializer',
+function ($scope, $modalInstance, Languages, CurrentLanguageFactory, CountryCodes, FileUploader,
+InitUrls, CallUrlService, TeamSerializer) {
 
     $scope.Languages = Languages;
     $scope.CountryCodes = CountryCodes;
 
     $scope.cancel = function () {
         $modalInstance.close("closed");
-    }
-
-    $scope.viewUserHistory = function () {
-        $scope.cancel();
     }
 
     $scope.team = {
@@ -242,7 +244,7 @@ function ($scope, $modalInstance, Languages, CurrentLanguageFactory, CountryCode
             name: ''
         },
         founded: '',
-        imageUrl: ''
+        image: null
     };
 
     for (var i in Languages.list) {
@@ -262,6 +264,37 @@ function ($scope, $modalInstance, Languages, CurrentLanguageFactory, CountryCode
 
     $scope.onTypeaheadCountrySelect = function (item) {
         $scope.team.country = item;
+    }
+
+    $scope.savingStatus = {
+        error: false,
+        message: ""
+    };
+
+    $scope.save = function () {
+
+        $scope.savingStatus.error = false;
+
+        var onSaveError = function (response) {
+            $scope.savingStatus.error = true;
+            $scope.savingStatus.message = response.message;
+        }
+
+        InitUrls.then(function (urls) {
+            FileUploader.uploadFile({uri: urls.team.logoUpload, file: $scope.team.image},
+            function (data) {
+
+                CallUrlService.post({uri: urls.team.address}, TeamSerializer.serialize($scope.team, data.path),
+                function (data) {
+
+                    TeamSerializer.adjustTeamForCurrentLanguage(data);
+                    $modalInstance.close(data);
+
+                }, onSaveError);
+
+            }, onSaveError
+            );
+        });
     }
 
 }

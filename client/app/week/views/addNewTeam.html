@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">New team</h3>
+    <h3 class="modal-title">{{'weekPage.addNewTeamPage.newTeam' | translate}}</h3>
 </div>
 <div class="modal-body">
 
@@ -9,7 +9,7 @@
             <div class="form-inline">
                 <input class="form-control cornered-input" style="width: 50%;"
                        ng-model="team.name[selectedLangs.name]"
-                        placeholder="Name" />
+                        placeholder="{{'weekPage.addNewTeamPage.name' | translate}} *" />
                 <select class="input-group"
                         ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.name">
                 </select>
@@ -22,7 +22,7 @@
             <div class="form-inline">
                 <input class="form-control cornered-input" style="width: 50%;"
                        ng-model="team.nicknames[selectedLangs.nicknames]"
-                       placeholder="Nicknames (comma separated)" />
+                       placeholder="{{'weekPage.addNewTeamPage.nicknames' | translate}}" />
                 <select class="input-group"
                         ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.nicknames">
                 </select>
@@ -35,7 +35,7 @@
             <div class="form-inline">
                 <textarea class="form-control cornered-input" style="width: 80%;"
                        ng-model="team.details[selectedLangs.details]"
-                       placeholder="Details about team"></textarea>
+                       placeholder="{{'weekPage.addNewTeamPage.details' | translate}}"></textarea>
                 <select class="input-group"
                         ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.details">
                 </select>
@@ -48,7 +48,7 @@
             <div class="form-inline">
                 <input class="form-control cornered-input" style="width: 50%;"
                        ng-model="team.city[selectedLangs.city]"
-                       placeholder="City" />
+                       placeholder="{{'weekPage.addNewTeamPage.city' | translate}} *" />
                 <select class="input-group"
                         ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.city">
                 </select>
@@ -61,7 +61,7 @@
             <div class="form-inline">
                 <input class="form-control cornered-input" style="width: 50%;"
                        ng-model="team.founded"
-                       placeholder="Year founded" />
+                       placeholder="{{'weekPage.addNewTeamPage.yearFounded' | translate}} *" />
             </div>
         </div>
     </div>
@@ -73,16 +73,29 @@
                        class="form-control cornered-input" style="width: 50%;"
                        typeahead="country.name for country in CountryCodes.countries | filter:$viewValue"
                        typeahead-on-select="onTypeaheadCountrySelect($item, $model, $label)"
-                       placeholder="Country" />
+                       placeholder="{{'weekPage.addNewTeamPage.country' | translate}} *" />
             </div>
         </div>
     </div>
 
-    {{team}}
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       file-model="team.image" type="file" name="pic" accept="image/*" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em" ng-if="savingStatus.error">
+        <span class="col-xs-12" style="color: red;">
+            {{savingStatus.message}}
+        </span>
+    </div>
 
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-primary" ng-click="save()">OK</button>
     <button class="btn btn-warning" ng-click="cancel()">{{'weekPage.weekEdit.cancel' | translate}}</button>
 </div>

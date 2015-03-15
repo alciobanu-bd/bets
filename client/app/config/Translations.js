@@ -210,6 +210,15 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 seemsThatArentBets: 'It seems that there aren\'t any bets to show.',
                 closeButton: 'Close',
                 couldntBeFetched: 'History couldn\'t be fetched.'
+            },
+            addNewTeamPage: {
+                newTeam: "New team",
+                name: "Name",
+                nicknames: "Nicknames (comma separated)",
+                details: "Details about team",
+                city: "City",
+                yearFounded: "Year founded",
+                country: "Country"
             }
         },
         rankingPage: {
@@ -616,6 +625,15 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 seemsThatArentBets: 'Se pare că nu există niciun pariu la acest moment.',
                 closeButton: 'Închide',
                 couldntBeFetched: 'Istoricul nu a putut fi descărcat.'
+            },
+            addNewTeamPage: {
+                newTeam: "Echipă nouă",
+                name: "Nume",
+                nicknames: "Porecle (separate prin virgulă)",
+                details: "Detalii despre echipă",
+                city: "Oraș",
+                yearFounded: "Anul înființării",
+                country: "Țara"
             }
         },
         rankingPage: {

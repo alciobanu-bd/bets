@@ -38,7 +38,8 @@ var initFeed = {
     },
     team: {
         address: "/api/team",
-        getByName: "/api/team/getByName"
+        getByName: "/api/team/getByName",
+        logoUpload: "/api/team/upload-logo"
     },
     admin: {
         rankingRecalculate: "/api/ranking/recalculate"

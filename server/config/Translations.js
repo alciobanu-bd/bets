@@ -109,7 +109,12 @@ module.exports = {
             cannotFetchTeams: 'An error has occurred when trying to fetch teams from database.',
             cannotFetchTeam: 'An error has occurred when trying to fetch team from database.',
             savingError: 'An error has occurred when trying to save the team to the database.',
-            noNameSent: 'Invalid request. No team name was sent.'
+            noNameSent: 'Invalid request. No team name was sent.',
+            noFileInReq: "No image was present in your request.",
+            pngOnly: "Please upload a PNG image.",
+            errReadingImage: "Error reading the image.",
+            logoAtLeast: "Logo should be at least ",
+            andNoMoreThan: " and no more than "
         }
     },
 
@@ -221,7 +226,12 @@ module.exports = {
             cannotFetchTeams: 'A apărut o eroare la căutarea echipelor în baza de date.',
             cannotFetchTeam: 'A apărut o eroare la căutarea echipei în baza de date.',
             savingError: 'A apărut o eroare la salvarea țării în baza de date.',
-            noNameSent: 'Cerere invalidă. Nu a fost trimis niciun nume de echipă.'
+            noNameSent: 'Cerere invalidă. Nu a fost trimis niciun nume de echipă.',
+            noFileInReq: "Nu a fost trimisă nicio imagine.",
+            pngOnly: "Doar imaginile PNG sunt admise.",
+            errReadingImage: "Eroare la citirea imaginii.",
+            logoAtLeast: "Imaginea trebuie să fie cel puțin ",
+            andNoMoreThan: " și nu mai mult de "
         }
     }
 
