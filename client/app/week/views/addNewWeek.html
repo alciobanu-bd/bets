@@ -46,6 +46,7 @@
                     <span style="width: 25%" class="input-group">
                         <input type="text" ng-model="match.homeTeam.name"
                                class="form-control cornered-input"
+                               ng-change="deleteTeamId(match.homeTeam)"
                                typeahead="team.name for team in getTeamsFromServer($viewValue)"
                                typeahead-on-select="onTypeaheadSelect(match.homeTeam, $item, $model, $label)"
                                typeahead-wait-ms="{{inputThrottleInterval}}"
@@ -57,6 +58,7 @@
                     <span style="width: 25%" class="input-group">
                         <input type="text" ng-model="match.awayTeam.name"
                                class="form-control cornered-input"
+                               ng-change="deleteTeamId(match.awayTeam)"
                                typeahead="team.name for team in getTeamsFromServer($viewValue)"
                                typeahead-on-select="onTypeaheadSelect(match.awayTeam, $item, $model, $label)"
                                typeahead-wait-ms="{{inputThrottleInterval}}"

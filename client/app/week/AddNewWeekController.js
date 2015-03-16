@@ -62,6 +62,10 @@ $modal, TeamFactory) {
             return true;
         }
 
+        var existTeamIds = _.every($scope.matches, function (match) {
+            return match.awayTeam.teamId != undefined && match.awayTeam.teamId != undefined;
+        });
+
         var dateAfterToday = _.every($scope.matches, function (match) {
             var startDate = match.startDate;
             var today00 = new Date();
@@ -78,7 +82,7 @@ $modal, TeamFactory) {
             return splitted[0] >= 0 && splitted[0] <= 24 && splitted[1] >= 0 && splitted[1] <= 59;
         });
 
-        return !dateAfterToday || !correctTime;
+        return !dateAfterToday || !correctTime || !existTeamIds;
 
     }
 
@@ -103,6 +107,10 @@ $modal, TeamFactory) {
 
     }
 
+    $scope.deleteTeamId = function (teamModel) {
+        delete teamModel.teamId;
+    }
+
     $scope.onTypeaheadSelect = function (teamModel, item, model, label) {
         if (item.isSpecialSelection) {
             // add new team
@@ -113,9 +121,12 @@ $modal, TeamFactory) {
             teamModel.name = "";
 
             modalInstance.result.then(function (resolvedTeam) {
+                teamModel.name = resolvedTeam.name;
+                teamModel.teamId = resolvedTeam._id;
             });
-
         }
+        teamModel.name = item.name;
+        teamModel.teamId = item._id;
     }
 
 

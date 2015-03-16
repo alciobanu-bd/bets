@@ -38,7 +38,8 @@ function ($q, InitUrls, CallUrlService, TeamSerializer) {
 ])
 
 .factory('TeamSerializer', [
-function () {
+'CurrentLanguageFactory',
+function (CurrentLanguageFactory) {
 
     var thisFactory = {};
 
@@ -93,6 +94,11 @@ function () {
 
         var getValueOnly = function (item) {
             return item.value;
+        }
+
+        team.searchingWord = "";
+        for (var i = 0; i < team.name.length; i++) {
+            team.searchingWord += team.name[i].value + ",";
         }
 
         team.name = _.find(team.name, currentLangFn);
