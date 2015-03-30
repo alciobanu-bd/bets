@@ -4,6 +4,7 @@
 var express = require('express');
 var Week = require('./../model/Week.js');
 var User = require('./../model/User.js');
+var Team = require('./../model/Team.js');
 var Roles = require('./../model/Roles.js')('en');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
@@ -18,6 +19,113 @@ var LOG_WEEK_MAIL_FILE_NAME = 'logs/user_mail_log.txt';
 
 var router = express.Router();
 
+var addTeamInfoToWeek = function (week, callback) {
+
+    callCallback = function (err, week) {
+        if (typeof callback === 'function') {
+            callback(err, week);
+        }
+    }
+
+    var teamsQuery = [];
+
+    for (var i = 0; i < week.events.length; i++) {
+        teamsQuery.push({
+            _id: week.events[i].homeTeam.teamId
+        });
+        teamsQuery.push({
+            _id: week.events[i].awayTeam.teamId
+        });
+    }
+
+    Team.find({$or: teamsQuery}, function (err, teams) {
+        if (err) {
+            callCallback(err, null);
+            return;
+        }
+
+        for (var i = 0; i < teams.length; i++) {
+            var team = teams[i];
+            for (var j = 0; j < week.events.length; j++) {
+                var event = week.events[j];
+                if (team._id == event.homeTeam.teamId) {
+                    event.homeTeam = team;
+                    break;
+                }
+                if (team._id == event.awayTeam.teamId) {
+                    event.awayTeam = team;
+                    break;
+                }
+            }
+        }
+
+        callCallback(null, week);
+
+    });
+
+}
+
+
+var addTeamInfoToWeeks = function (weeks, callback) {
+
+    callCallback = function (err, weeks) {
+        if (typeof callback === 'function') {
+            callback(err, weeks);
+        }
+    }
+
+    var teamsQuery = [];
+
+    for (var j = 0; j < weeks; j++) {
+        var week = weeks[j];
+        for (var i = 0; i < week.events.length; i++) {
+            teamsQuery.push({
+                _id: week.events[i].homeTeam.teamId
+            });
+            teamsQuery.push({
+                _id: week.events[i].awayTeam.teamId
+            });
+        }
+    }
+
+    Team.find({$or: teamsQuery}, function (err, teams) {
+        if (err) {
+            callCallback(err, null);
+            return;
+        }
+
+        for (var i = 0; i < teams.length; i++) {
+            var team = teams[i];
+            var found = false;
+            for (var k = 0; k < weeks.length; k++) {
+                if (found) {
+                    break;
+                }
+                var week = weeks[k];
+                for (var j = 0; j < week.events.length; j++) {
+                    var event = week.events[j];
+                    if (team._id == event.homeTeam.teamId) {
+                        event.homeTeam = team;
+                        found = true;
+                        break;
+                    }
+                    if (team._id == event.awayTeam.teamId) {
+                        event.awayTeam = team;
+                        found = true;
+                        berak;
+                    }
+                }
+            }
+        }
+
+        callCallback(null, week);
+
+    });
+
+}
+
+
+
 router.get('/week/:id([0-9a-fA-F]{24})',
 function (req, res, next) {
 
@@ -29,7 +137,15 @@ function (req, res, next) {
             }).end();
         }
         else {
-            res.status(200).json(week).end();
+            addTeamInfoToWeek(week, function (err, week) {
+                if (err) {
+                    res.status(500).json({
+                        message: Translations[req.query.lang].weekRoute.errorFetchingWeekFromDb
+                    }).end();
+                    return;
+                }
+                res.status(200).json(week).end();
+            });
         }
     });
 
@@ -54,7 +170,16 @@ function (req, res, next) {
             }).end();
         }
         else {
-            res.status(200).json(weeks).end();
+            addTeamInfoToWeeks(weeks, function (err, weeks) {
+                if (err) {
+                    res.status(500).json({
+                        message: Translations[req.query.lang].weekRoute.errorFetchingWeeksFromDb
+                    }).end();
+                    return;
+                }
+
+                res.status(200).json(weeks).end();
+            });
         }
     });
 
@@ -90,7 +215,17 @@ function (req, res, next) {
                     else {
                         weeks[0].available = false;
                     }
-                    res.status(200).json(weeks[0]).end();
+
+                    addTeamInfoToWeek(weeks[0], function (err, week) {
+                        if (err) {
+                            res.status(500).json({
+                                message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
+                            }).end();
+                            return;
+                        }
+                        res.status(200).json(week).end();
+                    });
+
                 }
                 else {
                     res.status(200).json({number: 0}).end();
@@ -289,6 +424,7 @@ function (req, res, next) {
 
             else {
                 if (weeks.length > 1) {
+
                     weeks[1] = weeks[1].toObject();
                     if (new Date(weeks[1].endDate) > new Date()) {
                         weeks[1].available = true;
@@ -296,7 +432,17 @@ function (req, res, next) {
                     else {
                         weeks[1].available = false;
                     }
-                    res.status(200).json(weeks[1]).end();
+
+                    addTeamInfoToWeek(weeks[1], function (err, week) {
+                        if (err) {
+                            res.status(500).json({
+                                message: Translations[req.query.lang].weekRoute.errorFetchingBeforeCurrentWeek
+                            }).end();
+                            return;
+                        }
+                        res.status(200).json(week).end();
+                    });
+
                 }
                 else {
                     res.status(200).json({number: 0}).end();
@@ -343,7 +489,19 @@ function (req, res, next) {
                     else {
                         week.available = false;
                     }
-                    res.status(200).json(week).end();
+
+                    addTeamInfoToWeek(week, function (err, week) {
+                        if (err) {
+                            res.status(500).json({
+                                message: Translations[req.query.lang].weekRoute.errorFetchingWeekWithNumber
+                                + req.query.number +
+                                "."
+                            }).end();
+                            return;
+                        }
+                        res.status(200).json(week).end();
+                    });
+
                 }
 
                 else {

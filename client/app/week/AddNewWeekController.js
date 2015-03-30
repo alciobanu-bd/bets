@@ -116,7 +116,7 @@ $modal, TeamFactory) {
             // add new team
             var modalInstance = $modal.open({
                 templateUrl: 'app/week/views/addNewTeam.html',
-                controller: 'TeamController'
+                controller: 'NewTeamController'
             });
             teamModel.name = "";
 
@@ -147,6 +147,8 @@ $modal, TeamFactory) {
             newMatch.startDate = new Date(newMatch.startDate);
             newMatch.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
             newMatch.index = parseInt(match.index);
+            delete newMatch.homeTeam.name;
+            delete newMatch.awayTeam.name;
             delete newMatch.startTime;
             return newMatch;
         });
@@ -232,7 +234,7 @@ $modal, TeamFactory) {
 
 
 weekModule
-.controller('TeamController', [
+.controller('NewTeamController', [
 '$scope', '$modalInstance', 'Languages', 'CurrentLanguageFactory', 'CountryCodes', 'FileUploader',
 'InitUrls', 'CallUrlService', 'TeamSerializer',
 function ($scope, $modalInstance, Languages, CurrentLanguageFactory, CountryCodes, FileUploader,

@@ -74,7 +74,7 @@
 
             <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in week.events track by $index">
                 <span style="width: 30%" class="input-group">
-                    {{match.homeTeam}}
+                    {{match.homeTeam.name}}
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.homeScore"
@@ -100,7 +100,7 @@
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
                 <span style="width: 30%;" class="input-group">
-                    {{match.awayTeam}}
+                    {{match.awayTeam.name}}
                 </span>
             </div>
 

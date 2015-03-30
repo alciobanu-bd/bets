@@ -2,8 +2,8 @@
 weekModule
 
 .factory('WeekFactory',[
-'InitUrls', 'CallUrlService', '$translate', 'CurrentLanguageFactory', '$q',
-function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory, $q) {
+'InitUrls', 'CallUrlService', '$translate', 'TeamSerializer',
+function (InitUrls, CallUrlService, $translate, TeamSerializer) {
 
     var thisFactory = {};
 
@@ -66,6 +66,12 @@ function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory, $q) {
                             }
                             return event;
                         });
+
+                        for (var i = 0; i < data.events.length; i++) {
+                            TeamSerializer.adjustTeamForCurrentLanguage(data.events[i].homeTeam);
+                            TeamSerializer.adjustTeamForCurrentLanguage(data.events[i].awayTeam);
+                        }
+
                         if (!angular.isDefined(thisFactory.error.weeksByNumberError[weekNo])) {
                             thisFactory.error.weeksByNumberError[weekNo] = {};
                         }
@@ -104,6 +110,12 @@ function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory, $q) {
                             }
                             return event;
                         });
+
+                        for (var i = 0; i < data.events.length; i++) {
+                            TeamSerializer.adjustTeamForCurrentLanguage(data.events[i].homeTeam);
+                            TeamSerializer.adjustTeamForCurrentLanguage(data.events[i].awayTeam);
+                        }
+
                         thisFactory.error.current.active = false;
                         thisFactory.currentWeek = data;
                         if (typeof callWhenDone === 'function') {
@@ -228,6 +240,12 @@ function (InitUrls, CallUrlService, $translate, CurrentLanguageFactory, $q) {
                             }
                             return event;
                         });
+
+                        for (var i = 0; i < data.events.length; i++) {
+                            TeamSerializer.adjustTeamForCurrentLanguage(data.events[i].homeTeam);
+                            TeamSerializer.adjustTeamForCurrentLanguage(data.events[i].awayTeam);
+                        }
+
                         thisFactory.error.beforeCurrent.active = false;
                         thisFactory.beforeCurrentWeek = data;
                         if (typeof callWhenDone === 'function') {
