@@ -2,8 +2,8 @@
 historyModule
 
 .factory('HistoryFactory', [
-'InitUrls', 'CallUrlService', '$q',
-function (InitUrls, CallUrlService, $q) {
+'InitUrls', 'CallUrlService', '$q', 'TeamSerializer',
+function (InitUrls, CallUrlService, $q, TeamSerializer) {
 
     var thisFactory = {};
     thisFactory.betHistory = null;
@@ -21,6 +21,12 @@ function (InitUrls, CallUrlService, $q) {
             }
             CallUrlService.get(reqObject,
             function (data) {
+                for (var i = 0; i < data.history.length; i++) {
+                    for (var j = 0; j < data.history[i].weekEvents.length; j++) {
+                        TeamSerializer.adjustTeamForCurrentLanguage(data.history[i].weekEvents[j].homeTeam);
+                        TeamSerializer.adjustTeamForCurrentLanguage(data.history[i].weekEvents[j].awayTeam);
+                    }
+                }
                 thisFactory.betHistory = data.history;
                 thisFactory.betHistoryUser = data.user;
                 if (typeof onSuccess === 'function') {

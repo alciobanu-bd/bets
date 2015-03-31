@@ -6,6 +6,7 @@ var Roles = require('./../model/Roles.js')('en');
 var Week = require('./../model/Week.js');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
+var WeekTeamAdder = require('./../services/WeekTeamAdder');
 
 var Translations = require('./../config/Translations.js');
 var _ = require('underscore');
@@ -56,56 +57,66 @@ function (req, res, next) {
                 }
                 else {
 
-                    var history = [];
-
-                    for (var i in weeks) {
-                        var week = weeks[i];
-                        var bet = _.find(bets, function (item) {
-                            return item.weekNumber == week.number;
-                        });
-                        if (!bet) {
-                            // user didn't place a bet this week
-                            bet = {
-                                placed: false,
-                                scores: [],
-                                points: 0,
-                                weekNumber: week.number
-                            };
-                        }
-                        else {
-                            bet.placed = true;
-                        }
-                        var historyItem = {
-                            weekNumber: week.number,
-                            points: bet.points,
-                            placed: bet.placed,
-//                            betEnded: bet.ended,
-//                            weekEnded: week.ended,
-                            requiredEvents: week.required,
-                            weekEndDate: week.endDate,
-                            betScores: bet.scores,
-                            weekEvents: week.events,
-                            competition: week.competition,
-                            available: new Date(week.endDate) > new Date()
-                        };
-
-                        history.push(historyItem);
-                    }
-
-                    User.findOne({_id: userId},
-                        {password: 0, salt: 0, serverSalt: 0, registrationIp: 0, isMailNotificationOn: 0},
-                        function (err, user) {
+                    WeekTeamAdder.addTeamInfoToWeeks(weeks, function (err, weeks) {
                         if (err) {
                             res.status(500).json({
-                                message: Translations[req.query.lang].history.cannotFetchFromDb
+                                message: Translations[req.query.lang].weekRoute.errorFetchingWeeksFromDb
                             }).end();
+                            return;
                         }
-                        else {
-                            res.status(200).json({
-                                history: history,
-                                user: user
-                            }).end();
+
+                        var history = [];
+
+                        for (var i = 0; i < weeks.length; i++) {
+                            var week = weeks[i];
+                            var bet = _.find(bets, function (item) {
+                                return item.weekNumber == week.number;
+                            });
+                            if (!bet) {
+                                // user didn't place a bet this week
+                                bet = {
+                                    placed: false,
+                                    scores: [],
+                                    points: 0,
+                                    weekNumber: week.number
+                                };
+                            }
+                            else {
+                                bet.placed = true;
+                            }
+                            var historyItem = {
+                                weekNumber: week.number,
+                                points: bet.points,
+                                placed: bet.placed,
+//                            betEnded: bet.ended,
+//                            weekEnded: week.ended,
+                                requiredEvents: week.required,
+                                weekEndDate: week.endDate,
+                                betScores: bet.scores,
+                                weekEvents: week.events,
+                                competition: week.competition,
+                                available: new Date(week.endDate) > new Date()
+                            };
+
+                            history.push(historyItem);
                         }
+
+                        User.findOne({_id: userId},
+                            {password: 0, salt: 0, serverSalt: 0, registrationIp: 0, isMailNotificationOn: 0},
+                            function (err, user) {
+                                if (err) {
+                                    res.status(500).json({
+                                        message: Translations[req.query.lang].history.cannotFetchFromDb
+                                    }).end();
+                                }
+                                else {
+                                    res.status(200).json({
+                                        history: history,
+                                        user: user
+                                    }).end();
+                                }
+                            });
+
                     });
 
                 }
