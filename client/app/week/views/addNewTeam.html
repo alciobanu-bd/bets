@@ -58,10 +58,61 @@
 
     <div class="row top-buffer-0-5-em">
         <div class="col-xs-12">
+            <span>
+                {{'weekPage.addNewTeamPage.isClub' | translate}}
+            </span>
+            <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuActive"
+                  data-toggle="dropdown" style="cursor: pointer">
+                {{!!team.isClub ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
+                <span class="caret"></span>
+            </span>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuActive" style="cursor: pointer">
+                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="team.isClub = true">
+                    {{'adminPanelPage.usersPage.yes' | translate}}
+                </a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="team.isClub = false">
+                    {{'adminPanelPage.usersPage.no' | translate}}
+                </a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
             <div class="form-inline">
                 <input class="form-control cornered-input" style="width: 50%;"
                        ng-model="team.founded"
                        placeholder="{{'weekPage.addNewTeamPage.yearFounded' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.website"
+                       placeholder="{{'weekPage.addNewTeamPage.website' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.ground"
+                       placeholder="{{'weekPage.addNewTeamPage.ground' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.stadiumCapacity"
+                       placeholder="{{'weekPage.addNewTeamPage.stadiumCapacity' | translate}} *" />
             </div>
         </div>
     </div>

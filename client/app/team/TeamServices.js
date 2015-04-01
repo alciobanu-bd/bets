@@ -48,7 +48,11 @@ function (CurrentLanguageFactory) {
         var team = {
             imageUrl: imagePath,
             countryCode: teamModel.country.code.toLowerCase(),
-            founded: teamModel.founded
+            founded: teamModel.founded,
+            website: teamModel.website,
+            ground: teamModel.ground,
+            stadiumCapacity: teamModel.stadiumCapacity,
+            isClub: teamModel.isClub
         };
         team.name = [];
         for (var i in teamModel.name) {
@@ -68,17 +72,19 @@ function (CurrentLanguageFactory) {
         for (var i in teamModel.city) {
             team.city.push({
                 lang: i,
-                value: teamModel.details[i]
+                value: teamModel.city[i]
             });
         }
         team.nicknames = [];
         for (var i in teamModel.nicknames) {
             var nicknamesSplit = teamModel.nicknames[i].split(",");
             for (var j = 0; j < nicknamesSplit.length; j++) {
-                team.nicknames.push({
-                    lang: i,
-                    value: nicknamesSplit[j]
-                });
+                if (nicknamesSplit[j]) {
+                    team.nicknames.push({
+                        lang: i,
+                        value: nicknamesSplit[j]
+                    });
+                }
             }
         }
 
@@ -87,6 +93,10 @@ function (CurrentLanguageFactory) {
     }
 
     thisFactory.adjustTeamForCurrentLanguage = function (team) {
+
+        if (!team._id) {
+            return;
+        }
 
         var currentLangFn = function (item) {
             return item.lang == CurrentLanguageFactory.getCurrentLanguage().code;

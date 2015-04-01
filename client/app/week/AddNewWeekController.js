@@ -116,7 +116,8 @@ $modal, TeamFactory) {
             // add new team
             var modalInstance = $modal.open({
                 templateUrl: 'app/week/views/addNewTeam.html',
-                controller: 'NewTeamController'
+                controller: 'NewTeamController',
+                backdrop: 'static'
             });
             teamModel.name = "";
 
@@ -257,7 +258,9 @@ InitUrls, CallUrlService, TeamSerializer) {
             name: ''
         },
         founded: '',
-        image: null
+        website: '',
+        image: null,
+        isClub: true
     };
 
     for (var i in Languages.list) {
@@ -276,7 +279,10 @@ InitUrls, CallUrlService, TeamSerializer) {
     };
 
     $scope.onTypeaheadCountrySelect = function (item) {
-        $scope.team.country = item;
+        $scope.team.country = {
+            name: item.name,
+            code: item.code
+        };
     }
 
     $scope.savingStatus = {

@@ -8,7 +8,11 @@ var TeamSchema = mongoose.Schema({
     countryCode: {type: 'string', required: true},
     founded: {type: 'number', required: true},
     imageUrl: {type: 'string', required: true},
-    city: {type: Array, required: true}
+    city: {type: Array, required: true},
+    ground: {type: String, required: true},
+    stadiumCapacity: {type: Number, required: false},
+    website: {type: String, required: true},
+    isClub: {type: Boolean, required: true} // club or national team
 });
 
 module.exports = mongoose.model('team', TeamSchema);

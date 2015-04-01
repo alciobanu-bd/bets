@@ -92,10 +92,7 @@ weekModule
                     delete newEvent.awayTeam;
                     delete newEvent.startDate;
                     delete newEvent.competition;
-
-                    if (angular.isDefined(newEvent.diffTooHigh)) {
-                        delete newEvent.diffTooHigh;
-                    }
+                    delete newEvent.diffTooHigh;
 
                     return newEvent;
                 });
@@ -204,7 +201,7 @@ weekModule
                 }
                 return !_.every(scope.week.events, function (event) {
                     return (event.awayScore || event.awayScore == '0') && (event.homeScore || event.homeScore == '0') &&
-                        parseInt(event.awayScore) != NaN && parseInt(event.homeScore) != NaN;
+                        !isNaN(parseInt(event.awayScore)) && !isNaN(parseInt(event.homeScore));
                 });
             }
 
@@ -338,8 +335,10 @@ function ($scope, $modalInstance, week, HistoryFactory, $translate) {
 
 weekModule
 .controller('WeekEditController', [
-    '$scope', '$modalInstance', 'week', 'InitUrls', 'CallUrlService',
-    function ($scope, $modalInstance, week, InitUrls, CallUrlService) {
+'$scope', '$modalInstance', 'week', 'InitUrls', 'CallUrlService', 'TeamFactory', '$translate', '$filter',
+'$modal',
+function ($scope, $modalInstance, week, InitUrls, CallUrlService, TeamFactory, $translate, $filter,
+$modal) {
 
         $scope.week = JSON.parse(JSON.stringify(week)); // trick to deep clone object
 
@@ -348,6 +347,14 @@ weekModule
             var date = new Date(event.startDate);
             event.startTime = ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2);
             event.dateOpened = false;
+            event.homeTeam = {
+                teamId: event.homeTeam._id,
+                name: event.homeTeam.name
+            };
+            event.awayTeam = {
+                teamId: event.awayTeam._id,
+                name: event.awayTeam.name
+            };
             if (event.realHomeScore || event.realHomeScore == 0) {
                 event.homeScore = event.realHomeScore;
                 delete event.realHomeScore;
@@ -375,6 +382,10 @@ weekModule
                 return true;
             }
 
+            var existTeamIds = _.every($scope.week.events, function (match) {
+                return match.awayTeam.teamId != undefined && match.awayTeam.teamId != undefined;
+            });
+
             var correctTime = _.every($scope.week.events, function (match) {
                 var timeRegex = RegExp(/[0-9][0-9]?:[0-9][0-9]/);
                 if (!timeRegex.test(match.startTime)) {
@@ -384,7 +395,7 @@ weekModule
                 return splitted[0] >= 0 && splitted[0] <= 24 && splitted[1] >= 0 && splitted[1] <= 59;
             });
 
-            return !correctTime;
+            return !existTeamIds || !correctTime;
         }
 
         $scope.removeMatch = function (index) {
@@ -397,6 +408,47 @@ weekModule
 
         $scope.addNewEvent = function () {
             $scope.week.events.push({});
+        }
+
+        $scope.getTeamsFromServer = function ($viewValue) {
+
+            if (!$viewValue || $viewValue.trim().length < 3) {
+                return [];
+            }
+
+            return TeamFactory.getTeamsByName($viewValue.trim())
+                .then(function (teams) {
+                    var suggestions = teams;
+                    suggestions.push({
+                        name: $translate.instant('weekPage.addNewWeekPage.addNewTeam'),
+                        isSpecialSelection: true
+                    });
+                    return $filter('teamSelect')(suggestions, $viewValue);
+                });
+
+        }
+
+        $scope.deleteTeamId = function (teamModel) {
+            delete teamModel.teamId;
+        }
+
+        $scope.onTypeaheadSelect = function (teamModel, item, model, label) {
+            if (item.isSpecialSelection) {
+                // add new team
+                var modalInstance = $modal.open({
+                    templateUrl: 'app/week/views/addNewTeam.html',
+                    controller: 'NewTeamController',
+                    backdrop: 'static'
+                });
+                teamModel.name = "";
+
+                modalInstance.result.then(function (resolvedTeam) {
+                    teamModel.name = resolvedTeam.name;
+                    teamModel.teamId = resolvedTeam._id;
+                });
+            }
+            teamModel.name = item.name;
+            teamModel.teamId = item._id;
         }
 
         var getHour = function (timeString) {
@@ -416,6 +468,9 @@ weekModule
                 delete newMatch.dateOpened;
                 newMatch.startDate.setHours(getHour(match.startTime), getMinutes(match.startTime));
                 delete newMatch.startTime;
+                delete newMatch.diffTooHigh;
+                delete newMatch.homeTeam.name;
+                delete newMatch.awayTeam.name;
                 return newMatch;
             });
         }

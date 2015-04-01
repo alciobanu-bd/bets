@@ -218,7 +218,11 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 details: "Details about team",
                 city: "City",
                 yearFounded: "Year founded",
-                country: "Country"
+                country: "Country",
+                ground: "Ground",
+                stadiumCapacity: "Stadium capacity",
+                website: "Website",
+                isClub: "If club, select Yes, if national team, select No"
             }
         },
         rankingPage: {
@@ -633,7 +637,11 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 details: "Detalii despre echipă",
                 city: "Oraș",
                 yearFounded: "Anul înființării",
-                country: "Țara"
+                country: "Țara",
+                ground: "Stadion",
+                stadiumCapacity: "Capacitatea stadionului",
+                website: "Site web",
+                isClub: "Echipă de club. Dacă este echipă națională, selectează Nu."
             }
         },
         rankingPage: {

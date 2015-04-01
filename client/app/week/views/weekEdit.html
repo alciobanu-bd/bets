@@ -49,15 +49,25 @@
                       ng-click="removeMatch($index)">
                 </span>
                 <span style="width: 23%" class="input-group">
-                    <input type="text" ng-model="match.homeTeam" class="form-control cornered-input"
-                           placeholder="{{'weekPage.weekEdit.homeTeam' | translate}}" />
+                    <input type="text" ng-model="match.homeTeam.name"
+                           class="form-control cornered-input"
+                           ng-change="deleteTeamId(match.homeTeam)"
+                           typeahead="team.name for team in getTeamsFromServer($viewValue)"
+                           typeahead-on-select="onTypeaheadSelect(match.homeTeam, $item, $model, $label)"
+                           typeahead-wait-ms="{{inputThrottleInterval}}"
+                           placeholder="{{'weekPage.addNewWeekPage.homeTeam' | translate}}" />
                 </span>
                 <span style="width: 4%">
                     vs
                 </span>
                 <span style="width: 23%" class="input-group">
-                    <input type="text" ng-model="match.awayTeam" class="form-control cornered-input"
-                           placeholder="{{'weekPage.weekEdit.awayTeam' | translate}}" />
+                    <input type="text" ng-model="match.awayTeam.name"
+                           class="form-control cornered-input"
+                           ng-change="deleteTeamId(match.awayTeam)"
+                           typeahead="team.name for team in getTeamsFromServer($viewValue)"
+                           typeahead-on-select="onTypeaheadSelect(match.awayTeam, $item, $model, $label)"
+                           typeahead-wait-ms="{{inputThrottleInterval}}"
+                           placeholder="{{'weekPage.addNewWeekPage.awayTeam' | translate}}" />
                 </span>
                 <span style="width: 18%" class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{dateFormat}}" ng-model="match.startDate"

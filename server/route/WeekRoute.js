@@ -81,57 +81,6 @@ function (req, res, next) {
 
 });
 
-router.get('/week/last',
-jwtauth([tokenChecks.hasRole("ROLE_USER")]),
-function (req, res, next) {
-
-    var queryObject = {};
-
-    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
-        queryObject.hidden = false;
-        // if user isn't at least admin, he should see only the unhidden weeks
-    }
-
-    Week.find(queryObject, {},
-        {sort: {number: -1}, limit: 1},
-        function (err, weeks) {
-
-            if (err) {
-                res.status(500).json({
-                    message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
-                }).end();
-            }
-
-            else {
-                if (weeks.length > 0) {
-                    weeks[0] = weeks[0].toObject();
-                    if (new Date(weeks[0].endDate) > new Date()) {
-                        weeks[0].available = true;
-                    }
-                    else {
-                        weeks[0].available = false;
-                    }
-
-                    WeekTeamAdder.addTeamInfoToWeek(weeks[0], function (err, week) {
-                        if (err) {
-                            res.status(500).json({
-                                message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
-                            }).end();
-                            return;
-                        }
-                        res.status(200).json(week).end();
-                    });
-
-                }
-                else {
-                    res.status(200).json({number: 0}).end();
-                }
-            }
-
-        });
-
-});
-
 router.get('/week/mail-notification',
 jwtauth([tokenChecks.hasRole("ROLE_ADMIN")]),
 function (req, res) {
@@ -297,6 +246,55 @@ function (req, res, next) {
 
 });
 
+router.get('/week/last',
+jwtauth([tokenChecks.hasRole("ROLE_USER")]),
+function (req, res, next) {
+
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject, {},
+    {sort: {number: -1}, limit: 1},
+    function (err, weeks) {
+
+        if (err) {
+            res.status(500).json({
+                message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
+            }).end();
+            return;
+        }
+
+        if (weeks.length > 0) {
+            weeks[0] = weeks[0].toObject();
+            if (new Date(weeks[0].endDate) > new Date()) {
+                weeks[0].available = true;
+            }
+            else {
+                weeks[0].available = false;
+            }
+
+            WeekTeamAdder.addTeamInfoToWeek(weeks[0], function (err, week) {
+                if (err) {
+                    res.status(500).json({
+                        message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
+                    }).end();
+                    return;
+                }
+                res.status(200).json(week).end();
+            });
+
+        }
+        else {
+            res.status(200).json({number: 0}).end();
+        }
+
+    });
+});
+
 router.get('/week/beforeLast',
 jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
@@ -316,33 +314,32 @@ function (req, res, next) {
                 res.status(500).json({
                     message: Translations[req.query.lang].weekRoute.errorFetchingBeforeCurrentWeek
                 }).end();
+                return;
             }
 
-            else {
-                if (weeks.length > 1) {
+            if (weeks.length > 1) {
 
-                    weeks[1] = weeks[1].toObject();
-                    if (new Date(weeks[1].endDate) > new Date()) {
-                        weeks[1].available = true;
-                    }
-                    else {
-                        weeks[1].available = false;
-                    }
-
-                    WeekTeamAdder.addTeamInfoToWeek(weeks[1], function (err, week) {
-                        if (err) {
-                            res.status(500).json({
-                                message: Translations[req.query.lang].weekRoute.errorFetchingBeforeCurrentWeek
-                            }).end();
-                            return;
-                        }
-                        res.status(200).json(week).end();
-                    });
-
+                weeks[1] = weeks[1].toObject();
+                if (new Date(weeks[1].endDate) > new Date()) {
+                    weeks[1].available = true;
                 }
                 else {
-                    res.status(200).json({number: 0}).end();
+                    weeks[1].available = false;
                 }
+
+                WeekTeamAdder.addTeamInfoToWeek(weeks[1], function (err, week) {
+                    if (err) {
+                        res.status(500).json({
+                            message: Translations[req.query.lang].weekRoute.errorFetchingBeforeCurrentWeek
+                        }).end();
+                        return;
+                    }
+                    res.status(200).json(week).end();
+                });
+
+            }
+            else {
+                res.status(200).json({number: 0}).end();
             }
 
         });
@@ -360,7 +357,7 @@ function (req, res, next) {
 
     if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
         queryObject.hidden = false;
-        // if user isn't at least admin, he should see only the unhidden weeks
+        // if user isn't at least admin, he should see only the non-hidden weeks
     }
 
     Week.findOne(
