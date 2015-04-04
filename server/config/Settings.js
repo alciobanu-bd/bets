@@ -41,6 +41,17 @@ var settingsProfiles = {
             numberOfConversationsOnInboxEmit: 7,
             numberOfMessagesToLoadPerCoversation: 50
         }
+    },
+    mutual: {
+        // settings which are mutual for prod and dev
+        team: {
+            minImageSize: 500,
+            maxImageSize: 2000,
+            logoPath: {
+                prefix: 'client/',
+                dir: 'images/team-logos/'
+            }
+        }
     }
 };
 
@@ -48,6 +59,10 @@ var settingsProfiles = {
 
 
 var returnVal = settingsProfiles.prod; // change this line to switch between profiles
+// add mutual settings
+for (var i in settingsProfiles.mutual) {
+    returnVal[i] = settingsProfiles.mutual[i];
+}
 
 returnVal.isDev = function () {
     return returnVal.profileName == 'dev';

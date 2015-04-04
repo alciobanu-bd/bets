@@ -1,0 +1,153 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{'weekPage.addNewTeamPage.newTeam' | translate}}</h3>
+</div>
+<div class="modal-body">
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.name[selectedLangs.name]"
+                        placeholder="{{'weekPage.addNewTeamPage.name' | translate}} *" />
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.name">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.nicknames[selectedLangs.nicknames]"
+                       placeholder="{{'weekPage.addNewTeamPage.nicknames' | translate}}" />
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.nicknames">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <textarea class="form-control cornered-input" style="width: 80%;"
+                       ng-model="team.details[selectedLangs.details]"
+                       placeholder="{{'weekPage.addNewTeamPage.details' | translate}}"></textarea>
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.details">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.city[selectedLangs.city]"
+                       placeholder="{{'weekPage.addNewTeamPage.city' | translate}} *" />
+                <select class="input-group"
+                        ng-options="lang.code as lang.code for (key, lang) in Languages.list" ng-model="selectedLangs.city">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <span>
+                {{'weekPage.addNewTeamPage.isClub' | translate}}
+            </span>
+            <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuActive"
+                  data-toggle="dropdown" style="cursor: pointer">
+                {{!!team.isClub ? ('adminPanelPage.usersPage.yes' | translate) : ('adminPanelPage.usersPage.no' | translate)}}
+                <span class="caret"></span>
+            </span>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuActive" style="cursor: pointer">
+                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="team.isClub = true">
+                    {{'adminPanelPage.usersPage.yes' | translate}}
+                </a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="team.isClub = false">
+                    {{'adminPanelPage.usersPage.no' | translate}}
+                </a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.founded"
+                       placeholder="{{'weekPage.addNewTeamPage.yearFounded' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.website"
+                       placeholder="{{'weekPage.addNewTeamPage.website' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.ground"
+                       placeholder="{{'weekPage.addNewTeamPage.ground' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       ng-model="team.stadiumCapacity"
+                       placeholder="{{'weekPage.addNewTeamPage.stadiumCapacity' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input type="text" ng-model="team.country.name"
+                       class="form-control cornered-input" style="width: 50%;"
+                       typeahead="country.name for country in CountryCodes.countries | filter:$viewValue"
+                       typeahead-on-select="onTypeaheadCountrySelect($item, $model, $label)"
+                       placeholder="{{'weekPage.addNewTeamPage.country' | translate}} *" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em">
+        <div class="col-xs-12">
+            <div class="form-inline">
+                <input class="form-control cornered-input" style="width: 50%;"
+                       file-model="team.image" type="file" name="pic" accept="image/*" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer-0-5-em" ng-if="savingStatus.error">
+        <span class="col-xs-12" style="color: red;">
+            {{savingStatus.message}}
+        </span>
+    </div>
+
+</div>
+
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">{{'weekPage.weekEdit.cancel' | translate}}</button>
+</div>

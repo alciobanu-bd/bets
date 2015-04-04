@@ -10,7 +10,8 @@ function () {
             maxNumberOfMatches: 10,
             events: {
                 maxScoreDifference: 5
-            }
+            },
+            findTeamByNameAddress: "/api/team/getByName/"
         },
         user: {
             detailsRefreshInterval: 10000, // milliseconds
@@ -41,6 +42,9 @@ function () {
             chatboxWidth: 255,
             maxNumberOfOpenChatboxes: Math.floor(window.innerWidth / 255),
             maxTimeoutSockets: 30000 // 30 seconds
+        },
+        utils: {
+            throttleInputInterval: 300
         }
 
     };

@@ -52,6 +52,10 @@ function (Languages) {
         location.reload(); // reload is needed to load correct angular locale
     }
 
+    thisService.getCurrentLanguage = function () {
+        return thisService.language;
+    }
+
     return thisService;
 
 }

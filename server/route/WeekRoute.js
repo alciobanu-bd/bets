@@ -4,11 +4,14 @@
 var express = require('express');
 var Week = require('./../model/Week.js');
 var User = require('./../model/User.js');
+var Team = require('./../model/Team.js');
 var Roles = require('./../model/Roles.js')('en');
 var jwtauth = require('./../middlewares/jwtauth.js');
 var tokenChecks = require('./../middlewares/tokenChecks.js');
 var pointsManagementFunctions = require('./../middlewares/pointsManagement.js');
 var mailServices = require('./../services/mailServices.js');
+var WeekTeamAdder = require('./../services/WeekTeamAdder');
+
 var _ = require('underscore');
 
 var Translations = require('./../config/Translations.js');
@@ -17,6 +20,7 @@ var fs = require('fs');
 var LOG_WEEK_MAIL_FILE_NAME = 'logs/user_mail_log.txt';
 
 var router = express.Router();
+
 
 router.get('/week/:id([0-9a-fA-F]{24})',
 function (req, res, next) {
@@ -29,7 +33,15 @@ function (req, res, next) {
             }).end();
         }
         else {
-            res.status(200).json(week).end();
+            WeekTeamAdder.addTeamInfoToWeek(week, function (err, week) {
+                if (err) {
+                    res.status(500).json({
+                        message: Translations[req.query.lang].weekRoute.errorFetchingWeekFromDb
+                    }).end();
+                    return;
+                }
+                res.status(200).json(week).end();
+            });
         }
     });
 
@@ -54,50 +66,18 @@ function (req, res, next) {
             }).end();
         }
         else {
-            res.status(200).json(weeks).end();
+            WeekTeamAdder.addTeamInfoToWeeks(weeks, function (err, weeks) {
+                if (err) {
+                    res.status(500).json({
+                        message: Translations[req.query.lang].weekRoute.errorFetchingWeeksFromDb
+                    }).end();
+                    return;
+                }
+
+                res.status(200).json(weeks).end();
+            });
         }
     });
-
-});
-
-router.get('/week/last',
-jwtauth([tokenChecks.hasRole("ROLE_USER")]),
-function (req, res, next) {
-
-    var queryObject = {};
-
-    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
-        queryObject.hidden = false;
-        // if user isn't at least admin, he should see only the unhidden weeks
-    }
-
-    Week.find(queryObject, {},
-        {sort: {number: -1}, limit: 1},
-        function (err, weeks) {
-
-            if (err) {
-                res.status(500).json({
-                    message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
-                }).end();
-            }
-
-            else {
-                if (weeks.length > 0) {
-                    weeks[0] = weeks[0].toObject();
-                    if (new Date(weeks[0].endDate) > new Date()) {
-                        weeks[0].available = true;
-                    }
-                    else {
-                        weeks[0].available = false;
-                    }
-                    res.status(200).json(weeks[0]).end();
-                }
-                else {
-                    res.status(200).json({number: 0}).end();
-                }
-            }
-
-        });
 
 });
 
@@ -266,6 +246,55 @@ function (req, res, next) {
 
 });
 
+router.get('/week/last',
+jwtauth([tokenChecks.hasRole("ROLE_USER")]),
+function (req, res, next) {
+
+    var queryObject = {};
+
+    if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
+        queryObject.hidden = false;
+        // if user isn't at least admin, he should see only the unhidden weeks
+    }
+
+    Week.find(queryObject, {},
+    {sort: {number: -1}, limit: 1},
+    function (err, weeks) {
+
+        if (err) {
+            res.status(500).json({
+                message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
+            }).end();
+            return;
+        }
+
+        if (weeks.length > 0) {
+            weeks[0] = weeks[0].toObject();
+            if (new Date(weeks[0].endDate) > new Date()) {
+                weeks[0].available = true;
+            }
+            else {
+                weeks[0].available = false;
+            }
+
+            WeekTeamAdder.addTeamInfoToWeek(weeks[0], function (err, week) {
+                if (err) {
+                    res.status(500).json({
+                        message: Translations[req.query.lang].weekRoute.errorFetchingCurrentWeek
+                    }).end();
+                    return;
+                }
+                res.status(200).json(week).end();
+            });
+
+        }
+        else {
+            res.status(200).json({number: 0}).end();
+        }
+
+    });
+});
+
 router.get('/week/beforeLast',
 jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res, next) {
@@ -285,22 +314,32 @@ function (req, res, next) {
                 res.status(500).json({
                     message: Translations[req.query.lang].weekRoute.errorFetchingBeforeCurrentWeek
                 }).end();
+                return;
             }
 
-            else {
-                if (weeks.length > 1) {
-                    weeks[1] = weeks[1].toObject();
-                    if (new Date(weeks[1].endDate) > new Date()) {
-                        weeks[1].available = true;
-                    }
-                    else {
-                        weeks[1].available = false;
-                    }
-                    res.status(200).json(weeks[1]).end();
+            if (weeks.length > 1) {
+
+                weeks[1] = weeks[1].toObject();
+                if (new Date(weeks[1].endDate) > new Date()) {
+                    weeks[1].available = true;
                 }
                 else {
-                    res.status(200).json({number: 0}).end();
+                    weeks[1].available = false;
                 }
+
+                WeekTeamAdder.addTeamInfoToWeek(weeks[1], function (err, week) {
+                    if (err) {
+                        res.status(500).json({
+                            message: Translations[req.query.lang].weekRoute.errorFetchingBeforeCurrentWeek
+                        }).end();
+                        return;
+                    }
+                    res.status(200).json(week).end();
+                });
+
+            }
+            else {
+                res.status(200).json({number: 0}).end();
             }
 
         });
@@ -318,7 +357,7 @@ function (req, res, next) {
 
     if (Roles.roleValue(res.data.local.user.role) < Roles.admin.value) {
         queryObject.hidden = false;
-        // if user isn't at least admin, he should see only the unhidden weeks
+        // if user isn't at least admin, he should see only the non-hidden weeks
     }
 
     Week.findOne(
@@ -343,7 +382,19 @@ function (req, res, next) {
                     else {
                         week.available = false;
                     }
-                    res.status(200).json(week).end();
+
+                    WeekTeamAdder.addTeamInfoToWeek(week, function (err, week) {
+                        if (err) {
+                            res.status(500).json({
+                                message: Translations[req.query.lang].weekRoute.errorFetchingWeekWithNumber
+                                + req.query.number +
+                                "."
+                            }).end();
+                            return;
+                        }
+                        res.status(200).json(week).end();
+                    });
+
                 }
 
                 else {

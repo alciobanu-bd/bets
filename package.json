@@ -18,6 +18,8 @@
         "nodemailer": "*",
         "nodemailer-smtp-transport": "*",
         "ursa": "*",
+        "multer": "*",
+        "image-size": "*",
         "grunt": "*",
         "grunt-contrib-clean": "*",
         "grunt-contrib-uglify": "*",

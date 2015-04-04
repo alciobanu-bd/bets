@@ -1,6 +1,7 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var multer  = require('multer');
 var mongoose = require('mongoose');
 var path = require('path');
 var fs = require('fs');
@@ -14,6 +15,7 @@ GLOBAL.domainName = Settings.domainName;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.query());
+app.use(multer({ dest: './uploads/'}));
 
 app.use(function (req, res, next) {
     // url decoding middleware
@@ -29,6 +31,9 @@ app.use(function (req, res, next) {
         req.url = decodeURIComponent(req.url);
     }
     catch (err) {
+        res.status(500).json({
+            message: "Cannot decode address. " + req.url
+        }).end();
         console.log(req.url);
     }
     req.url = req.url.replace(/[/]+/g, '/');
@@ -48,7 +53,7 @@ app.use(function (req, res, next) {
 // gc once in a while
 setInterval(function () {
     global.gc();
-}, 10 * 60 * 5000); // 10 minutes
+}, 10 * 60 * 1000); // 10 minutes
 
 // use token service
 var filename = "server/config/secretString";
@@ -69,6 +74,7 @@ db
 
 var mkdirp = require('mkdirp');
 mkdirp('logs');
+mkdirp('uploads');
 
 /*
  * Mail setup
@@ -117,7 +123,6 @@ console.log('Server started on port ' + Settings.port);
 
 require('./sockets/SocketConnection.js');
 
-require('./route/TestRoute.js');
 require('./route/InitRoute.js');
 require('./model/User.js');
 require('./route/UserRoute.js');
@@ -129,5 +134,6 @@ require('./route/BetRoute.js');
 require('./route/BetsPerWeek.js');
 require('./route/BetHistoryRoute.js');
 require('./route/UserLocationRoute.js');
+require('./route/TeamRoute.js');
 
 require('./services/CronJobs.js');

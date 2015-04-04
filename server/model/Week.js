@@ -1,5 +1,4 @@
 
-var restful = require('node-restful');
 var mongoose = require('mongoose');
 
 var WeekSchema = mongoose.Schema({
@@ -13,4 +12,4 @@ var WeekSchema = mongoose.Schema({
     hidden: {type: Boolean, required: true}
 });
 
-module.exports = restful.model('week', WeekSchema);
+module.exports = mongoose.model('week', WeekSchema);

@@ -73,8 +73,11 @@
         <div class="panel-body">
 
             <div class="row form-inline top-buffer-0-5-em" ng-repeat="match in week.events track by $index">
-                <span style="width: 30%" class="input-group">
-                    {{match.homeTeam}}
+                <span style="width: 25%" class="input-group">
+                    {{match.homeTeam.name}}
+                </span>
+                <span style="width: 5%" class="input-group">
+                    <img ng-src="{{match.homeTeam.imageUrl}}" style="max-width: 35px; max-height: 35px;" />
                 </span>
                 <span style="width: 5%" class="input-group">
                     <input class="form-control cornered-input" ng-model="match.homeScore"
@@ -99,9 +102,13 @@
                            ng-change="match.awayScore = validateScore(match.awayScore); checkScoreDifferenceTooHigh(match)"
                            ng-readonly="!week.available && !updateScoreMode" />
                 </span>
-                <span style="width: 30%;" class="input-group">
-                    {{match.awayTeam}}
+                <span style="width: 5%;" class="input-group">
+                    <img ng-src="{{match.awayTeam.imageUrl}}" style="max-width: 35px; max-height: 35px;" />
                 </span>
+                <span style="width: 25%;" class="input-group">
+                    {{match.awayTeam.name}}
+                </span>
+
             </div>
 
         </div>

@@ -166,7 +166,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'No',
                 refresh: 'Refresh',
                 weekSavedSuccessfully: 'Week saved successfully.',
-                weekDidntSave: 'Week didn\'t save. Please try again.'
+                weekDidntSave: 'Week didn\'t save. Please try again.',
+                addNewTeam: 'Add new team'
             },
             weekEdit: {
                 week: 'Week',
@@ -209,6 +210,19 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 seemsThatArentBets: 'It seems that there aren\'t any bets to show.',
                 closeButton: 'Close',
                 couldntBeFetched: 'History couldn\'t be fetched.'
+            },
+            addNewTeamPage: {
+                newTeam: "New team",
+                name: "Name",
+                nicknames: "Nicknames (comma separated)",
+                details: "Details about team",
+                city: "City",
+                yearFounded: "Year founded",
+                country: "Country",
+                ground: "Ground",
+                stadiumCapacity: "Stadium capacity",
+                website: "Website",
+                isClub: "If club, select Yes, if national team, select No"
             }
         },
         rankingPage: {
@@ -570,7 +584,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 no: 'Nu',
                 refresh: 'Reîncarcă',
                 weekSavedSuccessfully: 'Etapa s-a salvat cu succes.',
-                weekDidntSave: 'Etapa nu s-a salvat. Te rugăm încearcă din nou.'
+                weekDidntSave: 'Etapa nu s-a salvat. Te rugăm încearcă din nou.',
+                addNewTeam: 'Adaugă echipă nouă'
             },
             weekEdit: {
                 week: 'Etapa',
@@ -614,6 +629,19 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 seemsThatArentBets: 'Se pare că nu există niciun pariu la acest moment.',
                 closeButton: 'Închide',
                 couldntBeFetched: 'Istoricul nu a putut fi descărcat.'
+            },
+            addNewTeamPage: {
+                newTeam: "Echipă nouă",
+                name: "Nume",
+                nicknames: "Porecle (separate prin virgulă)",
+                details: "Detalii despre echipă",
+                city: "Oraș",
+                yearFounded: "Anul înființării",
+                country: "Țara",
+                ground: "Stadion",
+                stadiumCapacity: "Capacitatea stadionului",
+                website: "Site web",
+                isClub: "Echipă de club. Dacă este echipă națională, selectează Nu."
             }
         },
         rankingPage: {
