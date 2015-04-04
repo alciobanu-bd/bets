@@ -3,7 +3,7 @@ var Team = require('./../model/Team');
 
 exports.addTeamInfoToWeek = function (week, callback) {
 
-    callCallback = function (err, week) {
+    var callCallback = function (err, week) {
         if (typeof callback === 'function') {
             callback(err, week);
         }
