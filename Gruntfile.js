@@ -46,6 +46,8 @@ module.exports = function (grunt) {
                     'client/app/utils/stringSort.js',
                     'client/app/utils/numberSort.js',
                     'client/app/utils/Gravatar.js',
+                    'client/app/utils/CountryServices.js',
+                    'client/app/utils/fileModelDirective.js',
 
                     'client/app/settings/settingsModule.js',
                     'client/app/settings/Settings.js',
@@ -90,7 +92,11 @@ module.exports = function (grunt) {
                     'client/app/ranking/RankingController.js',
                     'client/app/ranking/RankingServices.js',
 
+                    'client/app/team/teamModule.js',
+                    'client/app/team/TeamServices.js',
+
                     'client/app/week/weekModule.js',
+                    'client/app/week/TeamSelectFilter.js',
                     'client/app/week/weekServices.js',
                     'client/app/week/WeekController.js',
                     'client/app/week/AddNewWeekController.js',
