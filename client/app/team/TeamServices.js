@@ -32,6 +32,36 @@ function ($q, InitUrls, CallUrlService, TeamSerializer) {
 
     }
 
+    thisFactory.getTeams = function (queryObject, onSuccess, onError) {
+
+        if (typeof queryObject != 'object') {
+            throw new Error("Query object @getTeams method is not present.");
+        }
+
+        var requestObject = {};
+        requestObject.isClub = queryObject.isClub;
+
+        InitUrls.then(function (urls) {
+            requestObject.uri = urls.team.address;
+            CallUrlService.getArray(requestObject,
+                function (data) {
+                    var teams = [];
+                    for (var i = 0; i < data.length; i++) {
+                        TeamSerializer.adjustTeamForCurrentLanguage(data[i]);
+                        teams.push(data[i]);
+                    }
+                    if (typeof onSuccess === 'function') {
+                        onSuccess(teams);
+                    }
+                },
+                function (response) {
+                    if (typeof onError === 'function') {
+                        onError(response);
+                    }
+                });
+        });
+    }
+
     return thisFactory;
 
 }

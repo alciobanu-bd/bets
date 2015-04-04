@@ -15,7 +15,7 @@
             <ul class="nav navbar-nav navbar-left">
                 <li>
                     <a href="" class="menu-link-border centered" ng-click="toggleMessageBox();">
-                        <span class="glyphicon glyphicon-envelope"></span>
+                        <i class="fa fa-envelope fa-fw"></i>
                         {{'header.logged.messages' | translate}}
                         <span class="badge" style="background-color: #ff0429"
                               ng-if="ChattingService.getNumberOfUnreadConversations() > 0">
@@ -28,68 +28,84 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a class="menu-link-border centered" href="#/">
-                        <span class="glyphicon glyphicon-home"></span>
+                        <o class="fa fa-home fa-fw"></o>
                         {{'header.logged.home' | translate}}
                     </a>
                 </li>
                 <li>
                     <a class="menu-link-border centered" href="#/week">
-                        <span class="glyphicon glyphicon-fire"></span>
+                        <i class="fa fa-futbol-o fa-fw"></i>
                         {{'header.logged.play' | translate}}
                     </a>
                 </li>
                 <li>
                     <a class="menu-link-border centered" href="#/ranking">
-                        <span class="glyphicon glyphicon-th-list"></span>
+                        <span class="fa fa-sort-amount-desc fa-fw"></span>
                         {{'header.logged.ranking' | translate}}
                     </a>
                 </li>
                 <li>
                     <a class="menu-link-border centered" href="#/rules">
-                        <span class="glyphicon glyphicon-book"></span>
+                        <span class="fa fa-asterisk fa-fw"></span>
                         {{'header.logged.rules' | translate}}
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-link-border centered" href="#/team">
+                        <i class="fa fa-group fa-fw"></i>
+                        {{'header.logged.team' | translate}}
                     </a>
                 </li>
                 <li class="dropdown">
                     <a class="menu-link-border centered" href="" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-user"></span>
+                        <span class="fa fa-user fa-fw"></span>
                         {{userInfo.user.username}}
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="">{{'header.logged.place' | translate}}: {{userInfo.user.place}}</a>
+                            <a href="#/ranking">
+                                <i class="fa fa-sort-numeric-asc fa-fw"></i>
+                                {{'header.logged.place' | translate}}: {{userInfo.user.place}}
+                            </a>
                         </li>
                         <li>
-                            <a href="">{{'header.logged.points' | translate}}: {{userInfo.user.points}}</a>
+                            <a href="#/ranking">
+                                <i class="fa fa-star-half-empty fa-fw"></i>
+                                {{'header.logged.points' | translate}}: {{userInfo.user.points}}
+                            </a>
                         </li>
                         <li>
                             <a href="#/profile">
+                                <i class="fa fa-user-secret fa-fw"></i>
                                 {{'header.logged.myProfile' | translate}}
                             </a>
                         </li>
                         <li>
                             <a href="#/change-password">
+                                <i class="fa fa-key fa-fw"></i>
                                 {{'header.logged.changePassword' | translate}}
                             </a>
                         </li>
                         <li ng-if="RolesFactory.userHasRole(userInfo.user.role, RolesFactory.roles.admin)">
                             <a href="#/admin">
+                                <i class="fa fa-user-plus fa-fw"></i>
                                 {{'header.logged.adminPanel' | translate}}
                             </a>
                         </li>
                         <li>
                             <a href="#/history">
+                                <i class="fa fa-history fa-fw"></i>
                                 {{'header.logged.history' | translate}}
                             </a>
                         </li>
+                        <li ng-click="logout()">
+                            <a href="">
+                                <span class="fa fa-sign-out fa-fw"></span>
+                                {{'header.logged.logout' | translate}}
+                            </a>
+                        </li>
                     </ul>
-                </li>
-                <li ng-click="logout()">
-                    <a class="menu-link-border centered" href="">
-                        <span class="glyphicon glyphicon-log-out"></span>
-                        {{'header.logged.logout' | translate}}
-                    </a>
                 </li>
 
                 <ng-include src="Templates.header.languageDropdown" include-replace></ng-include>

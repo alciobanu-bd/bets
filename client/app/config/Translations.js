@@ -20,7 +20,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 adminPanel: 'Admin Panel',
                 history: 'History',
                 logout: 'Logout',
-                messages: 'Messages'
+                messages: 'Messages',
+                team: 'Teams'
             },
             notLogged: {
                 home: 'Home',
@@ -420,6 +421,16 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             to: "to",
             socketsTimeout: "It seems that your firewall or your internet provider is blocking the communication with the " +
             "server. Therefore, the chatting functionality is disabled."
+        },
+        teams: {
+            pageName: "Teams @CanIHazBets",
+            errorFetchingTeams: "An error has occurred while trying to fetch teams from server.",
+            clubs: "Clubs",
+            nationalTeams: "National Teams",
+            clear: "Clear",
+            founded: "Founded",
+            alphabetically: "Alphabetically",
+            byYearFounded: "By year founded"
         }
     });
 
@@ -438,7 +449,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
                 adminPanel: 'Panou admin',
                 history: 'Istoric',
                 logout: 'Delogare',
-                messages: 'Mesaje'
+                messages: 'Mesaje',
+                team: 'Echipe'
             },
             notLogged: {
                 home: 'Acasă',
@@ -836,6 +848,16 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             to: "către",
             socketsTimeout: "Nu s-a putut stabili conexiunea cu serverul. Cel mai probabil firewall-ul sau furnizorul " +
             "dumneavoastră de internet vă blochează accesul. Din acest motiv, chat-ul este dezactivat."
+        },
+        teams: {
+            pageName: "Echipe @CanIHazBets",
+            errorFetchingTeams: "A apărut o eroare la încărcarea echipelor.",
+            clubs: "Cluburi",
+            nationalTeams: "Echipe naționale",
+            clear: "Șterge",
+            founded: "Înființare",
+            alphabetically: "Alfabetic",
+            byYearFounded: "După an înființare"
         }
     });
 
