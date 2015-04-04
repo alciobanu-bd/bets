@@ -131,7 +131,7 @@ module.exports = function (grunt) {
         uglify: {
                 min: {
                     options: {
-                        sourceMap: true,
+                        sourceMap: false,
                         sourceMapName: 'client/dist/built.map'
                     },
                     files: {
