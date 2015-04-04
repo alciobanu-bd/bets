@@ -22,7 +22,15 @@ router.get('/',
 jwtauth([tokenChecks.hasRole('ROLE_USER')]),
 function (req, res) {
 
-    Team.find({}, function (err, teams) {
+    req.query = req.query ? req.query : {};
+
+    var queryObject = {};
+
+    if (req.query.isClub != undefined) {
+        queryObject.isClub = req.query.isClub;
+    }
+
+    Team.find(queryObject, function (err, teams) {
         if (err) {
             res.status(500).json({
                 message: Translations[req.query.lang].teamRoute.cannotFetchTeams

@@ -93,7 +93,11 @@ module.exports = function (grunt) {
                     'client/app/ranking/RankingServices.js',
 
                     'client/app/team/teamModule.js',
+                    'client/app/team/countriesSortedFilter.js',
+                    'client/app/team/exlcudeTeamByCountryObject.js',
                     'client/app/team/TeamServices.js',
+                    'client/app/team/AddNewTeamController.js',
+                    'client/app/team/TeamController.js',
 
                     'client/app/week/weekModule.js',
                     'client/app/week/TeamSelectFilter.js',
@@ -131,7 +135,7 @@ module.exports = function (grunt) {
         uglify: {
                 min: {
                     options: {
-                        sourceMap: true,
+                        sourceMap: false,
                         sourceMapName: 'client/dist/built.map'
                     },
                     files: {

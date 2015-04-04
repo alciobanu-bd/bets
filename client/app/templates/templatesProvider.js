@@ -85,6 +85,10 @@ var templates =
     rules: {
         html: 'app/rules/views/rules.html',
         route: 'rules'
+    },
+    team: {
+        html: 'app/team/views/teams.html',
+        route: 'team'
     }
 }
 

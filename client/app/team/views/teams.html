@@ -1,0 +1,92 @@
+
+<div class="container" ng-click="closeDropdown();">
+    <div class="jumbotron white half-bg-opacity" style="width: 100%;">
+
+        <h2 class="centered">{{'teams.pageName' | translate}}</h2>
+
+        <div id="content" class="top-buffer-2-em">
+
+            <div class="row" id="filters">
+                <div class="col-xs-2 col-xs-offset-1">
+                    <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuActive"
+                          data-toggle="dropdown" style="cursor: pointer">
+                        {{filter.isClub ? ('teams.clubs' | translate) : ('teams.nationalTeams' | translate)}}
+                        <span class="caret"></span>
+                    </span>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuActive" style="cursor: pointer;">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="filter.isClub = true; getTeams();">
+                            {{'teams.clubs' | translate}}
+                        </a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="filter.isClub = false; getTeams();">
+                            {{'teams.nationalTeams' | translate}}
+                        </a></li>
+                    </ul>
+                </div>
+
+                <div class="col-xs-2">
+                    <span class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuSort"
+                          data-toggle="dropdown" style="cursor: pointer">
+                        {{selectedSort.name}}
+                        <span class="caret"></span>
+                    </span>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuSort" style="cursor: pointer;">
+                        <li role="presentation" ng-repeat="sort in filter.sort" ng-click="selectSort(sort)">
+                            <a role="menuitem" tabindex="-1">
+                                {{sort.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-xs-1" ng-class="{'open': isCountryFilterOpened}" ng-if="filter.isClub">
+                    <span class="btn btn-default btn-xs dropdown-toggle" type="button" ng-click="toggleCountryFilter($event);"
+                          aria-expanded="{{isCountryFilterOpened}}" style="cursor: pointer;">
+                        {{'Select countries' | translate}}
+                        <span class="caret"></span>
+                    </span>
+                    <ul class="dropdown-menu" role="menu" style="cursor: pointer; max-height: 300px; overflow-x: scroll;">
+                        <li role="presentation" ng-click="toggleCountry(country.code.toLowerCase()); $event.stopPropagation();"
+                            ng-repeat="country in filter.countryCodes | countriesSortedFilter track by country.code">
+                            <a role="menuitem" tabindex="-1">
+                                <i ng-show="filter.countryCodes[country.code.toLowerCase()]" class="fa fa-circle fa-fw"></i>
+                                <i ng-show="!filter.countryCodes[country.code.toLowerCase()]" class="fa fa-circle-o fa-fw"></i>
+                                {{country.name}}
+                            </a>
+                        </li>
+                        <span class="btn btn-default btn-xs top-buffer-0-5-em" ng-click="toggleCountryFilter($event);">
+                            OK
+                        </span>
+                        <span class="btn btn-default btn-xs top-buffer-0-5-em" ng-click="resetCountryFilter();">
+                            {{'teams.clear' | translate}}
+                        </span>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div id="teams-repeater" class="top-buffer-2-em">
+                <div ng-repeat="team in teams | excludeTeamByCountryObject:filter.countryCodes track by team._id" class="centered"
+                     style="width: 25%; display: inline-block; margin-bottom: 2em;"
+                     ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+
+                    <div style="cursor: pointer;">
+                        <img ng-src="{{team.imageUrl}}" style="max-height: 45px; max-width: 45px;" />
+                    </div>
+                    <span ng-if="selectedSort.id == 0">
+                        {{team.name}}
+                    </span>
+                    <span ng-if="selectedSort.id == 1">
+                        <span ng-show="!hover">{{'teams.founded' | translate}}: {{team.founded}}</span>
+                        <span ng-show="hover">{{team.name}}</span>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="error" class="top-buffer-2-em centered" ng-if="status.error">
+            {{status.message}}
+        </div>
+
+    </div>
+</div>

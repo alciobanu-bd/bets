@@ -83,6 +83,13 @@ function($routeProvider, TemplatesProvider) {
                 redirect: redirectHomeIfNotLogged
             }
         }).
+        when('/team', {
+            templateUrl: Templates.team.html,
+            controller: 'TeamController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
+        }).
         when('/profile', {
             templateUrl: Templates.account.profile.html,
             controller: 'ProfileController',
@@ -109,7 +116,8 @@ function($routeProvider, TemplatesProvider) {
             controller: 'ChangePasswordController',
             resolve: {
                 redirect: redirectHomeIfNotLogged
-            }        }).
+            }
+        }).
         when('/forgot-password', {
             templateUrl: Templates.user.forgotPassword.html,
             controller: 'ForgotPasswordController'

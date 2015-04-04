@@ -436,7 +436,7 @@ $modal) {
             if (item.isSpecialSelection) {
                 // add new team
                 var modalInstance = $modal.open({
-                    templateUrl: 'app/week/views/addNewTeam.html',
+                    templateUrl: 'app/team/views/addNewTeam.html',
                     controller: 'NewTeamController',
                     backdrop: 'static'
                 });
