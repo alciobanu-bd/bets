@@ -87,8 +87,14 @@ var templates =
         route: 'rules'
     },
     team: {
-        html: 'app/team/views/teams.html',
-        route: 'team'
+        all: {
+            html: 'app/team/views/teams.html',
+            route: 'team'
+        },
+        profile: {
+            html: 'app/team/views/teamProfile.html',
+            route: 'team'
+        }
     }
 }
 

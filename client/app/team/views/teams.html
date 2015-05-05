@@ -41,7 +41,7 @@
                 <div class="col-xs-1" ng-class="{'open': isCountryFilterOpened}" ng-if="filter.isClub">
                     <span class="btn btn-default btn-xs dropdown-toggle" type="button" ng-click="toggleCountryFilter($event);"
                           aria-expanded="{{isCountryFilterOpened}}" style="cursor: pointer;">
-                        {{'Select countries' | translate}}
+                        {{'teams.selectCountries' | translate}}
                         <span class="caret"></span>
                     </span>
                     <ul class="dropdown-menu" role="menu" style="cursor: pointer; max-height: 300px; overflow-x: scroll;">
@@ -65,8 +65,9 @@
 
 
             <div id="teams-repeater" class="top-buffer-2-em">
-                <div ng-repeat="team in teams | excludeTeamByCountryObject:filter.countryCodes track by team._id" class="centered"
-                     style="width: 25%; display: inline-block; margin-bottom: 2em;"
+                <a ng-repeat="team in teams | excludeTeamByCountryObject:filter.countryCodes track by team._id" class="centered"
+                     style="width: 25%; display: inline-block; margin-bottom: 2em; color: white;"
+                     ng-href="#/team/{{team._id}}"
                      ng-mouseenter="hover = true" ng-mouseleave="hover = false">
 
                     <div style="cursor: pointer;">
@@ -80,7 +81,7 @@
                         <span ng-show="hover">{{team.name}}</span>
                     </span>
 
-                </div>
+                </a>
             </div>
         </div>
 

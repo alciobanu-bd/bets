@@ -1,0 +1,54 @@
+
+<div class="container">
+    <div class="jumbotron white half-bg-opacity" style="width: 100%;">
+
+        <div class="centered">
+            <img ng-src="{{team.imageUrl}}" style="max-height: 70px; max-width: 70px;" />
+            <h2>{{team.name}}</h2>
+        </div>
+
+        <div class="top-buffer-1-em">
+            <div class="top-buffer-1-em">
+                <div ng-repeat="paragraph in team.details.split('\n')">
+                    {{paragraph}}
+                </div>
+            </div>
+
+            <div class="top-buffer-1-em">
+                <div>
+                    City:
+                    {{team.city}}
+                </div>
+                <div>
+                    Country:
+                    {{CountryCodes.getCountryByCode(team.countryCode).name}}
+                </div>
+                <div>
+                    Ground:
+                    {{team.ground}}
+                </div>
+                <div>
+                    Nicknames:
+                    <span ng-repeat="nickname in team.nicknames track by $index">
+                        {{nickname}}<span ng-if="$index != team.nicknames.length - 1">,</span>
+                    </span>
+                </div>
+                <div>
+                    Stadium capacity:
+                    {{team.stadiumCapacity}}
+                </div>
+                <div>
+                    Website:
+                    <a ng-href="{{team.website}}">
+                        {{team.website}}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="error" class="top-buffer-2-em centered" ng-if="status.error">
+            {{status.message}}
+        </div>
+
+    </div>
+</div>
