@@ -62,6 +62,24 @@ function ($q, InitUrls, CallUrlService, TeamSerializer) {
         });
     }
 
+    thisFactory.getTeamById = function (_id, onSuccess, onError) {
+
+        InitUrls.then(function (urls) {
+            CallUrlService.get({uri: urls.team.address, id: _id},
+                function (data) {
+                    TeamSerializer.adjustTeamForCurrentLanguage(data);
+                    if (typeof onSuccess === 'function') {
+                        onSuccess(data);
+                    }
+                },
+                function (response) {
+                    if (typeof onError === 'function') {
+                        onError(response);
+                    }
+                });
+        });
+    }
+
     return thisFactory;
 
 }

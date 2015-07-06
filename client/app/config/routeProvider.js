@@ -84,8 +84,15 @@ function($routeProvider, TemplatesProvider) {
             }
         }).
         when('/team', {
-            templateUrl: Templates.team.html,
+            templateUrl: Templates.team.all.html,
             controller: 'TeamController',
+            resolve: {
+                redirect: redirectHomeIfNotLogged
+            }
+        }).
+        when('/team/:id', {
+            templateUrl: Templates.team.profile.html,
+            controller: 'TeamProfileController',
             resolve: {
                 redirect: redirectHomeIfNotLogged
             }

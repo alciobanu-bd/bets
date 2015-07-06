@@ -430,7 +430,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             clear: "Clear",
             founded: "Founded",
             alphabetically: "Alphabetically",
-            byYearFounded: "By year founded"
+            byYearFounded: "By year founded",
+            selectCountries: "Select countries"
         }
     });
 
@@ -857,7 +858,8 @@ function ($translateProvider, LanguagesProvider, CurrentLanguageFactoryProvider)
             clear: "Șterge",
             founded: "Înființare",
             alphabetically: "Alfabetic",
-            byYearFounded: "După an înființare"
+            byYearFounded: "După an înființare",
+            selectCountries: "Selectează țările"
         }
     });
 
