@@ -86,24 +86,22 @@ exports.addTeamInfoToWeeks = function (weeks, callback) {
             return callCallback(err, null);
         }
 
-        for (var i = 0; i < teams.length; i++) {
-            var team = teams[i];
-            var found = false;
-            for (var k = 0; k < weeks.length; k++) {
-                if (found) {
-                    break;
-                }
-                var week = weeks[k];
-                for (var j = 0; j < week.events.length; j++) {
-                    var event = week.events[j];
+        for (var i = 0; i < weeks.length; i++) {
+            var week = weeks[i];
+            for (var j = 0; j < week.events.length; j++) {
+                var event = week.events[j];
+                var found = 0;
+                for (var k = 0; k < teams.length; k++) {
+                    var team = teams[k];
                     if (team._id.equals(event.homeTeam.teamId)) {
                         event.homeTeam = team;
-                        found = true;
-                        break;
+                        found++;
                     }
                     if (team._id.equals(event.awayTeam.teamId)) {
                         event.awayTeam = team;
-                        found = true;
+                        found++;
+                    }
+                    if (found == 2) {
                         break;
                     }
                 }
